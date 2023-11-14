@@ -1,0 +1,237 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>FinanceApp</PageTitle>
+
+@* <div class="page">
+<div class="sidebar">
+<NavMenu />
+</div>
+
+<main>
+<div class="top-row px-4">
+<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+</div>
+
+<article class="content px-4">
+@Body
+</article>
+</main>
+</div> *@
+@inject IJSRuntime JSRuntime
+@using Microsoft.JSInterop;
+@using Radzen.Blazor
+
+
+<style>
+    .loading-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        /* semi-transparent white */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        /* Ensure it's on top */
+    }
+
+    ul.rz-profile-menu {
+        list-style: none;
+        margin-bottom: 0;
+        padding: var(--rz-profile-menu-padding);
+        display: inline-block;
+        background-color: transparent;
+        border-left: var(--rz-profile-menu-border);
+        position: relative;
+        z-index: 3;
+    }
+
+    .rz-navigation-item-link {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: transparent;
+    }
+
+    ul {
+        list-style: none;
+        align-items: center;
+    }
+
+    .display-picture {
+        margin-left: auto;
+    }
+
+    .display-picture img {
+        max-width: 50px;
+        border-radius: 50%;
+        border: 2px solid #000;
+    }
+
+    .display-picture img:hover {
+        border: 2px solid #E78341;
+    }
+
+    .w-90 {
+        width: 90% !important;
+    @*margin-top:3.5rem;*@
+    }
+
+    #header img {
+        margin-right: 10px;
+        height: 40px;
+    }
+
+    #header-content {
+        margin-right: auto;
+    }
+
+    #header p {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .header_center {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .header_center img {
+        margin-right: 10px;
+    }
+
+    #header-content {
+        margin-left: 10px;
+        text-align: center;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    #header-rcontent {
+        margin-right: auto;
+    }
+
+    .header_right {
+        display: flex;
+        align-items: center;
+    }
+
+    #header-rcontent {
+        margin-left: 10px;
+        text-align: center;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .rz-text-align-center {
+        text-align: end;
+    }
+
+    .rz-p-12 {
+        padding: rem !important;
+    }
+
+    .rz-button.rz-primary.rz-shade-default {
+        background-color: #ffffff;
+        color: #000000;
+        box-shadow: none;
+    }
+
+    .justify-content-center {
+        justify-content: center !important;
+    }
+</style>
+<div id="body-pd">
+    <header class="header shadow-sm" id="header">
+        <div class="header_toggle">
+            @* <i class='material-icons' id="header-toggle"></i> *@
+            <i class='fa fa-bars' id="header-toggle"></i>
+        </div>
+        <div class="header_center">
+            <div id="header-content">
+                <img src="https://www.freepnglogos.com/uploads/starbucks-logo-png-transparent-0.png" alt="Logo">
+                <p>Your Website Name</p>
+                <!-- Add more content or links here if needed -->
+            </div>
+        </div>
+        <div class="header_right">
+            <div id="header-rcontent">
+                <div class="nav-right">
+                    @* <RadzenIcon Icon="save" /><span>Save</span> *@
+                    <RadzenButton Icon="save" Text="Save" Path="/" />
+                </div>
+                <div class="nav-right">
+                    @* <RadzenIcon Icon="insert_drive_file" /><span>Report</span> *@
+                    <RadzenButton Icon="insert_drive_file" Text="Report" Click="@Report" />
+                </div>
+                <div class="nav-right">
+                    @* <RadzenIcon Icon="" /><a href=""><span>App</span></a> *@
+                    <RadzenButton Icon="grid_view" Text="App" Click="@AppAll" />
+                </div>
+            </div>
+        </div>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenProfileMenu>
+                <Template>
+                    <nav>
+                        <ul>
+                            <a href="#" class="display-picture"><img src="https://i.pravatar.cc/85" alt=""></a>
+                            @* <a href="#" class="display-picture"><img
+                            src="https://www.finearts.cmu.ac.th/wp-content/uploads/2021/07/blank-profile-picture-973460_1280-1.png"
+                            alt=""></a> *@
+                        </ul>
+                    </nav>
+                </Template>
+                <ChildContent>
+                    <RadzenProfileMenuItem Text="Profile" Path="people/profile" Icon="manage_accounts">
+                    </RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Password" Path="menu" Icon="password"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="FileInput" Path="fileinput" Icon="attach_file"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="LogOff" Path="logout" Icon="logout"></RadzenProfileMenuItem>
+                </ChildContent>
+            </RadzenProfileMenu>
+        </div>
+    </header>
+    <div class="l-navbar shadow-sm mt-6" id="nav-bar">
+        <Sidebar />
+    </div>
+    <div class="height-100">
+        <div class="d-flex justify-content-center py-2">
+            <RadzenNotification />
+            <div class="w-90">
+                @Body
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("setupNavbar");
+        }
+    }
+    private void AppAll()
+    {
+        NavigationManager.NavigateTo("index");
+    }
+    private void Report()
+    {
+        NavigationManager.NavigateTo("/");
+    }
+
+}

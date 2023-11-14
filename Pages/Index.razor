@@ -1,0 +1,46 @@
+﻿@page "/"
+<PageTitle>Dashboard</PageTitle>
+<style>
+    a {
+        text-decoration: none;
+        /* ลบเส้นใต้ลิงก์ */
+    }
+
+    a:hover {
+        text-decoration: none;
+        /* ลบเส้นใต้ลิงก์เมื่อผู้ใช้โฮเวอร์ที่ลิงก์ */
+    }
+
+    .img-app {
+        max-width: 200px;
+    }
+
+    .group-app {
+        text-align: center;
+    }
+</style>
+<div class="header-page hrader-page">
+    <h4>Application</h4>
+</div>
+<div class="card col-12 body-page">
+    <div class="row mt-3" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+        <div class="row">
+            <div class="col-xl-3 col-md-4 col-sm-6">
+                <a href="dept/deposit">
+                    <div class="card" style="width: 18rem;" @bind="App1">
+                        <div class="card-body">
+                            <div class="group-app">
+                                @* <i class="fas fa-chart-line"></i> *@
+                                <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image">
+                                <h5 class="card-title">ระบบ การเงิน</h5>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+}

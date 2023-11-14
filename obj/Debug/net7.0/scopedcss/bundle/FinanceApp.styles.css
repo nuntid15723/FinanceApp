@@ -1,0 +1,249 @@
+/* _content/FinanceApp/Pages/Deposit/DepDeposit.razor.rz.scp.css */
+.form-check[b-3ru5zg23k1] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-3ru5zg23k1] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-3ru5zg23k1] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-3ru5zg23k1] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-3ru5zg23k1] {
+  padding: 10px;
+}
+
+.profile-pic img[b-3ru5zg23k1] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-3ru5zg23k1] {
+  margin-top: 5px;
+}
+
+.separator[b-3ru5zg23k1] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-3ru5zg23k1] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-3ru5zg23k1] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-3ru5zg23k1] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-3ru5zg23k1] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-3ru5zg23k1] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-3ru5zg23k1] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-3ru5zg23k1] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-3ru5zg23k1] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-3ru5zg23k1] {
+    margin-top: -35px;
+  }
+}
+
+/* _content/FinanceApp/Shared/MainLayout.razor.rz.scp.css */
+.page[b-mwq1nbykck] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+main[b-mwq1nbykck] {
+    flex: 1;
+}
+
+.sidebar[b-mwq1nbykck] {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row[b-mwq1nbykck] {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row[b-mwq1nbykck]  a, .top-row .btn-link[b-mwq1nbykck] {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+    }
+
+    .top-row a:first-child[b-mwq1nbykck] {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+@media (max-width: 640.98px) {
+    .top-row:not(.auth)[b-mwq1nbykck] {
+        display: none;
+    }
+
+    .top-row.auth[b-mwq1nbykck] {
+        justify-content: space-between;
+    }
+
+    .top-row a[b-mwq1nbykck], .top-row .btn-link[b-mwq1nbykck] {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-mwq1nbykck] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-mwq1nbykck] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-mwq1nbykck] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .top-row[b-mwq1nbykck], article[b-mwq1nbykck] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}
+/* _content/FinanceApp/Shared/NavMenu.razor.rz.scp.css */
+.navbar-toggler[b-d0y5yr2d5v] {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.top-row[b-d0y5yr2d5v] {
+    height: 3.5rem;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.navbar-brand[b-d0y5yr2d5v] {
+    font-size: 1.1rem;
+}
+
+.oi[b-d0y5yr2d5v] {
+    width: 2rem;
+    font-size: 1.1rem;
+    vertical-align: text-top;
+    top: -2px;
+}
+
+.nav-item[b-d0y5yr2d5v] {
+    font-size: 0.9rem;
+    padding-bottom: 0.5rem;
+}
+
+    .nav-item:first-of-type[b-d0y5yr2d5v] {
+        padding-top: 1rem;
+    }
+
+    .nav-item:last-of-type[b-d0y5yr2d5v] {
+        padding-bottom: 1rem;
+    }
+
+    .nav-item[b-d0y5yr2d5v]  a {
+        color: #d7d7d7;
+        border-radius: 4px;
+        height: 3rem;
+        display: flex;
+        align-items: center;
+        line-height: 3rem;
+    }
+
+.nav-item[b-d0y5yr2d5v]  a.active {
+    background-color: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.nav-item[b-d0y5yr2d5v]  a:hover {
+    background-color: rgba(255,255,255,0.1);
+    color: white;
+}
+
+@media (min-width: 641px) {
+    .navbar-toggler[b-d0y5yr2d5v] {
+        display: none;
+    }
+
+    .collapse[b-d0y5yr2d5v] {
+        /* Never collapse the sidebar for wide screens */
+        display: block;
+    }
+    
+    .nav-scrollable[b-d0y5yr2d5v] {
+        /* Allow sidebar to scroll for tall menus */
+        height: calc(100vh - 3.5rem);
+        overflow-y: auto;
+    }
+}

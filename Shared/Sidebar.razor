@@ -1,0 +1,64 @@
+﻿@using Microsoft.JSInterop
+@using Radzen.Blazor
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavManager
+
+<style>
+    li.rz-navigation-item>.rz-navigation-item-wrapper>.rz-navigation-item-link>i.rzi:first-child {
+        color: #095696;
+        /* Steel Blue */
+    }
+
+    li.rz-navigation-item .rz-navigation-item>.rz-navigation-item-wrapper>.rz-navigation-item-link>i.rzi:first-child {
+        color: #6c8aba;
+        /* Light Steel Blue */
+    }
+    .rz-panel-menu {
+        white-space: nowrap;
+        overflow-y: auto;
+    }
+</style>
+<nav class="nav">
+    <RadzenPanelMenu Multiple="@multiple">
+        <RadzenPanelMenuItem Text="ซิงค์ข้อมูลหุ้นหนี้" Icon="sync">
+            <RadzenPanelMenuItem Text="ฝากเงิน" Path="dept/deposit" Icon="savings"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="ข้อมูลหนี้" Path="debt/debtinfo" Icon="paid"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="ซิงค์ข้อมูล - CGD" Path="debt/Infomation_cgd" Icon="cloud_sync"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="ซิงค์ข้อมูล - EGAT" Path="debt/Infomation_egat" Icon="cloud_sync"></RadzenPanelMenuItem>
+            <RadzenPanelMenuItem Text="ทดสอบ" Path="information" Icon="recent_actors"></RadzenPanelMenuItem>
+        </RadzenPanelMenuItem>
+    </RadzenPanelMenu>
+</nav>
+@if (isLoading)
+{
+    <div class="loading-backdrop">
+        Loading...
+    </div>
+}
+
+@code {
+    bool multiple = false;
+}
+
+
+@inject NavigationManager NavManager
+
+@code {
+    private bool isLoading = false;
+
+    protected override void OnInitialized()
+    {
+        NavManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        isLoading = true;
+
+        Task.Delay(1000).ContinueWith(_ =>
+        {
+            isLoading = false;
+            StateHasChanged();
+        });
+    }
+}
