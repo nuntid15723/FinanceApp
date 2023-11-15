@@ -89,7 +89,7 @@ namespace FinanceApp.Models
         public string? deptpassbook_no { get; set; }
         public string? condforwithdraw { get; set; }
         public int? upint_time { get; set; }
-        public string? deptaccount_ename{ get; set; }
+        public string? deptaccount_ename { get; set; }
         public string? account_type { get; set; }
         public int? monthintpay_meth { get; set; }
         public string? traninttype_code { get; set; }
@@ -100,7 +100,7 @@ namespace FinanceApp.Models
         public int? dept_status { get; set; }
         public int? monthint_status { get; set; }
         public int? f_tax_rate { get; set; }
-        public decimal? adjdate_status { get; set; }
+        public int? adjdate_status { get; set; }
         public string? membcat_desc { get; set; }
 
 
@@ -191,5 +191,18 @@ namespace FinanceApp.Models
         public bool status { get; set; }
         public Deposit data { get; set; }
         public string message { get; set; }
+    }
+    public class ErrorResponse
+    {
+        public string Type { get; set; }
+        public string Title { get; set; }
+        public int Status { get; set; }
+        public string TraceId { get; set; }
+        public string Errors { get; set; }
+    }
+    public class Errors
+    {
+        public string errors {get;set;}
+
     }
 }

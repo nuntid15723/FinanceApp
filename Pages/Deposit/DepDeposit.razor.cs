@@ -10,6 +10,8 @@ using FinanceApp.Services;
 using System.Text;
 using Microsoft.AspNetCore.Components;
 using System.Globalization;
+using System.Net;
+using Newtonsoft.Json.Linq;
 
 
 
@@ -27,40 +29,10 @@ namespace FinanceApp.Pages.Deposit
         private List<Models.Recppaytype> recppaytype;
         private List<Models.Tofromacc> tofromacc;
         private Models.Deptslip deptSlip;
-        // private string deptaccount_no { get; set; }
+        private Models.DeptSlipdet deptSlipdet;
+        private Models.DeptSlipCheque deptSlipCheque;
+        /// <deptSlip>
         private string coop_id = "065001";
-        // private string deptslip_netamt { get; set; }
-        // private string memcoop_id { get; set; }
-        // private string member_no { get; set; }
-        // private string membcat_code { get; set; }
-        // private string deptaccount_name { get; set; }
-        // private string dept_objective { get; set; }
-        // private string depttype_desc { get; set; }
-        // private string deptgroup_code { get; set; }
-        // private string moneytype_code { get; set; }
-        // private string bank_code { get; set; }
-        // private string entry_id { get; set; }
-        // private string machine_id { get; set; }
-        // private string cash_type { get; set; }
-        // private string recppaytype_code { get; set; }
-        // private string remark { get; set; }
-        // private string entry_date { get; set; }
-        // private string operate_code { get; set; }
-        // private string sign_flag { get; set; }
-        // private string laststmseq_no { get; set; }
-        // private string deptitem_amt { get; set; }
-        // private string fee_amt { get; set; }
-        // private string oth_amt { get; set; }
-        // private string prncbal { get; set; }
-        // private string withdrawable_amt { get; set; }
-        // private string prncbal_retire { get; set; }
-        // private string tofrom_accid { get; set; }
-        // private string depttype_code { get; set; }
-        // private DateTime operate_date { get; set; }
-        // public string genvc_flag { get; set; }
-        // public int adjdate_status { get; set; }
-
-        // public string coop_id { get; set; }
         public string? deptcoop_id { get; set; }
         public string? deptslip_no { get; set; }
         public string? member_no { get; set; }
@@ -119,7 +91,7 @@ namespace FinanceApp.Pages.Deposit
         public int? adjdate_status { get; set; }
         public string? membcat_desc { get; set; }
 
-        /// <summary>
+        /// < deptSlipdet>
         public decimal? prnc_bal { get; set; }
         public decimal? prnc_amt { get; set; }
         public DateTime prnc_date { get; set; }
@@ -141,9 +113,7 @@ namespace FinanceApp.Pages.Deposit
         public decimal? other_amt { get; set; }
         public decimal? chequepend_amt { get; set; }
         public int? refer_prnc_no { get; set; }
-        /// </summary>
-        ////
-
+        /// <deptSlipCheque>
         public string? cheque_no { get; set; }
         public DateTime cheque_date { get; set; }
         public DateTime entry_time { get; set; }
@@ -201,7 +171,43 @@ namespace FinanceApp.Pages.Deposit
                 }
             }
         }
+        //ค้นหาใน dlg
+        private async Task SearchOfGetAcc()
+        {
 
+            try
+            {
+                isLoading = true;
+                var response = await
+                httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfGetAccountSaving");
+                response.EnsureSuccessStatusCode();
+
+                var json = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(json);
+                Console.WriteLine(apiResponse.status == true);
+                if (apiResponse.status)
+                {
+                    datadetail = new List<Models.Deposit> { apiResponse.data };
+                    Console.WriteLine($"API request failed: {datadetail}");
+                }
+                else
+                {
+                    ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
+                    datadetail = null;
+                    Console.WriteLine($"API request failed: {apiResponse.message}");
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+            finally
+            {
+                isLoading = false;
+            }
+
+        }
         //  public class ApiResponse
         // {
         // 		public bool status { get; set; }
@@ -333,33 +339,29 @@ namespace FinanceApp.Pages.Deposit
         private string cashTypeValue;
         private string Valueselecte;
         private string recpPayTypeCode { get; set; }
-        private string toFromaccId { get; set; }
+        private string valuetoFromaccId { get; set; }
+        private string toFromaccId2 { get; set; }
         private string bookCode { get; set; }
         private string deptslipNetamt { get; set; }
         private DateTime testDateTime = DateTime.Now;
-
-        // Event handler สำหรับ dropdown แรก
-        // private void RecpPayTypeChanged(ChangeEventArgs e )
-        // {
-        //     selectedValue = e.Value.ToString();
-        //     ShowCashType();
-        //     Console.WriteLine($"Selected Value: {selectedValue}, Custom Value: ");
-        // }
         private async Task RecpPayTypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('_');
+            string[] valuestoFo = e.Value.ToString().Split('|');
             selectedValue = values[0];
             recpPayTypeCode = values[1];
             cashTypeValue = values[2];
             bookCode = selectedValue;
-            Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{toFromaccId}");
+            string[] toFromaccId1 = bookCode.Split('|');
+            valuetoFromaccId = toFromaccId1[1];
+            Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{valuetoFromaccId}");
         }
         private async Task OnToFromAccChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
             Valueselecte = values[0];
-            toFromaccId = values[1];
-            Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {Valueselecte},toFromaccId:{toFromaccId}");
+            toFromaccId2 = values[1];
+            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId}");
 
         }
         private async Task CheckNumber()
@@ -378,10 +380,14 @@ namespace FinanceApp.Pages.Deposit
                 await jsRuntime.InvokeVoidAsync("alert", "กรุณากรอกเฉพาะตัวเลขเท่านั้น!");
             }
         }
+
         private async Task SaveDataAsync()
         {
             try
             {
+
+                string hostName = Dns.GetHostName();
+                var hostEntry = Dns.GetHostEntry(hostName);
                 isLoading = true;
                 foreach (var item in datadetail)
                 {
@@ -390,36 +396,6 @@ namespace FinanceApp.Pages.Deposit
                     var ItemdeptSlipCheque = item.deptSlipCheque;
                     var Deptslip = new Deptslip
                     {
-                        // coop_id = ItemdeptSlip.coop_id,
-                        // deptcoop_id = ItemdeptSlip.deptcoop_id,
-                        // member_no = ItemdeptSlip.member_no,
-                        // membcat_code = ItemdeptSlip.membcat_code,
-                        // deptaccount_no = ItemdeptSlip.deptaccount_no,
-                        // deptaccount_name = ItemdeptSlip.deptaccount_name,
-                        // dept_objective = ItemdeptSlip.dept_objective,
-                        // depttype_desc = ItemdeptSlip.depttype_desc,
-                        // deptgroup_code = ItemdeptSlip.deptgroup_code,
-                        // moneytype_code = (cashTypeValue == null) ? ItemdeptSlip.moneytype_code : cashTypeValue,
-                        // bank_code = ItemdeptSlip.bank_code,
-                        // entry_id = ItemdeptSlip.entry_id,
-                        // machine_id = ItemdeptSlip.machine_id,
-                        // recppaytype_code = (recpPayTypeCode == null) ? ItemdeptSlip.recppaytype_code : recpPayTypeCode,
-                        // remark = ItemdeptSlip.remark,
-                        // entry_date = ItemdeptSlip.entry_date,
-                        // operate_code = ItemdeptSlip.operate_code,
-                        // sign_flag = ItemdeptSlip.sign_flag,
-                        // laststmseq_no = ItemdeptSlip.laststmseq_no,
-                        // deptslip_amt = ItemdeptSlip.deptslip_amt,
-                        // fee_amt = ItemdeptSlip.fee_amt,
-                        // oth_amt = ItemdeptSlip.oth_amt,
-                        // prncbal = ItemdeptSlip.prncbal,
-                        // withdrawable_amt = ItemdeptSlip.withdrawable_amt,
-                        // prncbal_retire = ItemdeptSlip.prncbal_retire,
-                        // tofrom_accid = (toFromaccId == null) ? ItemdeptSlip.tofrom_accid : toFromaccId,
-                        // operate_date = ItemdeptSlip.operate_date,
-                        // depttype_code = ItemdeptSlip.depttype_code,
-                        // deptslip_netamt = (deptslipNetamt == null) ? ItemdeptSlip.deptslip_netamt : deptslipNetamt,
-
                         coop_id = coop_id,
                         deptcoop_id = ItemdeptSlip.deptcoop_id,
                         deptslip_no = ItemdeptSlip.deptslip_no,
@@ -430,15 +406,16 @@ namespace FinanceApp.Pages.Deposit
                         depttype_code = ItemdeptSlip.depttype_code,
                         deptgroup_code = ItemdeptSlip.deptgroup_code,
                         recppaytype_code = (recpPayTypeCode == null) ? ItemdeptSlip.recppaytype_code : recpPayTypeCode,
-                        moneytype_code = ItemdeptSlip.moneytype_code,
+                        moneytype_code = (cashTypeValue == null) ? ItemdeptSlip.moneytype_code : cashTypeValue,
                         bank_code = ItemdeptSlip.bank_code,
                         bankbranch_code = ItemdeptSlip.bankbranch_code,
-                        entry_id = "ItemdeptSlip.entry_id",
-                        machine_id = ItemdeptSlip.machine_id,
-                        tofrom_accid = (toFromaccId == null) ? ItemdeptSlip.tofrom_accid : toFromaccId,
-                        operate_date = testDateTime,
-                        entry_date = testDateTime,
-                        calint_from = testDateTime,
+                        entry_id = "Admin_id",
+                        machine_id = Dns.GetHostByName(hostName).AddressList[0].ToString(),
+                        // tofrom_accid = (toFromaccId2 == null) ? valuetoFromaccId : toFromaccId2,
+                        tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? ItemdeptSlip.tofrom_accid,
+                        operate_date = DateTime.Today,
+                        entry_date = DateTime.Today,
+                        calint_from = DateTime.Today,
                         operate_code = ItemdeptSlip.operate_code,
                         sign_flag = ItemdeptSlip.sign_flag,
                         laststmseq_no = ItemdeptSlip.laststmseq_no,
@@ -479,7 +456,6 @@ namespace FinanceApp.Pages.Deposit
                         f_tax_rate = ItemdeptSlip.f_tax_rate,
                         adjdate_status = ItemdeptSlip.adjdate_status,
                         membcat_desc = ItemdeptSlip.membcat_desc,
-
                     };
                     var DeptSlipdet = new DeptSlipdet
                     {
@@ -511,34 +487,6 @@ namespace FinanceApp.Pages.Deposit
                         // chequepend_amt = ItemdeptSlipdet.chequepend_amt,
                         // refer_prnc_no = ItemdeptSlipdet.refer_prnc_no,
                         // upint_time = ItemdeptSlipdet.upint_time,
-                        coop_id = coop_id,
-                        deptslip_no = deptslip_no,
-                        deptaccount_no = deptaccount_no,
-                        prnc_no = 0,
-                        prnc_bal = 0,
-                        prnc_amt = 0,
-                        prnc_date = DateTime.Today,
-                        calint_from = DateTime.Today,
-                        calint_to = DateTime.Today,
-                        prncdue_date = DateTime.Today,
-                        prncmindue_date = DateTime.Today,
-                        prncdue_nmonth = 0,
-                        prncslip_amt = 0,
-                        intarr_amt = 0,
-                        intpay_amt = 0,
-                        taxpay_amt = 0,
-                        intbf_accyear = 0,
-                        intcur_accyear = 0,
-                        monthintdue_date = DateTime.Today,
-                        prncdeptdue_date = DateTime.Today,
-                        interest_rate = 0,
-                        int_return = 0,
-                        tax_return = 0,
-                        fee_amt = 0,
-                        other_amt = 0,
-                        chequepend_amt = 0,
-                        refer_prnc_no = 0,
-                        upint_time = 0,
                     };
                     var DeptSlipCheque = new DeptSlipCheque
                     {
@@ -558,62 +506,61 @@ namespace FinanceApp.Pages.Deposit
                         // checkclear_status = ItemdeptSlipCheque.checkclear_status,
                         // entry_id = ItemdeptSlipCheque.entry_id,
                         // depttype_code = ItemdeptSlipCheque.depttype_code,
-                        coop_id = coop_id,
-                        deptslip_no = deptslip_no,
-                        deptaccount_no = deptaccount_no,
-                        cheque_no = cheque_no,
-                        bank_code = bank_code,
-                        bankbranch_code = bankbranch_code,
-                        cheque_date = DateTime.Today,
-                        entry_date = DateTime.Today,
-                        entry_time = DateTime.Today,
-                        chequedue_date = DateTime.Today,
-                        cheque_type = cheque_type,
-                        cheque_amt = 0,
-                        seq_no = 0,
-                        checkclear_status = 0,
-                        entry_id = entry_id,
-                        depttype_code = depttype_code,
                     };
 
                     var Deposit = new Models.Deposit
                     {
                         deptSlip = Deptslip,
-                        deptSlipdet = DeptSlipdet,
-                        deptSlipCheque = DeptSlipCheque,
+                        deptSlipdet = null,
+                        deptSlipCheque = null,
                     };
-
                     var json = JsonConvert.SerializeObject(Deposit);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    // var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
+                    var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
+                    var responseData = await response.Content.ReadAsStringAsync();
+                    // Console.WriteLine("JsonData:" + json);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // var responseData = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(responseData);
 
-                    var response = await httpClient.PostAsJsonAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", Deposit);
-					//convert response data to JsonElement which can handle any JSON data
-					if (response.IsSuccessStatusCode)
-					{
-						// Read the response content as JsonElement
-						var data = await response.Content.ReadFromJsonAsync<JsonElement>();
-						Console.WriteLine(data);
-					}
-					else
-					{
-						// Handle the case where the request was not successful
-						Console.WriteLine($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-					}
-					//var data = await response.Content.ReadFromJsonAsync<JsonElement>();
-                    Console.WriteLine(json);
+                        Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
+                        var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
+
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
+                    }
+                    else
+                    {
+                        // Console.WriteLine(responseData);
+                        var jsonResponse = JObject.Parse(responseData);
+                        var errorsProperty = jsonResponse["errors"];
+                        Console.WriteLine(errorsProperty);
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorsProperty + "ตรวจสอบข้อมูลให้ครบถ้วน", Duration = 2500 });
+                    }
                 }
             }
             catch (Exception ex)
             {
-                //ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
-                // Console.WriteLine(ex.Message.ToString()); 
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
                 Console.WriteLine(ex.ToString());
             }
             finally
             {
                 isLoading = false;
             }
+        }
+        public class ErrorResponse
+        {
+            public string? Type { get; set; }
+            public string? Title { get; set; }
+            public bool? Status { get; set; }
+            public string? TraceId { get; set; }
+            public Errors Errors { get; set; }
+        }
+        public class Errors
+        {
+            // public string errors { get; set; }
+            public Dictionary<string, List<string>> errors { get; set; }
         }
         public async Task<HttpResponseMessage> PostAsync<T>(string uri, T item)
         {

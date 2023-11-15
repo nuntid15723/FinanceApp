@@ -139,6 +139,7 @@ else
 	else
 	{
 		<div class="card body-page">
+			<div class="from">
 			@foreach (var item in datadetail)
 			{
 				var Item = item.deptSlip;
@@ -410,7 +411,7 @@ else
 					<div class="row">
 						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 							<label class="form-label" for="">ยอดฝากได้</label>
-							<input class="form-control" type="text" Name="emp_no" value="@Item.deptslip_amt" />
+							<input class="form-control" type="text" Name="emp_no" @bind-value="Item.deptslip_amt" />
 						</div>
 						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 							<label class="form-label" for="">ยอดทำรายการ</label>
@@ -457,15 +458,16 @@ else
 						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 							<label class="form-label" for="">ยอดสุทธิ</label>
 							<input class="format-money form-control" placeholder="0.00" type="text"
-								style="text-align: end; font-size: 40px;" readonly name="deptslipAmt" value="@(deptslipNetamt!= null?Item.deptslip_netamt:deptslipNetamt)"
-								id="showNumber" />	
+								style="text-align: end; font-size: 40px;" readonly name="deptslipAmt"
+								value="@(deptslipNetamt!= null?Item.deptslip_netamt:deptslipNetamt)" id="showNumber" />
 						</div>
 					</div>
 					<div class="row mt-button">
 						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 							<label class="form-label" for="">ประเภทเงิน</label>
 							<input class="form-control" type="text" name="cash_type"
-								value="@(cashTypeValue == null?Item.moneytype_code:cashTypeValue)" />
+								value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)"
+								/>
 						</div>
 						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 							<label class="form-label" for="">รหัสคู่บัญชี</label>
@@ -504,6 +506,7 @@ else
 					</div>
 				</div>
 			}
+			</div>
 		</div>
 		<div class="card mt-4" hidden>
 			<div class="row mt-2"
@@ -577,7 +580,7 @@ else
 		});
 	}
 </script>
-@code {
+@* @code {
 	private string formatMoneyValue;
 	private string showNumberValue;
 	private string previousData;
@@ -611,8 +614,7 @@ else
 			return "";
 		}
 	}
-}
-
+} *@
 @* @code {
 IList<IDictionary<string, object>> selectedItems;
 int selectedIndex = 0;
