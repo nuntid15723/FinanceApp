@@ -203,6 +203,33 @@ namespace FinanceApp.Models
     public class Errors
     {
         public string errors {get;set;}
+    }
+    public class ApiResponseModal
+    {
+        public bool status { get; set; }
+        public AccountDetails data { get; set; }
+        public string message { get; set; }
+    }
+    public class DepOfGetAccount
+    {
+        public AccountDetails accountDetails { get; set; }
+    }
+    public class AccountDetails
+    {
+        public string coop_id { get; set; }
+        public string memcoop_id { get; set; }
+        public string? deptaccount_no { get; set; }
+        public string? deptaccount_name { get; set; }
+        public string? member_no { get; set; }
+        public string? depttype_code { get; set; }
+        public int deptclose_status { get; set; }
+        public string? memb_name { get; set; }
+        public string? memb_surname { get; set; }
+        public string? card_person { get; set; }
+        public string? mem_telmobile { get; set; }
+        public string? full_name { get; set; }
+        public string? salary_id { get; set; }
+        public DateTime? entry_date { get; set; }
 
     }
 }

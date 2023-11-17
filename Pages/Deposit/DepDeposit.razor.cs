@@ -26,11 +26,14 @@ namespace FinanceApp.Pages.Deposit
         //     await jsRuntime.InvokeVoidAsync("alert", message);
         // }
         private List<Models.Deposit> datadetail;
-        private List<Models.Recppaytype> recppaytype;
-        private List<Models.Tofromacc> tofromacc;
-        private Models.Deptslip deptSlip;
-        private Models.DeptSlipdet deptSlipdet;
-        private Models.DeptSlipCheque deptSlipCheque;
+        private List<Recppaytype> recppaytype;
+        private List<Tofromacc> tofromacc;
+        private Deptslip deptSlip;
+        private DeptSlipdet deptSlipdet;
+        private DeptSlipCheque deptSlipCheque;
+        private DepOfGetAccount? depOfGetAccount;
+        private List<AccountDetails> depOfGetAccDetails;
+
         /// <deptSlip>
         private string coop_id = "065001";
         public string? deptcoop_id { get; set; }
@@ -122,16 +125,122 @@ namespace FinanceApp.Pages.Deposit
         public decimal? cheque_amt { get; set; }
         public int? seq_no { get; set; }
         public int? checkclear_status { get; set; }
-        ///
-		private bool isLoading;
+        /// <summary> 
+        // public string coop_id { get; set; }
+        // public string memcoop_id { get; set; }
+        public string memcoop_id = "065001";
+        // public string? deptaccount_no { get; set; }
+        // public string? deptaccount_name { get; set; }
+        // public string? member_no { get; set; }
+        // public string? depttype_code { get; set; }
+        public int deptclose_status { get; set; }
+        public string? memb_name { get; set; }
+        public string? memb_surname { get; set; }
+        public string? card_person { get; set; }
+        public string? mem_telmobile { get; set; }
+        public string? full_name { get; set; }
+        public string? salary_id { get; set; }
+        // public DateTime? entry_date { get; set; }
+
+        /// </summary>        
+        private bool isLoading;
+        private bool isLoadingModals;
         bool isCurrentOptionSelected = false;
+        private bool isUpdateExecuted = false;
+
         void ShowNotification(NotificationMessage message)
         {
             NotificationService.Notify(message);
         }
+        private async void UpdateAccountDetails(Models.AccountDetails data)
+        {
+            try
+            {
+                deptaccount_no = data.deptaccount_no;
+                Console.WriteLine($"Clicked on coop_id: {coop_id}");
+                Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
+                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id}&deptaccount_no={data.deptaccount_no}");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(json);
+                if (apiResponse.status == true)
+                {
+                    datadetail = new List<Models.Deposit> { apiResponse.data };
+                    StateHasChanged();
+                    Console.WriteLine($"API request failed: {datadetail}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            // await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+        }
+
+        // private async Task tableSearch(string coop_id_field, string deptaccount_no_field)
+        // {
+        //     coop_id = coop_id_field;
+        //     deptaccount_no = deptaccount_no_field;
+
+        //     try
+        //     {
+        //         var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id_field}&deptaccount_no={deptaccount_no_field}");
+        //         response.EnsureSuccessStatusCode();
+        //         var json = await response.Content.ReadAsStringAsync();
+        //         var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(json);
+        //         Console.WriteLine(apiResponse.status == true);
+
+        //         if (apiResponse.status)
+        //         {
+        //             datadetail = new List<Models.Deposit> { apiResponse.data };
+        //             Console.WriteLine($"API request failed: {datadetail}");
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine($"An error occurred: {ex.Message}");
+        //         // Handle the exception as needed
+        //     }
+        // }
+
         //ค้นหา
         private async Task Search()
         {
+            //try
+            //{
+            //    isLoading = true;
+            //    coop_id = coop_id_field;
+            //    deptaccount_no = deptaccount_no_field;
+            //    var response = await
+            //        httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id_field}&deptaccount_no={deptaccount_no_field}");
+            //    response.EnsureSuccessStatusCode();
+
+            //    var json = await response.Content.ReadAsStringAsync();
+            //    var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(json);
+            //    Console.WriteLine(apiResponse.status == true);
+            //    if (apiResponse.status)
+            //    {
+            //        datadetail = new List<Models.Deposit> { apiResponse.data };
+            //        Console.WriteLine($"API request failed: {datadetail}");
+            //    }
+            //    else
+            //    {
+            //        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
+            //        datadetail = null;
+            //        Console.WriteLine($"API request failed: {apiResponse.message}");
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //    ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+            //    Console.WriteLine(ex.Message.ToString());
+            //}
+            //finally
+            //{
+            //    isLoading = false;
+            //}
+
             if (deptaccount_no == null || deptaccount_no == "")
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขที่บัญชี", Duration = 1500 });
@@ -148,7 +257,7 @@ namespace FinanceApp.Pages.Deposit
                     var json = await response.Content.ReadAsStringAsync();
                     var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(json);
                     Console.WriteLine(apiResponse.status == true);
-                    if (apiResponse.status)
+                    if (apiResponse.status == true)
                     {
                         datadetail = new List<Models.Deposit> { apiResponse.data };
                         Console.WriteLine($"API request failed: {datadetail}");
@@ -170,6 +279,7 @@ namespace FinanceApp.Pages.Deposit
                     isLoading = false;
                 }
             }
+
         }
         //ค้นหาใน dlg
         private async Task SearchOfGetAcc()
@@ -177,25 +287,63 @@ namespace FinanceApp.Pages.Deposit
 
             try
             {
-                isLoading = true;
-                var response = await
-                httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfGetAccountSaving");
-                response.EnsureSuccessStatusCode();
+                isLoadingModals = true;
+                var depOfGetAccount = new AccountDetails
+                {
+                    coop_id = "065001",
+                    memcoop_id = "065001",
+                    deptaccount_no = null,
+                    deptaccount_name = null,
+                    member_no = "00915176",
+                    depttype_code = null,
+                    deptclose_status = 0,
+                    memb_name = null,
+                    memb_surname = null,
+                    card_person = null,
+                    mem_telmobile = null,
+                    full_name = null,
+                    salary_id = null,
+                    entry_date = null
+                };
+                var json = JsonConvert.SerializeObject(depOfGetAccount);
+                // Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{Apiurl.ApibaseUrl}DepOfGetAccountSaving";
+                var response = await httpClient.PostAsync(apiUrl, content);
 
-                var json = await response.Content.ReadAsStringAsync();
-                var apiResponse = JsonConvert.DeserializeObject<Models.ApiResponse>(json);
-                Console.WriteLine(apiResponse.status == true);
-                if (apiResponse.status)
+                Console.WriteLine(response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
                 {
-                    datadetail = new List<Models.Deposit> { apiResponse.data };
-                    Console.WriteLine($"API request failed: {datadetail}");
+                    // อ่าน response string
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonResponse1 = JObject.Parse(jsonResponse);
+                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
+                    Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
+
                 }
-                else
+                // dataaccDetails = accountDetailsList;
+                var accountDetailsList = new List<Models.AccountDetails>();
+                if (depOfGetAccDetails != null)
                 {
-                    ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
-                    datadetail = null;
-                    Console.WriteLine($"API request failed: {apiResponse.message}");
+                    foreach (var accDetails in depOfGetAccDetails)
+                    {
+                        var accountDetails = new Models.AccountDetails
+                        {
+                            deptaccount_no = accDetails.deptaccount_no,
+                            deptaccount_name = accDetails.deptaccount_name,
+                            member_no = accDetails.member_no,
+                            full_name = accDetails.full_name
+                        };
+
+                        // Optional: You might want to add this to the list
+                        accountDetailsList.Add(accountDetails);
+
+                        Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
+                        // Add other properties as needed
+                    }
                 }
+                // Assign the list to dataaccDetails
+                dataaccDetails = accountDetailsList;
             }
             catch (Exception ex)
             {
@@ -204,7 +352,7 @@ namespace FinanceApp.Pages.Deposit
             }
             finally
             {
-                isLoading = false;
+                isLoadingModals = false;
             }
 
         }
@@ -267,72 +415,71 @@ namespace FinanceApp.Pages.Deposit
         // 	} 
 
         //ตาราง
-        IList<IDictionary<string, object>> selectedItems;
-        int selectedIndex = 0;
+        // IList<IDictionary<string, object>> selectedItems;
+        // int selectedIndex = 0;
 
-        public IEnumerable<IDictionary<string, object>> data { get; set; }
+        // public IEnumerable<IDictionary<string, object>> data { get; set; }
 
-        public IDictionary<string, Type> columns { get; set; }
+        // public IDictionary<string, Type> columns { get; set; }
 
-        public string GetColumnPropertyExpression(string name, Type type)
-        {
-            var expression = $@"it[""{name}""].ToString()";
+        // public string GetColumnPropertyExpression(string name, Type type)
+        // {
+        //     var expression = $@"it[""{name}""].ToString()";
 
-            if (type == typeof(int))
-            {
-                return $"int.Parse({expression})";
-            }
-            else if (type == typeof(DateTime))
-            {
-                return $"DateTime.Parse({expression})";
-            }
+        //     if (type == typeof(int))
+        //     {
+        //         return $"int.Parse({expression})";
+        //     }
+        //     else if (type == typeof(DateTime))
+        //     {
+        //         return $"DateTime.Parse({expression})";
+        //     }
 
-            return expression;
-        }
+        //     return expression;
+        // }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await base.OnInitializedAsync();
+        // protected override async Task OnInitializedAsync()
+        // {
+        //     await base.OnInitializedAsync();
 
-            columns = new Dictionary<string, Type>()
-        {
-        { "ต้นเงิน", typeof(int) },
-        { "ต้นเงินคงเหลือ", typeof(string) },
-        { "ยอดเงินทำรายการ", typeof(string) },
-        { "วันที่ต้นเงิน", typeof(DateTime) },
-        { "วันครบกำหนด", typeof(DateTime) },
-        { "วันเริ่มคิดด/บถึง", typeof(DateTime) },
-        { "วันคิดด/บถึง", typeof(DateTime) },
-        { "ด/บ จ่าย", typeof(DateTime) },
-        { "ภาษี", typeof(string) },
-        { "ด/บ.หลังหักภาษี", typeof(DateTime) },
-        { "ด/บค้าง", typeof(DateTime) },
-        { "ค่าปรับ", typeof(string) },
-        { "ด/บ เรียกคืน", typeof(DateTime) },
-        { "ภาษี เรียกคืน", typeof(string) },
-        { "อัตราดอกเบี้ย", typeof(string) },
-        { "จำนวนวัน", typeof(string) },
-        };
+        //     columns = new Dictionary<string, Type>()
+        // {
+        // { "ต้นเงิน", typeof(int) },
+        // { "ต้นเงินคงเหลือ", typeof(string) },
+        // { "ยอดเงินทำรายการ", typeof(string) },
+        // { "วันที่ต้นเงิน", typeof(DateTime) },
+        // { "วันครบกำหนด", typeof(DateTime) },
+        // { "วันเริ่มคิดด/บถึง", typeof(DateTime) },
+        // { "วันคิดด/บถึง", typeof(DateTime) },
+        // { "ด/บ จ่าย", typeof(DateTime) },
+        // { "ภาษี", typeof(string) },
+        // { "ด/บ.หลังหักภาษี", typeof(DateTime) },
+        // { "ด/บค้าง", typeof(DateTime) },
+        // { "ค่าปรับ", typeof(string) },
+        // { "ด/บ เรียกคืน", typeof(DateTime) },
+        // { "ภาษี เรียกคืน", typeof(string) },
+        // { "อัตราดอกเบี้ย", typeof(string) },
+        // { "จำนวนวัน", typeof(string) },
+        // };
 
-            //  foreach (var i in Enumerable.Range(0, 5))
-            //     {
-            //         columns.Add($"Column{i}", typeof(string));
-            //     }
+        //  foreach (var i in Enumerable.Range(0, 5))
+        //     {
+        //         columns.Add($"Column{i}", typeof(string));
+        //     }
 
 
-            data = Enumerable.Range(0, 20).Select(i =>
-            {
-                var row = new Dictionary<string, object>();
+        //     data = Enumerable.Range(0, 20).Select(i =>
+        //     {
+        //         var row = new Dictionary<string, object>();
 
-                foreach (var column in columns)
-                {
-                    row.Add(column.Key, column.Value == typeof(int) ? i :
-        column.Value == typeof(DateTime) ? DateTime.Now.AddMonths(i) : $"{column.Key}{i}");
-                }
-
-                return row;
-            });
-        }
+        //         foreach (var column in columns)
+        //         {
+        //             row.Add(column.Key, column.Value == typeof(int) ? i :
+        // column.Value == typeof(DateTime) ? DateTime.Now.AddMonths(i) : $"{column.Key}{i}");
+        //         }
+        //         return row;
+        //     });
+        // }
         private string selectedValue;
         private string moneytypeCode;
 
