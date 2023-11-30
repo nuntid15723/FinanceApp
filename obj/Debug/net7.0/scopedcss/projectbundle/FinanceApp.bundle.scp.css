@@ -181,7 +181,17 @@
   top: 3px;
   color: #ff0000;
 }
+.save_top[b-jevbfxu0ld] {
+  border: #adacac solid 1px;
+}
 
+.header-right[b-jevbfxu0ld] {
+  text-align: start;
+}
+
+.header-left[b-jevbfxu0ld] {
+  text-align: end;
+}
 @media (min-width: 1200px) {
   .profile-pic[b-jevbfxu0ld] {
     position: absolute;
@@ -193,7 +203,7 @@
   .btn.btn-outline-secondary[b-jevbfxu0ld] {
     margin-top: 30px;
   }
-   .row .mt-button[b-jevbfxu0ld] {
+  .row .mt-button[b-jevbfxu0ld] {
     margin-top: -35px;
   }
 }
@@ -215,7 +225,6 @@
     margin-top: -35px;
   }
 }
-
 /* _content/FinanceApp/Pages/Deposit/Dep_slip_withdraw/DepWithdraw.razor.rz.scp.css */
 .form-check[b-38i8sy31j1] {
   display: block;

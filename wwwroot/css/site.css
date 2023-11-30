@@ -367,7 +367,7 @@ a {
 .body-page {
   margin-top: 1rem;
 }
-.hrader-page {
+.header-page {
   margin-top: 5rem;
 }
 table {
@@ -398,4 +398,15 @@ tr td:last-child {
 }
 tr:hover td {
   background-color: #f5f5f5;
+}
+.save_top {
+  border: #adacac solid 1px;
+}
+
+.header-right {
+  text-align: start;
+}
+
+.header-left {
+  text-align: end;
 }

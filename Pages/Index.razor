@@ -1,5 +1,4 @@
 ﻿@page "/"
-@inject Microsoft.Extensions.Logging.ILogger<Index> Logger
 <PageTitle>Dashboard</PageTitle>
 <style>
     a {
@@ -19,6 +18,15 @@
     .group-app {
         text-align: center;
     }
+
+    .icons-app {
+        font-size: 100px;
+    }
+
+    .text-app {
+        margin-top: 10px;
+        ;
+    }
 </style>
 <div class="header-page hrader-page">
     <h4>Application</h4>
@@ -31,9 +39,30 @@
                     <div class="card" style="width: 18rem;" @bind="App1">
                         <div class="card-body">
                             <div class="group-app">
-                                @* <i class="fas fa-chart-line"></i> *@
-                                <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image">
-                                <h5 class="card-title">ระบบ การเงิน</h5>
+                                <div class="ions-app">
+                                    <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
+                                </div>
+                                @* <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image"> *@
+                                <div class="text-app">
+                                    <h5 class="card-title">ระบบ การเงิน</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-xl-3 col-md-4 col-sm-6">
+                <a href="dept/deposit">
+                    <div class="card" style="width: 18rem;" @bind="App1">
+                        <div class="card-body">
+                            <div class="group-app">
+                                <div class="ions-app">
+                                    <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
+                                </div>
+                                @* <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image"> *@
+                                <div class="text-app">
+                                    <h5 class="card-title">ระบบ การเงิน</h5>
+                                </div>
                             </div>
                         </div>
                     </div>

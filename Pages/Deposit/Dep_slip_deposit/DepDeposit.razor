@@ -28,10 +28,28 @@
 	.table>:not(caption)>*>* {
 		padding: 0.2rem 0.2rem;
 	}
+
+	.save_top {
+		border: #adacac solid 1px;
+	}
+
+	.header-right {
+		text-align: start;
+	}
+
+	.header-left {
+		text-align: end;
+	}
 </style>
-<div class="header-page hrader-page">
-	<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
-	<RadzenButton Icon="save" Text="Save" Click="@SaveDataAsync" />
+<div class="header-page">
+	<div class="row-header d-flex justify-content-between ">
+		<div class="header-left">
+			<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
+		</div>
+		<div class="header-right">
+			<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
+		</div>
+	</div>
 </div>
 @if (isLoading)
 {
@@ -812,9 +830,6 @@ else
 									}
 								</select>
 							</div>
-						</div>
-						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-							<button type="button" @onclick=SaveDataAsync>SaveDataAsync</button>
 						</div>
 					</div>
 					@if (recpPayTypeCode == "DEN")

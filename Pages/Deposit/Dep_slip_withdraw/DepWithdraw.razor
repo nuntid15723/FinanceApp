@@ -28,9 +28,28 @@
 	.table>:not(caption)>*>* {
 		padding: 0.2rem 0.2rem;
 	}
+
+	.save_top {
+		border: #adacac solid 1px;
+	}
+
+	.header-right {
+		text-align: start;
+	}
+
+	.header-left {
+		text-align: end;
+	}
 </style>
-<div class="header-page hrader-page">
-	<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
+<div class="header-page">
+	<div class="row-header d-flex justify-content-between ">
+		<div class="header-left">
+			<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
+		</div>
+		<div class="header-right">
+			<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
+		</div>
+	</div>
 </div>
 @if (isLoading)
 {
@@ -912,9 +931,10 @@ else
 								<Columns>
 									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ลำดับ" Property="prnc_no">
 									</RadzenDataGridColumn>
-									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="เลขอ้างอิง"Property="prnc_bal">
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="เลขอ้างอิง" Property="prnc_bal">
 									</RadzenDataGridColumn>
-									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ชื่อ - นามสกุล"Property="prncslip_amt">
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ชื่อ - นามสกุล"
+										Property="prncslip_amt">
 									</RadzenDataGridColumn>
 								</Columns>
 							</RadzenDataGrid>

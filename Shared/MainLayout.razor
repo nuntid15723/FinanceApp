@@ -238,7 +238,38 @@
     }
     private void Report()
     {
-        NavigationManager.NavigateTo("/");
+        @* string dept_deposit *@
+        string currentUrl = NavigationManager.Uri;
+        Console.WriteLine($"Current URL: {currentUrl}");
+        if (currentUrl.Contains("dept/dep_reqdepoit") || currentUrl.Contains("dept/deposit") ||
+        currentUrl.Contains("dept/dep_withdraw") || currentUrl.Contains("dept/dep_conteck") ||
+        currentUrl.Contains("dept/dep_procdeptuptran") ||
+        currentUrl.Contains("dept/reprintslip"))
+        {
+            try
+            {
+                NavigationManager.NavigateTo("/"); 
+                Console.WriteLine("DepDeposit");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
+        }
+        else if (currentUrl.Contains("dept/deposit"))
+        {
+            try
+            {
+                NavigationManager.NavigateTo("/");
+                Console.WriteLine("DepDeposit");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
+        }
     }
 
 }
