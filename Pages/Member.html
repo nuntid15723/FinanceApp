@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>ทะเบียนสมาชิก</title>
+  </head>
+  <body>
+    <div class="a4-page">
+      <div class="container">
+        <table class="tble mt-3">
+          <tr>
+            <td class="tdrl">
+              <label for="fullName">วันที่</label>
+              <input
+                class="operatedate"
+                type="text"
+                id="fullName"
+                name="fullName"
+                required
+              />
+            </td>
+            <!-- <td class="tdc"></td>
+            <td class="tdrl"></td> -->
+          </tr>
+          <tr>
+            <td>
+              <label for="fullName">เลขที่สมาชิก</label>
+              <input
+                class="memb-no"
+                type="text"
+                id="fullName"
+                name="fullName"
+                required
+              />
+            </td>
+          </tr>
+          <tr class="img-tr">
+            <td class="tdrl"></td>
+            <td class="tdc">
+              <div class="img-tdc">
+                <img
+                  class="img"
+                  src="https://www.freepnglogos.com/uploads/starbucks-logo-png-transparent-0.png"
+                  alt=""
+                />
+                <div class="textheard">
+                  <h4>ทะเบียนสมาชิก</h4>
+                  <h4 class="textheard">สหกรณ์อิสลาม อิบนูอัฟฟาน จำกัด</h4>
+                </div>
+              </div>
+            </td>
+            <td class="tdrl">
+              <div class="img-tdl">
+                <div class="square">
+                  <label for="">ติดรูปถ่าย</label>
+                  <br>
+                  <label for="">1 นิ้ว 1 รูป</label>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+        <div class="body">
+          <h4 class="form-control text-align border-1">ข้อมูลผู้สมัคร</h4>
+          <form action="#" method="post">
+            <label for="title">ข้าพเจ้า นาย/นาง/นางสาว</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="fullName"
+              name="fullName"
+              required
+            />
+
+            <label for="fullName">นามสกุล:</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="fullName"
+              name="fullName"
+              required
+            />
+
+            <label for="birthdate">วันเกิด</label>
+            <input
+              class="input-bottom width-3"
+              type="text"
+              id="birthdate"
+              name="birthdate"
+              required
+            />
+            <label for="birthdate">เดือน</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="birthdate"
+              name="birthdate"
+              required
+            />
+            <label for="birthdate">พ.ศ</label>
+            <input
+              class="input-bottom input-bd-width"
+              type="text"
+              id="birthdate"
+              name="birthdate"
+              required
+            />
+
+            <label for="citizenId">เลขประจำตัวประชาชน</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="citizenId"
+              name="citizenId"
+              required
+            />
+            <label for="citizenId">ออกให้ ณ จังหวัด</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="citizenId"
+              name="citizenId"
+              required
+            />
+            <label for="citizenId">วันที่ออกบัตร</label>
+            <input
+              class="input-bottom input-bd-width"
+              type="text"
+              id="citizenId"
+              name="citizenId"
+              required
+            />
+            <label for="citizenId">วันบัตรหมดอายุ</label>
+            <input
+              class="input-bottom input-bd-width"
+              type="text"
+              id="citizenId"
+              name="citizenId"
+              required
+            />
+            <label for="age">อายุ</label>
+            <input
+              class="input-bottom width-3"
+              type="text"
+              id="age"
+              name="age"
+              required
+            /><span>ปี</span>
+
+            <label for="bloodGroup">กรุ๊ปเลือด</label>
+            <input
+              class="input-bottom input-bd-width"
+              type="text"
+              id="bloodGroup"
+              name="bloodGroup"
+              required
+            />
+
+            <label for="occupation">อาชีพ</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="occupation"
+              name="occupation"
+              required
+            />
+
+            <label for="income">รายได้</label>
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="income"
+              name="income"
+              required
+            />
+
+            <label for="incomeText">(ตัวอักษร)</label>
+            <input
+              class="input-bottom"
+              type="text"
+              id="incomeText"
+              name="incomeText"
+              required
+            />
+            <span>บาท</span>
+            <label for="maritalStatus"
+              >สถานภาพ โสด/สมรส/หม้าย ชื่อคู่สมรส นาย/นาง</label
+            >
+            <input
+              class="input-bottom width-17"
+              type="text"
+              id="spouseName"
+              name="spouseName"
+            />
+            <label for="childrenCount">นามสกุล</label>
+            <input
+              class="input-bottom width-body"
+              type="number"
+              id="childrenCount"
+              name="childrenCount"
+            />
+
+            <label for="childrenCount">จำนวนบุตร</label>
+            <input
+              class="input-bottom width-body"
+              type="number"
+              id="childrenCount"
+              name="childrenCount"
+            />
+            <span>คน</span>
+
+            <label for="sonsCount">ชาย</label>
+            <input
+              class="input-bottom input-bd-width"
+              type="number"
+              id="sonsCount"
+              name="sonsCount"
+            /><span>คน</span>
+
+            <label for="daughtersCount">หญิง</label>
+            <input
+              class="input-bottom input-bd-width"
+              type="number"
+              id="daughtersCount"
+              name="daughtersCount"
+            />
+            <span>คน</span>
+            <label for="fatherName">ชื่อบิดา</label>
+            <input
+              class="input-bottom"
+              type="text"
+              id="fatherName"
+              name="fatherName"
+            />
+
+            <label for="motherName">ชื่อมารดา</label>
+            <input
+              class="input-bottom"
+              type="text"
+              id="motherName"
+              name="motherName"
+            />
+
+            <label for="depositAmount"
+              >ข้าพเจ้าขอแสดงความจำนงฝากเงินกับสหกรณ์อิสลามอิบนูอัฟฟาน จำกัด
+              ในอัตราเดือนละ (บาท)</label
+            >
+            <input
+              class="input-bottom width-body"
+              type="text"
+              id="depositAmount"
+              name="depositAmount"
+              required
+            />
+
+            <label for="depositAmountText">(ตัวอักษร)</label>
+            <input
+              class="input-bottom"
+              type="text"
+              id="depositAmountText"
+              name="depositAmountText"
+              required
+            />
+            <span>บาท</span>
+            <span>
+              ข้าพเจ้าสัญญาว่าถ้าคณะกรรมการดำเนินการตกลงให้ข้าพเจ้าสมาชิก
+              ข้าพเจ้าจะลงลายมือชื ่อในทะเบียนสมาชิกพร้อมกับชำระ
+              ค่าธรรมเนียมแรกเข้าพร้อมกับช
+              าระค่าหุ้นตามระเบียบและข้อบังคับสหกรณ์ฯ
+              ภายในระยะเวลาซึ่งคณะกรรมการดำเนินการกำหนดต่อไป
+              ข้าพเจ้าได้ทราบข้อความในระเบียบของสหกรณ์ฯ
+              เกี่ยวกับขั้นตอนการรับสมัครเป็นสมาชิกและเห็นชอบในวัตถุประสงค์ของสหกรณ์ฯ
+              และข้าพเจ้าขอสัญญาว่าจะปฏิบัติตามข้อบังคับ ระเบียบ
+              และมติของสหกรณ์ฯ ทุกประการ
+            </span>
+          </form>
+          <table class="table1 mt-2">
+            <tr>
+              <td class="form-lable">รายละเอียดการขอสมัครเป็นสมาชิก</td>
+            </tr>
+          </table>
+          <table class="table1">
+            <tr>
+              <td class="td-rigth fn">ชื่อเจ้าของบัญชี</td>
+              <td class="fn"></td>
+            </tr>
+          </table>
+          <table class="table1">
+            <tr>
+              <td class="formlable">สถานที่ติดต่อเจ้าของบัญชี</td>
+            </tr>
+          </table>
+          <table class="table1">
+            <tr>
+              <td class="tdtop tdright"></td>
+              <td class="tdtop">
+                <label for="fullName">เลขที่</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตรอก/ซอย</label>
+                <input
+                  class="input-bottom width-12"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ถนน</label>
+                <input
+                  class="input-table width-12"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">หมู่ที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตำบล/แขวง</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-rigth tdright">
+                <div class="textcenter">ที่ปัจจุบัน</div>
+              </td>
+              <td class="td-body">
+                <label for="fullName">อำเภอ/เขต</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">จังหวัด</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">รหัสไปรษณีย์</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">โทรศัพท์</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="tdtop tdright"></td>
+              <td class="tdtop">
+                <label for="fullName">เลขที่</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตรอก/ซอย</label>
+                <input
+                  class="input-bottom width-12"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ถนน</label>
+                <input
+                  class="input-table width-12"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">หมู่ที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตำบล/แขวง</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-rigth tdright">
+                <div class="textcenter">ที่อยู่ตามทะเบียนบ้าน</div>
+              </td>
+              <td class="td-body">
+                <label for="fullName">อำเภอ/เขต</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">จังหวัด</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">รหัสไปรษณีย์</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">โทรศัพท์</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+          </table>
+          <table class="table1">
+            <tr>
+              <td class="form-lable">หนังสือสำคัญประกอบการเปิดบัญชีเงินหุ้น</td>
+            </tr>
+          </table>
+          <table class="table1">
+            <tr>
+              <td class="tdtop">
+                <label for="fullName">1. ชื่อ</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">นามสกุล</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">อายุ</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <span>ปี</span>
+                <label for="fullName">อยู่บ้านเลขที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">หมู่ที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตรอก/ซอย</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-body">
+                <label for="fullName">ถนน</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตำบล</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">อำเภอ/แขวง</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">จังหวัด</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">โทรศัพท์</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">มีความสัมพันธ์เป็น</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <span> ของผู้สมัคร </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="tdtop">
+                <label for="fullName">1. ชื่อ</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">นามสกุล</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">อายุ</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <span>ปี</span>
+                <label for="fullName">อยู่บ้านเลขที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">หมู่ที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตรอก/ซอย</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="td-body">
+                <label for="fullName">ถนน</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตำบล</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">อำเภอ/แขวง</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">จังหวัด</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">โทรศัพท์</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">มีความสัมพันธ์เป็น</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <span> ของผู้สมัคร </span>
+              </td>
+            </tr>
+            <tr>
+              <td class="tdtop">
+                <label for="fullName">1. ชื่อ</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">นามสกุล</label>
+                <input
+                  class="input-table width-15"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">อายุ</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <span>ปี</span>
+                <label for="fullName">อยู่บ้านเลขที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">หมู่ที่</label>
+                <input
+                  class="input-table width-5"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตรอก/ซอย</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="tdbottom">
+                <label for="fullName">ถนน</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">ตำบล</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">อำเภอ/แขวง</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">จังหวัด</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">โทรศัพท์</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <label for="fullName">มีความสัมพันธ์เป็น</label>
+                <input
+                  class="input-table width-8"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                />
+                <span class="mt-2"> ของผู้สมัคร </span>
+              </td>
+            </tr>
+          </table>
+          <table class="table-footer">
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="color-transparent">footer</td>
+            </tr>
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="">
+                <label for="fullName">ลงชื่อ</label>
+                <input
+                  class="input-table width-18"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                /><span>เจ้าของบัญชี</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="">
+                <div class="ml-3">
+                  (<input
+                    class="input-table width-18"
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    required
+                  />)
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="">
+                <label for="fullName">ลงชื่อ</label>
+                <input
+                  class="input-table width-18"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                /><span>เจ้าหน้าที่</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="">
+                <div class="ml-3">
+                  (<input
+                    class="input-table width-18"
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    required
+                  />)
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="">
+                <label for="fullName">ลงชื่อ</label>
+                <input
+                  class="input-table width-18"
+                  type="text"
+                  id="fullName"
+                  name="fullName"
+                  required
+                /><span>พยาน</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="color-transparent"></td>
+              <td class="">
+                <div class="ml-3">
+                  (
+                  <input
+                    class="input-table width-18"
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    required
+                  />
+                  )
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@using Newtonsoft.Json;
+
 
 <PageTitle>FinanceApp</PageTitle>
 
@@ -18,8 +20,13 @@
 </main>
 </div> *@
 @inject IJSRuntime JSRuntime
-@using Microsoft.JSInterop;
+
+@using FinanceApp.Services;
+@using Microsoft.JSInterop
 @using Radzen.Blazor
+@using FinanceApp.Pages.Deposit.Dep_reqdepoit
+@using FinanceApp.Pages.Deposit.Dep_slip_deposit
+@inject ISaveService SaveService
 
 
 <style>
@@ -77,7 +84,7 @@
 
     .w-90 {
         width: 90% !important;
-        @* z-index: 90; *@
+    @*z-index:90;*@
     }
 
     #header img {
@@ -166,7 +173,7 @@
             <div id="header-rcontent">
                 <div class="nav-right">
                     @* <RadzenIcon Icon="save" /><span>Save</span> *@
-                    <RadzenButton Icon="save" Text="Save" Path="/" />
+                    @* <RadzenButton Icon="save" Text="Save" Click="@SaveData" /> *@
                 </div>
                 <div class="nav-right">
                     @* <RadzenIcon Icon="insert_drive_file" /><span>Report</span> *@

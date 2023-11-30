@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using FinanceApp.Data;
 using Radzen;
+using FinanceApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,11 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<NotificationService>();
+builder.Services.AddLogging(builder => builder.AddConsole());
+builder.Services.AddSingleton<ISaveService, SaveService>();
+builder.Services.AddScoped<ISaveService, SaveService>();
+
+
 
 var app = builder.Build();
 

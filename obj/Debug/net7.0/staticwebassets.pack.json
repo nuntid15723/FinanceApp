@@ -81,6 +81,10 @@
       "PackagePath": "staticwebassets\\js\\resize.js"
     },
     {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\select2Interop.js",
+      "PackagePath": "staticwebassets\\js\\select2Interop.js"
+    },
+    {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\selected.js",
       "PackagePath": "staticwebassets\\js\\selected.js"
     },

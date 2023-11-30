@@ -1,0 +1,31 @@
+<!-- SaveButton.razor -->
+<button @onclick="SaveData">บันทึกข้อมูล</button>
+
+@code {
+    [Inject]
+    private ILogger<SaveButton> Logger { get; set; }
+
+    private async Task SaveData()
+    {
+        try
+        {
+            // ทำการบันทึกข้อมูลลงในฐานข้อมูล
+            await SaveDataAsync();
+
+            // บันทึก log
+            Logger.LogInformation("บันทึกข้อมูลลงในฐานข้อมูลสำเร็จ");
+        }
+        catch (Exception ex)
+        {
+            // กรณีเกิด error ในขณะที่บันทึกข้อมูล
+            Logger.LogError($"เกิดข้อผิดพลาด: {ex.Message}");
+        }
+    }
+
+    private async Task SaveDataAsync()
+    {
+        // โค้ดสำหรับบันทึกข้อมูลลงในฐานข้อมูล
+        // ในที่นี้จะเป็นโค้ดทดลอง
+        await Task.Delay(1000); // ทำการ simulate การทำงานที่ใช้เวลา
+    }
+}

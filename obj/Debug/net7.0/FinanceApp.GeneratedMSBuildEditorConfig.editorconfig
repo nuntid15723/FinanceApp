@@ -32,6 +32,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/SaveButton.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2F2ZUJ1dHRvbi5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/Sidebar.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFNpZGViYXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
@@ -44,9 +48,17 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/DepDeposit.razor]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBEZXBvc2l0LnJhem9y
-build_metadata.AdditionalFiles.CssScope = b-3ru5zg23k1
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_reqdepoit/DepReqdepoit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfcmVxZGVwb2l0XERlcFJlcWRlcG9pdC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-9ywdyua9z3
+
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_slip_deposit/DepDeposit.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfc2xpcF9kZXBvc2l0XERlcERlcG9zaXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-jevbfxu0ld
+
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_slip_withdraw/DepWithdraw.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfc2xpcF93aXRoZHJhd1xEZXBXaXRoZHJhdy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-38i8sy31j1
 
 [D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=

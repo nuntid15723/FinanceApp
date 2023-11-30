@@ -1,0 +1,1358 @@
+@page "/dept/deposit"
+@using Newtonsoft.Json
+@using Radzen.Blazor
+@using System.Runtime.InteropServices.JavaScript
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@using System.Linq.Dynamic.Core
+@inject NotificationService NotificationService
+@using System.Globalization
+@using System.Text.Json
+@using System.ComponentModel
+@using System.ComponentModel.DataAnnotations
+
+<style>
+	.icon-search {
+		display: inline-flex !important;
+		justify-content: space-evenly !important;
+		align-items: center !important;
+		position: relative !important;
+		top: 3px !important;
+		padding: 15px !important;
+		flex-wrap: nowrap !important;
+	}
+
+	.table>:not(caption)>*>* {
+		padding: 0.2rem 0.2rem;
+	}
+</style>
+<div class="header-page hrader-page">
+	<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
+	<RadzenButton Icon="save" Text="Save" Click="@SaveDataAsync" />
+</div>
+@if (isLoading)
+{
+	<div
+		style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%; justify-content: center; align-items: center; z-index: 90;">
+		<div class="spinner-border text-primary" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+}
+else
+{
+	@if (datadetail == null)
+	{
+		<div class="card body-page">
+			<div class="row" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+				<div class="row">
+					<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+						<label class="form-label" for="">เลขที่บัญชี</label>
+						<div class="form-group ">
+							<div class="input-group">
+								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
+									Name="deptaccount_no" class="form-control" />
+								<div class="input-group-addon">
+									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+										data-bs-target="#ModalSearch" />
+								</div>
+							</div>
+						</div>
+						<div class="modal" id="ModalSearch">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+									<!-- Modal Header -->
+									<div class="modal-header">
+										<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+									</div>
+									<!-- Modal body -->
+									<div class="modal-body">
+										<div class="row" style="margin-left:-4px;margin-right:-4px;">
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ประเภทบัญชี</label>
+												@* @foreach (var item in datadetail)
+										{
+										var Item = item.deptSlip;
+										<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
+										@onchange="RecpPayTypeChanged">
+										<option selected disabled></option>
+										@foreach (var recppaytypeItem in Item.recppaytype)
+										{
+										if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+										{
+										isCurrentOptionSelected = true;
+
+										}
+										else
+										{
+										isCurrentOptionSelected = false;
+										}
+										if (recppaytypeItem.genvc_flag == 1)
+										{
+										<option value="@recppaytypeItem.recppaytype_code"
+										selected="@isCurrentOptionSelected">
+										@recppaytypeItem.recppaytype_desc
+										</option>
+										}
+										}
+										}
+
+										</select>
+										} *@
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขที่บัญชี</label>
+												<div class="form-group ">
+													<div class="input-group">
+														@* <input class="form-control" type="text" name="emp_name"
+												@bind-value="deptaccount_no"> *@
+														<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
+															@bind-value="deptaccount_No_fild" Name="deptaccount_no"
+															class="form-control" />
+
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อบัญชี :</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="emp_name"
+															@bind-value="deptaccount_name_fild">
+
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">สถานะบัญชี :</label>
+												<select class="form-select" @bind="deptclose_status"
+													aria-label="Default select example">
+													<option Value="0">เปิดบัญชี</option>
+													<option Value="1">ปิดบัญชี</option>
+												</select>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขที่สมาชิก</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="memb_name"
+															@bind-value="member_no">
+
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขพนักงาน</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="salary_id"
+															@bind-value="salary_id">
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อ</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="memb_name"
+															@bind-value="memb_name">
+
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">นามสกุล</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="memb_surname"
+															@bind-value="memb_surname">
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">บัตรประชาชน :</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="card_person"
+															@bind-value="card_person">
+
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เบอร์โทรศัพท์ :</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="form-control" type="text" name="mem_telmobile"
+															@bind-value="mem_telmobile">
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<button class="btn btn-outline-secondary"
+													@onclick="SearchOfGetAcc">ค้นหา</button>
+											</div>
+										</div>
+										<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
+											AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+											FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+											AllowPaging="true" AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left"
+											ShowPagingSummary="true">
+											<Columns>
+												<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+													Title="เลขที่บัญชี" Property="deptaccount_no">
+													<Template>
+														<div @onclick="@(e => UpdateAccountDetails(context))"
+															data-bs-dismiss="modal">
+															@context.deptaccount_no
+														</div>
+													</Template>
+												</RadzenDataGridColumn>
+
+												<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+													Title="ชื่อบัญชี" Property="deptaccount_name">
+													<Template>
+														<div @onclick="@(e => UpdateAccountDetails(context))"
+															data-bs-dismiss="modal">
+															@context.deptaccount_name
+														</div>
+													</Template>
+												</RadzenDataGridColumn>
+												<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+													Title="เลขสมาชิก" Property="member_no">
+													<Template>
+														<div @onclick="@(e => UpdateAccountDetails(context))"
+															data-bs-dismiss="modal">
+															@context.member_no
+														</div>
+													</Template>
+												</RadzenDataGridColumn>
+												<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+													Title=" ชื่อ -นามสกุล" Property="full_name">
+													<Template>
+														<div @onclick="@(e => UpdateAccountDetails(context))"
+															data-bs-dismiss="modal">
+															@context.full_name
+														</div>
+													</Template>
+												</RadzenDataGridColumn>
+											</Columns>
+										</RadzenDataGrid>
+
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+						<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+	else
+	{
+		<div class="card body-page">
+			<div class="from">
+				@foreach (var item in datadetail)
+				{
+					var Item = item.deptSlip;
+					<div class="row" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+						<div class="row">
+							<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">เลขที่บัญชี</label>
+								<div class="form-group ">
+									<div class="input-group">
+										@* <input class="form-control" type="text" name="deptaccount_no" @bind="deptaccount_no"> *@
+										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
+											Name="deptaccount_no" class="form-control" />
+										<div class="input-group-addon">
+											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+												data-bs-target="#anotherModal" />
+										</div>
+									</div>
+								</div>
+								<div class="modal" id="anotherModal">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<!-- Modal Header -->
+											<div class="modal-header">
+												<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+											</div>
+											<!-- Modal body -->
+											<div class="modal-body">
+												<div class="row" style="margin-left:-4px;margin-right:-4px;">
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">ประเภทบัญชี</label>
+														@* @foreach (var item in datadetail)
+											{
+											var Item = item.deptSlip;
+											<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
+											@onchange="RecpPayTypeChanged">
+											<option selected disabled></option>
+											@foreach (var recppaytypeItem in Item.recppaytype)
+											{
+											if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+											{
+											isCurrentOptionSelected = true;
+
+											}
+											else
+											{
+											isCurrentOptionSelected = false;
+											}
+											if (recppaytypeItem.genvc_flag == 1)
+											{
+											<option value="@recppaytypeItem.recppaytype_code"
+											selected="@isCurrentOptionSelected">
+											@recppaytypeItem.recppaytype_desc
+											</option>
+											}
+											}
+											}
+
+											</select>
+											} *@
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">เลขที่บัญชี</label>
+														<div class="form-group ">
+															<div class="input-group">
+																@* <input class="form-control" type="text" name="emp_name"
+													@bind-value="deptaccount_no"> *@
+																<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
+																	@bind-value="deptaccount_No_fild" Name="deptaccount_no"
+																	class="form-control" />
+
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">ชื่อบัญชี :</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="emp_name"
+																	@bind-value="deptaccount_name_fild">
+
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">สถานะบัญชี :</label>
+														<select class="form-select" @bind="deptclose_status"
+															aria-label="Default select example">
+															<option Value="0">เปิดบัญชี</option>
+															<option Value="1">ปิดบัญชี</option>
+														</select>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">เลขที่สมาชิก</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="memb_name"
+																	@bind-value="member_no">
+
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">เลขพนักงาน</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="salary_id"
+																	@bind-value="salary_id">
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">ชื่อ</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="memb_name"
+																	@bind-value="memb_name">
+
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">นามสกุล</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="memb_surname"
+																	@bind-value="memb_surname">
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">บัตรประชาชน :</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="card_person"
+																	@bind-value="card_person">
+
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">เบอร์โทรศัพท์ :</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<input class="form-control" type="text" name="mem_telmobile"
+																	@bind-value="mem_telmobile">
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+														<button class="btn btn-outline-secondary"
+															@onclick="SearchOfGetAcc">ค้นหา</button>
+													</div>
+												</div>
+												<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
+													ColumnWidth="200px" AllowFiltering="true"
+													FilterPopupRenderMode="PopupRenderMode.OnDemand"
+													FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+													AllowPaging="true" AllowSorting="true"
+													PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+													<Columns>
+														<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+															Title="เลขที่บัญชี" Property="deptaccount_no">
+															<Template>
+																<div @onclick="@(e => UpdateAccountDetails(context))"
+																	data-bs-dismiss="modal">
+																	@context.deptaccount_no
+																</div>
+															</Template>
+														</RadzenDataGridColumn>
+
+														<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+															Title="ชื่อบัญชี" Property="deptaccount_name">
+															<Template>
+																<div @onclick="@(e => UpdateAccountDetails(context))"
+																	data-bs-dismiss="modal">
+																	@context.deptaccount_name
+																</div>
+															</Template>
+														</RadzenDataGridColumn>
+														<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+															Title="เลขสมาชิก" Property="member_no">
+															<Template>
+																<div @onclick="@(e => UpdateAccountDetails(context))"
+																	data-bs-dismiss="modal">
+																	@context.member_no
+																</div>
+															</Template>
+														</RadzenDataGridColumn>
+														<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+															Title=" ชื่อ -นามสกุล" Property="full_name">
+															<Template>
+																<div @onclick="@(e => UpdateAccountDetails(context))"
+																	data-bs-dismiss="modal">
+																	@context.full_name
+																</div>
+															</Template>
+														</RadzenDataGridColumn>
+													</Columns>
+												</RadzenDataGrid>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+								<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">รายการ</label>
+								@* <select id="recppaytypeSelect" @ref="recepPayTypeSelect" name="recppaytype_code"
+					class="form-select"
+					@onchange="RecpPayTypeChanged"> *@
+								<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
+									@onchange="RecpPayTypeChanged">
+
+									@if (Item.recppaytype == null || !Item.recppaytype.Any())
+									{
+										<option selected disabled></option>
+									}
+									else
+									{
+										<option selected disabled></option>
+										@foreach (var recppaytypeItem in Item.recppaytype)
+										{
+											if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+											{
+												isCurrentOptionSelected = true;
+
+											}
+											else
+											{
+												isCurrentOptionSelected = false;
+											}
+											if (recppaytypeItem.genvc_flag == 1)
+											{
+												<option
+													value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}")"
+													selected="@isCurrentOptionSelected">
+													@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+												</option>
+											}
+											@* <option
+						value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}")"
+						selected="@isCurrentOptionSelected">
+						@recppaytypeItem.recppaytype_desc
+						</option> *@
+										}
+									}
+
+								</select>
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">วันที่</label>
+								@* <input class="form-control" type="text" DateFormat="dd/MM/yyyy" name="operate_date"
+					@bind="Item.operate_date" /> *@
+								<RadzenDatePicker @bind-Value=@Item.operate_date Name="operate_date" DateFormat="dd/MM/yyyy" />
+							</div>
+							<!-- The Modal -->
+							<div class="modal" id="anotherModal">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+										<!-- Modal Header -->
+										<div class="modal-header">
+											<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+										</div>
+										<!-- Modal body -->
+										<div class="modal-body">
+											<div class="row">
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ชื่อ</label>
+													<div class="form-group ">
+														<div class="input-group">
+															@* <input class="form-control" type="text" name="emp_name"
+												@bind="emp_name">
+												*@
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">นามสกุล</label>
+													<div class="form-group ">
+														<div class="input-group">
+															@* <input class="form-control" type="text"
+												name="emp_surname"@bind="emp_surname"> *@
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													@* <button type="button" class="btn
+										btn-outline-secondary"@onclick="SearchModals">ค้นหา</button> *@
+												</div>
+											</div>
+											@* @if (employeeData != null)
+								{ *@
+											<table id="example" class="table mt-2" style="width:100%">
+												<thead>
+													<tr>
+														<th>เลขที่สมาชิก</th>
+														<th>ชื่อ</th>
+														<th>นามสกุล</th>
+														<th>ชื่อเล่น</th>
+														<th>เลขบัตรประชาชน</th>
+													</tr>
+												</thead>
+												@* @foreach (var Itemmodal in employeeData)
+									{
+									<tbody>
+									<tr>
+									<td><a style="cursor: pointer;"
+									@onclick="() => OpenModal(Itemmodal.emp_no)">@Itemmodal.emp_no</a></td>
+									<td>@Itemmodal.emp_name</td>
+									<td>@Itemmodal.emp_surname</td>
+									<td>@Itemmodal.emp_nickname</td>
+									<td>@Itemmodal.id_card</td>
+									</tr>
+									</tbody>
+									} *@
+											</table>
+
+											<!-- Modal footer -->
+											<div class="modal-footer">
+												<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+											</div>
+											@* } *@
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">เลขสมุด</label>
+								@* <RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
+					name="deptaccount_no" @bind-value="Item.deptaccount_no" /> *@
+								<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="Item.deptpassbook_no"
+									Name="deptaccount_no" class="form-control" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ชื่อบัญชี</label>
+								<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
+									Name="deptaccount_name" @bind-value="Item.deptaccount_name" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ประเภทบัญชี</label>
+								<RadzenTextBox class="form-control" type="text" Name="depttype_code"
+									@bind-value="Item.depttype_desc" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ทำรายการโดย</label>
+								<select class="form-select" @bind="nobook_flag" aria-label="Default select example">
+									<option Value="0">มีสมุด</option>
+									<option Value="1">ไม่มีสมุด</option>
+								</select>
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">อ้างอิงรายการ</label>
+								<div class="form-group ">
+									<div class="input-group">
+										<RadzenTextBox class="form-control" type="text" Name="refer_slipno" />
+										<div class="input-group-addon">
+											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+												data-bs-target="#myModal" />
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- The Modal -->
+							<div class="modal" id="myModal">
+								<div class="modal-dialog modal-lg">
+									<div class="modal-content">
+										<!-- Modal Header -->
+										<div class="modal-header">
+											<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+											<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+										</div>
+										<!-- Modal body -->
+										<div class="modal-body">
+											<div class="row">
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ชื่อ</label>
+													<div class="form-group ">
+														<div class="input-group">
+															@* <input class="form-control" type="text" name="emp_name"
+												@bind="emp_name">
+												*@
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">นามสกุล</label>
+													<div class="form-group ">
+														<div class="input-group">
+															@* <input class="form-control" type="text"
+												name="emp_surname"@bind="emp_surname"> *@
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													@* <button type="button" class="btn
+										btn-outline-secondary"@onclick="SearchModals">ค้นหา</button> *@
+												</div>
+											</div>
+											@* @if (employeeData != null)
+								{ *@
+											<table id="example" class="table mt-2" style="width:100%">
+												<thead>
+													<tr>
+														<th>เลขที่สมาชิก</th>
+														<th>ชื่อ</th>
+														<th>นามสกุล</th>
+														<th>ชื่อเล่น</th>
+														<th>เลขบัตรประชาชน</th>
+													</tr>
+												</thead>
+												@* @foreach (var Itemmodal in employeeData)
+									{
+									<tbody>
+									<tr>
+									<td><a style="cursor: pointer;"
+									@onclick="() => OpenModal(Itemmodal.emp_no)">@Itemmodal.emp_no</a></td>
+									<td>@Itemmodal.emp_name</td>
+									<td>@Itemmodal.emp_surname</td>
+									<td>@Itemmodal.emp_nickname</td>
+									<td>@Itemmodal.id_card</td>
+									</tr>
+									</tbody>
+									} *@
+											</table>
+
+											<!-- Modal footer -->
+											<div class="modal-footer">
+												<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+											</div>
+											@* } *@
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">เพื่อ</label>
+								<RadzenTextBox class="form-control" type="text" Name="dept_objective"
+									@bind-value="Item.dept_objective" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">หมายเหตู</label>
+								<input class="form-control" type="text" Name="remark" @bind-value="@Item.remark" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">คงเหลือ</label>
+								<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
+									@bind-value="Item.prncbal" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">คงเหลือสูงสุด</label>
+								<input class="form-control" style="text-align: end;" type="text" Name="withdrawable_amt"
+									@bind-value="Item.withdrawable_amt" />
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ยอดฝากได้</label>
+								<input class="form-control" style="text-align: end;" type="text" Name="emp_no"
+									@bind-value="Item.deptslip_amt" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ยอดทำรายการ</label>
+								<div class="form-group ">
+									<div class="input-group">
+										<input type="text" class="format-money    form-control" style="text-align: end;"
+											Name="deptslip_netamt"
+											value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)"
+											placeholder="0.00" onblur="formattNumber(this)" />
+										<div class="input-group-addon">
+											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+												data-bs-target="#myModal1" />
+										</div>
+									</div>
+								</div>
+								<!-- The Modal -->
+								<div class="modal" id="myModal1">
+									<div class="modal-dialog modal-lg">
+										<div class="modal-content">
+											<!-- Modal Header -->
+											<div class="modal-header">
+												<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+											</div>
+											<!-- Modal body -->
+											<div class="modal-body">
+												<div style="margin: 20px">
+												</div>
+												<span>
+													<asp:Button ID="b_calChange" runat="server"
+														Style="float: left; width: 100%; height: 25px" Text="คำนวณเงินทอน"
+														TabIndex="12" BackColor="#556B2F" ForeColor="White" />
+												</span>
+
+												<!-- Modal footer -->
+												<div class="modal-footer">
+													<button type="button" class="btn btn-danger"
+														data-bs-dismiss="modal">Close</button>
+												</div>
+
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ยอดสุทธิ</label>
+								<input class="format-money form-control" placeholder="0.00" type="text"
+									style="text-align: end; font-size: 40px;" readonly name="deptslipAmt"
+									value="@(deptslipNetamt!= null?Item.deptslip_netamt:deptslipNetamt)" id="showNumber" />
+							</div>
+						</div>
+						<div class="row mt-button">
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ประเภทเงิน</label>
+								<input class="form-control" type="text" name="cash_type"
+									value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
+							</div>
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">รหัสคู่บัญชี</label>
+								@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+								<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+									@if (Item.tofromacc == null || !Item.tofromacc.Any())
+									{
+										<option selected disabled></option>
+									}
+									else
+									{
+										<option selected disabled></option>
+										@foreach (var tofromaccItem in Item.tofromacc)
+										{
+											if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+											{
+												isCurrentOptionSelected = true;
+
+											}
+											else
+											{
+												isCurrentOptionSelected = false;
+											}
+											<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+												selected="@isCurrentOptionSelected">
+												@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+											</option>
+
+										}
+									}
+								</select>
+							</div>
+						</div>
+						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+							<button type="button" @onclick=SaveDataAsync>SaveDataAsync</button>
+						</div>
+					</div>
+					@if (recpPayTypeCode == "DEN")
+					{
+
+						<div class="row mt-5">
+							<div class="col-12">
+								<div class="row">
+									<div class="col-2" style="text-align: end;">
+										<h4>รายการเช็ค:</h4>
+									</div>
+									<div class="col-4"><button class="btn btn-outline-primary" style="border: solid 1px #d1d1d1;"
+											@onclick="AddRow">เพิ่มแถว</button></div>
+								</div>
+							</div>
+							<div class=" mt-1">
+								<div class="row mt-2">
+									<div class="col-12">
+										<table class="table table-bordered" style="width: 100%;">
+											<thead>
+												<tr>
+													<th style="text-align: center;width:10%;background-color: rgb(166, 207, 243);">
+														เลขที่เช็ค
+													</th>
+													<th style="text-align: center;width:13%;background-color: rgb(166, 207, 243);">
+														วันที่หน้าchq
+													</th>
+													<th style="text-align: center;width:8%;background-color: rgb(166, 207, 243);">รหัส
+													</th>
+													<th style="text-align: center;width:20%;background-color: rgb(166, 207, 243);">
+														ธนาคาร </th>
+													<th style="text-align: center;width:8%;background-color: rgb(166, 207, 243);">รหัส
+													</th>
+													<th style="text-align: center;width:20%;background-color: rgb(166, 207, 243);">สาขา
+													</th>
+													<th style="text-align: center;width:3%;background-color: rgb(166, 207, 243);"></th>
+													<th style="text-align: center;width:15%;background-color: rgb(166, 207, 243);">
+														จำนวนเงิน
+													</th>
+													<th style="text-align: center;width:3%;background-color: rgb(166, 207, 243);">ลบ
+													</th>
+												</tr>
+											</thead>
+											<tbody>
+												@if (rows != null && rows.Count > 0)
+												{
+													@foreach (var row in rows)
+													@* @for (var index = 0; index < rows.Count; index++) *@
+													{
+														<tr>
+															<td><input class="form-control"
+																	style="width:100%;text-align: center; border: solid 1px #fff;"
+																	placeholder="0" type="text" @bind="row.cheque_no" /></td>
+															<td>
+																<RadzenDatePicker class="inputrPicker" @bind-Value=row.cheque_date
+																	Name="operate_date" DateFormat="dd/MM/yyyy" />
+															</td>
+															<td>
+																<input class="form-control"
+																	style="width:100%;text-align: center; border: solid 1px #fff;" type="text"
+																	@bind-value="row.bank_code" @oninput="OnGetBankChanged" />
+															</td>
+															<td>
+																<select id="getBankSelect" class="form-select"
+																	@onchange="OnGetBankSelectChanged">
+																	<option selected disabled>--กรุณาเลือก--</option>
+																	@foreach (var getBankItem in getBank)
+																	{
+																		bool isCurrentOptionSelected = getBankItem.bank_code == row.bank_code;
+																		<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
+																			@getBankItem.bank_code - @getBankItem.bank_desc
+																		</option>
+																	}
+																</select>
+																@* <RadzenDropDown @ref="radzenDropDown" @bind-SearchText="searchText"
+										FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+										FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+										Data="@getBank" TextProperty="bank_desc" ValueProperty="bank_code"
+										AllowClear="true" @bind-Value="selectedCustomer"
+										Style="width: 100%; max-width: 400px;" /> *@
+
+															</td>
+
+															<td>
+																<input class="form-control"
+																	style="width:100%;text-align: center; border: solid 1px #fff;" type="text"
+																	@bind="row.branch_id" />
+
+															</td>
+															<td>
+																<select class="form-select">
+																	<option selected disabled>--กรุณาเลือก--</option>
+																	@foreach (var bankBranchItem in bankBranch)
+																	{
+																		bool isCurrentOptionSelected = bankBranchItem.branch_id == row.branch_id;
+																		<option value="@bankBranchItem.branch_id"
+																			selected="@isCurrentOptionSelected">
+																			@bankBranchItem.branch_id - @bankBranchItem.branch_name
+																		</option>
+																	}
+																</select>
+															</td>
+															<td>
+																<RadzenIcon style="width:100%" class="icons icon-search" Icon="ballot"
+																	data-bs-toggle="modal" data-bs-target="#myModal1" />
+															</td>
+															<td><input class="form-control"
+																	style="width:100%;text-align: end;border: solid 1px #fff;"
+																	placeholder="0.00" onblur="formattNumberr(this)" type="text"
+																	@bind="row.cheque_amt" /></td>
+															<td style="width:100%">
+																<button class="btn btn-outline-danger"
+																	@onclick="() => RemoveRow(row)">ลบ</button>
+															</td>
+														</tr>
+													}
+												}
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+					}
+				}
+			</div>
+		</div>
+		<div class="card mt-4">
+			<div class="row mt-2"
+				style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+				<RadzenTabs @bind-SelectedIndex=@selectedIndex>
+					<Tabs>
+						<RadzenTabsItem Text="รายละเอียดต้นเงิน">
+							<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
+								AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+								FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+								AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+								<Columns>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ต้นเงิน" Property="prnc_no">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ต้นเงินคงเหลือ"
+										Property="prnc_bal">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ยอดเงินทำรายการ"
+										Property="prncslip_amt">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันที่ต้นเงิน"
+										Property="prnc_date">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันครบกำหนด"
+										Property="prncdue_date">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันเริ่มคิดด/บถึง"
+										Property="calint_from">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บ จ่าย" Property="calint_to">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ภาษี" Property="intpay_amt">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บ.หลังหักภาษี"
+										Property="taxpay_amt">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บค้าง" Property="intslip_net">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ค่าปรับ"
+										Property="intbf_accyear">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บ เรียกคืน"
+										Property="int_return">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ภาษี เรียกคืน"
+										Property="tax_return">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="อัตราดอกเบี้ย"
+										Property="interest_rate">
+									</RadzenDataGridColumn>
+									<RadzenDataGridColumn TItem="Models.AccountDetails" Title="จำนวนวัน" Property="day_cal">
+									</RadzenDataGridColumn>
+								</Columns>
+							</RadzenDataGrid>
+						</RadzenTabsItem>
+						<RadzenTabsItem Text="ลายเซ็น">
+							ลายเซ็น
+						</RadzenTabsItem>
+					</Tabs>
+				</RadzenTabs>
+			</div>
+		</div>
+	}
+}
+
+<script>
+	$(document).ready(function () {
+		var previous_data;
+		$(".format-money").on('focus', function () {
+			previous_data = this.value;
+		}).change(function () {
+			var item_amt = this.value;
+			item_amt = formatNumber(Number(item_amt.replace(/[^0-9.-]+/g, "")));
+			this.value = item_amt; // ต้องกำหนดค่ากลับไปให้ฟิลด์
+		});
+	});
+
+	function formattNumber(input) {
+		let anotherInput = document.getElementById('showNumber');
+		let value = input.value.replace(/[^0-9.]/g, '');
+		let number = parseFloat(value);
+		if (!isNaN(number)) {
+			let formattedValue = number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			input.value = formattedValue;
+			anotherInput.value = formattedValue;
+		} else {
+			input.value = '';
+		}
+	}
+	function formattNumberr(input) {
+		let value = input.value.replace(/[^0-9.]/g, '');
+		let number = parseFloat(value);
+		if (!isNaN(number)) {
+			let formattedValue = number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			input.value = formattedValue;
+		} else {
+			input.value = '';
+		}
+	}
+</script>
+<script>
+	window.preventNonNumericInput = (element) => {
+		element.addEventListener('keypress', function (e) {
+			if (!/[\d.]/.test(e.key)) {
+				e.preventDefault();
+			}
+
+			if (e.key === '.' && element.value.includes('.')) {
+				e.preventDefault();
+			}
+		});
+	}
+</script>
+@code {
+	private string searchText;
+	int selectedIndex = 0;
+
+	@* public List<GetBank>? getBanks ; *@
+
+	@*
+private async Task OnInitializedAsync()
+{
+if (getBank == null)
+{
+getBank = new List<Models.GetBank>();
+}
+foreach (var item in getBank)
+{
+Console.WriteLine($"bank_code: {item.bank_code}, bank_desc: {item.bank_desc}, bank_name_e: {item.bank_name_e},
+bank_shortname_t: {item.bank_shortname_t}");
+
+getBank.Add(new Models.GetBank { bank_code = item.bank_code, bank_desc = item.bank_code +"-"+ item.bank_desc });
+}
+} *@
+	private Models.GetBank selectedCustomer;
+
+	private RadzenDropDown<Models.GetBank> radzenDropDown;
+
+	@* private class GetBank
+{
+public string bank_code { get; set; }
+public string bank_desc { get; set; }
+public string bank_name_e { get; set; }
+public string bank_shortname_t { get; set; }
+} *@
+
+	IList<IDictionary<string, object>> accDetails; // Assuming this is your original data
+	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+	private List<TableRow> rows = new List<TableRow>();
+	private List<string> bankValuesList = new List<string>();
+
+	public class TableRow
+	{
+		public string? cheque_no { get; set; }
+		public DateTime? cheque_date = DateTime.Now;
+		public DateTime? entry_time { get; set; }
+		public DateTime? chequedue_date { get; set; }
+		public string? cheque_type { get; set; }
+		public decimal? cheque_amt { get; set; }
+		public int? seq_no { get; set; }
+		public int? checkclear_status { get; set; }
+		public string bank_code { get; set; }
+		public string bank_desc { get; set; }
+		public string bank_name_e { get; set; }
+		public string bank_shortname_t { get; set; }
+		public string branch_id { get; set; }
+		public string branch_name { get; set; }
+	}
+	private bool isLoadingSave;
+
+	private void OnInitialized()
+	{
+		AddRow();
+		StateHasChanged();
+	}
+	private void AddRow()
+	{
+		@* rows.Add(new TableRow()); *@
+		try
+		{
+			isLoadingSave = true;
+			var newRow = new TableRow
+				{
+					cheque_no = rows.Count > 0 ? rows[0].cheque_no : "0",
+					cheque_date = rows.Count > 0 ? rows[0].cheque_date : DateTime.Now,
+					bank_code = rows.Count > 0 ? rows[0].bank_code : "000",
+					branch_id = rows.Count > 0 ? rows[0].branch_id : "0000",
+				};
+			rows.Add(newRow);
+			ShowNotification(new NotificationMessage
+				{
+					Severity = NotificationSeverity.Success,
+					Summary =
+				"Success",
+					Detail = "เพิ่มแถวเรียบร้อย",
+					Duration = 1500
+				});
+		}
+		catch (Exception ex)
+		{
+			isLoadingSave = false;
+			ShowNotification(new NotificationMessage
+				{
+					Severity = NotificationSeverity.Error,
+					Summary =
+				"Error",
+					Detail = ex.Message,
+					Duration = 5000
+				});
+			Console.WriteLine(ex.Message.ToString());
+		}
+		finally
+		{
+			isLoadingSave = false;
+
+		}
+
+	}
+	private void RemoveRow(TableRow row)
+	{
+		try
+		{
+			isLoadingSave = true;
+			rows.Remove(row);
+			ShowNotification(new NotificationMessage
+				{
+					Severity = NotificationSeverity.Success,
+					Summary =
+				"Success",
+					Detail = "ลบเรียบร้อย",
+					Duration = 1500
+				});
+		}
+		catch (Exception ex)
+		{
+			isLoadingSave = false;
+			ShowNotification(new NotificationMessage
+				{
+					Severity = NotificationSeverity.Error,
+					Summary =
+				"Error",
+					Detail = ex.Message,
+					Duration = 5000
+				});
+			Console.WriteLine(ex.Message.ToString());
+		}
+		finally
+		{
+			isLoadingSave = false;
+
+		}
+
+	}
+	private string BankBranchValues { get; set; }
+	private string BankValues { get; set; }
+	private async Task OnBankBranchChanged(ChangeEventArgs e)
+	{
+		BankBranchValues = e.Value.ToString();
+	}
+	private void OnBankBranchSelectChanged(ChangeEventArgs e)
+	{
+		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
+		bankbranch_code = e.Value.ToString();
+		BankBranchValues = bankbranch_code;
+	}
+	private async Task OnGetBankChanged(ChangeEventArgs e)
+	{
+		BankValues = e.Value.ToString();
+		Console.WriteLine($"BankValues: {BankValues}");
+	}
+	private void OnGetBankSelectChanged(ChangeEventArgs e)
+	{
+		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
+		bank_code = e.Value.ToString();
+		Console.WriteLine($"BankValues: {bank_code}");
+		BankValues = bank_code;
+
+	}
+}
+@* @code {
+private string formatMoneyValue;
+private string showNumberValue;
+private string previousData;
+
+private void FormatMoneyFocus(FocusEventArgs e)
+{
+previousData = formatMoneyValue;
+}
+
+private void FormatMoneyChange(ChangeEventArgs e)
+{
+string itemAmount = e.Value.ToString();
+itemAmount = FormatNumber(double.Parse(System.Text.RegularExpressions.Regex.Replace(itemAmount, "[^0-9.-]+",
+"")));
+formatMoneyValue = itemAmount;
+}
+
+private string FormatNumber(double input)
+{
+string value = showNumberValue?.Replace("[^0-9.]", "") ?? "";
+double number = double.Parse(value);
+
+if (!double.IsNaN(number))
+{
+string formattedValue = number.ToString("N2");
+showNumberValue = formattedValue;
+return formattedValue;
+}
+else
+{
+showNumberValue = "";
+return "";
+}
+}
+} *@
+@* @code {
+IList<IDictionary<string, object>> selectedItems;
+int selectedIndex = 0;
+
+public IEnumerable<IDictionary<string, object>> data { get; set; }
+
+public IDictionary<string, Type> columns { get; set; }
+
+public string GetColumnPropertyExpression(string name, Type type)
+{
+var expression = $@"it[""{name}""].ToString()";
+
+if (type == typeof(int))
+{
+return $"int.Parse({expression})";
+}
+else if (type == typeof(DateTime))
+{
+return $"DateTime.Parse({expression})";
+}
+
+return expression;
+}
+
+protected override async Task OnInitializedAsync()
+{
+await base.OnInitializedAsync();
+
+columns = new Dictionary<string, Type>()
+{
+{ "ต้นเงิน", typeof(int) },
+{ "ต้นเงินคงเหลือ", typeof(string) },
+{ "ยอดเงินทำรายการ", typeof(string) },
+{ "วันที่ต้นเงิน", typeof(DateTime) },
+{ "วันครบกำหนด", typeof(DateTime) },
+{ "วันเริ่มคิดด/บถึง", typeof(DateTime) },
+{ "วันคิดด/บถึง", typeof(DateTime) },
+{ "ด/บ จ่าย", typeof(DateTime) },
+{ "ภาษี", typeof(string) },
+{ "ด/บ.หลังหักภาษี", typeof(DateTime) },
+{ "ด/บค้าง", typeof(DateTime) },
+{ "ค่าปรับ", typeof(string) },
+{ "ด/บ เรียกคืน", typeof(DateTime) },
+{ "ภาษี เรียกคืน", typeof(string) },
+{ "อัตราดอกเบี้ย", typeof(string) },
+{ "จำนวนวัน", typeof(string) },
+};
+
+foreach (var i in Enumerable.Range(0, 5))
+{
+columns.Add($"Column{i}", typeof(string));
+}
+
+data = Enumerable.Range(0, 20).Select(i =>
+{
+var row = new Dictionary<string, object>();
+
+foreach (var column in columns)
+{
+row.Add(column.Key, column.Value == typeof(int) ? i :
+column.Value == typeof(DateTime) ? DateTime.Now.AddMonths(i) : $"{column.Key}{i}");
+}
+
+return row;
+});
+}
+} *@
+@* @code {
+// ตัวแปรสำหรับเก็บค่าที่เลือกใน dropdown แรก
+private string selectedValue;
+private string cashTypeValue;
+
+
+// Event handler สำหรับ dropdown แรก
+private void RecpPayTypeChanged(ChangeEventArgs e)
+{
+// เมื่อมีการเปลี่ยนแปลงค่าใน dropdown แรก
+// ให้กำหนดค่าที่เลือกใน dropdown ที่สองเป็นค่าเดียวกัน
+selectedValue = e.Value.ToString();
+ShowCashType();
+}
+
+private void ShowCashType()
+{
+cashTypeValue = selectedValue;
+}
+
+private string deptslipAmt;
+private async Task CheckNumber(KeyboardEventArgs e)
+{
+int e_k = e.Key[0]; // ดึงค่า char แรกจาก Key
+
+// 13 = Enter, 46 = .
+if (e_k != 13 && e_k != 46 && (e_k < 48 || e_k > 57))
+{
+// ไม่ให้ผ่านค่าเข้ามา
+await jsRuntime.InvokeVoidAsync("alert", "กรุณากรอกเฉพาะตัวเลขเท่านั้น!");
+}
+}
+} *@

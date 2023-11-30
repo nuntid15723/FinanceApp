@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 namespace FinanceApp.Models
 {
     public class Deposit
@@ -58,9 +60,9 @@ namespace FinanceApp.Models
         public string? entry_id { get; set; }
         public string? machine_id { get; set; }
         public string? tofrom_accid { get; set; }
-        public DateTime operate_date { get; set; }
-        public DateTime entry_date { get; set; }
-        public DateTime calint_from { get; set; }
+        public DateTime? operate_date { get; set; }
+        public DateTime? entry_date { get; set; }
+        public DateTime? calint_from { get; set; }
         public int? operate_code { get; set; }
         public int? sign_flag { get; set; }
         public int? laststmseq_no { get; set; }
@@ -113,11 +115,11 @@ namespace FinanceApp.Models
         public int? prnc_no { get; set; }
         public decimal? prnc_bal { get; set; }
         public decimal? prnc_amt { get; set; }
-        public DateTime prnc_date { get; set; }
-        public DateTime calint_from { get; set; }
-        public DateTime calint_to { get; set; }
-        public DateTime prncdue_date { get; set; }
-        public DateTime prncmindue_date { get; set; }
+        public DateTime? prnc_date { get; set; }
+        public DateTime? calint_from { get; set; }
+        public DateTime? calint_to { get; set; }
+        public DateTime? prncdue_date { get; set; }
+        public DateTime? prncmindue_date { get; set; }
         public int? prncdue_nmonth { get; set; }
         public decimal? prncslip_amt { get; set; }
         public decimal? intarr_amt { get; set; }
@@ -125,8 +127,8 @@ namespace FinanceApp.Models
         public decimal? taxpay_amt { get; set; }
         public decimal? intbf_accyear { get; set; }
         public int? intcur_accyear { get; set; }
-        public DateTime monthintdue_date { get; set; }
-        public DateTime prncdeptdue_date { get; set; }
+        public DateTime? monthintdue_date { get; set; }
+        public DateTime? prncdeptdue_date { get; set; }
         public decimal? interest_rate { get; set; }
         public decimal? int_return { get; set; }
         public decimal? tax_return { get; set; }
@@ -158,15 +160,18 @@ namespace FinanceApp.Models
         public string? deptslip_no { get; set; }
         public string? deptaccount_no { get; set; }
         public string? cheque_no { get; set; }
+        [DefaultValue(0)]
         public string? bank_code { get; set; }
         public string? bankbranch_code { get; set; }
-        public DateTime cheque_date { get; set; }
-        public DateTime entry_date { get; set; }
-        public DateTime entry_time { get; set; }
-        public DateTime chequedue_date { get; set; }
+        public DateTime? cheque_date { get; set; }
+        public DateTime? entry_date { get; set; }
+        public DateTime? entry_time { get; set; }
+        public DateTime? chequedue_date { get; set; }
         public string? cheque_type { get; set; }
         public decimal? cheque_amt { get; set; }
+        [DefaultValue(0)]
         public int? seq_no { get; set; }
+        [DefaultValue(0)]
         public int? checkclear_status { get; set; }
         public string? entry_id { get; set; }
         public string? depttype_code { get; set; }
@@ -186,12 +191,6 @@ namespace FinanceApp.Models
         public int genvc_flag { get; set; }
         public int adjdate_status { get; set; }
     }
-    public class ApiResponse
-    {
-        public bool status { get; set; }
-        public Deposit data { get; set; }
-        public string message { get; set; }
-    }
     public class ErrorResponse
     {
         public string Type { get; set; }
@@ -202,7 +201,7 @@ namespace FinanceApp.Models
     }
     public class Errors
     {
-        public string errors {get;set;}
+        public string errors { get; set; }
     }
     public class ApiResponseModal
     {
@@ -230,6 +229,10 @@ namespace FinanceApp.Models
         public string? full_name { get; set; }
         public string? salary_id { get; set; }
         public DateTime? entry_date { get; set; }
-
+        public string? deptaccountNo_fild { get; set; }
+        // public string? membgroup_code { get; set; }
+        // public string? membgroup_desc { get; set; }
+        // public string? deptitem_group { get; set; }
+        // public int? reqappl_flag { get; set; }
     }
 }
