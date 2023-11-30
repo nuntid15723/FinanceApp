@@ -115,8 +115,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             NotificationService.Notify(message);
         }
-        private List<Models.DepReqdepoit> repReqdepoit;
-
+        public List<Models.DepReqdepoit> repReqdepoit;
         private string DepttypeValue;
         private string Valueselecte;
         private async Task GetBank()
