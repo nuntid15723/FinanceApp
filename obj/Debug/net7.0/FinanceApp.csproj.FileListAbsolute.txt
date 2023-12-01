@@ -38,3 +38,5 @@ D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Depo
 D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_slip_deposit\DepDeposit.razor.rz.scp.css
 D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_slip_withdraw\DepWithdraw.razor.rz.scp.css
 D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_conteck\DepConteck.razor.rz.scp.css
+D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_procdeptuptran\DepProcdeptuptran.razor.rz.scp.css
+D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_reprintslip\DepReprintslip.razor.rz.scp.css

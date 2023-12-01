@@ -45,7 +45,7 @@
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
 		<div class="header-left">
-			<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
+			<h4>ระบบ เงินฝาก - ตรวจสอบรายการเคลื่อนไหว</h4>
 		</div>
 		<div class="header-right">
 			<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
@@ -466,31 +466,35 @@ else
 				</div>
 			</div>
 		</div>
-		@* <div class="row mt-button">
-		<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-		<label class="form-label" for="">รหัสคู่บัญชี DR</label>
-		<select class="form-select" @bind="tofrom_accid">
-		<option Value="0">มีสมุด</option>
-		<option Value="1">ไม่มีสมุด</option>
-		</select>
+	</div>
+	<div class="card mt-4">
+		<div class="row mt-2"
+			style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+			<h6>ตารางแสดงรายการเคลื่อนไหว</h6>
+			<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="180px"
+				AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
+				IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true" AllowSorting="true"
+				PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+				<Columns>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ต้นเงิน" Property="prnc_no">
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันที่" Property="prnc_bal">
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="รายการ" Property="prncslip_amt">
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ถอน" Property="prnc_date">
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ฝาก" Property="prncdue_date">
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ยอดคงเหลือ" Property="calint_from">
+					</RadzenDataGridColumn>
+					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="พิมพ์ Book" Property="calint_to">
+					</RadzenDataGridColumn>
+				</Columns>
+			</RadzenDataGrid>
 		</div>
-		<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-		<label class="form-label" for="">อ้างอิง</label>
-		<div class="form-group ">
-		<div class="input-group">
-		<input type="text" class="format-money form-control" Name="deptslip_netamt"
-		value="@deptslip_no" placeholder="0.00" />
-		<div class="input-group-addon">
-		<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-		data-bs-target="#myModal1" />
-		</div>
-		</div>
-		</div>
-		</div>
-		</div> *@
 	</div>
 	@* } *@
-</div>
 </div>
 @* } *@
 @* } *@
