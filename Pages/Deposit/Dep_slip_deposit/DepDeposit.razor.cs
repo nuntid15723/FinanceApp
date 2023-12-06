@@ -664,7 +664,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
                     var responseData = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("JsonData:" + deptDeposit);
+                    Console.WriteLine("JsonData:" + responseData);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -673,6 +673,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                         var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
+                        Console.WriteLine($"{apiResponse.message}");
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
                     }
                     else
