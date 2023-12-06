@@ -40,6 +40,50 @@
 	.header-left {
 		text-align: end;
 	}
+
+	.rz-fileupload-row {
+		display: flex;
+		color: transparent;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: column-reverse;
+	}
+
+	.rz-fileupload-row img {
+		width: 250px;
+		max-width: 250px;
+		margin-top: -4rem;
+		max-height: 200px;
+
+	}
+
+	.rz-fileupload-row button {
+		margin-left: 20rem;
+		margin-top: 8px;
+	}
+
+	.rz-fileupload-files {
+		background-color: var(--rz-upload-files-background-color);
+		padding: var(--rz-upload-files-padding);
+		margin-top: -1.5rem;
+	}
+
+	.rz-fileupload-buttonbar {
+		position: relative;
+		background-color: transparent;
+		padding: var(--rz-upload-button-bar-padding);
+		border-radius: var(--rz-upload-button-bar-border-radius);
+	}
+
+	.rz-card.rz-variant-filled {
+		box-shadow: var(--rz-base-background-color);
+		margin-top: -5px;
+	}
+
+	.rz-card {
+		padding: 0;
+		box-sizing: var(--rz-base-background-color);
+	}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -805,27 +849,22 @@ else
 								<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
 									@if (Item.tofromacc == null || !Item.tofromacc.Any())
 									{
-										<option selected disabled></option>
+										<option selected disabled>--กรุณาเลือก--</option>
 									}
 									else
 									{
-										<option selected disabled></option>
+										<option selected disabled>--กรุณาเลือก--</option>
 										@foreach (var tofromaccItem in Item.tofromacc)
 										{
-											if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-											{
-												isCurrentOptionSelected = true;
+											isCurrentOptionSelected = true;
 
-											}
-											else
+											@if (tofromaccItem.cash_type == cashTypeValue)
 											{
-												isCurrentOptionSelected = false;
+												<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+													selected="@isCurrentOptionSelected">
+													@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+												</option>
 											}
-											<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-												selected="@isCurrentOptionSelected">
-												@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-											</option>
-
 										}
 									}
 								</select>
@@ -1012,7 +1051,16 @@ else
 							</RadzenDataGrid>
 						</RadzenTabsItem>
 						<RadzenTabsItem Text="ลายเซ็น">
-							ลายเซ็น
+							<div class="col-xl-12 col-md-6 col-sm-6 d-flex flex-column" style="text-align: center;">
+								<label class="form-label" for="">กำหนดสำหรับอ้างถึง</label>
+								<div class="row">
+									<RadzenCard Style="background-color: transparent;">
+										<RadzenUpload @ref="upload" Auto="false" Multiple="true" Url="upload/multiple"
+											Change=@(args => OnChange(args, "Manual Upload")) Progress=@(args =>
+									OnProgress(args, "Manual Upload")) class="w-100" />
+									</RadzenCard>
+								</div>
+							</div>
 						</RadzenTabsItem>
 					</Tabs>
 				</RadzenTabs>
@@ -1234,110 +1282,74 @@ public string bank_shortname_t { get; set; }
 		BankValues = bank_code;
 
 	}
+	RadzenUpload upload;
+
+	int progress;
+	bool showProgress;
+	private string file_name;
+
+	bool showComplete;
+	string completionMessage;
+	bool cancelUpload = false;
+
+	void CompleteUpload(UploadCompleteEventArgs args)
+	{
+		if (!args.Cancelled)
+			completionMessage = "Upload Complete!";
+		else
+			completionMessage = "Upload Cancelled!";
+
+		showProgress = false;
+		showComplete = true;
+	}
+
+	void TrackProgress(UploadProgressArgs args)
+	{
+		showProgress = true;
+		showComplete = false;
+		@* progress = args.Progress; *@
+
+		// cancel upload
+		args.Cancel = cancelUpload;
+
+		// reset cancel flag
+		cancelUpload = false;
+	}
+
+	void CancelUpload()
+	{
+		cancelUpload = true;
+	}
+
+	int customParameter = 1;
+	void OnChange(UploadChangeEventArgs args, string name)
+	{
+		foreach (var file in args.Files)
+		{
+			Console.WriteLine($"File: {file.Name} / {file.Size} bytes");
+			file_name = file.Name;
+		}
+		Console.WriteLine($"{file_name} changed");
+	}
+
+	void OnProgress(UploadProgressArgs args, string name)
+	{
+		Console.WriteLine($"{args.Progress}% '{name}' / {args.Loaded} of {args.Total} bytes.");
+
+		if (args.Progress == 100)
+		{
+			foreach (var file in args.Files)
+			{
+				Console.WriteLine($"Uploaded: {file.Name} / {file.Size} bytes");
+			}
+		}
+	}
+
+	void OnComplete(UploadCompleteEventArgs args)
+	{
+		Console.WriteLine($"Server response: {args.RawResponse}");
+	}
 }
-@* @code {
-private string formatMoneyValue;
-private string showNumberValue;
-private string previousData;
-
-private void FormatMoneyFocus(FocusEventArgs e)
-{
-previousData = formatMoneyValue;
-}
-
-private void FormatMoneyChange(ChangeEventArgs e)
-{
-string itemAmount = e.Value.ToString();
-itemAmount = FormatNumber(double.Parse(System.Text.RegularExpressions.Regex.Replace(itemAmount, "[^0-9.-]+",
-"")));
-formatMoneyValue = itemAmount;
-}
-
-private string FormatNumber(double input)
-{
-string value = showNumberValue?.Replace("[^0-9.]", "") ?? "";
-double number = double.Parse(value);
-
-if (!double.IsNaN(number))
-{
-string formattedValue = number.ToString("N2");
-showNumberValue = formattedValue;
-return formattedValue;
-}
-else
-{
-showNumberValue = "";
-return "";
-}
-}
-} *@
-@* @code {
-IList<IDictionary<string, object>> selectedItems;
-int selectedIndex = 0;
-
-public IEnumerable<IDictionary<string, object>> data { get; set; }
-
-public IDictionary<string, Type> columns { get; set; }
-
-public string GetColumnPropertyExpression(string name, Type type)
-{
-var expression = $@"it[""{name}""].ToString()";
-
-if (type == typeof(int))
-{
-return $"int.Parse({expression})";
-}
-else if (type == typeof(DateTime))
-{
-return $"DateTime.Parse({expression})";
-}
-
-return expression;
-}
-
-protected override async Task OnInitializedAsync()
-{
-await base.OnInitializedAsync();
-
-columns = new Dictionary<string, Type>()
-{
-{ "ต้นเงิน", typeof(int) },
-{ "ต้นเงินคงเหลือ", typeof(string) },
-{ "ยอดเงินทำรายการ", typeof(string) },
-{ "วันที่ต้นเงิน", typeof(DateTime) },
-{ "วันครบกำหนด", typeof(DateTime) },
-{ "วันเริ่มคิดด/บถึง", typeof(DateTime) },
-{ "วันคิดด/บถึง", typeof(DateTime) },
-{ "ด/บ จ่าย", typeof(DateTime) },
-{ "ภาษี", typeof(string) },
-{ "ด/บ.หลังหักภาษี", typeof(DateTime) },
-{ "ด/บค้าง", typeof(DateTime) },
-{ "ค่าปรับ", typeof(string) },
-{ "ด/บ เรียกคืน", typeof(DateTime) },
-{ "ภาษี เรียกคืน", typeof(string) },
-{ "อัตราดอกเบี้ย", typeof(string) },
-{ "จำนวนวัน", typeof(string) },
-};
-
-foreach (var i in Enumerable.Range(0, 5))
-{
-columns.Add($"Column{i}", typeof(string));
-}
-
-data = Enumerable.Range(0, 20).Select(i =>
-{
-var row = new Dictionary<string, object>();
-
-foreach (var column in columns)
-{
-row.Add(column.Key, column.Value == typeof(int) ? i :
-column.Value == typeof(DateTime) ? DateTime.Now.AddMonths(i) : $"{column.Key}{i}");
-}
-
-return row;
-});
-}
-} *@
 @* @code {
 // ตัวแปรสำหรับเก็บค่าที่เลือกใน dropdown แรก
 private string selectedValue;

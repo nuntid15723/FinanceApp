@@ -546,12 +546,12 @@ else
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">เลขสมาชิก</label>
-								<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="Item.deptpassbook_no"
+								<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="Item.member_no"
 									Name="deptaccount_no" class="form-control" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">เลขบัตรประชาชน</label>
-								<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="Item.deptpassbook_no"
+								<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="card_person"
 									Name="deptaccount_no" class="form-control" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -570,37 +570,260 @@ else
 								<input class="form-control" type="text" name="cash_type"
 									value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
 							</div>
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">รหัสคู่บัญชี</label>
-								@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
-								<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
-									@if (Item.tofromacc == null || !Item.tofromacc.Any())
-									{
-										<option selected disabled></option>
-									}
-									else
-									{
-										<option selected disabled></option>
-										@foreach (var tofromaccItem in Item.tofromacc)
-										{
-											if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+							@if (cashTypeValue == "CSH")
+							{
+								@if (recpPayTypeCode == "WTD")
+								{
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+										<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+											@if (Item.tofromacc == null || !Item.tofromacc.Any())
 											{
-												isCurrentOptionSelected = true;
-
+												<option selected disabled></option>
 											}
 											else
 											{
-												isCurrentOptionSelected = false;
-											}
-											<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-												selected="@isCurrentOptionSelected">
-												@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-											</option>
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var tofromaccItem in Item.tofromacc)
+												{
+													@* if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+						{
+						isCurrentOptionSelected = true;
 
+						}
+						else
+						{
+						isCurrentOptionSelected = false;
+						} *@
+													@if (tofromaccItem.cash_type == cashTypeValue)
+													{
+														<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															selected="@isCurrentOptionSelected">
+															@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+														</option>
+													}
+												}
+											}
+										</select>
+									</div>
+								}
+								else
+								{
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+										<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+											@if (Item.tofromacc == null || !Item.tofromacc.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var tofromaccItem in Item.tofromacc)
+												{
+													@* if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+						{
+						isCurrentOptionSelected = true;
+
+						}
+						else
+						{
+						isCurrentOptionSelected = false;
+						} *@
+													@if (tofromaccItem.cash_type == cashTypeValue)
+													{
+														<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															selected="@isCurrentOptionSelected">
+															@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+														</option>
+													}
+												}
+											}
+										</select>
+									</div>
+								}
+							}
+							else if (cashTypeValue == "TRN" || Item.moneytype_code == "TRN")
+							{
+								@if (recpPayTypeCode == "WIB")
+								{
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+										<select id="tofromaccSelect" class="form-select"  @onchange="OnToFromAccChanged">
+											@if (Item.tofromacc == null || !Item.tofromacc.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var tofromaccItem in Item.tofromacc)
+												{
+													isCurrentOptionSelected = true;
+													@if (tofromaccItem.cash_type == cashTypeValue)
+													{
+														<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															selected="@isCurrentOptionSelected">
+															@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+														</option>
+													}
+
+												}
+											}
+										</select>
+									</div>
+								}else{
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+										<select id="tofromaccSelect" class="form-select" @onchange="OnToFromAccChanged">
+											@if (Item.tofromacc == null || !Item.tofromacc.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var tofromaccItem in Item.tofromacc)
+												{
+													isCurrentOptionSelected = true;
+													@if (tofromaccItem.cash_type == cashTypeValue)
+													{
+														<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															selected="@isCurrentOptionSelected">
+															@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+														</option>
+													}
+
+												}
+											}
+										</select>
+									</div>
+								}
+							}
+							else if (cashTypeValue == "CBT" || Item.moneytype_code == "CBT" || cashTypeValue == "CHQ" ||
+							Item.moneytype_code == "CHQ")
+							{
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ธนาคาร</label>
+									<div class="form-group ">
+										<div class="input-group">
+											<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+												name="bank_code" value="@bank_code" @oninput="OnGetBankChanged" />
+											<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
+												style="width: 70%;">
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var getBankItem in getBank)
+												{
+													bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
+													<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
+														@getBankItem.bank_code - @getBankItem.bank_desc
+													</option>
+												}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">สาขา</label>
+									<div class="form-group ">
+										<div class="input-group">
+											<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+												name="bank_code" value="@bankbranch_code" @oninput="OnBankBranchChanged" />
+											<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
+												style="width: 70%;">
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var bankBranchItem in bankBranch)
+												{
+													bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
+													<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
+														@bankBranchItem.branch_id - @bankBranchItem.branch_name
+													</option>
+												}
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">เลขที่บัญชี</label>
+									<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
+										@bind-value="check_no" />
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ชื่อบัญชี</label>
+									<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
+										@bind-value="bankaccount_name" />
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">รหัสคู่บัญชี</label>
+									@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+									<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+										@if (Item.tofromacc == null || !Item.tofromacc.Any())
+										{
+											<option selected disabled></option>
 										}
-									}
-								</select>
-							</div>
+										else
+										{
+											<option selected disabled>--กรุณาเลือก--</option>
+											@foreach (var tofromaccItem in Item.tofromacc)
+											{
+												@* if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+						{
+						isCurrentOptionSelected = true;
+
+						}
+						else
+						{
+						isCurrentOptionSelected = false;
+						} *@
+												@if (tofromaccItem.cash_type == cashTypeValue)
+												{
+													<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+														selected="@isCurrentOptionSelected">
+														@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+													</option>
+												}
+											}
+										}
+									</select>
+								</div>
+							}
+							
+							else
+							{
+								@if (Item.moneytype_code == "CSH")
+								{
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
+										<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+											@if (Item.tofromacc == null || !Item.tofromacc.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var tofromaccItem in Item.tofromacc)
+												{
+													isCurrentOptionSelected = true;
+													@if (tofromaccItem.cash_type == Item.moneytype_code)
+													{
+														<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															selected="@isCurrentOptionSelected">
+															@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+														</option>
+													}
+												}
+											}
+										</select>
+									</div>
+								}
+							}
+
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">คงเหลือ</label>
 								<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
@@ -616,12 +839,12 @@ else
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">อายัดรวม</label>
 								<input class="form-control" style="text-align: end;" type="text" Name="withdrawable_amt"
-									@bind-value="Item.withdrawable_amt" />
+									@bind-value="sequest_amont" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">เช็คเรียกเก็บ</label>
 								<input class="form-control" style="text-align: end;" type="text" Name="withdrawable_amt"
-									@bind-value="Item.withdrawable_amt" />
+									@bind-value="checkpend_amt" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ยอดฝากได้</label>
@@ -631,43 +854,39 @@ else
 							<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ด/บ</label>
 								<input type="text" class="format-money form-control" style="text-align: end;" Name="deptslip_netamt"
-									value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
+									value="@(int_amt!= null ? Item.int_amt:int_amt)" placeholder="0.00"
 									onblur="formattNumberr(this)" />
 
 							</div>
 							<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">โบนัส</label>
 								<input type="text" class="format-money form-control" style="text-align: end;" Name="deptslip_netamt"
-									value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
-									onblur="formattNumberr(this)" />
+									value="@intbonus_amt" placeholder="0.00" onblur="formattNumberr(this)" />
 
 							</div>
 							<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ภาษี ด/บ</label>
 								<input type="text" class="format-money form-control" style="text-align: end;" Name="deptslip_netamt"
-									value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
+									value="@(tax_amt!= null ? Item.tax_amt:tax_amt)" placeholder="0.00"
 									onblur="formattNumberr(this)" />
 
 							</div>
 							<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ด/บ คืน</label>
 								<input type="text" class="format-money form-control" style="text-align: end;" Name="deptslip_netamt"
-									value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
-									onblur="formattNumberr(this)" />
+									value="@int_return" placeholder="0.00" onblur="formattNumberr(this)" />
 
 							</div>
 							<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ภาษี คืน</label>
 								<input type="text" class="format-money form-control" style="text-align: end;" Name="deptslip_netamt"
-									value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
-									onblur="formattNumberr(this)" />
+									value="@tax_return" placeholder="0.00" onblur="formattNumberr(this)" />
 
 							</div>
 							<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ด/บ สุทธิ</label>
 								<input type="text" class="format-money form-control" style="text-align: end;" Name="deptslip_netamt"
-									value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
-									onblur="formattNumberr(this)" />
+									value="@int_netamt" placeholder="0.00" onblur="formattNumberr(this)" />
 
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -734,11 +953,6 @@ else
 								<label class="form-label" for="">เงื่อนไขการถอน</label>
 								<textarea class="form-control" name="" id="" cols="30" rows="2"></textarea>
 							</div>
-						</div>
-						<div class="row mt-button">
-						</div>
-						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-							<button type="button" @onclick=SaveDataAsync>SaveDataAsync</button>
 						</div>
 					</div>
 					@if (recpPayTypeCode == "DEN")

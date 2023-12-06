@@ -5,8 +5,11 @@ public static class Apiurl
 }
 public static class Paths{
     public const string DepOfInitDataOffline = "DepOfInitDataOffline";
-    public const string DepOfGetAccountSaving = "DepOfGetAccountSaving"; 
+    public const string DepOfGetAccountSaving = "DepOfGetAccountSaving";
+    public const string DepOfPostDeptSaving = "DepOfPostDeptSaving";
     public const string DepOfInitOpenAccount = "DepOfInitOpenAccount";
+    public const string DepOfPostWithSaving = "DepOfPostWithSaving";
+
     public const string DepOfGetBank = "DepOfGetBank";
     public const string DepOfGetBankBranch = "DepOfGetBankBranch";
 

@@ -180,10 +180,16 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             depttype_code = values[1];
             Console.WriteLine($"Recp Pay Type Code: {DepttypeValue},Depttype Code: {depttype_code}");
         }
-        private async Task Search()
+        private void AnotherFunction()
         {
             GetBank();
             BankBranch();
+        }
+        private async Task Search()
+        {
+            // GetBank();
+            // BankBranch();
+            AnotherFunction();
             if (member_no == null || member_no == "")
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });

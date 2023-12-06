@@ -143,7 +143,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public string? mem_telmobile { get; set; }
         public string? full_name { get; set; }
         public string? salary_id { get; set; }
-        // public DateTime? entry_date { get; set; }
+        public string? membgroup_code { get; set; }
+        public string? membgroup_desc { get; set; }
+        public string? deptitem_group { get; set; }
+        public int? reqappl_flag { get; set; }
 
         /// </summary>        
         private bool isLoading;
@@ -152,7 +155,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private bool isUpdateExecuted = false;
         public List<GetBank>? getBank { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
-
+        public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
 
         void ShowNotification(NotificationMessage message)
         {
@@ -190,33 +193,95 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขที่บัญชี", Duration = 1500 });
             }
+            // else
+            // {
+            //     try
+            //     {
+            //         isLoading = true;
+            //         var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}?coop_control={coop_id}&deptaccount_no={deptaccount_no}");
+            //         // var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
+            //         // var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code={bank_code}");
+            //         response.EnsureSuccessStatusCode();
+
+            //         var json = await response.Content.ReadAsStringAsync();
+            //         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
+            //         Console.WriteLine(apiResponse.status == true);
+            //         if (apiResponse.status == true)
+            //         {
+            //             datadetail = new List<Models.Deposit> { apiResponse.data };
+            //             Console.WriteLine($"API request failed: {datadetail}");
+            //         }
+            //         else
+            //         {
+            //             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
+            //             datadetail = null;
+            //             Console.WriteLine($"API request failed: {apiResponse.message}");
+            //         }
+            //         Console.WriteLine($"API request failed: {datadetail}");
+
+            //     }
+            //     catch (Exception ex)
+            //     {
+            //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+            //         Console.WriteLine(ex.Message.ToString());
+            //     }
+            //     finally
+            //     {
+            //         isLoading = false;
+            //     }
+            // }
             else
             {
+                string[] deptaccountNoDtails = deptaccount_no.ToString().Split('-');
+                string firstPart = deptaccountNoDtails[0];
+                string secondPart = deptaccountNoDtails[1];
+                deptaccountNo_fild = firstPart + secondPart;
                 try
                 {
                     isLoading = true;
-                    var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}?coop_control={coop_id}&deptaccount_no={deptaccount_no}");
-                    // var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
-                    // var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code={bank_code}");
-                    response.EnsureSuccessStatusCode();
-
-                    var json = await response.Content.ReadAsStringAsync();
-                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
-                    Console.WriteLine(apiResponse.status == true);
-                    if (apiResponse.status == true)
+                    var depOfGetAccount = new DepOfInitDataOffline
                     {
-                        datadetail = new List<Models.Deposit> { apiResponse.data };
-                        Console.WriteLine($"API request failed: {datadetail}");
-                    }
-                    else
-                    {
-                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
-                        datadetail = null;
-                        Console.WriteLine($"API request failed: {apiResponse.message}");
-                    }
-                    Console.WriteLine($"API request failed: {datadetail}");
+                        coop_id = "065001",
+                        memcoop_id = "065001",
+                        deptaccount_no = deptaccountNo_fild,
+                        deptaccount_name = deptaccount_name,
+                        member_no = member_no,
+                        depttype_code = depttype_code,
+                        deptclose_status = 0,
+                        memb_name = memb_name,
+                        memb_surname = memb_surname,
+                        card_person = card_person,
+                        mem_telmobile = mem_telmobile,
+                        full_name = full_name,
+                        salary_id = salary_id,
+                        membgroup_code = membgroup_code,
+                        membgroup_desc = membgroup_desc,
+                        entry_date = entry_date,
+                        deptitem_group = deptitem_group ?? "DEP",
+                        reqappl_flag = reqappl_flag?? 0,
+                    };
+                    var json = JsonConvert.SerializeObject(depOfGetAccount);
+                    Console.WriteLine(json);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                    var response = await httpClient.PostAsync(apiUrl, content);
 
+                    Console.WriteLine(response.IsSuccessStatusCode);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // อ่าน response string
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                        // Console.WriteLine(apiResponse.status == true);
+                        if (apiResponse.status == true)
+                        {
+                            datadetail = new List<Models.Deposit> { apiResponse.data };
+                            Console.WriteLine($"API request failed: {datadetail}");
+                        }
+                    }
                 }
+                // var repReqdepoitDetails = new List<Models.DepReqdepoit>();
+
                 catch (Exception ex)
                 {
                     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
@@ -510,6 +575,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         f_tax_rate = ItemdeptSlip.f_tax_rate,
                         adjdate_status = ItemdeptSlip.adjdate_status,
                         membcat_desc = ItemdeptSlip.membcat_desc,
+                        reqappl_flag = ItemdeptSlip.reqappl_flag,
+                        spcint_rate_status = ItemdeptSlip.spcint_rate_status,
+                        spcint_rate = ItemdeptSlip.spcint_rate,
                     };
                     var DeptSlipdet = new DeptSlipdet
                     {
@@ -647,6 +715,5 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             return await httpClient.PostAsync(uri, content);
         }
-
     }
 }

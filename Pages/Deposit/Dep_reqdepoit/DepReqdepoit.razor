@@ -41,6 +41,50 @@
 	.header-left {
 		text-align: end;
 	}
+
+	.rz-fileupload-row {
+		display: flex;
+		color: transparent;
+		align-items: center;
+		justify-content: space-between;
+		flex-direction: column-reverse;
+	}
+
+	.rz-fileupload-row img {
+		width: 250px;
+		margin-top: -4rem;
+		max-height: 200px;
+
+
+	}
+
+	.rz-fileupload-row button {
+		margin-left: 20rem;
+		margin-top: 8px;
+	}
+
+	.rz-fileupload-files {
+		background-color: var(--rz-upload-files-background-color);
+		padding: var(--rz-upload-files-padding);
+		margin-top: -1.5rem;
+	}
+
+	.rz-fileupload-buttonbar {
+		position: relative;
+		background-color: transparent;
+		padding: var(--rz-upload-button-bar-padding);
+		border-radius: var(--rz-upload-button-bar-border-radius);
+	}
+
+	.rz-card.rz-variant-filled {
+		box-shadow: var(--rz-base-background-color);
+		margin-top: -5px;
+	}
+
+	.rz-card {
+		padding: 0;
+		box-sizing: var(--rz-base-background-color);
+	}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -703,11 +747,6 @@ else
 									<div class="input-group">
 										<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
 											name="bank_code" value="@bank_code" @oninput="OnGetBankChanged" />
-										@* <select class="form-select" @bind="bank_code" style="width: 70%;"
-							aria-label="Default select example">
-							<option Value="0">มีสมุด</option>
-							<option Value="1">ไม่มีสมุด</option>
-							</select> *@
 										<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
 											style="width: 70%;">
 											<option selected disabled>--กรุณาเลือก--</option>
@@ -728,11 +767,6 @@ else
 									<div class="input-group">
 										<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
 											name="bank_code" value="@bankbranch_code" @oninput="OnBankBranchChanged" />
-										@* <select class="form-select" @bind="Item.bankbranch_code" style="width: 70%;"
-							aria-label="Default select example">
-							<option Value="0">มีสมุด</option>
-							<option Value="1">ไม่มีสมุด</option>
-							</select> *@
 										<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
 											style="width: 70%;">
 											<option selected disabled>--กรุณาเลือก--</option>
@@ -749,10 +783,6 @@ else
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">รหัสคู่บัญชี DR</label>
-								@* <select class="form-select" @bind="Item.tofrom_accid">
-					<option Value="0">มีสมุด</option>
-					<option Value="1">ไม่มีสมุด</option>
-					</select> *@
 								<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
 									@foreach (var tofromaccItem in Item.tofromacc)
 									{
@@ -857,33 +887,86 @@ else
 									value="@dept_tranacc_name" />
 							</div>
 						</div>
-						@* <div class="row mt-button">
-			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-			<label class="form-label" for="">รหัสคู่บัญชี DR</label>
-			<select class="form-select" @bind="tofrom_accid">
-			<option Value="0">มีสมุด</option>
-			<option Value="1">ไม่มีสมุด</option>
-			</select>
-			</div>
-			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-			<label class="form-label" for="">อ้างอิง</label>
-			<div class="form-group ">
-			<div class="input-group">
-			<input type="text" class="format-money form-control" Name="deptslip_netamt"
-			value="@deptslip_no" placeholder="0.00" />
-			<div class="input-group-addon">
-			<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-			data-bs-target="#myModal1" />
-			</div>
-			</div>
-			</div>
-			</div>
-			</div> *@
-						<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-							<button type="button" @onclick=SaveDataAsync>SaveDataAsync</button>
-						</div>
 					</div>
 				}
+			</div>
+		</div>
+		<div class="card mt-4">
+			<div class="row mt-2"
+				style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+				<RadzenTabs @bind-SelectedIndex=@selectedIndex>
+					<Tabs>
+						<RadzenTabsItem Text="ข้อมูลรูปภาพ">
+							<div class="row">
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">เลือกกลุ่มงาน</label>
+									<select class="form-select" @bind="membcat_code" aria-label="Default select example">
+										<option selected>--เลือก--</option>
+										<option Value="10">สามัญ</option>
+										<option Value="20">สมทบ</option>
+										<option Value="30">สหกรณ์อื่นๆ</option>
+									</select>
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">เลือกรูปแบบข้อมูล</label>
+									<select class="form-select" @bind="membcat_code" aria-label="Default select example">
+										<option selected>--เลือก--</option>
+										<option Value="10">สามัญ</option>
+										<option Value="20">สมทบ</option>
+										<option Value="30">สหกรณ์อื่นๆ</option>
+									</select>
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ชื่อรูปภาพ</label>
+									<input class="form-control" type="text" Name="remark" @bind-value="@file_name" />
+
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">วันที่หมดอายุ</label>
+									<RadzenDatePicker @bind-Value=operate_date Disabled="true" Name="operate_date"
+										DateFormat="dd/MM/yyyy" />
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">หมายเหตุ</label>
+									<input class="form-control" type="text" Name="remark" @bind-value="@remark" />
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">กำหนดสำหรับอ้างถึง</label>
+									<RadzenCard Style="background-color: transparent;">
+										<RadzenUpload @ref="upload" Auto="false" Multiple="true" Url="upload/multiple"
+											Change=@(args => OnChange(args, "Manual Upload")) Progress=@(args =>
+									OnProgress(args, "Manual Upload")) class="w-100" />
+									</RadzenCard>
+								</div>
+							</div>
+							<div class="row">
+								<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
+									AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+									FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+									AllowPaging="true" AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left"
+									ShowPagingSummary="true">
+									<Columns>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title="ลำดับ"
+											Property="prnc_no"></RadzenDataGridColumn>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="25%"
+											Title="แฟ้มข้อมูล (ชื่อ)" Property="prnc_bal"></RadzenDataGridColumn>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="15%" Title="รูปแบบข้อมูล"
+											Property="prncslip_amt"></RadzenDataGridColumn>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title="วันที่หมดอายุ"
+											Property="prnc_date"></RadzenDataGridColumn>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="15%" Title="ผู้เพิ่ม"
+											Property="prncdue_date"></RadzenDataGridColumn>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title="วันที่เพิ่ม"
+											Property="calint_from"></RadzenDataGridColumn>
+										<RadzenDataGridColumn TItem="Models.AccountDetails" Width="15%" Title="ประเภท File"
+											Property="calint_to"></RadzenDataGridColumn>
+									</Columns>
+								</RadzenDataGrid>
+							</div>
+
+						</RadzenTabsItem>
+					</Tabs>
+				</RadzenTabs>
 			</div>
 		</div>
 	}
@@ -938,7 +1021,75 @@ else
 </script>
 
 @code {
+	RadzenUpload upload;
+
+	int progress;
+	bool showProgress;
+	private string file_name;
+
+	bool showComplete;
+	string completionMessage;
+	bool cancelUpload = false;
+
+	void CompleteUpload(UploadCompleteEventArgs args)
+	{
+		if (!args.Cancelled)
+			completionMessage = "Upload Complete!";
+		else
+			completionMessage = "Upload Cancelled!";
+
+		showProgress = false;
+		showComplete = true;
+	}
+
+	void TrackProgress(UploadProgressArgs args)
+	{
+		showProgress = true;
+		showComplete = false;
+		@* progress = args.Progress; *@
+
+		// cancel upload
+		args.Cancel = cancelUpload;
+
+		// reset cancel flag
+		cancelUpload = false;
+	}
+
+	void CancelUpload()
+	{
+		cancelUpload = true;
+	}
+
+	int customParameter = 1;
+	void OnChange(UploadChangeEventArgs args, string name)
+	{
+		foreach (var file in args.Files)
+		{
+			Console.WriteLine($"File: {file.Name} / {file.Size} bytes");
+			file_name = file.Name;
+		}
+		Console.WriteLine($"{file_name} changed");
+	}
+
+	void OnProgress(UploadProgressArgs args, string name)
+	{
+		Console.WriteLine($"{args.Progress}% '{name}' / {args.Loaded} of {args.Total} bytes.");
+
+		if (args.Progress == 100)
+		{
+			foreach (var file in args.Files)
+			{
+				Console.WriteLine($"Uploaded: {file.Name} / {file.Size} bytes");
+			}
+		}
+	}
+
+	void OnComplete(UploadCompleteEventArgs args)
+	{
+		Console.WriteLine($"Server response: {args.RawResponse}");
+	}
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+	int selectedIndex = 0;
 
 	private async Task OnBankBranchChanged(ChangeEventArgs e)
 	{
@@ -949,6 +1100,7 @@ else
 		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
 		bankbranch_code = e.Value.ToString();
 		BankBranchValues = bankbranch_code;
+		Console.WriteLine($"BankBranchValues: {BankBranchValues}");
 	}
 	private async Task OnGetBankChanged(ChangeEventArgs e)
 	{
