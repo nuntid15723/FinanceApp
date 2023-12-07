@@ -72,7 +72,8 @@ else
 						<div class="form-group ">
 							<div class="input-group">
 								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
-									Name="deptaccount_no" class="form-control" />
+									Name="deptaccount_no" class="form-control"
+									@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 										data-bs-target="#ModalSearch" />
@@ -288,7 +289,7 @@ else
 									<div class="input-group">
 										@* <input class="form-control" type="text" name="deptaccount_no" @bind="deptaccount_no"> *@
 										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
-											Name="deptaccount_no" class="form-control" />
+											Name="deptaccount_no" class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 												data-bs-target="#anotherModal" />
@@ -652,7 +653,7 @@ else
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">รหัสคู่บัญชี</label>
 										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
-										<select id="tofromaccSelect" class="form-select"  @onchange="OnToFromAccChanged">
+										<select id="tofromaccSelect" class="form-select" @onchange="OnToFromAccChanged">
 											@if (Item.tofromacc == null || !Item.tofromacc.Any())
 											{
 												<option selected disabled></option>
@@ -675,7 +676,9 @@ else
 											}
 										</select>
 									</div>
-								}else{
+								}
+								else
+								{
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">รหัสคู่บัญชี</label>
 										@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
@@ -791,7 +794,7 @@ else
 									</select>
 								</div>
 							}
-							
+
 							else
 							{
 								@if (Item.moneytype_code == "CSH")
@@ -1238,6 +1241,7 @@ else
 	}
 </script>
 @code {
+	
 	private string searchText;
 	int selectedIndex = 0;
 	@* public List<GetBank>? getBanks ; *@

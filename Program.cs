@@ -16,8 +16,6 @@ builder.Services.AddLogging(builder => builder.AddConsole());
 builder.Services.AddSingleton<ISaveService, SaveService>();
 builder.Services.AddScoped<ISaveService, SaveService>();
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

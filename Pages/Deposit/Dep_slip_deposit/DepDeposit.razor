@@ -116,7 +116,8 @@ else
 						<div class="form-group ">
 							<div class="input-group">
 								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
-									Name="deptaccount_no" class="form-control" />
+									Name="deptaccount_no" class="form-control"
+									@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 										data-bs-target="#ModalSearch" />
@@ -332,7 +333,8 @@ else
 									<div class="input-group">
 										@* <input class="form-control" type="text" name="deptaccount_no" @bind="deptaccount_no"> *@
 										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
-											Name="deptaccount_no" class="form-control" />
+											Name="deptaccount_no" class="form-control"
+											@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 												data-bs-target="#anotherModal" />
@@ -783,17 +785,19 @@ else
 						<div class="row">
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ยอดฝากได้</label>
-								<input class="form-control" style="text-align: end;" type="text" Name="emp_no"
-									@bind-value="Item.deptslip_amt" />
+								<input class="form-control" style="text-align: end;" type="text" Name="emp_no" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ยอดทำรายการ</label>
 								<div class="form-group ">
 									<div class="input-group">
-										<input type="text" class="format-money    form-control" style="text-align: end;"
-											Name="deptslip_netamt"
-											value="@(deptslipNetamt!= null ? Item.deptslip_netamt:deptslipNetamt)"
-											placeholder="0.00" onblur="formattNumber(this)" />
+										@* <input type="text" class="format-money    form-control" style="text-align: end;"
+											Name="deptslip_amt"
+											@value="@(deptslipNetamt!= null?Item.deptslip_netamt:deptslipNetamt)" placeholder="0.00"
+											onblur="formattNumber(this)" /> *@
+										<input type="text" class="format-money form-control" style="text-align: end;"
+											@bind="DeptslipAmt" placeholder="0.00" @onblur="FormatNumber" />
+
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 												data-bs-target="#myModal1" />
@@ -833,8 +837,9 @@ else
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ยอดสุทธิ</label>
 								<input class="format-money form-control" placeholder="0.00" type="text"
-									style="text-align: end; font-size: 40px;" readonly name="deptslipAmt"
-									value="@(deptslipNetamt!= null?Item.deptslip_netamt:deptslipNetamt)" id="showNumber" />
+									style="text-align: end; font-size: 40px;" readonly name="deptslip_netamt"
+									@bind="DeptslipAmt"
+									 id="showNumber" />
 							</div>
 						</div>
 						<div class="row mt-button">
@@ -1089,6 +1094,7 @@ else
 			let formattedValue = number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 			input.value = formattedValue;
 			anotherInput.value = formattedValue;
+			console.log(formattedValue);
 		} else {
 			input.value = '';
 		}

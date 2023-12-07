@@ -116,6 +116,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             NotificationService.Notify(message);
         }
         public List<Models.DepReqdepoit> repReqdepoit;
+        public List<DeptSlip> deptSlipOpe;
         private string DepttypeValue;
         private string Valueselecte;
         private async Task GetBank()
@@ -369,25 +370,25 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 isLoading = true;
                 foreach (var item in repReqdepoit)
                 {
-                    // var ItemdeptSlip = item.deptSlip;
-                    // var ItemdeptSlipdet = item.deptSlipdet;
-                    // var ItemdeptSlipCheque = item.deptSlipCheque;
-                    var DepReqdepoit = new DepReqdepoit
+                    var SlipOpen = item.deptSlip;
+                    var ItemdeptSlipdet = item.deptSlipdet;
+                    var ItemdeptSlipCheque = item.deptSlipCheque;
+                    var DeptSlip = new DeptSlip
                     {
                         coop_id = item.coop_id,
-                        deptcoop_id = item.deptcoop_id,
+                        deptcoop_id = "065001",
                         deptslip_no = item.deptslip_no,
                         member_no = item.member_no,
                         deptno_format = item.deptno_format,
-                        deptaccount_no = item.deptaccount_no,
+                        deptaccount_no = "1000000001",
                         membcat_code = item.membcat_code,
                         depttype_code = item.depttype_code,
                         deptgroup_code = item.deptgroup_code,
                         recppaytype_code = item.recppaytype_code,
                         moneytype_code = item.moneytype_code,
-                        bank_code = (BankValues == null) ? item.bank_code : BankValues,
-                        bankbranch_code = (BankBranchValues == null) ? item.bankbranch_code : BankBranchValues,
-                        entry_id = item.entry_id,
+                        bank_code = item.bank_code,
+                        bankbranch_code = item.bankbranch_code,
+                        entry_id = "item.entry_id",
                         machine_id = item.machine_id,
                         tofrom_accid = item.tofrom_accid,
                         operate_date = item.operate_date,
@@ -398,33 +399,31 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         nobook_flag = item.nobook_flag,
                         prnc_no = item.prnc_no,
                         deptslip_amt = item.deptslip_amt,
-                        deptslip_netamt = item.deptslip_netamt ?? 0,
-                        fee_amt = item.fee_amt ?? 0,
-                        oth_amt = item.oth_amt ?? 0,
-                        prncbal = item.prncbal ?? 0,
-                        withdrawable_amt = item.withdrawable_amt ?? 0,
+                        deptslip_netamt = item.deptslip_netamt,
+                        fee_amt = item.fee_amt,
+                        oth_amt = item.oth_amt,
+                        prncbal = item.prncbal,
+                        withdrawable_amt = item.withdrawable_amt,
                         prncbal_bf = item.prncbal_bf,
-                        tax_amt = item.tax_amt ?? 0,
-                        int_amt = item.int_amt ?? 0,
-                        slipnetprncbal_amt = item.slipnetprncbal_amt ?? 0,
-                        posttovc_flag = item.posttovc_flag ?? 0,
+                        tax_amt = item.tax_amt,
+                        int_amt = item.int_amt,
+                        slipnetprncbal_amt = item.slipnetprncbal_amt,
+                        posttovc_flag = item.posttovc_flag,
                         refer_slipno = item.refer_slipno,
                         deptaccount_name = item.deptaccount_name,
                         depttype_desc = item.depttype_desc,
                         dept_objective = item.dept_objective,
-                        prncbal_retire = item.prncbal_retire ?? 0,
+                        prncbal_retire = item.prncbal_retire,
                         remark = item.remark,
-                        bank = item.bank,
-                        branch = item.branch,
                         due_date = item.due_date,
                         deptpassbook_no = item.deptpassbook_no,
                         condforwithdraw = item.condforwithdraw,
                         passbook_flag = item.passbook_flag,
-                        upint_time = item.upint_time ?? 0,
+                        upint_time = item.upint_time,
                         deptaccount_ename = item.deptaccount_ename,
                         deptrequest_docno = item.deptrequest_docno,
                         account_type = item.account_type,
-                        monthintpay_meth = item.monthintpay_meth ?? 0,
+                        monthintpay_meth = item.monthintpay_meth,
                         traninttype_code = item.traninttype_code,
                         tran_deptacc_no = item.tran_deptacc_no,
                         dept_tranacc_name = item.dept_tranacc_name,
@@ -437,12 +436,51 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         membcat_desc = item.membcat_desc,
                         reqappl_flag = item.reqappl_flag,
                         spcint_rate_status = item.spcint_rate_status,
-                        spcint_rate = item.spcint_rate,
+                        spcint_rate = item.spcint_rate
                     };
-                    var json = JsonConvert.SerializeObject(DepReqdepoit);
-                    // Console.WriteLine("JsonData:" + json);
+                    var DeptSlipdet = new DeptSlipdet
+                    {
+                        // coop_id = (coop_id == null) ? ItemdeptSlipdet.coop_id : null,
+                        // deptslip_no = (deptslip_no == null) ? ItemdeptSlipdet.deptslip_no : null,
+                        // deptaccount_no = (deptaccount_no == null) ? ItemdeptSlipdet.deptaccount_no : null,
+                        // prnc_no = (prnc_no == null) ? ItemdeptSlipdet.prnc_no : null,
+                        // prnc_bal = (prnc_bal == null) ? ItemdeptSlipdet.prnc_bal : null,
+                        // prnc_amt = (prnc_amt == null) ? ItemdeptSlipdet.prnc_amt : null,
+                        // prnc_date = (prnc_date == null) ? ItemdeptSlipdet.prnc_date : null,
+                        // calint_from = (calint_from == null) ? ItemdeptSlipdet.calint_from : null,
+                        // calint_to = (calint_to == null) ? ItemdeptSlipdet.calint_to : null,
+                        // prncdue_date = (prncdue_date == null) ? ItemdeptSlipdet.prncdue_date : null,
+                        // prncmindue_date = (prncmindue_date == null) ? ItemdeptSlipdet.prncmindue_date : null,
+                        // prncdue_nmonth = (prncdue_nmonth == null) ? ItemdeptSlipdet.prncdue_nmonth : null,
+                        // prncslip_amt = (prncslip_amt == null) ? ItemdeptSlipdet.prncslip_amt : null,
+                        // intarr_amt = (intarr_amt == null) ? ItemdeptSlipdet.intarr_amt : null,
+                        // intpay_amt = (intpay_amt == null) ? ItemdeptSlipdet.intpay_amt : null,
+                        // taxpay_amt = (taxpay_amt == null) ? ItemdeptSlipdet.taxpay_amt : null,
+                        // intbf_accyear = (intbf_accyear == null) ? ItemdeptSlipdet.intbf_accyear : null,
+                        // intcur_accyear = (intcur_accyear == null) ? ItemdeptSlipdet.intcur_accyear : null,
+                        // monthintdue_date = (monthintdue_date == null) ? ItemdeptSlipdet.monthintdue_date : null,
+                        // prncdeptdue_date = (prncdeptdue_date == null) ? ItemdeptSlipdet.prncdeptdue_date : null,
+                        // interest_rate = (interest_rate == null) ? ItemdeptSlipdet.interest_rate : null,
+                        // int_return = (int_return == null) ? ItemdeptSlipdet.int_return : null,
+                        // tax_return = (tax_return == null) ? ItemdeptSlipdet.tax_return : null,
+                        // fee_amt = (fee_amt == null) ? ItemdeptSlipdet.fee_amt : null,
+                        // other_amt = (other_amt == null) ? ItemdeptSlipdet.other_amt : null,
+                        // chequepend_amt = (chequepend_amt == null) ? ItemdeptSlipdet.chequepend_amt : null,
+                        // refer_prnc_no = (refer_prnc_no == null) ? ItemdeptSlipdet.refer_prnc_no : null,
+                        // upint_time = (upint_time == null) ? ItemdeptSlipdet.upint_time : null,
+                    };
+                    var DeptSlipCheque = new DeptSlipCheque();
+                    var Reqdepoit = new Models.DepReqdepoit
+                    {
+                        deptSlip = DeptSlip,
+                        deptSlipdet = null,
+                        deptSlipCheque =  null,
+
+                    };
+                    var json = JsonConvert.SerializeObject(Reqdepoit);
+                    Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
+                    var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfPostOpenAccount}", content);
                     var responseData = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("JsonData:" + json);
 

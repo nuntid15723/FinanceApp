@@ -142,6 +142,8 @@ namespace FinanceApp.Models
         public int? reqappl_flag { get; set; }
         public int? spcint_rate_status { get; set; }
         public decimal? spcint_rate { get; set; }
+        public decimal? deptslipAmt { get; set; }
+
     }
     public class DeptSlipdet
     {

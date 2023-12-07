@@ -258,7 +258,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         membgroup_desc = membgroup_desc,
                         entry_date = entry_date,
                         deptitem_group = deptitem_group ?? "DEP",
-                        reqappl_flag = reqappl_flag?? 0,
+                        reqappl_flag = reqappl_flag ?? 0,
                     };
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
@@ -394,7 +394,22 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private string valuetoFromaccId { get; set; }
         private string toFromaccId2 { get; set; }
         private string bookCode { get; set; }
+        private decimal deptslipAmt { get; set; }
         private string deptslipNetamt { get; set; }
+        private string DeptslipAmt { get; set; }
+        private void FormatNumber()
+        {
+         
+            if (decimal.TryParse(DeptslipAmt, out decimal result))
+            {
+                DeptslipAmt = result.ToString("0.00");
+                result = Math.Round(result, 2);
+                deptslipAmt = result;
+                Console.WriteLine(deptslipAmt);
+
+
+            }
+        }
         private async Task RecpPayTypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('_');
@@ -503,7 +518,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         {
             try
             {
-
+                Console.WriteLine($"deptslipAmt:{deptslipAmt}");
                 string hostName = Dns.GetHostName();
                 var hostEntry = Dns.GetHostEntry(hostName);
                 isLoading = true;
@@ -540,9 +555,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         laststmseq_no = ItemdeptSlip.laststmseq_no,
                         nobook_flag = ItemdeptSlip.nobook_flag,
                         prnc_no = ItemdeptSlip.prnc_no,
-                        // deptslip_amt = (deptslip_amt==null) ? ItemdeptSlip.deptslip_amt: deptslip_amt,
-                        deptslip_amt = ItemdeptSlip.deptslip_amt,
-                        deptslip_netamt = ItemdeptSlip.deptslip_netamt,
+                        deptslip_amt = deptslipAmt,
+                        // deptslip_amt = deptslipAmt ?? ItemdeptSlip.deptslip_amt,
+                        deptslip_netamt = ItemdeptSlip.deptslip_amt,
                         fee_amt = ItemdeptSlip.fee_amt,
                         oth_amt = ItemdeptSlip.oth_amt,
                         prncbal = ItemdeptSlip.prncbal,
@@ -660,7 +675,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     };
                     var json = JsonConvert.SerializeObject(deptDeposit);
                     // datadetailSave.AddRange(deptDeposit);
-                    // Console.WriteLine("JsonData:" + json);
+                    Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
                     var responseData = await response.Content.ReadAsStringAsync();

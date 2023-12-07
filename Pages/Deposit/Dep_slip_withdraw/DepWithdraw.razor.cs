@@ -97,7 +97,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         // public int? int_return { get; set; }
         // public int? tax_return { get; set; }
         public decimal? int_netamt { get; set; }
-        
+
 
 
 
@@ -255,9 +255,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //ค้นหา
         private async Task Search()
         {
+            
             AnotherFunction();
             if (deptaccount_no == null || deptaccount_no == "")
             {
+              
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขที่บัญชี", Duration = 1500 });
             }
             // else
@@ -515,7 +517,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         membcat_code = ItemdeptSlip.membcat_code,
                         depttype_code = ItemdeptSlip.depttype_code,
                         deptgroup_code = ItemdeptSlip.deptgroup_code,
-                        recppaytype_code = recpPayTypeCode?? ItemdeptSlip.recppaytype_code,
+                        recppaytype_code = recpPayTypeCode ?? ItemdeptSlip.recppaytype_code,
                         moneytype_code = ItemdeptSlip.moneytype_code,
                         bank_code = ItemdeptSlip.bank_code,
                         bankbranch_code = ItemdeptSlip.bankbranch_code,
@@ -569,7 +571,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         spcint_rate_status = ItemdeptSlip.spcint_rate_status,
                         spcint_rate = ItemdeptSlip.spcint_rate,
                     };
-                    var DeptSlipdet = new DeptSlipdet();                   
+                    var DeptSlipdet = new DeptSlipdet();
                     //{
                     //    coop_id = (coop_id == null) ? ItemdeptSlipdet.coop_id : null,
                     //    deptslip_no = (deptslip_no == null) ? ItemdeptSlipdet.deptslip_no : null,
@@ -654,7 +656,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     {
                         deptSlip = Deptslip,
                         deptSlipdet = null,
-                        deptSlipCheque =  null,
+                        deptSlipCheque = null,
 
                     };
                     var json = JsonConvert.SerializeObject(Deposit);

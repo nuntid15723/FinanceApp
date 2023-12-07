@@ -117,7 +117,7 @@ else
 						<div class="form-group ">
 							<div class="input-group">
 								<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
-									class="form-control" />
+									class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 										data-bs-target="#ModalSearch" />
@@ -282,7 +282,8 @@ else
 								<div class="form-group ">
 									<div class="input-group">
 										<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no"
-											Name="member_no" class="form-control" />
+											Name="member_no" class="form-control"
+											@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 												data-bs-target="#ModalSearch" />
@@ -770,13 +771,13 @@ else
 										<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
 											style="width: 70%;">
 											<option selected disabled>--กรุณาเลือก--</option>
-											@foreach (var bankBranchItem in bankBranch)
+											@* @foreach (var bankBranchItem in bankBranch)
 											{
 												bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
 												<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
 													@bankBranchItem.branch_id - @bankBranchItem.branch_name
 												</option>
-											}
+											} *@
 										</select>
 									</div>
 								</div>

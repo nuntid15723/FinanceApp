@@ -81,7 +81,8 @@ else
 				<label class="form-label" for="">เลขที่บัญชี</label>
 				<div class="form-group ">
 					<div class="input-group">
-						<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
+						<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="member_no"
+							@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" Name="member_no"
 							class="form-control" />
 						<div class="input-group-addon">
 							<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
