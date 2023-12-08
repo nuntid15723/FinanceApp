@@ -155,9 +155,14 @@
     .justify-content-center {
         justify-content: center !important;
     }
+
+    .shadow-sm {
+        box-shadow: var(--bs-box-shadow-sm) !important;
+        background-color: #fff;
+    }
 </style>
 <div id="body-pd">
-    <header class="header shadow-sm" style="background-color: white;" id="header">
+    <header class="header shadow-sm" id="header">
         <div class="header_toggle">
             @* <i class='material-icons' id="header-toggle"></i> *@
             <i class='fa fa-bars' id="header-toggle"></i>
@@ -211,10 +216,10 @@
     <div class="l-navbar shadow-sm mt-6" id="nav-bar">
         <Sidebar />
     </div>
-    <div class="height-100">
-        <div class="d-flex justify-content-center py-2">
+    <div class="height-100hv">
+        <div class="d-flex justify-content-center py-2" style="background-color: rgb(159, 243, 205);">
             <RadzenNotification />
-            <div class="w-90">
+            <div class="w-90" style="background-color: rgb(159, 243, 205);">
                 @Body
             </div>
         </div>
@@ -248,7 +253,7 @@
         {
             try
             {
-                NavigationManager.NavigateTo("/"); 
+                NavigationManager.NavigateTo("/");
                 Console.WriteLine("DepDeposit");
             }
             catch (Exception ex)
