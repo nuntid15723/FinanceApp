@@ -163,7 +163,7 @@
 													</div>
 												</div>
 												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">สถานะบัญชี :</label>
+													<label class="form-label" for="">ประเภทบุคคล</label>
 													<select class="form-select" @bind="membcat_code"
 														aria-label="Default select example">
 														<option selected>--เลือก--</option>
@@ -209,56 +209,51 @@
 											</div>
 											@* <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
 									ColumnWidth="200px" *@
-											<RadzenDataGrid TItem="Models.AccountDetails" ColumnWidth="200px"
-												AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+											<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
+												ColumnWidth="200px" AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
 												FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 												AllowPaging="true" AllowSorting="true"
 												PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
 												<Columns>
 													<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-														Title="ประเภทเงินฝาก" Property="member_no">
+														Title="ทะเบียน" Property="member_no">
 														<Template>
-															@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_no
-													</div> *@
+															<div data-bs-dismiss="modal">
+																@context.member_no
+															</div>
 														</Template>
 													</RadzenDataGridColumn>
 
 													<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
 														Title="ชื่อ - นามสกุล" Property="deptaccount_name">
 														<Template>
-															@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_name
-													</div> *@
+															<div data-bs-dismiss="modal">
+																@context.full_name
+															</div>
 														</Template>
 													</RadzenDataGridColumn>
 													<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-														Title="เลขที่บัญชี" Property="member_no">
+														Title="รหัสประเภทบุคคล" Property="membcat_code">
 														<Template>
-															@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_name
-													</div> *@
+															<div data-bs-dismiss="modal">
+																@context.membgroup_code
+															</div>
 														</Template>
 													</RadzenDataGridColumn>
 													<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-														Title="ประเภทบุคคล" Property="full_name">
+														Title="ประเภทบุคคล" Property="membcat_desc">
 														<Template>
-															@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_surname
-													</div> *@
+															<div data-bs-dismiss="modal">
+																@context.membgroup_desc
+															</div>
 														</Template>
 													</RadzenDataGridColumn>
 													<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-														Title="สังกัด" Property="fullgroup">
+														Title="สังกัด" Property="membgroup_desc">
 														<Template>
-															@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.fullgroup
-													</div> *@
+															<div data-bs-dismiss="modal">
+																@context.depttype_code
+															</div>
 														</Template>
 													</RadzenDataGridColumn>
 												</Columns>
@@ -460,7 +455,7 @@
 										{
 											@foreach (var depttypeItem in Item.depttype)
 											{
-												if (depttypeItem.deptgroup_code == Item.depttype_code)
+												if (depttypeItem.deptmain_type == Item.depttype_code)
 												{
 													isCurrentOptionSelected = true;
 
@@ -469,8 +464,7 @@
 												{
 													isCurrentOptionSelected = false;
 												}
-												<option value="@($"{depttypeItem.deptmain_desc}|{depttypeItem.deptgroup_code}")"
-													selected="@isCurrentOptionSelected">
+												<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
 													@depttypeItem.deptmain_desc
 												</option>
 											}
@@ -580,12 +574,8 @@
 								</div>
 								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 									<label class="form-label" for="">ประเภทบัญชี</label>
-									@* <select class="form-select" @bind="Item.traninttype_code" aria-label="Default select
-						example">
-						<option Value="0">มีสมุด</option>
-						<option Value="1">ไม่มีสมุด</option>
-						</select> *@
-									<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+									<select id="recppaytypeSelect" name="depttype_code" @bind="traninttype_code"
+										class="form-select">
 										@if (Item.recppaytype == null || !Item.recppaytype.Any())
 										{
 											<option selected disabled></option>
@@ -603,7 +593,7 @@
 												{
 													isCurrentOptionSelected = false;
 												}
-												<option value="@depttypeItem.deptmain_desc" selected="@isCurrentOptionSelected">
+												<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
 													@depttypeItem.deptmain_desc
 												</option>
 											}
@@ -852,8 +842,7 @@
 												{
 													isCurrentOptionSelected = false;
 												}
-												<option value="@($"{depttypeItem.deptmain_desc}|{depttypeItem.deptgroup_code}")"
-													selected="@isCurrentOptionSelected">
+												<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
 													@depttypeItem.deptmain_desc
 												</option>
 											}
