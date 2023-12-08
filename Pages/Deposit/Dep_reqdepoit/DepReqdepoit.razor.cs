@@ -117,6 +117,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         }
         public List<Models.DepReqdepoit> repReqdepoit;
         public List<DeptSlip> deptSlipOpe;
+        private List<AccountDetails> depOfGetAccDetails;
+
         private string DepttypeValue;
         private string Valueselecte;
         private async Task GetBank()
@@ -176,16 +178,40 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
         private async Task DepttypeChanged(ChangeEventArgs e)
         {
-            string[] values = e.Value.ToString().Split('|');
             DepttypeValue = e.Value.ToString();
-            depttype_code = values[1];
-            Console.WriteLine($"Recp Pay Type Code: {DepttypeValue},Depttype Code: {depttype_code}");
+            depttype_code = DepttypeValue;
+            Console.WriteLine($"Depttype Code: {DepttypeValue}");
         }
         private void AnotherFunction()
         {
             GetBank();
             BankBranch();
         }
+        private async void UpdateAccountDetails(Models.AccountDetails data)
+        {
+            try
+            {
+                deptaccount_no = data.deptaccount_no;
+                Console.WriteLine($"Clicked on coop_id: {coop_id}");
+                Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
+                await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id}&deptaccount_no={data.deptaccount_no}");
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
+                if (apiResponse.status == true)
+                {
+                    repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
+                    StateHasChanged();
+                    Console.WriteLine($"API request failed: {repReqdepoit}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
         private async Task Search()
         {
             // GetBank();
@@ -330,8 +356,33 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     // อ่าน response string
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
+                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
                 }
                 var accountDetailsList = new List<Models.AccountDetails>();
+                if (depOfGetAccDetails != null)
+                {
+                    foreach (var accDetails in depOfGetAccDetails)
+                    {
+                        var accountDetails = new Models.AccountDetails
+                        {
+                            deptaccount_no = accDetails.deptaccount_no,
+                            deptaccount_name = accDetails.deptaccount_name,
+                            member_no = accDetails.member_no,
+                            full_name = accDetails.full_name,
+                            depttype_code = accDetails.depttype_code,
+                            membgroup_code = accDetails.membgroup_code,
+                            membgroup_desc = accDetails.membgroup_desc,
+                        };
+
+                        // Optional: You might want to add this to the list
+                        accountDetailsList.Add(accountDetails);
+
+                        // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
+                        // Add other properties as needed
+                    }
+                }
+                // Assign the list to dataaccDetails
+                dataaccDetails = accountDetailsList;
             }
             catch (Exception ex)
             {
@@ -382,14 +433,14 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         deptno_format = item.deptno_format,
                         deptaccount_no = "1000000001",
                         membcat_code = item.membcat_code,
-                        depttype_code = item.depttype_code,
+                        depttype_code = DepttypeValue ?? item.depttype_code,
                         deptgroup_code = item.deptgroup_code,
                         recppaytype_code = item.recppaytype_code,
                         moneytype_code = item.moneytype_code,
                         bank_code = item.bank_code,
                         bankbranch_code = item.bankbranch_code,
                         entry_id = "item.entry_id",
-                        machine_id = item.machine_id,
+                        machine_id = machine_id,
                         tofrom_accid = item.tofrom_accid,
                         operate_date = item.operate_date,
                         entry_date = item.entry_date,
@@ -474,7 +525,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     {
                         deptSlip = DeptSlip,
                         deptSlipdet = null,
-                        deptSlipCheque =  null,
+                        deptSlipCheque = null,
 
                     };
                     var json = JsonConvert.SerializeObject(Reqdepoit);

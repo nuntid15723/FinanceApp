@@ -328,7 +328,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
                 };
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
-                // Console.WriteLine(json);
+                Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
                 var response = await httpClient.PostAsync(apiUrl, content);
@@ -340,7 +340,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
                     depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
-                    Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
+                    // Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
 
                 }
                 // dataaccDetails = accountDetailsList;
@@ -360,7 +360,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         // Optional: You might want to add this to the list
                         accountDetailsList.Add(accountDetails);
 
-                        Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
+                        // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
                         // Add other properties as needed
                     }
                 }

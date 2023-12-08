@@ -252,8 +252,8 @@ namespace FinanceApp.Models
         public string? salary_id { get; set; }
         public DateTime? entry_date { get; set; }
         public string? deptaccountNo_fild { get; set; }
-        // public string? membgroup_code { get; set; }
-        // public string? membgroup_desc { get; set; }
+        public string? membgroup_code { get; set; }
+        public string? membgroup_desc { get; set; }
         // public string? deptitem_group { get; set; }
         // public int? reqappl_flag { get; set; }
     }
