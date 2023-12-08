@@ -259,24 +259,27 @@ namespace FinanceApp.Models
     }
     public class DepOfInitDataOffline
     {
-        public string coop_id { get; set; }
-        public string memcoop_id { get; set; }
-        public string? deptaccount_no { get; set; }
-        public string? deptaccount_name { get; set; }
-        public string? member_no { get; set; }
-        public string? depttype_code { get; set; }
-        public int deptclose_status { get; set; }
-        public string? memb_name { get; set; }
-        public string? memb_surname { get; set; }
-        public string? card_person { get; set; }
-        public string? mem_telmobile { get; set; }
-        public string? full_name { get; set; }
-        public string? salary_id { get; set; }
-        public DateTime? entry_date { get; set; }
-        public string? deptaccountNo_fild { get; set; }
-        public string? membgroup_code { get; set; }
-        public string? membgroup_desc { get; set; }
-        public string? deptitem_group { get; set; }
-        public int? reqappl_flag { get; set; }
-    }
+		public string coop_id { get; set; }
+		public string? memcoop_id { get; set; }
+		public string? deptno_format { get; set; }
+		public string? deptaccount_no { get; set; }
+		public string? deptaccount_name { get; set; }
+		public string? member_no { get; set; }
+		public string? depttype_code { get; set; }
+		[DefaultValue(0)]
+		public int deptclose_status { get; set; }
+		public string? memb_name { get; set; }
+		public string? memb_surname { get; set; }
+		public string? card_person { get; set; }
+		public string? mem_telmobile { get; set; }
+		public string? full_name { get; set; }
+		public string? salary_id { get; set; }
+		public string? membgroup_code { get; set; }
+		public string? membgroup_desc { get; set; }
+		public DateTime? entry_date { get; set; }
+		public string? deptitem_group { get; set; }
+		[DefaultValue(0)]
+		public int reqappl_flag { get; set; }
+		public string? membcat_code { get; set; } = null;
+	}
 }

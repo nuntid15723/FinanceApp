@@ -75,8 +75,8 @@ else
 						<label class="form-label" for="">เลขที่บัญชี</label>
 						<div class="form-group ">
 							<div class="input-group">
-								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
-									Name="deptaccount_no" class="form-control"
+								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
+									Name="deptno_format" class="form-control"
 									@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
@@ -134,7 +134,7 @@ else
 														@* <input class="form-control" type="text" name="emp_name"
 												@bind-value="deptaccount_no"> *@
 														<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
-															@bind-value="deptaccount_No_fild" Name="deptaccount_no"
+														@bind-value="deptaccount_No_fild" Name="deptaccount_No_fild"
 															class="form-control" />
 
 													</div>
@@ -144,7 +144,7 @@ else
 												<label class="form-label" for="">ชื่อบัญชี :</label>
 												<div class="form-group ">
 													<div class="input-group">
-														<input class="form-control" type="text" name="emp_name"
+														<input class="form-control" type="text" name="deptaccount_name_fild"
 															@bind-value="deptaccount_name_fild">
 
 													</div>
