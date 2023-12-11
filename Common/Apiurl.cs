@@ -10,7 +10,7 @@ public static class Paths{
     public const string DepOfPostWithSaving = "DepOfPostWithSaving";
     public const string DepOfInitOpenAccount = "DepOfInitOpenAccount";
     public const string DepOfPostOpenAccount = "DepOfPostOpenAccount";
-
+    public const string DepOfGetMemberOpenAccount = "DepOfGetMemberOpenAccount";
     public const string DepOfGetBank = "DepOfGetBank";
     public const string DepOfGetBankBranch = "DepOfGetBankBranch";
 

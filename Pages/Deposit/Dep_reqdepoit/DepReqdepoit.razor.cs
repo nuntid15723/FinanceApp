@@ -102,6 +102,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? membgroup_code { get; set; }
         public string? membgroup_desc { get; set; }
         public string? deptitem_group { get; set; }
+        public int? deptclose_status { get; set; }
 
         // public string? membcat_code { get; set; }
 
@@ -117,7 +118,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         }
         public List<Models.DepReqdepoit> repReqdepoit;
         public List<DeptSlip> deptSlipOpe;
-        private List<AccountDetails> depOfGetAccDetails;
+        private List<ReqAccDetails> depOfGetAccDetails;
 
         private string DepttypeValue;
         private string Valueselecte;
@@ -187,18 +188,45 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             GetBank();
             BankBranch();
         }
-        private async void UpdateAccountDetails(Models.AccountDetails data)
+        private async void UpdateAccountDetails(Models.ReqAccDetails data)
         {
+            AnotherFunction();
             try
             {
-                deptaccount_no = data.deptaccount_no;
+                member_no = data.member_no;
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
-                Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
-                await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id}&deptaccount_no={data.deptaccount_no}");
+                Console.WriteLine($"Clicked on member_no: {data.member_no}");
+                await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.member_no}, {data.memb_name}  {data.memb_surname}");
+
+                var depOfGetAccount = new ReqAccDetails
+                {
+                    coop_id = "065001",
+                    memcoop_id = "065001",
+                    deptaccount_no = deptaccount_no,
+                    member_no = member_no,
+                    depttype_code = depttype_code,
+                    salary_id = salary_id,
+                    deptclose_status = 0,
+                    memb_name = memb_name,
+                    memb_surname = memb_surname,
+                    card_person = card_person,
+                    mem_telmobile = mem_telmobile,
+                    full_name = full_name,
+                    membgroup_code = membgroup_code,
+                    membgroup_desc = membgroup_desc,
+                    entry_date = entry_date,
+                    deptitem_group = deptitem_group,
+                    reqappl_flag = reqappl_flag,
+                };
+                var json = JsonConvert.SerializeObject(depOfGetAccount);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                var response = await httpClient.PostAsync(apiUrl, content);
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
+                Console.WriteLine(response.IsSuccessStatusCode);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
                 if (apiResponse.status == true)
                 {
                     repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
@@ -283,12 +311,12 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         full_name = full_name,
                         membgroup_code = membgroup_code,
                         membgroup_desc = membgroup_desc,
-                        entry_date = entry_date,
+                        entry_date = DateTime.Today,
                         deptitem_group = deptitem_group,
                         reqappl_flag = reqappl_flag,
                     };
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
-                    // Console.WriteLine(json);
+                    Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
                     var response = await httpClient.PostAsync(apiUrl, content);
@@ -299,11 +327,18 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         // อ่าน response string
                         var jsonResponse = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
-                        // Console.WriteLine(apiResponse.status == true);
+                        Console.WriteLine(apiResponse.status == true);
                         if (apiResponse.status == true)
                         {
                             repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
                             Console.WriteLine($"API request failed: {repReqdepoit}");
+                        }
+                        else
+                        {
+
+                            var Error = JsonConvert.SerializeObject(apiResponse.message);
+                            // Console.WriteLine(Error);
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Error, Duration = 5000 });
                         }
                     }
                 }
@@ -335,19 +370,33 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             try
             {
                 isLoadingModals = true;
-                var depOfGetAccount = new AccountDetails
+                var depOfGetAccount = new ReqAccDetails
                 {
                     coop_id = "065001",
                     memcoop_id = "065001",
-                    deptaccount_no = memberNo_fild,
-                    member_no = member_no,
-                    depttype_code = depttype_code,
-                    salary_id = salary_id,
+                    deptaccount_no = null,
+                    deptaccount_name = null,
+                    member_no = null,
+                    memberNo_fild = null,
+                    depttype_code = null,
+                    deptclose_status = 0,
+                    memb_name = null,
+                    memb_surname = null,
+                    card_person = null,
+                    mem_telmobile = null,
+                    full_name = null,
+                    salary_id = null,
+                    membgroup_code = null,
+                    membgroup_desc = null,
+                    entry_date = null,
+                    deptitem_group = null,
+                    reqappl_flag = 0,
+                    membcat_code = null
                 };
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
-                // Console.WriteLine(json);
+                Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
+                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetMemberOpenAccount}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -356,22 +405,35 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     // อ่าน response string
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
-                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
+                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<ReqAccDetails>>();
                 }
-                var accountDetailsList = new List<Models.AccountDetails>();
+                var accountDetailsList = new List<Models.ReqAccDetails>();
                 if (depOfGetAccDetails != null)
                 {
                     foreach (var accDetails in depOfGetAccDetails)
                     {
-                        var accountDetails = new Models.AccountDetails
+                        var accountDetails = new Models.ReqAccDetails
                         {
+                            coop_id = accDetails.coop_id,
+                            memcoop_id = accDetails.memcoop_id,
                             deptaccount_no = accDetails.deptaccount_no,
                             deptaccount_name = accDetails.deptaccount_name,
                             member_no = accDetails.member_no,
-                            full_name = accDetails.full_name,
                             depttype_code = accDetails.depttype_code,
+                            deptclose_status = accDetails.deptclose_status,
+                            memb_name = accDetails.memb_name,
+                            memb_surname = accDetails.memb_surname,
+                            card_person = accDetails.card_person,
+                            mem_telmobile = accDetails.mem_telmobile,
+                            full_name = accDetails.full_name,
+                            salary_id = accDetails.salary_id,
                             membgroup_code = accDetails.membgroup_code,
                             membgroup_desc = accDetails.membgroup_desc,
+                            entry_date = DateTime.Today,
+                            deptitem_group = accDetails.deptitem_group,
+                            reqappl_flag = accDetails.reqappl_flag,
+                            membcat_code = accDetails.membcat_code
+
                         };
 
                         // Optional: You might want to add this to the list
@@ -386,7 +448,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             }
             catch (Exception ex)
             {
-                // ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
                 Console.WriteLine(ex.Message.ToString());
             }
             finally
