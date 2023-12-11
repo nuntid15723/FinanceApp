@@ -203,13 +203,14 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         //ค้นหา
         private async Task Search()
         {
-            deptno_format = deptno_format.Trim().Replace("-", "");
+
             if (deptno_format == null || deptno_format == "")
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขที่บัญชี", Duration = 1500 });
             }
             else
-            {              
+            {
+                deptno_format = deptno_format.Trim().Replace("-", "");
                 try
                 {
                     isLoading = true;
