@@ -709,6 +709,13 @@ else
 													@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 												</option>
 											}
+											else if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+											{
+												<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+													selected="@isCurrentOptionSelected">
+													@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+												</option>
+											}
 										}
 									}
 								</select>
