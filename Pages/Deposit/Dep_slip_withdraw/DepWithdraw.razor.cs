@@ -223,11 +223,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         {
             NotificationService.Notify(message);
         }
+        //RetriveDataFromDeptNo
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
             try
             {
                 deptaccount_no = data.deptaccount_no?.Trim();
+<<<<<<< HEAD
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
                 await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
@@ -244,6 +246,27 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
                 var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
                 var response = await httpClient.PostAsync(apiUrl, content);
+=======
+				Console.WriteLine($"Clicked on coop_id: {coop_id}");
+                Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
+                await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+				var depOfGetAccount = new DepOfInitDataOffline
+				{
+					coop_id = coop_id,
+					memcoop_id = coop_id,
+					deptno_format = data.deptaccount_no,
+					entry_date = null,
+					deptitem_group ="WID",
+				};
+				var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
+				Console.WriteLine(jsonReq);
+				var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
+				var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+				var response = await httpClient.PostAsync(apiUrl, content);
+                //var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id}&deptaccount_no={data.deptaccount_no}");
+
+                response.EnsureSuccessStatusCode();
+>>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
                 var jsonRes = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonRes);
                 if (apiResponse.status == true)
@@ -266,9 +289,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //ค้นหา
         private async Task Search()
         {
+<<<<<<< HEAD
 
             AnotherFunction();
             deptno_format = deptno_format?.Trim().Replace("-", "");
+=======
+            deptno_format = deptno_format?.Trim().Replace("-", "");            
+>>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
             if (deptno_format == null || deptno_format == "")
             {
 
@@ -310,35 +337,30 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             //     }
             // }
             else
+<<<<<<< HEAD
             {
                 // string[] deptaccountNoDtails = deptaccount_no.ToString().Split('-');
                 // string firstPart = deptaccountNoDtails[0];
                 // string secondPart = deptaccountNoDtails[1];
                 // deptaccountNo_fild = firstPart + secondPart;
+=======
+            {                
+>>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
                 try
                 {
-                    isLoading = true;
+                    isLoading = true;                    
                     var depOfGetAccount = new DepOfInitDataOffline
                     {
                         coop_id = "065001",
                         memcoop_id = "065001",
-                        deptaccount_no = deptaccountNo_fild,
-                        deptaccount_name = deptaccount_name,
-                        member_no = member_no,
-                        depttype_code = depttype_code,
-                        deptclose_status = 0,
-                        memb_name = memb_name,
-                        memb_surname = memb_surname,
-                        card_person = card_person,
-                        mem_telmobile = mem_telmobile,
-                        full_name = full_name,
-                        salary_id = salary_id,
-                        membgroup_code = membgroup_code,
-                        membgroup_desc = membgroup_desc,
+						deptno_format = deptno_format,
                         entry_date = entry_date,
                         deptitem_group = deptitem_group ?? "WID",
+<<<<<<< HEAD
                         reqappl_flag = reqappl_flag ?? 0,
                         deptno_format = deptno_format,
+=======
+>>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
                     };
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
@@ -376,16 +398,6 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //ค้นหาใน dlg
         private async Task SearchOfGetAcc()
         {
-            string deptaccountNo_fild = null;
-
-            if (deptaccount_No_fild != null)
-            {
-                string[] deptaccountNoDtails = deptaccount_No_fild.ToString().Split('-');
-                string firstPart = deptaccountNoDtails[0];
-                string secondPart = deptaccountNoDtails[1];
-                deptaccountNo_fild = firstPart + secondPart;
-            }
-
             try
             {
                 isLoadingModals = true;
@@ -394,8 +406,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     coop_id = "065001",
                     memcoop_id = "065001",
                     deptaccount_no = deptaccount_No_fild,
+<<<<<<< HEAD
                     deptaccount_name = deptaccount_name_fild,
                     member_no = member_no,
+=======
+					deptaccount_name = deptaccount_name_fild,
+					member_no = member_no,
+>>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
                     depttype_code = depttype_code,
                     deptclose_status = deptclose_status,
                     memb_name = memb_name,
@@ -405,7 +422,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     full_name = full_name,
                     salary_id = salary_id,
                     entry_date = entry_date ?? null
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
                 };
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 // Console.WriteLine(json);
@@ -420,8 +440,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
                     depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
-                    Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
-
+                    //Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
                 }
                 // dataaccDetails = accountDetailsList;
                 var accountDetailsList = new List<Models.AccountDetails>();
