@@ -105,7 +105,6 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public int? deptclose_status { get; set; }
 
         // public string? membcat_code { get; set; }
-
         public string? salary_id { get; set; }
         public string? fullgroup { get; set; }
         public List<GetBank>? getBank { get; set; }
@@ -249,47 +248,6 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
             }
-            // else
-            // {
-            //     try
-            //     {
-            //         isLoading = true;
-            //         var response = await
-            //         httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}?coop_control={coop_id}&member_no={member_no}&reqappl_flag={reqappl_flag}");
-            //         response.EnsureSuccessStatusCode();
-            //         var json = await response.Content.ReadAsStringAsync();
-            //         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
-            //         Console.WriteLine(apiResponse.status == true);
-            //         if (apiResponse.status == true)
-            //         {
-            //             repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
-            //             Console.WriteLine($"API request failed: {repReqdepoit}");
-            //         }
-            //         else
-            //         {
-            //             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
-            //             Console.WriteLine($"API request failed: {apiResponse.message}");
-            //         }
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
-            //         Console.WriteLine(ex.Message.ToString());
-            //     }
-            //     finally
-            //     {
-            //         isLoading = false;
-            //     }
-            // }
-            // string memberNo_fild = null;
-
-            // if (member_no != null)
-            // {
-            //     string[] memberNoDtails = member_no.ToString().Split('-');
-            //     string firstPart = memberNoDtails[0];
-            //     string secondPart = memberNoDtails[1];
-            //     member_no = firstPart + secondPart;
-            // }
             else
             {
                 try
@@ -318,7 +276,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetMemberOpenAccount}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -355,18 +313,9 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 }
             }
         }
+
         private async Task SearchOfGetAcc()
         {
-            string memberNo_fild = null;
-
-            if (member_No_fild != null)
-            {
-                string[] memberNoDtails = member_No_fild.ToString().Split('-');
-                string firstPart = memberNoDtails[0];
-                string secondPart = memberNoDtails[1];
-                memberNo_fild = firstPart + secondPart;
-            }
-
             try
             {
                 isLoadingModals = true;
@@ -376,8 +325,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     memcoop_id = "065001",
                     deptaccount_no = null,
                     deptaccount_name = null,
-                    member_no = null,
-                    memberNo_fild = null,
+                    member_no = member_No_fild,
                     depttype_code = null,
                     deptclose_status = 0,
                     memb_name = null,
@@ -432,14 +380,15 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                             entry_date = DateTime.Today,
                             deptitem_group = accDetails.deptitem_group,
                             reqappl_flag = accDetails.reqappl_flag,
-                            membcat_code = accDetails.membcat_code
+                            membcat_code = accDetails.membcat_code,
+                            membcat_desc = accDetails.membcat_desc
 
                         };
 
                         // Optional: You might want to add this to the list
                         accountDetailsList.Add(accountDetails);
 
-                        // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
+                        // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}, membcat_desc: {accDetails.membcat_desc}");
                         // Add other properties as needed
                     }
                 }

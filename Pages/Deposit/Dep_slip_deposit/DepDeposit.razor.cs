@@ -93,6 +93,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public decimal? f_tax_rate { get; set; }
         public int? adjdate_status { get; set; }
         public string? membcat_desc { get; set; }
+        public string? deptmax_amt { get; set; }
 
         /// < deptSlipdet>
         public decimal? prnc_bal { get; set; }
@@ -526,7 +527,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         prnc_no = ItemdeptSlip.prnc_no,
                         deptslip_amt = deptslipAmt,
                         // deptslip_amt = deptslipAmt ?? ItemdeptSlip.deptslip_amt,
-                        deptslip_netamt = ItemdeptSlip.deptslip_amt,
+                        deptslip_netamt = deptslipAmt,
                         fee_amt = ItemdeptSlip.fee_amt,
                         oth_amt = ItemdeptSlip.oth_amt,
                         prncbal = ItemdeptSlip.prncbal,
@@ -662,7 +663,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     }
                     else
                     {
-                        // Console.WriteLine(responseData);
+                        Console.WriteLine(responseData);
                         var jsonResponse = JObject.Parse(responseData);
                         var errorsProperty = jsonResponse["errors"];
                         Console.WriteLine(errorsProperty);

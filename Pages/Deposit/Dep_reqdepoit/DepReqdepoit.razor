@@ -143,7 +143,7 @@ else
 												<label class="form-label" for="">ทะเบียนสมาชิก</label>
 												<div class="form-group ">
 													<div class="input-group">
-														<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
+														<RadzenMask Mask="********" CharacterPattern="[0-9]"
 															@bind-value="member_No_fild" Name="deptaccount_no"
 															class="form-control" />
 
@@ -244,7 +244,7 @@ else
 													<Template>
 														<div @onclick="@(e => UpdateAccountDetails(context))"
 															data-bs-dismiss="modal">
-															@context.membgroup_desc
+															@context.membcat_desc
 														</div>
 													</Template>
 												</RadzenDataGridColumn>
@@ -308,7 +308,7 @@ else
 														<label class="form-label" for="">ทะเบียนสมาชิก</label>
 														<div class="form-group ">
 															<div class="input-group">
-																<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
+																<RadzenMask Mask="********" CharacterPattern="[0-9]"
 																	@bind-value="member_No_fild" Name="deptaccount_no"
 																	class="form-control" />
 
@@ -406,11 +406,11 @@ else
 															</Template>
 														</RadzenDataGridColumn>
 														<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails"
-															Title="ประเภทบุคคล" Property="membcat_code">
+															Title="ประเภทบุคคล" Property="membcat_desc">
 															<Template>
 																<div @onclick="@(e => UpdateAccountDetails(context))"
 																	data-bs-dismiss="modal">
-																	@context.membcat_code
+																	@context.membcat_desc
 																</div>
 															</Template>
 														</RadzenDataGridColumn>

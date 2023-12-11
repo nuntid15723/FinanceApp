@@ -160,7 +160,7 @@
 		public string account_type { get; set; }
 		public string account_desc { get; set; }
 	}
-	public class DepOfInitOpenAccount
+	public class DepOfGetMemberOpenAccount
 	{
 		public ReqAccDetails accountDetails { get; set; }
 	}
@@ -187,7 +187,7 @@
 		public string? deptitem_group { get; set; }
 		public int? reqappl_flag { get; set; }
 		public string? membcat_code { get; set; }
-		// public string? membcat_desc { get; set; }
+		public string? membcat_desc { get; set; }
 	}
 
 }
