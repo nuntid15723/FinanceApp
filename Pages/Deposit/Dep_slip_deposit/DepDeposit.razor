@@ -120,7 +120,7 @@ else
 						<div class="form-group ">
 							<div class="input-group">
 								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
-									Name="deptno_format" class="form-control"
+									Name="deptaccount_no" class="form-control"
 									@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
@@ -335,9 +335,8 @@ else
 								<label class="form-label" for="">เลขที่บัญชี</label>
 								<div class="form-group ">
 									<div class="input-group">
-										@* <input class="form-control" type="text" name="deptaccount_no" @bind="deptaccount_no"> *@
 										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
-											Name="deptno_format" class="form-control"
+											Name="deptaccount_no" class="form-control"
 											@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
@@ -586,7 +585,6 @@ else
 					@bind="Item.operate_date" /> *@
 								<RadzenDatePicker @bind-Value=@Item.operate_date Name="operate_date" DateFormat="dd/MM/yyyy" />
 							</div>
-<<<<<<< HEAD
 							<!-- The Modal -->
 							<div class="modal" id="anotherModal">
 								<div class="modal-dialog modal-xl">
@@ -607,28 +605,6 @@ else
 												@bind="emp_name">
 												*@
 														</div>
-=======
-						</div>
-						<!-- The Modal -->
-						<div class="modal" id="anotherModal">
-							<div class="modal-dialog modal-lg">
-								<div class="modal-content">
-									<!-- Modal Header -->
-									<div class="modal-header">
-										<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-										<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-									</div>
-									<!-- Modal body -->
-									<div class="modal-body">
-										<div class="row">
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ชื่อ</label>
-												<div class="form-group ">
-													<div class="input-group">
-														@* <input class="form-control" type="text" name="emp_name"
-											@bind="emp_name">
-											*@
->>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
 													</div>
 												</div>
 											</div>
