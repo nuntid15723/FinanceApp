@@ -89,6 +89,11 @@
 	.card {
 		background-color: #f9f9f9;
 	}
+
+	.rz-calendar .rz-inputtext {
+		background-color: #e9ecef;
+		opacity: 1;
+	}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -494,18 +499,17 @@ else
 							</div>
 							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ประเภทบุคคล</label>
-								<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
-									Name="membcat_code" @bind-value="Item.membcat_desc" />
+								<RadzenTextBox class="form-control" type="text" ReadOnly Name="membcat_code"
+									@bind-value="Item.membcat_desc" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">วันที่เปิดบัญชี</label>
-								<RadzenDatePicker @bind-Value=Item.operate_date Disabled="true" Name="operate_date"
+								<RadzenDatePicker @bind-Value=Item.operate_date ReadOnly Name="operate_date"
 									DateFormat="dd/MM/yyyy" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">วันครบกำหนด</label>
-								<RadzenDatePicker @bind-Value=Item.entry_date Disabled="true" Name="operate_date"
-									DateFormat="dd/MM/yyyy" />
+								<RadzenDatePicker @bind-Value=Item.due_date ReadOnly Name="operate_date" DateFormat="dd/MM/yyyy" />
 							</div>
 						</div>
 						<div class="row">
@@ -538,13 +542,13 @@ else
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ชื่อบัญชี(TH)</label>
-								<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
-									Name="deptaccount_name" @bind-value="Item.deptaccount_name" />
+								<RadzenTextBox class="form-control" type="text" ReadOnly Name="deptaccount_name"
+									@bind-value="Item.deptaccount_name" />
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ชื่อบัญชี(EN)</label>
-								<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
-									Name="deptaccount_ename" @bind-value="Item.deptaccount_ename" />
+								<RadzenTextBox class="form-control" type="text" ReadOnly Name="deptaccount_ename"
+									@bind-value="Item.deptaccount_ename" />
 							</div>
 						</div>
 						<div class="row">
@@ -558,9 +562,9 @@ else
 							</div>
 							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">วิธีรับดอกเบี้ย</label>
-								<select class="form-select" @bind="Item.monthintpay_meth" aria-label="Default select example">
+								<select class="form-select" @bind="Item.monthintpay_meth">
 									<option Value="0">ทบต้น</option>
-									<option Value="1">โอนเข้า บ/ช</option>
+									<option value="1">โอนเข้า บ/ช</option>
 									<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
 									<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
 									<option Value="5">รับเป็นธนาณัติ</option>
@@ -576,269 +580,641 @@ else
 									@bind-value="Item.condforwithdraw" />
 							</div>
 						</div>
-						<div class="row">
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">บัญชีเลขที่</label>
-								<div class="form-group ">
-									<div class="input-group">
-										<input type="text" class="format-money form-control" Name="tran_deptacc_no"
-											value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
-										<div class="input-group-addon">
-											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-												data-bs-target="#accNo" />
-										</div>
-									</div>
-								</div>
-								<!-- The Modal -->
-								<div class="modal" id="accNo">
-									<div class="modal-dialog modal-xl">
-										<div class="modal-content">
-											<!-- Modal Header -->
-											<div class="modal-header">
-												<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+						@if (Item.monthintpay_meth == 1 || Item.monthintpay_meth == 2)
+						{
+							@if (Item.monthintpay_meth == 1)
+							{
+								<div class="row">
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">บัญชีเลขที่</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input type="text" class="format-money form-control" Name="tran_deptacc_no"
+													value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
+												<div class="input-group-addon">
+													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+														data-bs-target="#accNo" />
+												</div>
 											</div>
-											<!-- Modal body -->
-											<div class="modal-body">
-												<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
-													ColumnWidth="100" AllowFiltering="true"
-													FilterPopupRenderMode="PopupRenderMode.OnDemand"
-													FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-													AllowPaging="true" AllowSorting="true"
-													PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-													<Columns>
-														<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
-															Title="ประเภทเงินฝาก" Property="deptaccount_no">
-															<Template>
-																@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+										</div>
+										<!-- The Modal -->
+										<div class="modal" id="accNo">
+											<div class="modal-dialog modal-xl">
+												<div class="modal-content">
+													<!-- Modal Header -->
+													<div class="modal-header">
+														<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+													</div>
+													<!-- Modal body -->
+													<div class="modal-body">
+														<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
+															ColumnWidth="100" AllowFiltering="true"
+															FilterPopupRenderMode="PopupRenderMode.OnDemand"
+															FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+															AllowPaging="true" AllowSorting="true"
+															PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+															<Columns>
+																<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
+																	Title="ประเภทเงินฝาก" Property="deptaccount_no">
+																	<Template>
+																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
 													data-bs-dismiss="modal">
 													@context.deptaccount_no
 													</div> *@
-															</Template>
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
-															Title="เลขที่บัญชี" Property="member_no">
-															<Template>
-																@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+																	</Template>
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
+																	Title="เลขที่บัญชี" Property="member_no">
+																	<Template>
+																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
 													data-bs-dismiss="modal">
 													@context.member_no
 													</div> *@
-															</Template>
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
-															Title="ชื่อบัญชี" Property="deptaccount_name">
-															<Template>
-																@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+																	</Template>
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
+																	Title="ชื่อบัญชี" Property="deptaccount_name">
+																	<Template>
+																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
 													data-bs-dismiss="modal">
 													@context.deptaccount_name
 													</div> *@
-															</Template>
-														</RadzenDataGridColumn>
-													</Columns>
-												</RadzenDataGrid>
-												<!-- Modal footer -->
-												<div class="modal-footer">
-													<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-														Close
-													</button>
-												</div>
+																	</Template>
+																</RadzenDataGridColumn>
+															</Columns>
+														</RadzenDataGrid>
+														<!-- Modal footer -->
+														<div class="modal-footer">
+															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+																Close
+															</button>
+														</div>
 
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">การฝากรายเดือน</label>
+										<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
+											<option Value="0">ไม่ต้องการฝาก</option>
+											<option Value="1">ต้องการฝาก</option>
+										</select>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">จำนวนส่งรายงวด</label>
+										<input type="text" class="format-money form-control" Name="deptmonth_amt"
+											value="@Item.deptmonth_amt" />
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">เปิดบัญชีโดย</label>
+										<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+											@if (Item.recppaytype == null || !Item.recppaytype.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												@foreach (var recppaytypeItem in Item.recppaytype)
+												{
+													if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+													{
+														isCurrentOptionSelected = true;
+
+													}
+													else
+													{
+														isCurrentOptionSelected = false;
+													}
+													<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
+														@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+													</option>
+												}
+											}
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ชื่อบัญชี</label>
+										<input type="text" class="format-money form-control" Name="deptslip_netamt"
+											value="@Item.dept_tranacc_name" />
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ประเภทบัญชี</label>
+										<select id="recppaytypeSelect" name="depttype_code" class="form-select" @bind="traninttype_code">
+											@if (Item.recppaytype == null || !Item.recppaytype.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												@foreach (var depttypeItem in Item.depttype)
+												{
+													if (depttypeItem.deptgroup_code == Item.traninttype_code)
+													{
+														isCurrentOptionSelected = true;
+
+													}
+													else
+													{
+														isCurrentOptionSelected = false;
+													}
+													<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
+														@depttypeItem.deptmain_desc
+													</option>
+												}
+											}
+										</select>
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
+											@foreach (var tofromaccItem in Item.tofromacc)
+											{
+												if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+												{
+													isCurrentOptionSelected = true;
+
+												}
+												else
+												{
+													isCurrentOptionSelected = false;
+												}
+												<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
+													@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+												</option>
+
+											}
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ธนาคาร</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+													name="bank_code" readonly value="@bank_code" @oninput="OnGetBankChanged" />
+												<select id="getBankSelect" disabled class="form-select" @onchange="OnGetBankSelectChanged"
+													style="width: 70%;">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">สาขา</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input class="format-money form-control"  type="text" style="text-align: center; width: 30%;"
+													name="bank_code" readonly value="@bankbranch_code" @oninput="OnBankBranchChanged" />
+												<select id="getBankSelect" disabled class="form-select"
+													@onchange="OnBankBranchSelectChanged" style="width: 70%;">
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<div class="form-check" style="margin-top: 35px;">
+											<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+											<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">อ้างอิง</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input type="text" class="format-money form-control" Name="deptslip_netamt"
+													value="@Item.deptslip_no" />
+												<div class="input-group-addon">
+													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+														data-bs-target="#myModal1" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รวมสุทธิ</label>
+										<input class="format-money form-control" placeholder="0.00" type="text"
+											style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
+									</div>
+								</div>
+							}
+							else
+							{
+								<div class="row">
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">บัญชีเลขที่</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input type="text" class="format-money form-control" Name="tran_deptacc_no"
+													value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
+												<div class="input-group-addon">
+													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+														data-bs-target="#accNo" />
+												</div>
+											</div>
+										</div>
+										<!-- The Modal -->
+										<div class="modal" id="accNo">
+											<div class="modal-dialog modal-xl">
+												<div class="modal-content">
+													<!-- Modal Header -->
+													<div class="modal-header">
+														<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+													</div>
+													<!-- Modal body -->
+													<div class="modal-body">
+														<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
+															ColumnWidth="100" AllowFiltering="true"
+															FilterPopupRenderMode="PopupRenderMode.OnDemand"
+															FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+															AllowPaging="true" AllowSorting="true"
+															PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+															<Columns>
+																<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
+																	Title="ประเภทเงินฝาก" Property="deptaccount_no">
+																	<Template>
+																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+													data-bs-dismiss="modal">
+													@context.deptaccount_no
+													</div> *@
+																	</Template>
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
+																	Title="เลขที่บัญชี" Property="member_no">
+																	<Template>
+																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+													data-bs-dismiss="modal">
+													@context.member_no
+													</div> *@
+																	</Template>
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
+																	Title="ชื่อบัญชี" Property="deptaccount_name">
+																	<Template>
+																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+													data-bs-dismiss="modal">
+													@context.deptaccount_name
+													</div> *@
+																	</Template>
+																</RadzenDataGridColumn>
+															</Columns>
+														</RadzenDataGrid>
+														<!-- Modal footer -->
+														<div class="modal-footer">
+															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+																Close
+															</button>
+														</div>
+
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">การฝากรายเดือน</label>
+										<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
+											<option Value="0">ไม่ต้องการฝาก</option>
+											<option Value="1">ต้องการฝาก</option>
+										</select>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">จำนวนส่งรายงวด</label>
+										<input type="text" class="format-money form-control" Name="deptmonth_amt"
+											value="@Item.deptmonth_amt" />
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">เปิดบัญชีโดย</label>
+										<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+											@if (Item.recppaytype == null || !Item.recppaytype.Any())
+											{
+												<option selected disabled></option>
+											}
+											else
+											{
+												@foreach (var recppaytypeItem in Item.recppaytype)
+												{
+													if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+													{
+														isCurrentOptionSelected = true;
+
+													}
+													else
+													{
+														isCurrentOptionSelected = false;
+													}
+													<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
+														@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+													</option>
+												}
+											}
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ชื่อบัญชี</label>
+										<input type="text" class="format-money form-control" Name="deptslip_netamt"
+											value="@Item.dept_tranacc_name" />
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ประเภทบัญชี</label>
+										<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select" @bind="traninttype_code">
+										</select>
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รหัสคู่บัญชี</label>
+										<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
+											@foreach (var tofromaccItem in Item.tofromacc)
+											{
+												if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+												{
+													isCurrentOptionSelected = true;
+
+												}
+												else
+												{
+													isCurrentOptionSelected = false;
+												}
+												<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
+													@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+												</option>
+
+											}
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ธนาคาร</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+													name="bank_code" value="@bank_code" @oninput="OnGetBankChanged" />
+												<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
+													style="width: 70%;">
+													<option selected>--กรุณาเลือก--</option>
+													@foreach (var getBankItem in getBank)
+													{
+														bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
+														<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
+															@getBankItem.bank_code - @getBankItem.bank_desc
+														</option>
+													}
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">สาขา</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+													name="bank_code" value="@bankbranch_code" @oninput="OnBankBranchChanged" />
+												<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
+													style="width: 70%;">
+													<option selected>--กรุณาเลือก--</option>
+													@foreach (var bankBranchItem in bankBranch)
+													{
+														bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
+														<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
+															@bankBranchItem.branch_id - @bankBranchItem.branch_name
+														</option>
+													}
+												</select>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<div class="form-check" style="margin-top: 35px;">
+											<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+											<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+										</div>
+									</div>
+									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">อ้างอิง</label>
+										<div class="form-group ">
+											<div class="input-group">
+												<input type="text" class="format-money form-control" Name="deptslip_netamt"
+													value="@Item.deptslip_no" />
+												<div class="input-group-addon">
+													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+														data-bs-target="#myModal1" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">รวมสุทธิ</label>
+										<input class="format-money form-control" placeholder="0.00" type="text"
+											style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
+									</div>
+								</div>
+							}
+						}
+						else
+						{
+							<div class="row">
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">บัญชีเลขที่</label>
+									<div class="form-group ">
+										<div class="input-group">
+											<input type="text" class="format-money form-control" readonly Name="tran_deptacc_no"
+												value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
+											<div class="input-group-addon">
+												<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+													data-bs-target="#accNo" />
+											</div>
+										</div>
+									</div>
+									<!-- The Modal -->
+									<div class="modal" id="accNo">
+										<div class="modal-dialog modal-xl">
+											<div class="modal-content">
+												<!-- Modal Header -->
+												<div class="modal-header">
+													<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+													<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+												</div>
+												<!-- Modal body -->
+												<div class="modal-body">
+													<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
+														ColumnWidth="100" AllowFiltering="true"
+														FilterPopupRenderMode="PopupRenderMode.OnDemand"
+														FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+														AllowPaging="true" AllowSorting="true"
+														PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+														<Columns>
+															<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
+																Title="ประเภทเงินฝาก" Property="deptaccount_no">
+																<Template>
+																	@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+													data-bs-dismiss="modal">
+													@context.deptaccount_no
+													</div> *@
+																</Template>
+															</RadzenDataGridColumn>
+															<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
+																Title="เลขที่บัญชี" Property="member_no">
+																<Template>
+																	@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+													data-bs-dismiss="modal">
+													@context.member_no
+													</div> *@
+																</Template>
+															</RadzenDataGridColumn>
+															<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
+																Title="ชื่อบัญชี" Property="deptaccount_name">
+																<Template>
+																	@* <div @onclick="@(e => UpdateReqAccDetails(context))"
+													data-bs-dismiss="modal">
+													@context.deptaccount_name
+													</div> *@
+																</Template>
+															</RadzenDataGridColumn>
+														</Columns>
+													</RadzenDataGrid>
+													<!-- Modal footer -->
+													<div class="modal-footer">
+														<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+															Close
+														</button>
+													</div>
+
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<!-- The Modal -->
-								<div class="modal" id="myModal1">
-									<div class="modal-dialog modal-xl">
-										<div class="modal-content">
-											<!-- Modal Header -->
-											<div class="modal-header">
-												<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-											</div>
-											<!-- Modal body -->
-											<div class="modal-body">
-												<div style="margin: 20px">
-												</div>
-												<span>
-													<asp:Button ID="b_calChange" runat="server"
-														Style="float: left; width: 100%; height: 25px" Text="คำนวณเงินทอน"
-														TabIndex="12" BackColor="#556B2F" ForeColor="White" />
-												</span>
-
-												<!-- Modal footer -->
-												<div class="modal-footer">
-													<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-														Close
-													</button>
-												</div>
-
-											</div>
-										</div>
-									</div>
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">การฝากรายเดือน</label>
+									<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
+										<option Value="0">ไม่ต้องการฝาก</option>
+										<option Value="1">ต้องการฝาก</option>
+									</select>
 								</div>
-							</div>
-							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">การฝากรายเดือน</label>
-								<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
-									<option Value="0">ไม่ต้องการฝาก</option>
-									<option Value="1">ต้องการฝาก</option>
-								</select>
-							</div>
-							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">จำนวนส่งรายงวด</label>
-								<input type="text" class="format-money form-control" Name="deptmonth_amt"
-									value="@Item.deptmonth_amt" />
-							</div>
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">เปิดบัญชีโดย</label>
-								<select id="recppaytypeSelect" name="depttype_code" class="form-select">
-									@if (Item.recppaytype == null || !Item.recppaytype.Any())
-									{
-										<option selected disabled></option>
-									}
-									else
-									{
-										@foreach (var recppaytypeItem in Item.recppaytype)
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">จำนวนส่งรายงวด</label>
+									<input type="text" class="format-money form-control" Name="deptmonth_amt"
+										value="@Item.deptmonth_amt" />
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">เปิดบัญชีโดย</label>
+									<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+										@if (Item.recppaytype == null || !Item.recppaytype.Any())
 										{
-											if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-											{
-												isCurrentOptionSelected = true;
-
-											}
-											else
-											{
-												isCurrentOptionSelected = false;
-											}
-											<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
-												@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-											</option>
-										}
-									}
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">ชื่อบัญชี</label>
-								<input type="text" class="format-money form-control" Name="deptslip_netamt"
-									value="@Item.dept_tranacc_name" />
-							</div>
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">ประเภทบัญชี</label>
-								<select id="recppaytypeSelect" name="depttype_code" class="form-select" @bind="traninttype_code">
-									@if (Item.recppaytype == null || !Item.recppaytype.Any())
-									{
-										<option selected disabled></option>
-									}
-									else
-									{
-										@foreach (var depttypeItem in Item.depttype)
-										{
-											if (depttypeItem.deptgroup_code == Item.traninttype_code)
-											{
-												isCurrentOptionSelected = true;
-
-											}
-											else
-											{
-												isCurrentOptionSelected = false;
-											}
-											<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
-												@depttypeItem.deptmain_desc
-											</option>
-										}
-									}
-								</select>
-							</div>
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">รหัสคู่บัญชี</label>
-								<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
-									@foreach (var tofromaccItem in Item.tofromacc)
-									{
-										if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-										{
-											isCurrentOptionSelected = true;
-
+											<option selected disabled></option>
 										}
 										else
 										{
-											isCurrentOptionSelected = false;
-										}
-										<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
-											@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-										</option>
-
-									}
-								</select>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">ธนาคาร</label>
-								<div class="form-group ">
-									<div class="input-group">
-										<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
-											name="bank_code" value="@bank_code" @oninput="OnGetBankChanged" />
-										<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
-											style="width: 70%;">
-											<option selected disabled>--กรุณาเลือก--</option>
-											@foreach (var getBankItem in getBank)
+											@foreach (var recppaytypeItem in Item.recppaytype)
 											{
-												bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
-												<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
-													@getBankItem.bank_code - @getBankItem.bank_desc
+												if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+												{
+													isCurrentOptionSelected = true;
+
+												}
+												else
+												{
+													isCurrentOptionSelected = false;
+												}
+												<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
+													@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
 												</option>
 											}
-										</select>
-									</div>
+										}
+									</select>
 								</div>
 							</div>
-							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">สาขา</label>
-								<div class="form-group ">
-									<div class="input-group">
-										<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
-											name="bank_code" value="@bankbranch_code" @oninput="OnBankBranchChanged" />
-										<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
-											style="width: 70%;">
-											<option selected disabled>--กรุณาเลือก--</option>
-											@* @foreach (var bankBranchItem in bankBranch)
-								{
-								bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
-								<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
-								@bankBranchItem.branch_id - @bankBranchItem.branch_name
-								</option>
-								} *@
-										</select>
-									</div>
+							<div class="row">
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ชื่อบัญชี</label>
+									<input type="text" class="format-money form-control" readonly Name="deptslip_netamt"
+										value="@Item.dept_tranacc_name" />
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ประเภทบัญชี</label>
+									<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select" @bind="traninttype_code">
+									</select>
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">รหัสคู่บัญชี</label>
+									<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
+										@foreach (var tofromaccItem in Item.tofromacc)
+										{
+											if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+											{
+												isCurrentOptionSelected = true;
+
+											}
+											else
+											{
+												isCurrentOptionSelected = false;
+											}
+											<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
+												@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+											</option>
+
+										}
+									</select>
 								</div>
 							</div>
-							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-								<div class="form-check" style="margin-top: 35px;">
-									<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-									<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
-								</div>
-							</div>
-							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">อ้างอิง</label>
-								<div class="form-group ">
-									<div class="input-group">
-										<input type="text" class="format-money form-control" Name="deptslip_netamt"
-											value="@Item.deptslip_no" />
-										<div class="input-group-addon">
-											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-												data-bs-target="#myModal1" />
+							<div class="row">
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ธนาคาร</label>
+									<div class="form-group ">
+										<div class="input-group">
+											<input class="format-money form-control" readonly type="text"
+												style="text-align: center; width: 30%;" name="bank_code" @oninput="OnGetBankChanged" />
+											<select id="getBankSelect" disabled class="form-select" @onchange="OnGetBankSelectChanged"
+												style="width: 70%;">
+											</select>
 										</div>
 									</div>
 								</div>
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">สาขา</label>
+									<div class="form-group ">
+										<div class="input-group">
+											<input class="format-money form-control" type="text" readonly
+												style="text-align: center; width: 30%;" name="bank_code"
+												@oninput="OnBankBranchChanged" />
+											<select id="getBankSelect" disabled class="form-select" @onchange="OnBankBranchSelectChanged" style="width: 70%;">
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+									<div class="form-check" style="margin-top: 35px;">
+										<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+										<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+									</div>
+								</div>
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">อ้างอิง</label>
+									<div class="form-group ">
+										<div class="input-group">
+											<input type="text" class="format-money form-control" Name="deptslip_netamt"
+												value="@Item.deptslip_no" />
+											<div class="input-group-addon">
+												<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+													data-bs-target="#myModal1" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">รวมสุทธิ</label>
+									<input class="format-money form-control" placeholder="0.00" type="text"
+										style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
+								</div>
 							</div>
-							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">รวมสุทธิ</label>
-								<input class="format-money form-control" placeholder="0.00" type="text"
-									style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
-							</div>
-						</div>
+						}
 					</div>
 				}
 			</div>

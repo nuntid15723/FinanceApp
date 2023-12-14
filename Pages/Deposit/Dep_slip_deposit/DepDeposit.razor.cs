@@ -522,7 +522,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         entry_date = DateTime.Today,
                         calint_from = DateTime.Today,
                         operate_code = ItemdeptSlip.operate_code,
-                        sign_flag = ItemdeptSlip.sign_flag,
+                        sign_flag = 1,
                         laststmseq_no = ItemdeptSlip.laststmseq_no,
                         nobook_flag = ItemdeptSlip.nobook_flag,
                         prnc_no = ItemdeptSlip.prnc_no,

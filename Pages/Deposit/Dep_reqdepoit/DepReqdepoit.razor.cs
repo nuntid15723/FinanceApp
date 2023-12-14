@@ -187,6 +187,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             GetBank();
             BankBranch();
         }
+        private async Task HandleSelection(ChangeEventArgs args)
+        {
+            await GetBank();
+            await BankBranch();
+        }
         private async void UpdateAccountDetails(Models.ReqAccDetails data)
         {
             AnotherFunction();
@@ -241,8 +246,6 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
         private async Task Search()
         {
-            // GetBank();
-            // BankBranch();
             AnotherFunction();
             if (member_no == null || member_no == "")
             {
@@ -272,11 +275,12 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         entry_date = DateTime.Today,
                         deptitem_group = deptitem_group,
                         reqappl_flag = reqappl_flag,
+                        membcat_code = "10"
                     };
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetMemberOpenAccount}";
+                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);

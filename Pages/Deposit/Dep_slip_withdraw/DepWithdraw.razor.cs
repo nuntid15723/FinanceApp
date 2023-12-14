@@ -309,6 +309,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         {
                             datadetail = new List<Models.Deposit> { apiResponse.data };
                             Console.WriteLine($"API request failed: {datadetail}");
+                            foreach (var item in datadetail)
+                            {
+                                var Item = item.deptSlip;
+                                Console.WriteLine($"Item.condforwithdraw :{Item.condforwithdraw}");
+                            }
                             AnotherFunction();
                         }
                     }
@@ -418,6 +423,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private string toFromaccId2 { get; set; }
         private string bookCode { get; set; }
         private string deptslipNetamt { get; set; }
+        private string DeptslipAmt { get; set; }
+        private decimal deptslipAmt { get; set; }
+
+
         private async Task RecpPayTypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('_');
@@ -448,6 +457,19 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             deptslipNetamt = "50";
             Console.WriteLine($"input: {deptslipNetamt}");
         }
+        private void FormatNumber()
+        {
+
+            if (decimal.TryParse(DeptslipAmt, out decimal result))
+            {
+                DeptslipAmt = result.ToString("0.00");
+                result = Math.Round(result, 2);
+                deptslipAmt = result;
+                Console.WriteLine(deptslipAmt);
+
+
+            }
+        }
         private async Task SaveDataAsync()
         {
             try
@@ -467,64 +489,68 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         deptcoop_id = ItemdeptSlip.deptcoop_id,
                         deptslip_no = ItemdeptSlip.deptslip_no,
                         member_no = ItemdeptSlip.member_no,
+                        membcat_code = ItemdeptSlip.membcat_code,
                         deptno_format = ItemdeptSlip.deptno_format,
                         deptaccount_no = ItemdeptSlip.deptaccount_no,
-                        membcat_code = ItemdeptSlip.membcat_code,
                         depttype_code = ItemdeptSlip.depttype_code,
                         deptgroup_code = ItemdeptSlip.deptgroup_code,
                         recppaytype_code = recpPayTypeCode ?? ItemdeptSlip.recppaytype_code,
-                        moneytype_code = ItemdeptSlip.moneytype_code,
+                        moneytype_code = (cashTypeValue == null) ? ItemdeptSlip.moneytype_code : cashTypeValue,
                         bank_code = ItemdeptSlip.bank_code,
                         bankbranch_code = ItemdeptSlip.bankbranch_code,
-                        entry_id = "entry_id",
-                        machine_id = ItemdeptSlip.machine_id,
-                        tofrom_accid = ItemdeptSlip.tofrom_accid,
+                        entry_id = "admin",
+                        machine_id = hostName,
+                        tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? ItemdeptSlip.tofrom_accid,
                         operate_date = DateTime.Today,
                         entry_date = DateTime.Today,
-                        calint_from = DateTime.Today,
-                        sign_flag = ItemdeptSlip.sign_flag,
-                        laststmseq_no = ItemdeptSlip.laststmseq_no,
-                        nobook_flag = ItemdeptSlip.nobook_flag,
-                        prnc_no = ItemdeptSlip.prnc_no,
-                        deptslip_amt = ItemdeptSlip.deptslip_amt,
-                        deptslip_netamt = ItemdeptSlip.deptslip_netamt,
+                        operate_code = operate_code,
+                        sign_flag = -1,
+                        laststmseq_no = ItemdeptSlip.laststmseq_no ?? 0,
+                        deptslip_amt = deptslipAmt,
+                        deptslip_netamt = deptslipAmt,
                         fee_amt = ItemdeptSlip.fee_amt,
                         oth_amt = ItemdeptSlip.oth_amt,
                         prncbal = ItemdeptSlip.prncbal,
                         withdrawable_amt = ItemdeptSlip.withdrawable_amt,
+                        calint_from = DateTime.Today,
                         prncbal_bf = ItemdeptSlip.prncbal_bf,
-                        tax_amt = ItemdeptSlip.tax_amt,
-                        int_amt = ItemdeptSlip.int_amt,
-                        slipnetprncbal_amt = ItemdeptSlip.slipnetprncbal_amt,
-                        posttovc_flag = ItemdeptSlip.posttovc_flag,
-                        refer_slipno = ItemdeptSlip.refer_slipno,
-                        deptaccount_name = ItemdeptSlip.deptaccount_name,
+                        remark = ItemdeptSlip.remark,
+                        tofromacc = tofromacc,
                         depttype_desc = ItemdeptSlip.depttype_desc,
                         dept_objective = ItemdeptSlip.dept_objective,
-                        prncbal_retire = ItemdeptSlip.prncbal_retire,
-                        remark = ItemdeptSlip.remark,
-                        due_date = DateTime.Today,
-                        deptpassbook_no = ItemdeptSlip.deptpassbook_no,
-                        condforwithdraw = ItemdeptSlip.condforwithdraw,
-                        passbook_flag = ItemdeptSlip.passbook_flag,
-                        upint_time = ItemdeptSlip.upint_time,
-                        deptaccount_ename = ItemdeptSlip.deptaccount_ename,
-                        deptrequest_docno = ItemdeptSlip.deptrequest_docno,
-                        account_type = ItemdeptSlip.account_type,
-                        monthintpay_meth = ItemdeptSlip.monthintpay_meth,
-                        traninttype_code = ItemdeptSlip.traninttype_code,
-                        tran_deptacc_no = ItemdeptSlip.tran_deptacc_no,
-                        dept_tranacc_name = ItemdeptSlip.dept_tranacc_name,
-                        deptmonth_status = ItemdeptSlip.deptmonth_status,
-                        deptmonth_amt = ItemdeptSlip.deptmonth_amt,
-                        dept_status = ItemdeptSlip.dept_status,
+                        deptaccount_name = ItemdeptSlip.deptaccount_name,
+                        recppaytype = recppaytype,
+
+                        tax_amt = ItemdeptSlip.tax_amt ?? 0,
+                        int_amt = ItemdeptSlip.int_amt ?? 0,
+                        slipnetprncbal_amt = ItemdeptSlip.slipnetprncbal_amt ?? 0,
+                        prncbal_retire = ItemdeptSlip.prncbal_retire ?? 0,
                         monthint_status = ItemdeptSlip.monthint_status,
-                        f_tax_rate = ItemdeptSlip.f_tax_rate,
-                        adjdate_status = ItemdeptSlip.adjdate_status,
-                        membcat_desc = ItemdeptSlip.membcat_desc,
-                        reqappl_flag = ItemdeptSlip.reqappl_flag,
-                        spcint_rate_status = ItemdeptSlip.spcint_rate_status,
-                        spcint_rate = ItemdeptSlip.spcint_rate,
+                        // nobook_flag = ItemdeptSlip.nobook_flag,
+                        // prnc_no = ItemdeptSlip.prnc_no,
+                        // posttovc_flag = ItemdeptSlip.posttovc_flag,
+                        // refer_slipno = ItemdeptSlip.refer_slipno,
+                        // due_date = DateTime.Today,
+                        // deptpassbook_no = ItemdeptSlip.deptpassbook_no,
+                        condforwithdraw = ItemdeptSlip.condforwithdraw,
+                        // passbook_flag = ItemdeptSlip.passbook_flag,
+                        // upint_time = ItemdeptSlip.upint_time,
+                        // deptaccount_ename = ItemdeptSlip.deptaccount_ename,
+                        // deptrequest_docno = ItemdeptSlip.deptrequest_docno,
+                        // account_type = ItemdeptSlip.account_type,
+                        // monthintpay_meth = ItemdeptSlip.monthintpay_meth,
+                        // traninttype_code = ItemdeptSlip.traninttype_code,
+                        // tran_deptacc_no = ItemdeptSlip.tran_deptacc_no,
+                        // dept_tranacc_name = ItemdeptSlip.dept_tranacc_name,
+                        // deptmonth_status = ItemdeptSlip.deptmonth_status,
+                        // deptmonth_amt = ItemdeptSlip.deptmonth_amt,
+                        // dept_status = ItemdeptSlip.dept_status,
+                        // f_tax_rate = ItemdeptSlip.f_tax_rate,
+                        // adjdate_status = ItemdeptSlip.adjdate_status,
+                        // membcat_desc = ItemdeptSlip.membcat_desc,
+                        // reqappl_flag = ItemdeptSlip.reqappl_flag,
+                        // spcint_rate_status = ItemdeptSlip.spcint_rate_status,
+                        // spcint_rate = ItemdeptSlip.spcint_rate,
                     };
                     var DeptSlipdet = new DeptSlipdet();
                     //{
