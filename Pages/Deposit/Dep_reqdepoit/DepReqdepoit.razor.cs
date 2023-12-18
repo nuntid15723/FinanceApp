@@ -7,6 +7,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using Radzen;
 using System.IO;
+using Microsoft.AspNetCore.Components.Web;
 
 
 namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
@@ -313,6 +314,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 {
                     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
                     Console.WriteLine(ex.Message.ToString());
+                    isLoading = false;
                 }
                 finally
                 {
@@ -320,7 +322,6 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 }
             }
         }
-
         private async Task SearchOfGetAcc()
         {
             try
@@ -412,6 +413,90 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 isLoadingModals = false;
             }
 
+        }
+        private async Task HandleEnterKeyPress(KeyboardEventArgs e)
+        {
+            if (e.Code == "Enter")
+            {
+                await PerformSearch();
+            }
+        }
+        private async Task PerformSearch()
+        {
+            isLoading = true;
+
+            AnotherFunction();
+
+            if (string.IsNullOrEmpty(member_no))
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
+            }
+            else
+            {
+                await CallApi();
+            }
+
+            isLoading = false;
+        }
+
+        private async Task CallApi()
+        {
+            try
+            {
+                var depOfGetAccount = new ReqAccDetails
+                {
+                    coop_id = "065001",
+                    memcoop_id = "065001",
+                    deptaccount_no = deptaccount_no,
+                    member_no = member_no,
+                    depttype_code = depttype_code,
+                    salary_id = salary_id,
+                    deptclose_status = 0,
+                    memb_name = memb_name,
+                    memb_surname = memb_surname,
+                    card_person = card_person,
+                    mem_telmobile = mem_telmobile,
+                    full_name = full_name,
+                    membgroup_code = membgroup_code,
+                    membgroup_desc = membgroup_desc,
+                    entry_date = DateTime.Today,
+                    deptitem_group = deptitem_group,
+                    reqappl_flag = reqappl_flag,
+                    membcat_code = "10"
+                };
+                var json = JsonConvert.SerializeObject(depOfGetAccount);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                var response = await httpClient.PostAsync(apiUrl, content);
+
+                Console.WriteLine(response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    // อ่าน response string
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    Console.WriteLine(apiResponse.status == true);
+                    if (apiResponse.status == true)
+                    {
+                        repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
+                        Console.WriteLine($"API request failed: {repReqdepoit}");
+                    }
+                    else
+                    {
+
+                        var Error = JsonConvert.SerializeObject(apiResponse.message);
+                        // Console.WriteLine(Error);
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Error, Duration = 5000 });
+                    }
+                }
+                // โค้ดเกี่ยวกับการเรียก API ที่เหมือนเดิม
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
         }
         // private async Task SaveData()
         // {

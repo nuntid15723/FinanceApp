@@ -166,7 +166,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         {
             try
             {
-                deptaccount_no = data.deptaccount_no?.Trim();
+                deptno_format = data.deptaccount_no?.Trim();
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {deptaccount_no}");
                 await jsRuntime.InvokeVoidAsync("alert", $"เลือก {deptaccount_no}, {data.deptaccount_name}");
@@ -174,6 +174,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 {
                     coop_id = coop_id,
                     memcoop_id = coop_id,
+                    deptaccount_no = data.deptaccount_no,
                     deptno_format = data.deptaccount_no,
                     entry_date = null,
                     deptitem_group = "DEP",
@@ -192,6 +193,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     datadetail = new List<Models.Deposit> { apiResponse.data };
                     StateHasChanged();
                     Console.WriteLine($"API request failed: {datadetail}");
+
+
                 }
             }
             catch (Exception ex)
@@ -210,7 +213,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             }
             else
             {
-                deptno_format = deptno_format.Trim().Replace("-", "");
+                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
                 try
                 {
                     isLoading = true;
@@ -231,7 +234,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         salary_id = salary_id,
                         membgroup_code = membgroup_code,
                         membgroup_desc = membgroup_desc,
-						deptno_format = deptno_format,
+                        deptno_format = deptno_format,
                         entry_date = entry_date,
                         deptitem_group = deptitem_group ?? "DEP",
                     };
@@ -275,29 +278,113 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 }
             }
         }
+        private async Task HandleEnterKeyPress(KeyboardEventArgs e)
+        {
+            if (e.Code == "Enter")
+            {
+                await PerformSearch();
+            }
+        }
+        private async Task PerformSearch()
+        {
+            isLoading = true;
+            if (string.IsNullOrEmpty(deptno_format ?? deptaccount_no))
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
+            }
+            else
+            {
+                await CallApi();
+            }
+
+            isLoading = false;
+        }
+        private async Task CallApi()
+        {
+            try
+            {
+                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                // deptno_format = deptaccount_no;
+                // deptaccount_no = deptno_format;
+                var depOfGetAccount = new DepOfInitDataOffline
+                {
+                    coop_id = "065001",
+                    memcoop_id = "065001",
+                    deptaccount_no = deptaccountNo_fild,
+                    deptaccount_name = deptaccount_name,
+                    member_no = member_no,
+                    depttype_code = depttype_code,
+                    deptclose_status = 0,
+                    memb_name = memb_name,
+                    memb_surname = memb_surname,
+                    card_person = card_person,
+                    mem_telmobile = mem_telmobile,
+                    full_name = full_name,
+                    salary_id = salary_id,
+                    membgroup_code = membgroup_code,
+                    membgroup_desc = membgroup_desc,
+                    deptno_format = deptno_format,
+                    entry_date = entry_date,
+                    deptitem_group = deptitem_group ?? "DEP",
+                };
+                var json = JsonConvert.SerializeObject(depOfGetAccount);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                var response = await httpClient.PostAsync(apiUrl, content);
+
+                Console.WriteLine(response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    // อ่าน response string
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    // Console.WriteLine(apiResponse.status == true);
+                    if (apiResponse.status == true)
+                    {
+                        datadetail = new List<Models.Deposit> { apiResponse.data };
+                        Console.WriteLine($"API request failed: {datadetail}");
+                    }
+                    else
+                    {
+                        var Error = JsonConvert.SerializeObject(apiResponse.message);
+
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Error, Duration = 5000 });
+
+                    }
+                }
+                // โค้ดเกี่ยวกับการเรียก API ที่เหมือนเดิม
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
+
         //ค้นหาใน dlg
         private async Task SearchOfGetAcc()
-        {            
+        {
             try
             {
                 isLoadingModals = true;
                 var depOfGetAccount = new AccountDetails
                 {
-					coop_id = "065001",
-					memcoop_id = "065001",
-					deptaccount_no = deptaccount_No_fild,
-					deptaccount_name = deptaccount_name_fild,
-					member_no = member_no,
-					depttype_code = depttype_code,
-					deptclose_status = deptclose_status,
-					memb_name = memb_name,
-					memb_surname = memb_surname,
-					card_person = card_person,
-					mem_telmobile = mem_telmobile,
-					full_name = full_name,
-					salary_id = salary_id,
-					entry_date = entry_date ?? null
-				};
+                    coop_id = "065001",
+                    memcoop_id = "065001",
+                    deptaccount_no = deptaccount_No_fild,
+                    deptaccount_name = deptaccount_name_fild,
+                    member_no = member_no,
+                    depttype_code = depttype_code,
+                    deptclose_status = deptclose_status,
+                    memb_name = memb_name,
+                    memb_surname = memb_surname,
+                    card_person = card_person,
+                    mem_telmobile = mem_telmobile,
+                    full_name = full_name,
+                    salary_id = salary_id,
+                    entry_date = entry_date ?? null
+                };
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");

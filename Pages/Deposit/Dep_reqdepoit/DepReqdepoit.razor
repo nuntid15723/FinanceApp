@@ -125,8 +125,10 @@ else
 						<label class="form-label" for="">ทะเบียนสมาชิก</label>
 						<div class="form-group ">
 							<div class="input-group">
+								@* <RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
+									class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
 								<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
-									class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
+									class="form-control" @onkeydown="@HandleEnterKeyPress" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 										data-bs-target="#ModalSearch" />
@@ -271,7 +273,7 @@ else
 						</div>
 					</div>
 					<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-						<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
+						<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
 					</div>
 				</div>
 			</div>

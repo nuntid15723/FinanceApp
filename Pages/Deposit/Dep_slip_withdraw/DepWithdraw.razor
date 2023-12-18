@@ -81,8 +81,7 @@ else
 						<div class="form-group ">
 							<div class="input-group">
 								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
-									Name="deptaccount_no" class="form-control"
-									@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
+									Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 										data-bs-target="#ModalSearch" />
@@ -298,8 +297,7 @@ else
 									<div class="input-group">
 										@* <input class="form-control" type="text" name="deptaccount_no" @bind="deptaccount_no"> *@
 										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
-											Name="deptno_format" class="form-control"
-											@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" />
+											Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 												data-bs-target="#anotherModal" />
@@ -495,7 +493,7 @@ else
 								</div>
 							</div>
 							<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-								<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
+								<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ทำรายการ</label>

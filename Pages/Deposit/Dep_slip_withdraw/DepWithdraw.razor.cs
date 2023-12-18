@@ -228,24 +228,24 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         {
             try
             {
-                deptaccount_no = data.deptaccount_no?.Trim();
+                deptno_format = data.deptaccount_no?.Trim();
 
-				Console.WriteLine($"Clicked on coop_id: {coop_id}");
+                Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
                 await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
-				var depOfGetAccount = new DepOfInitDataOffline
-				{
-					coop_id = coop_id,
-					memcoop_id = coop_id,
-					deptno_format = data.deptaccount_no,
-					entry_date = null,
-					deptitem_group ="WID",
-				};
-				var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
-				Console.WriteLine(jsonReq);
-				var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
-				var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
-				var response = await httpClient.PostAsync(apiUrl, content);
+                var depOfGetAccount = new DepOfInitDataOffline
+                {
+                    coop_id = coop_id,
+                    memcoop_id = coop_id,
+                    deptno_format = data.deptaccount_no,
+                    entry_date = null,
+                    deptitem_group = "WID",
+                };
+                var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
+                Console.WriteLine(jsonReq);
+                var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
+                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                var response = await httpClient.PostAsync(apiUrl, content);
                 //var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}DepOfInitDataOffline?coop_control={coop_id}&deptaccount_no={data.deptaccount_no}");
 
                 response.EnsureSuccessStatusCode();
@@ -282,12 +282,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             {
                 try
                 {
-                    isLoading = true;                    
+                    isLoading = true;
                     var depOfGetAccount = new DepOfInitDataOffline
                     {
                         coop_id = "065001",
                         memcoop_id = "065001",
-						deptno_format = deptno_format,
+                        deptno_format = deptno_format,
                         entry_date = entry_date,
                         deptitem_group = deptitem_group ?? "WID",
                         reqappl_flag = reqappl_flag ?? 0,
@@ -330,6 +330,77 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             }
 
         }
+        private async Task HandleEnterKeyPress(KeyboardEventArgs e)
+        {
+            if (e.Code == "Enter")
+            {
+                await PerformSearch();
+            }
+        }
+        private async Task PerformSearch()
+        {
+            isLoading = true;
+            if (string.IsNullOrEmpty(deptno_format))
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
+            }
+            else
+            {
+                await CallApi();
+            }
+
+            isLoading = false;
+        }
+        private async Task CallApi()
+        {
+            try
+            {
+                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                // deptno_format = deptaccount_no;
+                // deptaccount_no = deptno_format;
+                isLoading = true;
+                var depOfGetAccount = new DepOfInitDataOffline
+                {
+                    coop_id = "065001",
+                    memcoop_id = "065001",
+                    deptno_format = deptno_format,
+                    entry_date = entry_date,
+                    deptitem_group = deptitem_group ?? "WID",
+                    reqappl_flag = reqappl_flag ?? 0,
+                };
+                var json = JsonConvert.SerializeObject(depOfGetAccount);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                var response = await httpClient.PostAsync(apiUrl, content);
+
+                Console.WriteLine(response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    // อ่าน response string
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    // Console.WriteLine(apiResponse.status == true);
+                    if (apiResponse.status == true)
+                    {
+                        datadetail = new List<Models.Deposit> { apiResponse.data };
+                        Console.WriteLine($"API request failed: {datadetail}");
+                        foreach (var item in datadetail)
+                        {
+                            var Item = item.deptSlip;
+                            Console.WriteLine($"Item.condforwithdraw :{Item.condforwithdraw}");
+                        }
+                        AnotherFunction();
+                    }
+                }
+                // โค้ดเกี่ยวกับการเรียก API ที่เหมือนเดิม
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
         //ค้นหาใน dlg
         private async Task SearchOfGetAcc()
         {
@@ -342,8 +413,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     memcoop_id = "065001",
                     deptaccount_no = deptaccount_No_fild,
 
-					deptaccount_name = deptaccount_name_fild,
-					member_no = member_no,
+                    deptaccount_name = deptaccount_name_fild,
+                    member_no = member_no,
                     depttype_code = depttype_code,
                     deptclose_status = deptclose_status,
                     memb_name = memb_name,
