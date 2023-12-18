@@ -1,11 +1,8 @@
 ﻿@page "/login"
 @page "/"
-@* @inherits FinanceApp.LoginBase *@
+@inherits FinanceApp.LoginBase
+@* @layout EmptyLayout *@
 @layout LoginLayout
-@using FinanceApp.Services;
-@inject IJSRuntime jsRuntime
-
-
 
 <title>Login Page</title>
 
@@ -29,8 +26,8 @@
                             style="border-radius: 50%;max-width: 150px;" alt=" Logo">
                     </div>
                     <br>
-                    <h2 class="title-name">Back Office Core</h2>
-                    <div class="title-desc">ระบบหลังบ้านสหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิต จำกัด</div>
+                    <h2 class="title-name">SMSK</h2>
+                    <div class="title-desc">สหกรณ์ออมทรัพย์สาธารณสุขสมุทรสงคราม จำกัด</div>
                 </div>
                 <div class="column right">
                     <h3 class="header-title">เข้าสู่ระบบ</h3>
@@ -47,7 +44,7 @@
                         <div class="item">
                             <div class="form-group2">
                                 <label for="database"><span class="required">*</span>ฐานข้อมูล </label>
-                                <select class="form-control" id="database" name="database" @bind="selectedDatabase">
+                                <select class="form-control" id="database" name="database"@bind="selectedDatabase">
                                     <option value="main-database">ฐานข้อมูลหลัก</option>
                                     <option value="2nd-database">ฐานข้อมูลทดสอบ</option>
                                 </select>
@@ -60,7 +57,7 @@
                             <div class="form-group2">
                                 <label for="password"><span class="required">*</span> รหัสผ่าน : </label>
                                 <input class="form-control" type="password" id="password" name="password"
-                                    @bind="password">
+                                   @bind="password">
                             </div>
                         </div>
                         <div class="form-group3">
@@ -72,53 +69,3 @@
         </div>
     </div>
 </body>
-@code {
-    string password;
-    string subcrrt = "1";
-
-    string username;
-
-    protected string errorMessage;
-
-    string dropDownDataGridValue = "";
-
-    protected LoginResult loginResponse;
-    Variant variant = Variant.Outlined;
-
-    List<string> companyNames = new List<string>();
-
-    protected string selectedDatabase;
-
-    string selectedCoopName;
-
-    protected override async Task OnInitializedAsync()
-    {
-
-        await base.OnInitializedAsync();
-
-        @* companyNames = dbContext.Customers.Select(c => c.CompanyName).Distinct(); *@
-        string coop_name = "สหกรณ์ออมทรัพย์สาธารณสุขสมุทรสงคราม จำกัด";
-
-        companyNames.Add(coop_name);
-
-        if (companyNames.Any())
-
-
-        {
-
-            selectedCoopName = companyNames.First();
-
-        }
-
-    }
-    protected async Task SubmitForm()
-
-    {
-        Console.WriteLine($"username:{selectedDatabase}");
-
-        Console.WriteLine($"username:{username}");
-
-        Console.WriteLine($"password:{password}");
-    }
-
-}

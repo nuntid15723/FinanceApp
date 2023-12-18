@@ -458,6 +458,9 @@ else
 											else
 											{
 												isCurrentOptionSelected = false;
+												@* <option value="@depttypeItem.deptmain_type" selected="@(depttypeItem.deptmain_type == "10")">
+						@depttypeItem.deptmain_desc
+						</option> *@
 											}
 											<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
 												@depttypeItem.deptmain_desc
@@ -768,7 +771,7 @@ else
 										<label class="form-label" for="">สาขา</label>
 										<div class="form-group ">
 											<div class="input-group">
-												<input class="format-money form-control"  type="text" style="text-align: center; width: 30%;"
+												<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
 													name="bank_code" readonly value="@bankbranch_code" @oninput="OnBankBranchChanged" />
 												<select id="getBankSelect" disabled class="form-select"
 													@onchange="OnBankBranchSelectChanged" style="width: 70%;">
@@ -924,7 +927,8 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">ประเภทบัญชี</label>
-										<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select" @bind="traninttype_code">
+										<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select"
+											@bind="traninttype_code">
 										</select>
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -1139,7 +1143,8 @@ else
 								</div>
 								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 									<label class="form-label" for="">ประเภทบัญชี</label>
-									<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select" @bind="traninttype_code">
+									<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select"
+										@bind="traninttype_code">
 									</select>
 								</div>
 								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -1184,7 +1189,8 @@ else
 											<input class="format-money form-control" type="text" readonly
 												style="text-align: center; width: 30%;" name="bank_code"
 												@oninput="OnBankBranchChanged" />
-											<select id="getBankSelect" disabled class="form-select" @onchange="OnBankBranchSelectChanged" style="width: 70%;">
+											<select id="getBankSelect" disabled class="form-select"
+												@onchange="OnBankBranchSelectChanged" style="width: 70%;">
 											</select>
 										</div>
 									</div>

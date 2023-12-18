@@ -33,12 +33,13 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? tofrom_accid { get; set; }
         public DateTime? operate_date { get; set; }
         public DateTime? entry_date { get; set; }
+        public string? operate_code { get; set; }
         public string? calint_from { get; set; }
         public int? sign_flag { get; set; }
         public string? laststmseq_no { get; set; }
         public string? nobook_flag { get; set; }
         public string? prnc_no { get; set; }
-        public string? deptslip_amt { get; set; }
+        public decimal? deptslip_amt { get; set; }
         public int? deptslip_netamt { get; set; }
         public decimal? fee_amt { get; set; }
         public decimal? oth_amt { get; set; }
@@ -116,6 +117,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             NotificationService.Notify(message);
         }
         public List<Models.DepReqdepoit> repReqdepoit;
+        public List<DepReqdepoitDeails> depReqdepoitDeails;
         public List<DeptSlip> deptSlipOpe;
         private List<ReqAccDetails> depOfGetAccDetails;
 
@@ -234,6 +236,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 if (apiResponse.status == true)
                 {
                     repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
+
                     StateHasChanged();
                     Console.WriteLine($"API request failed: {repReqdepoit}");
                 }
@@ -445,12 +448,13 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         deptcoop_id = "065001",
                         deptslip_no = item.deptslip_no,
                         member_no = item.member_no,
-                        deptno_format = item.deptno_format,
-                        deptaccount_no = "1000000001",
-                        membcat_code = item.membcat_code,
                         depttype_code = DepttypeValue ?? item.depttype_code,
+                        membcat_code = item.membcat_code,
                         deptgroup_code = item.deptgroup_code,
                         recppaytype_code = item.recppaytype_code,
+                        deptno_format = item.deptno_format ?? "null",
+                        deptaccount_no = item.deptaccount_no ?? "null",
+
                         moneytype_code = item.moneytype_code,
                         bank_code = item.bank_code,
                         bankbranch_code = item.bankbranch_code,
@@ -459,82 +463,61 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         tofrom_accid = item.tofrom_accid,
                         operate_date = item.operate_date,
                         entry_date = item.entry_date,
-                        calint_from = item.calint_from,
-                        sign_flag = item.sign_flag,
-                        laststmseq_no = item.laststmseq_no,
+                        operate_code = item.operate_code,
+                        sign_flag = 1,
+
                         nobook_flag = item.nobook_flag,
-                        prnc_no = item.prnc_no,
                         deptslip_amt = item.deptslip_amt,
                         deptslip_netamt = item.deptslip_netamt,
                         fee_amt = item.fee_amt,
                         oth_amt = item.oth_amt,
-                        prncbal = item.prncbal,
-                        withdrawable_amt = item.withdrawable_amt,
-                        prncbal_bf = item.prncbal_bf,
-                        tax_amt = item.tax_amt,
-                        int_amt = item.int_amt,
-                        slipnetprncbal_amt = item.slipnetprncbal_amt,
-                        posttovc_flag = item.posttovc_flag,
-                        refer_slipno = item.refer_slipno,
                         deptaccount_name = item.deptaccount_name,
                         depttype_desc = item.depttype_desc,
                         dept_objective = item.dept_objective,
                         prncbal_retire = item.prncbal_retire,
                         remark = item.remark,
-                        due_date = item.due_date,
+
                         deptpassbook_no = item.deptpassbook_no,
                         condforwithdraw = item.condforwithdraw,
-                        passbook_flag = item.passbook_flag,
                         upint_time = item.upint_time,
                         deptaccount_ename = item.deptaccount_ename,
-                        deptrequest_docno = item.deptrequest_docno,
                         account_type = item.account_type,
                         monthintpay_meth = item.monthintpay_meth,
                         traninttype_code = item.traninttype_code,
                         tran_deptacc_no = item.tran_deptacc_no,
                         dept_tranacc_name = item.dept_tranacc_name,
                         deptmonth_status = item.deptmonth_status,
+
                         deptmonth_amt = item.deptmonth_amt,
                         dept_status = item.dept_status,
                         monthint_status = item.monthint_status,
                         f_tax_rate = item.f_tax_rate,
                         adjdate_status = item.adjdate_status,
                         membcat_desc = item.membcat_desc,
-                        reqappl_flag = item.reqappl_flag,
-                        spcint_rate_status = item.spcint_rate_status,
-                        spcint_rate = item.spcint_rate
+
+                        prncbal = item.prncbal,
+                        withdrawable_amt = item.withdrawable_amt,
+                        tax_amt = item.tax_amt,
+                        int_amt = item.int_amt,
+                        slipnetprncbal_amt = item.slipnetprncbal_amt,
+
+                        // calint_from = item.calint_from,
+                        // laststmseq_no = item.laststmseq_no,
+                        // prnc_no = item.prnc_no,
+                        // prncbal_bf = item.prncbal_bf,
+                        // posttovc_flag = item.posttovc_flag,
+                        // refer_slipno = item.refer_slipno,
+                        // due_date = item.due_date,
+                        // passbook_flag = item.passbook_flag,
+                        // deptrequest_docno = item.deptrequest_docno,
+                        // reqappl_flag = item.reqappl_flag,
+                        // spcint_rate_status = item.spcint_rate_status,
+                        // spcint_rate = item.spcint_rate
+
+
+
                     };
-                    var DeptSlipdet = new DeptSlipdet
-                    {
-                        // coop_id = (coop_id == null) ? ItemdeptSlipdet.coop_id : null,
-                        // deptslip_no = (deptslip_no == null) ? ItemdeptSlipdet.deptslip_no : null,
-                        // deptaccount_no = (deptaccount_no == null) ? ItemdeptSlipdet.deptaccount_no : null,
-                        // prnc_no = (prnc_no == null) ? ItemdeptSlipdet.prnc_no : null,
-                        // prnc_bal = (prnc_bal == null) ? ItemdeptSlipdet.prnc_bal : null,
-                        // prnc_amt = (prnc_amt == null) ? ItemdeptSlipdet.prnc_amt : null,
-                        // prnc_date = (prnc_date == null) ? ItemdeptSlipdet.prnc_date : null,
-                        // calint_from = (calint_from == null) ? ItemdeptSlipdet.calint_from : null,
-                        // calint_to = (calint_to == null) ? ItemdeptSlipdet.calint_to : null,
-                        // prncdue_date = (prncdue_date == null) ? ItemdeptSlipdet.prncdue_date : null,
-                        // prncmindue_date = (prncmindue_date == null) ? ItemdeptSlipdet.prncmindue_date : null,
-                        // prncdue_nmonth = (prncdue_nmonth == null) ? ItemdeptSlipdet.prncdue_nmonth : null,
-                        // prncslip_amt = (prncslip_amt == null) ? ItemdeptSlipdet.prncslip_amt : null,
-                        // intarr_amt = (intarr_amt == null) ? ItemdeptSlipdet.intarr_amt : null,
-                        // intpay_amt = (intpay_amt == null) ? ItemdeptSlipdet.intpay_amt : null,
-                        // taxpay_amt = (taxpay_amt == null) ? ItemdeptSlipdet.taxpay_amt : null,
-                        // intbf_accyear = (intbf_accyear == null) ? ItemdeptSlipdet.intbf_accyear : null,
-                        // intcur_accyear = (intcur_accyear == null) ? ItemdeptSlipdet.intcur_accyear : null,
-                        // monthintdue_date = (monthintdue_date == null) ? ItemdeptSlipdet.monthintdue_date : null,
-                        // prncdeptdue_date = (prncdeptdue_date == null) ? ItemdeptSlipdet.prncdeptdue_date : null,
-                        // interest_rate = (interest_rate == null) ? ItemdeptSlipdet.interest_rate : null,
-                        // int_return = (int_return == null) ? ItemdeptSlipdet.int_return : null,
-                        // tax_return = (tax_return == null) ? ItemdeptSlipdet.tax_return : null,
-                        // fee_amt = (fee_amt == null) ? ItemdeptSlipdet.fee_amt : null,
-                        // other_amt = (other_amt == null) ? ItemdeptSlipdet.other_amt : null,
-                        // chequepend_amt = (chequepend_amt == null) ? ItemdeptSlipdet.chequepend_amt : null,
-                        // refer_prnc_no = (refer_prnc_no == null) ? ItemdeptSlipdet.refer_prnc_no : null,
-                        // upint_time = (upint_time == null) ? ItemdeptSlipdet.upint_time : null,
-                    };
+                    var DeptSlipdet = new DeptSlipdet();
                     var DeptSlipCheque = new DeptSlipCheque();
                     var Reqdepoit = new Models.DepReqdepoit
                     {
@@ -544,11 +527,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
                     };
                     var json = JsonConvert.SerializeObject(Reqdepoit);
-                    Console.WriteLine("JsonData:" + json);
+                    // Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfPostOpenAccount}", content);
                     var responseData = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("JsonData:" + json);
+                    // Console.WriteLine("JsonData:" + json);
 
                     if (response.IsSuccessStatusCode)
                     {

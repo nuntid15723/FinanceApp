@@ -1,5 +1,4 @@
 namespace FinanceApp.Services;
-
 using FinanceApp.Models;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
@@ -41,7 +40,8 @@ public class LoginService : IApiService
             password = password,
             username = username,
         };
-
+        Console.WriteLine(username);
+        Console.WriteLine(password);
         var reqUrl = Constants.Paths.UserLogin;
         var response = await _apiProvider.PostAsync(reqUrl, payload);
 
