@@ -595,7 +595,7 @@ else
 										<div class="form-group ">
 											<div class="input-group">
 												<input type="text" class="format-money form-control" Name="tran_deptacc_no"
-													value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
+													@bind="@Item.tran_deptacc_no"  />
 												<div class="input-group-addon">
 													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 														data-bs-target="#accNo" />
@@ -675,7 +675,7 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">เปิดบัญชีโดย</label>
-										<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+										<select id="recppaytypeSelect" name="recppaytype_code" @onchange="RecpPayTypeChanged" class="form-select">
 											@if (Item.recppaytype == null || !Item.recppaytype.Any())
 											{
 												<option selected disabled></option>
@@ -816,7 +816,7 @@ else
 										<div class="form-group ">
 											<div class="input-group">
 												<input type="text" class="format-money form-control" Name="tran_deptacc_no"
-													value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
+													@bind="@Item.tran_deptacc_no"  />
 												<div class="input-group-addon">
 													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 														data-bs-target="#accNo" />
@@ -896,7 +896,7 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">เปิดบัญชีโดย</label>
-										<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+										<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged" class="form-select">
 											@if (Item.recppaytype == null || !Item.recppaytype.Any())
 											{
 												<option selected disabled></option>
@@ -1033,7 +1033,7 @@ else
 									<div class="form-group ">
 										<div class="input-group">
 											<input type="text" class="format-money form-control" readonly Name="tran_deptacc_no"
-												value="@Item.tran_deptacc_no" onblur="formattNumberr(this)" />
+												@bind="@Item.tran_deptacc_no"  />
 											<div class="input-group-addon">
 												<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 													data-bs-target="#accNo" />
@@ -1113,7 +1113,7 @@ else
 								</div>
 								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 									<label class="form-label" for="">เปิดบัญชีโดย</label>
-									<select id="recppaytypeSelect" name="depttype_code" class="form-select">
+									<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged" class="form-select">
 										@if (Item.recppaytype == null || !Item.recppaytype.Any())
 										{
 											<option selected disabled></option>

@@ -124,6 +124,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
         private string DepttypeValue;
         private string Valueselecte;
+        private string recpPayTypeCode;
         private async Task GetBank()
         {
             try
@@ -525,6 +526,16 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 Console.WriteLine(ex.Message.ToString());
             }
         }
+        private async Task RecpPayTypeChanged(ChangeEventArgs e)
+        {
+            recpPayTypeCode = e.Value.ToString();
+            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}");
+            // if (recpPayTypeCode == "DEN")
+            // {
+            //     GetBabk();
+            //     BankBranch();
+            // }
+        }
         // private async Task SaveData()
         // {
         //     try
@@ -563,7 +574,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         depttype_code = DepttypeValue ?? item.depttype_code,
                         membcat_code = item.membcat_code,
                         deptgroup_code = item.deptgroup_code,
-                        recppaytype_code = item.recppaytype_code,
+                        recppaytype_code = recpPayTypeCode ?? item.recppaytype_code,
                         deptno_format = item.deptno_format ?? "null",
                         deptaccount_no = item.deptaccount_no ?? "null",
 
@@ -644,12 +655,13 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfPostOpenAccount}", content);
                     var responseData = await response.Content.ReadAsStringAsync();
-                    // Console.WriteLine("JsonData:" + json);
+                    // Console.WriteLine("JsonData:" + responseData);
 
                     if (response.IsSuccessStatusCode)
                     {
                         // var responseData = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        // Console.WriteLine("JsonData:" + apiResponse);
 
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                         var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
