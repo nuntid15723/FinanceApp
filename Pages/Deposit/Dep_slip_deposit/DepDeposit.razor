@@ -93,6 +93,28 @@
 	.card {
 		background-color: #f9f9f9;
 	}
+	tr:hover td {
+		background-color: transparent;
+	}
+	td {
+    text-align: left;
+    padding:2px;
+ 	}
+	.cashiput{
+		color: #00CC00;
+        background-color: black;
+        text-align: right;
+        font-size: 16px;
+        font-weight: bold;
+        width: 100%;
+	}
+	  .cashiput::placeholder {
+        color: #00CC00; /* สีที่คุณต้องการ */
+		
+    }
+	.cashred::placeholder{
+		 color: red; /* สีที่คุณต้องการ */
+	}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -128,8 +150,7 @@ else
 						Name="deptaccount_no" class="form-control"
 						@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
 								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
-									Name="deptaccount_no" class="form-control"
-									@onkeydown="@HandleEnterKeyPress" />
+									Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 								<div class="input-group-addon">
 									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 										data-bs-target="#ModalSearch" />
@@ -324,7 +345,685 @@ else
 						</div>
 					</div>
 					<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-						<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
+						<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+					</div>
+					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+						<label class="form-label" for="">ยอดทำรายการ</label>
+						<div class="form-group ">
+							<div class="input-group">
+								<input type="text" id="" class="format-money form-control" style="text-align: end;"
+									@bind="DeptslipAmt" placeholder="0.00" @onblur="OnBlurHandler" />
+
+								<div class="input-group-addon">
+									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+										data-bs-target="#myModal1" onclick="OpenModal"/>
+								</div>
+							</div>
+						</div>
+						<!-- The Modal -->
+						<div class="modal" id="myModal1">
+							<div class="modal-dialog modal-xl">
+								<div class="modal-content">
+									<!-- Modal Header -->
+									<div class="modal-header">
+										@* <h4 class="modal-title">ข้อมูลสมาชิก</h4> *@
+										<button type="button" class="btn-close" data-bs-dismiss="modal" @onclick="ClearInputValues"></button>
+									</div>
+									<!-- Modal body -->
+									<div class="modal-body">
+									<div class="col-12"style="margin-top: -35px;">
+										<table style="width: 100%;">
+											<tbody>
+												<tr style="border-top: 0px solid #dddddd !important;">
+													<td style="width:30%; text-align:center;background-color:#3CB371;color:White">
+														<span>จำนวนเงินในลิ้นชักรวม</span>
+													</td>
+													<td style="width:30%;text-align:center;background-color:#6495ED;color:White;border-right: 1px solid #dddddd;" >
+														<span>ยอดรับ-จ่าย</span>
+													</td>
+													<td style="width:30%;text-align:center;background-color:#556B2F;color:White">
+														<span>เงินทอน</span>
+													</td>
+												</tr>
+												<tr>
+													<td>
+														<table style="width: 100%;margin-top: -55px;">
+															<tbody>
+																<tr style="border: transparent !important;">
+																	<td style="border: transparent !important;">
+																		<table style="margin-top: 0px; width: 100%;">
+																			<tbody>
+																				<tr>
+																					<td width="35%">
+																						<div>
+																							<span style="font-size: 11px;">รายการ</span>
+																						</div>
+																					</td>
+																					<td width="25%">
+																						<div>
+																							<span style="font-size: 11px;">จำนวน</span>
+																						</div>
+																					</td>
+																					<td width="40%">
+																						<div>
+																							<span style="font-size: 11px;">จำนวนเงิน</span>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="35%">
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 1,000 บาท</span>
+																						</div>
+																					</td>
+																					<td width="25%">
+																						<input  name="" type="text" value="0" id="" readonly="readonly" autofocus="autofocus" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;">
+																					</td>
+																					<td width="40%">
+																						<input name="" type="text" value="0.00" readonly="readonly" id="" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td  width="35%">
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 500 บาท</span>
+																						</div>
+																					</td>
+																					<td  width="25%">
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$b_500" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_b_500" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td  width="40%">
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_500" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_500" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 100 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$b_100" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_b_100" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_100" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_100" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 50 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$b_50" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_b_50" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_50" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_50" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 20 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$b_20" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_b_20" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_20" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_20" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 10 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$c_10" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_c_10" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_10" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_10" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 5 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$c_5" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_c_5" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_5" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_5" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right;font-size: 16px; font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 2 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$c_2" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_c_2" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_2" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_2" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;
+                        font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 1 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$c_1" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_c_1" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_1" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_1" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;
+                        font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 50 สตางค์</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$c_50" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_c_50" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_050" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_050" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;
+                        font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 25 สตางค์</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$c_25" type="text" value="0" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_c_25" onkeypress="check_number();" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$amount_025" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_amount_025" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;
+                        font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 30px; line-height: 30px; vertical-align: middle;">
+																								ยอดปรับปรุง
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$ADJ_AMT" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_ADJ_AMT" title="#,##0.00" style="color:Red;background-color:Black;height: 30px; text-align: right;
+                        font-size: 16px; font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 40px; line-height: 40px; vertical-align: middle;">
+																								รวม
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsSave$FormView1$AMOUNT_BALANCE" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsSave_FormView1_AMOUNT_BALANCE" title="#,##0.00" style="color:White;background-color:Black;height: 40px; text-align: right;
+                        font-size: 16px; font-weight: bold;width: 100%; ">
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+
+													</td>
+													<td style="border-right: 1px solid #dddddd;">
+														<table style="width: 100%;margin-top: 0px;;">
+															<tbody>
+																<tr style="border: transparent !important;">
+																	<td style="border: transparent !important;">
+																		<table style="margin-top: 0px; width: 100%;">
+																			<tbody>
+																				<tr>
+																					<td width="35%">
+																						<div>
+																							<span style="font-size: 11px;">รายการ</span>
+																						</div>
+																					</td>
+																					<td width="25%">
+																						<div>
+																							<span style="font-size: 11px;">จำนวน</span>
+																						</div>
+																					</td>
+																					<td width="40%">
+																						<div>
+																							<span style="font-size: 11px;">จำนวนเงิน</span>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="35%">
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 1,000 บาท</span>
+																						</div>
+																					</td>
+																					<td width="25%">
+																						<input name=""  type="text" @bind="CH_B1000" placeholder="0" @onblur="MoneyDetail"
+																						style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td width="40%">
+																							<input name=""  class="cashiput" type="text" @bind="amount_1000"placeholder="0.00" readonly="readonly" 
+   																							 style="">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 500 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input  name=""   type="text" placeholder="0" @bind="CH_B500" @onblur="MoneyDetail"style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_500" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 100 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_B100" title="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_100" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 50 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_B50" valuetitle="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_50" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 20 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_B20" valuetitle="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_20" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 10 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_C10" valuetitle="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_10" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 5 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_C5" valutitle="#,##0" @onblur="MoneyDetail"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_5" placeholder="0.00"  readonly="readonly" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right;font-size: 16px; font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 2 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_C2" valutitle="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_2" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 1 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0" @bind="CH_C1" valutitle="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_1" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 50 สตางค์</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0"  @bind="CH_C50" title="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_050" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 25 สตางค์</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""   type="text" placeholder="0"  @bind="CH_C25" title="#,##0" @onblur="MoneyDetail" style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold; width: 100%;  ">
+																					</td>
+																					<td>
+																						<input name=""  class="cashiput" type="text" @bind="amount_025" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				 <tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 30px; line-height: 30px; vertical-align: middle;">
+																								ยอดปรับปรุง
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""  class="cashred" @bind="adj_total" type="text" placeholder="0.00"  readonly="readonly"  title="#,##0.00" style="color:Red;background-color:Black;height: 30px; text-align: right;font-size: 16px; font-weight: bold; width: 100%;"  >
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 30px; line-height: 30px; vertical-align: middle;">
+																								ยอดปรับปรุงสตางค์
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name=""  class="cashred" @bind="adj_amount" type="text" placeholder="0.00" title="#,##0.00" onfocus="this.select()" style="color:Red;background-color:Black;height: 30px; text-align: right;font-size: 16px; font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 40px; line-height: 40px; vertical-align: middle;">
+																								รวม
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="" type="text" placeholder="0.00" readonly="readonly" @bind="AMOUNT_BALANCEE" title="#,##0.00" style="color:White;background-color:Black;height: 40px; text-align: right;font-size: 16px; font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																		<span>
+																			<input type="button" name=""  class="cashiput" value="ตกลง" onclick="javascript:__doPostBack('ctl00$ContentPlace$dsMain$FormView1$b_confirm','')"  style="color:White;background-color:#8FBC8F;float: left; width: 50%; height: 25px">
+																		</span><span>
+																			<input type="button" name=""  class="cashiput" value="ยกเลิก" onclick="javascript:__doPostBack('ctl00$ContentPlace$dsMain$FormView1$b_cancel','')" style="color:White;background-color:IndianRed;width: 48%; height: 25px">
+																		</span>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+													<td style="border-right: 1px solid #dddddd;">
+														<table  id="" style="width: 100%;margin-top: -40px;">
+															<tbody>
+																<tr style="border: transparent !important;">
+																	<td style="border: transparent !important;">
+																		<table style="margin-top: 0px; width: 100%;">
+																			<tbody>
+																				<tr>
+																					<td width="35%">
+																						<div>
+																							<span style="font-size: 11px;">รายการ</span>
+																						</div>
+																					</td>
+																					<td width="25%">
+																						<div>
+																							<span style="font-size: 11px;">จำนวน</span>
+																						</div>
+																					</td>
+																					<td width="40%">
+																						<div>
+																							<span style="font-size: 11px;">จำนวนเงิน</span>
+																						</div>
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 1,000 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_B1000" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_B1000" tabindex="14" title="#,##0" autofocus="autofocus"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_1000" type="text"  readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_1000" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 500 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_B500" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_B500" tabindex="15" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_500" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_500" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 100 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_B100" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_B100" tabindex="16" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_100" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_100" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 50 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_B50" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_B50" tabindex="17" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_50" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_50" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">ธนบัตร 20 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_B20" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_B20" tabindex="18" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_20" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_20" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 10 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_C10" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_C10" tabindex="19" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_10" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_10" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 5 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_C5" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_C5" tabindex="20" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_5" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_5" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right;font-size: 16px; font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 2 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_C2" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_C2" tabindex="21" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_2" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_2" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 1 บาท</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_C1" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_C1" tabindex="22" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_1" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_1" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 50 สตางค์</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_C50" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_C50" tabindex="23" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_050" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_050" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td>
+																						<div>
+																							<span style="font-size: 11px;">เหรียญ 25 สตางค์</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$CH_C25" type="text" value="0" id="ctl00_ContentPlace_dsChange_FormView1_CH_C25" tabindex="24" title="#,##0"  style="background: rgb(255, 250, 205); text-align: right; font-size: 14px; font-weight: bold;width: 100%;">
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$amount_025" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_amount_025" title="#,##0.00" style="color:#00CC00;background-color:Black;text-align: right; font-size: 16px;font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 30px; line-height: 30px; vertical-align: middle;">
+																								ยอดปรับปรุง
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$ADJ_AMT" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_ADJ_AMT" title="#,##0.00" style="color:Red;background-color:Black;height: 30px; text-align: right;font-size: 16px; font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																				<tr>
+																					<td width="15%" colspan="2" valign="middle">
+																						<div>
+																							<span style="font-size: 14px; height: 40px; line-height: 40px; vertical-align: middle;">
+																								รวม
+																							</span>
+																						</div>
+																					</td>
+																					<td>
+																						<input name="ctl00$ContentPlace$dsChange$FormView1$AMOUNT_BALANCE" type="text" value="0.00" readonly="readonly" id="ctl00_ContentPlace_dsChange_FormView1_AMOUNT_BALANCE" title="#,##0.00" style="color:White;background-color:Black;height: 40px; text-align: right;font-size: 16px; font-weight: bold;width: 100%;">
+																					</td>
+																				</tr>
+																			</tbody>
+																		</table>
+																		<span>
+																			<input type="button" name="ctl00$ContentPlace$dsChange$FormView1$b_calChange" value="คำนวณเงินทอน" onclick="javascript:__doPostBack('ctl00$ContentPlace$dsChange$FormView1$b_calChange','')" id="ctl00_ContentPlace_dsChange_FormView1_b_calChange" tabindex="12" style="color:White;background-color:DarkOliveGreen;float: left; width: 100%; height: 25px">
+																		</span>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+													</td>
+												</tr>
+
+											</tbody>
+										</table>
+									</div>
+										<!-- Modal footer -->
+										<div class="modal-footer">
+											<button type="button" class="btn btn-danger" data-bs-dismiss="modal" @onclick="ClearInputValues">
+												Close
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -343,8 +1042,7 @@ else
 								<label class="form-label" for="">เลขที่บัญชี</label>
 								<div class="form-group ">
 									<div class="input-group">
-										<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
-											@bind-value="deptno_format "
+										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format "
 											Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 										<div class="input-group-addon">
 											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
@@ -804,7 +1502,7 @@ else
 							</div>
 							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">ทำรายการโดย</label>
-								<select class="form-select" @bind="nobook_flag" aria-label="Default select example">
+								<select class="form-select" @bind="nobook_flag">
 									<option Value="0">มีสมุด</option>
 									<option Value="1">ไม่มีสมุด</option>
 								</select>
@@ -841,18 +1539,66 @@ else
 										<div class="modal-content">
 											<!-- Modal Header -->
 											<div class="modal-header">
-												<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+												@* <h4 class="modal-title">ข้อมูลสมาชิก</h4> *@
 												<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 											</div>
 											<!-- Modal body -->
 											<div class="modal-body">
-												<div style="margin: 20px">
+												<div class="col-12">
+													<div class="row">
+														<div class="col-4">
+															<table>
+																<tr>
+																	<td
+																		style="width:400px;height:22px; text-align:center;background-color:#3CB371;color:White">
+																		<span>จำนวนเงินในลิ้นชักรวม</span>
+																	</td>
+																	<td></td>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td>รายการ</td>
+																	<td>จำนวน</td>
+																	<td>จำนวนเงิน</td>
+																</tr>
+															</table>
+														</div>
+														<div class="col-4">
+															<table>
+																<tr>
+																	<td
+																		style="width:400px;text-align:center;background-color:#6495ED;color:White">
+																		<span>ยอดรับ-จ่าย</span>
+																	</td>
+																	<td></td>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td>รายการ</td>
+																	<td>จำนวน</td>
+																	<td>จำนวนเงิน</td>
+																</tr>
+															</table>
+														</div>
+														<div class="col-4">
+															<table>
+																<tr>
+																	<td
+																		style="width:400px;text-align:center;background-color:#556B2F;color:White">
+																		<span>เงินทอน</span>
+																	</td>
+																	<td></td>
+																	<td></td>
+																</tr>
+																<tr>
+																	<td>รายการ</td>
+																	<td>จำนวน</td>
+																	<td>จำนวนเงิน</td>
+																</tr>
+															</table>
+														</div>
+													</div>
 												</div>
-												<span>
-													<asp:Button ID="b_calChange" runat="server"
-														Style="float: left; width: 100%; height: 25px" Text="คำนวณเงินทอน"
-														TabIndex="12" BackColor="#556B2F" ForeColor="White" />
-												</span>
 
 												<!-- Modal footer -->
 												<div class="modal-footer">
@@ -1140,38 +1886,26 @@ else
 	}
 </script>
 @code {
+
+	@* private async Task OpenModal(){
+		if(cashTypeValue == "CSH"){
+			if (Convert.ToDecimal(dept(0, "deptslip_netamt")) < 0.01)
+    {
+        MessageBox.Show("- กรุณากรอกจำนวนเงิน");
+        return false;
+    }
+    else
+    {
+     
+       
+    }
+		}
+	} *@
 	private string searchText;
 	int selectedIndex = 0;
-
-	@* public List<GetBank>? getBanks ; *@
-
-	@*
-private async Task OnInitializedAsync()
-{
-if (getBank == null)
-{
-getBank = new List<Models.GetBank>();
-}
-foreach (var item in getBank)
-{
-Console.WriteLine($"bank_code: {item.bank_code}, bank_desc: {item.bank_desc}, bank_name_e: {item.bank_name_e},
-bank_shortname_t: {item.bank_shortname_t}");
-
-getBank.Add(new Models.GetBank { bank_code = item.bank_code, bank_desc = item.bank_code +"-"+ item.bank_desc });
-}
-} *@
 	private Models.GetBank selectedCustomer;
 
 	private RadzenDropDown<Models.GetBank> radzenDropDown;
-
-	@* private class GetBank
-{
-public string bank_code { get; set; }
-public string bank_desc { get; set; }
-public string bank_name_e { get; set; }
-public string bank_shortname_t { get; set; }
-} *@
-
 	IList<IDictionary<string, object>> accDetails; // Assuming this is your original data
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
 	private List<TableRow> rows = new List<TableRow>();

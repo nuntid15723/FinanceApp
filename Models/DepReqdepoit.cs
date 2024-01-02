@@ -24,7 +24,7 @@
 		public DateTime? operate_date { get; set; }
 		public DateTime? entry_date { get; set; }
 		public string? operate_code { get; set; }
-		public string? calint_from { get; set; }
+		public DateTime? calint_from { get; set; }
 		public int? sign_flag { get; set; }
 		public string? laststmseq_no { get; set; }
 		public string? nobook_flag { get; set; }
@@ -99,7 +99,7 @@
 		public DateTime? entry_date { get; set; }
 		public string? operate_code { get; set; }
 
-		public string? calint_from { get; set; }
+		public DateTime? calint_from { get; set; }
 		public int? sign_flag { get; set; }
 		public string? laststmseq_no { get; set; }
 		public string? nobook_flag { get; set; }
@@ -175,7 +175,7 @@
 		public DateTime? entry_date { get; set; }
 		public string? operate_code { get; set; }
 
-		public string? calint_from { get; set; }
+		public DateTime? calint_from { get; set; }
 		public int? sign_flag { get; set; }
 		public string? laststmseq_no { get; set; }
 		public string? nobook_flag { get; set; }

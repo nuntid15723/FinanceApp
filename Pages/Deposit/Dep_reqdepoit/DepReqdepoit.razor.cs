@@ -35,7 +35,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public DateTime? operate_date { get; set; }
         public DateTime? entry_date { get; set; }
         public string? operate_code { get; set; }
-        public string? calint_from { get; set; }
+        public DateTime? calint_from { get; set; }
         public int? sign_flag { get; set; }
         public string? laststmseq_no { get; set; }
         public string? nobook_flag { get; set; }
@@ -194,6 +194,33 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             await GetBank();
             await BankBranch();
+        }
+        private decimal deptslipAmt { get; set; }
+        private string deptslipNetamt { get; set; }
+        private string DeptslipAmt { get; set; }
+        private void FormatNumber()
+        {
+
+            if (decimal.TryParse(DeptslipAmt, out decimal result))
+            {
+                // DeptslipAmt = result.ToString("0.00");
+                // result = Math.Round(result, 2);
+                // deptslipAmt = result;
+                // Console.WriteLine(deptslipAmt);
+
+                DeptslipAmt = result.ToString("N2");
+
+                // นำค่าที่ได้มา round และกำหนดให้กับตัวแปร result
+                result = Math.Round(result, 2);
+
+                // นำค่าที่ได้มากำหนดให้กับตัวแปร deptslipAmt (หาก deptslipAmt เป็นตัวแปรที่ถูกประกาศแล้ว)
+                deptslipAmt = result;
+
+                // แสดงค่าใน Console
+                Console.WriteLine(deptslipAmt);
+
+
+            }
         }
         private async void UpdateAccountDetails(Models.ReqAccDetails data)
         {
@@ -546,8 +573,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         entry_id = "item.entry_id",
                         machine_id = machine_id,
                         tofrom_accid = item.tofrom_accid,
-                        operate_date = item.operate_date,
-                        entry_date = item.entry_date,
+                        operate_date = DateTime.Today,
+                        entry_date = DateTime.Today,
                         operate_code = item.operate_code,
                         sign_flag = 1,
 
@@ -580,24 +607,25 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         adjdate_status = item.adjdate_status,
                         membcat_desc = item.membcat_desc,
 
-                        prncbal = item.prncbal,
+                        prncbal = deptslipAmt,
                         withdrawable_amt = item.withdrawable_amt,
                         tax_amt = item.tax_amt,
                         int_amt = item.int_amt,
                         slipnetprncbal_amt = item.slipnetprncbal_amt,
+                        prnc_no = item.prnc_no,
 
-                        // calint_from = item.calint_from,
-                        // laststmseq_no = item.laststmseq_no,
-                        // prnc_no = item.prnc_no,
-                        // prncbal_bf = item.prncbal_bf,
-                        // posttovc_flag = item.posttovc_flag,
-                        // refer_slipno = item.refer_slipno,
-                        // due_date = item.due_date,
-                        // passbook_flag = item.passbook_flag,
-                        // deptrequest_docno = item.deptrequest_docno,
-                        // reqappl_flag = item.reqappl_flag,
-                        // spcint_rate_status = item.spcint_rate_status,
-                        // spcint_rate = item.spcint_rate
+
+                        calint_from = DateTime.Today,
+                        laststmseq_no = item.laststmseq_no,
+                        prncbal_bf = item.prncbal_bf,
+                        posttovc_flag = item.posttovc_flag,
+                        refer_slipno = item.refer_slipno,
+                        due_date = item.due_date,
+                        passbook_flag = item.passbook_flag,
+                        deptrequest_docno = item.deptrequest_docno,
+                        reqappl_flag = item.reqappl_flag,
+                        spcint_rate_status = item.spcint_rate_status,
+                        spcint_rate = item.spcint_rate
 
 
 
@@ -612,7 +640,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
                     };
                     var json = JsonConvert.SerializeObject(Reqdepoit);
-                    // Console.WriteLine("JsonData:" + json);
+                    Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfPostOpenAccount}", content);
                     var responseData = await response.Content.ReadAsStringAsync();

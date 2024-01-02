@@ -25,15 +25,14 @@ public partial class LoginBase : ComponentBase
 
     protected async Task SubmitForm()
     {
-        Console.WriteLine($"username : {username}");
-        Console.WriteLine($"password : {password}");
+      
+
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
             errorMessage = "Username และ password ไม่สามารถเว้นว่างได้.";
             return;
         }
         loginResponse = await LoginService.Login(username, password, selectedDatabase);
-
         if (loginResponse.RESULT)
         {
             Constants.authToken = loginResponse.ACCESS_TOKEN;
@@ -41,7 +40,8 @@ public partial class LoginBase : ComponentBase
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "refreshToken", loginResponse.REFRESH_TOKEN);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "pin", loginResponse.PIN);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "username", username);
-            NavigationManager.NavigateTo("/dashboard");
+            // NavigationManager.NavigateTo("/dashboard");
+            NavigationManager.NavigateTo("/index");
         }
         else
         {

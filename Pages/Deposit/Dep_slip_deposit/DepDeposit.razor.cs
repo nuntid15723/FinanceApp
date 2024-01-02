@@ -460,9 +460,20 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
             if (decimal.TryParse(DeptslipAmt, out decimal result))
             {
-                DeptslipAmt = result.ToString("0.00");
+                // DeptslipAmt = result.ToString("0.00");
+                // result = Math.Round(result, 2);
+                // deptslipAmt = result;
+                // Console.WriteLine(deptslipAmt);
+
+                DeptslipAmt = result.ToString("N2");
+
+                // นำค่าที่ได้มา round และกำหนดให้กับตัวแปร result
                 result = Math.Round(result, 2);
+
+                // นำค่าที่ได้มากำหนดให้กับตัวแปร deptslipAmt (หาก deptslipAmt เป็นตัวแปรที่ถูกประกาศแล้ว)
                 deptslipAmt = result;
+
+                // แสดงค่าใน Console
                 Console.WriteLine(deptslipAmt);
 
 
@@ -579,6 +590,17 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 Console.WriteLine($"deptslipAmt:{deptslipAmt}");
                 string hostName = Dns.GetHostName();
                 var hostEntry = Dns.GetHostEntry(hostName);
+                string machine_address = null;
+                foreach (IPAddress address in hostEntry.AddressList)
+                {
+                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        machine_address = address.ToString();
+                        break;
+                    }
+                }
+                Console.WriteLine($"machine_address: {machine_address}");
+                Console.WriteLine($"nobook_flag: {nobook_flag}");
                 isLoading = true;
 
                 foreach (var item in datadetail)
@@ -602,7 +624,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         bank_code = ItemdeptSlip.bank_code,
                         bankbranch_code = ItemdeptSlip.bankbranch_code,
                         entry_id = "Admin_id",
-                        machine_id = Dns.GetHostByName(hostName).AddressList[0].ToString(),
+                        machine_id = machine_address,
                         // tofrom_accid = (toFromaccId2 == null) ? valuetoFromaccId : toFromaccId2,
                         tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? ItemdeptSlip.tofrom_accid,
                         operate_date = DateTime.Today,
@@ -611,7 +633,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         operate_code = ItemdeptSlip.operate_code,
                         sign_flag = 1,
                         laststmseq_no = ItemdeptSlip.laststmseq_no,
-                        nobook_flag = ItemdeptSlip.nobook_flag,
+                        nobook_flag = nobook_flag?? 0,
                         prnc_no = ItemdeptSlip.prnc_no,
                         deptslip_amt = deptslipAmt,
                         // deptslip_amt = deptslipAmt ?? ItemdeptSlip.deptslip_amt,
@@ -769,25 +791,248 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 isLoading = false;
             }
         }
-        public class ErrorResponse
+        string CH_B1000 { get; set; }
+        string amount_1000 { get; set; }
+        string CH_B500 { get; set; }
+        string amount_500 { get; set; }
+        string CH_B100 { get; set; }
+        string amount_100 { get; set; }
+        string CH_B50 { get; set; }
+        string amount_50 { get; set; }
+        string CH_B20 { get; set; }
+        string amount_20 { get; set; }
+        string CH_C10 { get; set; }
+        string amount_10 { get; set; }
+        string CH_C5 { get; set; }
+        string amount_5 { get; set; }
+        string CH_C2 { get; set; }
+        string amount_2 { get; set; }
+        string CH_C1 { get; set; }
+        string amount_1 { get; set; }
+        string CH_C50 { get; set; }
+        string amount_050 { get; set; }
+        string CH_C25 { get; set; }
+        string amount_025 { get; set; }
+        decimal adj_total { get; set; }
+        decimal adj_amount { get; set; }
+        decimal adj_amountt { get; set; }
+        decimal AMOUNT_BALANCE { get; set; }
+
+        decimal amount_1000T { get; set; }
+        decimal amount_500T { get; set; }
+        decimal amount_100T { get; set; }
+        decimal amount_50T { get; set; }
+        decimal amount_20T { get; set; }
+        decimal amount_10T { get; set; }
+        decimal amount_5T { get; set; }
+        decimal amount_2T { get; set; }
+        decimal amount_1T { get; set; }
+        decimal amount_050T { get; set; }
+        decimal amount_025T { get; set; }
+        decimal AMOUNT_BALANCET { get; set; }
+        string AMOUNT_BALANCEE { get; set; }
+        private void OnBlurHandler()
         {
-            public string? Type { get; set; }
-            public string? Title { get; set; }
-            public bool? Status { get; set; }
-            public string? TraceId { get; set; }
-            public Errors Errors { get; set; }
+            FormatNumber();
+            SplitMoney();
+            MoneyDetail();
         }
-        public class Errors
+        private void SplitMoney()
         {
-            // public string errors { get; set; }
-            public Dictionary<string, List<string>> errors { get; set; }
+            decimal amount = deptslipAmt;
+            double amountt = Convert.ToDouble(amount);
+            decimal[] per = { 1000, 500, 100, 50, 20, 10, 5, 2, 1, 0.5M, 0.25M };
+            foreach (var item in per)
+            {
+                int count = (int)(amountt / (double)item);
+                if (count > 0)
+                {
+                    if (item < 1)
+                    {
+                        if (item == 0.50m)
+                        {
+                            CH_C50 += count;
+                        }
+                        else if (item == 0.25m)
+                        {
+                            CH_C25 += count;
+                        }
+                    }
+                    else
+                    {
+                        if (item == 1000)
+                        {
+                            CH_B1000 += count;
+                        }
+                        else if (item == 500)
+                        {
+                            CH_B500 += count;
+                        }
+                        else if (item == 100)
+                        {
+                            CH_B100 += count;
+                        }
+                        else if (item == 50)
+                        {
+                            CH_B50 += count;
+                        }
+                        else if (item == 20)
+                        {
+                            CH_B20 += count;
+                        }
+                        else if (item == 10)
+                        {
+                            CH_C10 += count;
+                        }
+                        else if (item == 5)
+                        {
+                            CH_C5 += count;
+                        }
+                        else if (item == 2)
+                        {
+                            CH_C2 += count;
+                        }
+                        else if (item == 1)
+                        {
+                            CH_C1 += count;
+                        }
+                    }
+
+                    amountt %= (double)item;
+                }
+            }
         }
-        public async Task<HttpResponseMessage> PostAsync<T>(string uri, T item)
+
+        private void MoneyDetail()
         {
-            uri = Apiurl.ApibaseUrl + uri;
-            var json = JsonConvert.SerializeObject(item);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            return await httpClient.PostAsync(uri, content);
+            if (decimal.TryParse(CH_B1000, out decimal chB1000))
+            {
+                amount_1000T = chB1000 * 1000;
+                amount_1000 = amount_1000T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_B500, out decimal chB500))
+            {
+                amount_500T = chB500 * 500;
+                amount_500 = amount_500T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_B100, out decimal chB100))
+            {
+                amount_100T = chB100 * 100;
+                amount_100 = amount_100T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_B50, out decimal chB50))
+            {
+                amount_50T = chB50 * 50;
+                amount_50 = amount_50T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_B20, out decimal chB20))
+            {
+                amount_20T = chB20 * 20;
+                amount_20 = amount_20T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_C10, out decimal chC10))
+            {
+                amount_10T = chC10 * 10;
+                amount_10 = amount_10T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_C5, out decimal chC5))
+            {
+                amount_5T = chC5 * 5;
+                amount_5 = amount_5T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_C2, out decimal chC2))
+            {
+                amount_2T = chC2 * 2;
+                amount_2 = amount_2T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_C1, out decimal chC1))
+            {
+                amount_1T = chC1 * 1;
+                amount_1 = amount_1T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_C50, out decimal chC50))
+            {
+                amount_050T = chC50 * 0.50m;
+                amount_050 = amount_050T.ToString("N2");
+            }
+            if (decimal.TryParse(CH_C25, out decimal chC25))
+            {
+                amount_025T = chC25 * 0.25m;
+                amount_025 = amount_025T.ToString("N2");
+            }
+            AMOUNT_BALANCET = amount_1000T + amount_500T + amount_100T + amount_50T + amount_20T + amount_10T + amount_5T + amount_2T + amount_1T + amount_050T + amount_025T;
+            if (AMOUNT_BALANCET == deptslipAmt)
+            {
+                decimal sumamount = deptslipAmt - AMOUNT_BALANCET;
+                adj_amount = (sumamount - Math.Floor(sumamount));
+                Console.WriteLine($"adj_amount: {adj_amount}");
+
+                adj_total = Math.Truncate(sumamount);
+                Console.WriteLine("AMOUNT_BALANCET == deptslipAmt");
+            }
+            else
+            {
+                decimal sumamount = deptslipAmt - AMOUNT_BALANCET;
+                var adj_amountt = sumamount - Math.Floor(sumamount);
+                // adj_amount = adj_amountt + Math.Floor(sumamount);
+                // Console.WriteLine($"adj_amount: {adj_amount}");
+                // adj_total = Math.Truncate(adj_amountt);
+                if (sumamount % 1 == 0) // ถ้า sumamount เป็นจำนวนเต็ม
+                {
+                    adj_total = Math.Truncate(sumamount);
+                    adj_amountt = sumamount - adj_total;
+                }
+                else
+                {
+                    adj_total = Math.Truncate(sumamount);
+                    adj_amount = sumamount < 0 ? -adj_amountt : adj_amountt;
+                }
+
+                Console.WriteLine($"adj_total: {adj_total}");
+                Console.WriteLine($"adj_amount: {adj_amount}");
+                Console.WriteLine("AMOUNT_BALANCET != deptslipAmt");
+
+
+
+            }
+            // AMOUNT_BALANCET = amount_1000T + amount_500T + amount_100T + amount_50T + amount_20T + amount_10T + amount_5T + amount_2T + amount_1T + amount_050T + amount_025T;
+            // decimal sumamount = deptslipAmt - AMOUNT_BALANCET;
+
+
+
+            AMOUNT_BALANCE = deptslipAmt;
+            AMOUNT_BALANCEE = AMOUNT_BALANCE.ToString("N2");
+            Console.WriteLine($"AMOUNT_BALANCE: {AMOUNT_BALANCET}");
+        }
+        private void ClearInputValues()
+        {
+            CH_B1000 = "";
+            amount_1000 = "";
+            CH_B500 = "";
+            amount_500 = "";
+            CH_B100 = "";
+            amount_100 = "";
+            CH_B50 = "";
+            amount_50 = "";
+            CH_B20 = "";
+            amount_20 = "";
+            CH_C10 = "";
+            amount_10 = "";
+            CH_C5 = "";
+            amount_5 = "";
+            CH_C2 = "";
+            amount_2 = "";
+            CH_C1 = "";
+            amount_1 = "";
+            CH_C50 = "";
+            amount_050 = "";
+            CH_C25 = "";
+            amount_025 = "";
+            adj_total = 0;
+            adj_amount = 0;
+            adj_amountt = 0;
+            AMOUNT_BALANCE = 0;
+            StateHasChanged();
         }
     }
 }

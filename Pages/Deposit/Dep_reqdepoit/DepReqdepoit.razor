@@ -126,7 +126,7 @@ else
 						<div class="form-group ">
 							<div class="input-group">
 								@* <RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
-									class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
+						class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
 								<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
 									class="form-control" @onkeydown="@HandleEnterKeyPress" />
 								<div class="input-group-addon">
@@ -802,8 +802,9 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">รวมสุทธิ</label>
-										<input class="format-money form-control" placeholder="0.00" type="text"
-											style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
+										<input class="format-money form-control" @onblur="FormatNumber" @bind="DeptslipAmt"
+											placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
+											id="showNumber" />
 									</div>
 								</div>
 							}
@@ -1017,8 +1018,9 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">รวมสุทธิ</label>
-										<input class="format-money form-control" placeholder="0.00" type="text"
-											style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
+										<input class="format-money form-control" @onblur="FormatNumber" @bind="DeptslipAmt"
+											placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
+											id="showNumber" />
 									</div>
 								</div>
 							}
@@ -1218,8 +1220,9 @@ else
 								</div>
 								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 									<label class="form-label" for="">รวมสุทธิ</label>
-									<input class="format-money form-control" placeholder="0.00" type="text"
-										style="text-align: end; font-size: 40px;" name="deptslip_netamt" value="" id="showNumber" />
+									<input class="format-money form-control" @onblur="FormatNumber" @bind="DeptslipAmt"
+										placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
+										id="showNumber" />
 								</div>
 							</div>
 						}

@@ -40,11 +40,13 @@ public class LoginService : IApiService
             password = password,
             username = username,
         };
-        Console.WriteLine(username);
-        Console.WriteLine(password);
+        Console.WriteLine($"username : {username}");
+        Console.WriteLine($"password : {password}");
+        var json = JsonConvert.SerializeObject(payload);
+        Console.WriteLine($"jsonData : {json}");
         var reqUrl = Constants.Paths.UserLogin;
         var response = await _apiProvider.PostAsync(reqUrl, payload);
-
+        Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
 
         if (response.IsSuccessStatusCode)
         {
