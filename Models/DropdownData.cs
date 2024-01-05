@@ -18,4 +18,9 @@
 		public string bank_name_e { get; set; }
 		public string bank_shortname_t { get; set; }
 	}
+	public class GetOfBookNo
+	{
+		public string book_no { get; set; }
+	}
+
 }

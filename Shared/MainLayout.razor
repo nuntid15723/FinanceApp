@@ -208,13 +208,18 @@
                     <RadzenProfileMenuItem Text="Password" Path="menu" Icon="password"></RadzenProfileMenuItem>
                     <RadzenProfileMenuItem Text="FileInput" Path="fileinput" Icon="attach_file"></RadzenProfileMenuItem>
                     <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
-                    <RadzenProfileMenuItem Text="LogOff" Path="logout" Icon="logout"></RadzenProfileMenuItem>
+                    <RadzenProfileMenu @onclick="@LogOff" Style="padding: 0px;">
+                        <Template>
+                            <RadzenProfileMenuItem Text="LogOff" Style="padding: 0px;margin-left: -15px;" Icon="logout"></RadzenProfileMenuItem>
+                        </Template>
+                    </RadzenProfileMenu>
                 </ChildContent>
             </RadzenProfileMenu>
+            
         </div>
     </header>
     <div class="l-navbar shadow-sm mt-6" id="nav-bar">
-        <Sidebar/>
+        <Sidebar />
     </div>
     <div class="height-100hv">
         <div class="d-flex justify-content-center py-2" style="background-color: rgb(159, 243, 205);">
@@ -240,6 +245,16 @@
     private void AppAll()
     {
         NavigationManager.NavigateTo("index");
+    }
+    void LogOff()
+    {
+
+        // Navigate to the login page
+        NavigationManager.NavigateTo("Login");
+        Console.WriteLine("logout");
+
+        // Force a page reload using JavaScript interop
+        JSRuntime.InvokeVoidAsync("location.reload");
     }
     private void Report()
     {

@@ -182,7 +182,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(jsonReq);
                 var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDataOffline}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 response.EnsureSuccessStatusCode();
@@ -241,7 +241,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDataOffline}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -330,7 +330,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDataOffline}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -388,7 +388,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -513,7 +513,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         {
             try
             {
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
+                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -546,7 +546,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             }
             try
             {
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
+                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -757,7 +757,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     // datadetailSave.AddRange(deptDeposit);
                     Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
+                    var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}DepOfPostDeptSaving", content);
                     var responseData = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("JsonData:" + responseData);
 

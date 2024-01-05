@@ -41,7 +41,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? nobook_flag { get; set; }
         public string? prnc_no { get; set; }
         public decimal? deptslip_amt { get; set; }
-        public int? deptslip_netamt { get; set; }
+        public decimal? deptslip_netamt { get; set; }
         public decimal? fee_amt { get; set; }
         public decimal? oth_amt { get; set; }
         public decimal? prncbal { get; set; }
@@ -110,6 +110,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? salary_id { get; set; }
         public string? fullgroup { get; set; }
         public List<GetBank>? getBank { get; set; }
+        public List<GetOfBookNo>? getOfBookNo { get; set; }
+        public List<GetBookNo>? getBookNo { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
         private string BankBranchValues { get; set; }
         private string BankValues { get; set; }
@@ -129,7 +131,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             try
             {
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
+                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -157,7 +159,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             try
             {
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
+                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -190,11 +192,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             GetBank();
             BankBranch();
-        }
-        private async Task HandleSelection(ChangeEventArgs args)
-        {
-            await GetBank();
-            await BankBranch();
+            GetBookNo();
         }
         private decimal deptslipAmt { get; set; }
         private string deptslipNetamt { get; set; }
@@ -256,7 +254,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
                 var response = await httpClient.PostAsync(apiUrl, content);
                 response.EnsureSuccessStatusCode();
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -312,7 +310,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -380,7 +378,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetMemberOpenAccount}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetMemberOpenAccount}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -495,7 +493,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -536,6 +534,98 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             //     BankBranch();
             // }
         }
+        private async Task GetBookNo()
+        {
+            try
+            {
+                string book_no;
+                var depOfGetBookNo = new GetBookNo
+                {
+                    coop_id = "065001",
+                    depttype_code = "10",
+                    membcat_code = "10",
+                };
+                var json = JsonConvert.SerializeObject(depOfGetBookNo);
+                Console.WriteLine(json);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDeptPassbook}";
+                var response = await httpClient.PostAsync(apiUrl, content);
+                response.EnsureSuccessStatusCode();
+                Console.WriteLine(response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    // อ่าน response string
+                    var OfBookNoJson = await response.Content.ReadAsStringAsync();
+                    var OfBookNoList = JsonConvert.DeserializeObject<List<GetOfBookNo>>(OfBookNoJson);
+                    getOfBookNo = new List<GetOfBookNo>();
+                    getOfBookNo.AddRange(OfBookNoList);
+                    // foreach (var item in OfBookNoList)
+                    // {
+                    //     Console.WriteLine($"book_no: {item.book_no}");
+                    // }
+
+                    // var jsonResponse = await response.Content.ReadAsStringAsync();
+                    // Console.WriteLine(jsonResponse);
+                    // var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    // Console.WriteLine(apiResponse.status == true);
+                    // if (apiResponse.status == true)
+                    // {
+                    //     // repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
+                    //     // Console.WriteLine($"API request failed: {repReqdepoit}");
+                    // }
+                    // else
+                    // {
+
+                    //     var Error = JsonConvert.SerializeObject(apiResponse.message);
+                    //     Console.WriteLine(Error);
+                    //     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Error, Duration = 5000 });
+                    // }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+            finally
+            {
+                isLoading = false;
+            }
+
+        }
+        private int type_monthintpay;
+        // private async Task BookNo(ChangeEventArgs e)
+        // {
+        //     var type_Value = e.Value.ToString();
+        //     type_monthintpay = int.Parse(type_Value);
+        //     Console.WriteLine($"type_monthintpay: {type_monthintpay}");
+        //     if (type_monthintpay == 1)
+        //     {
+        //         await GetBookNo();
+        //         // await LoadData();
+
+
+        //         foreach (var item in getOfBookNo)
+        //         {
+        //             Console.WriteLine($"book_no: {item.book_no}");
+        //         }
+        //     }
+        // }
+        private async Task BookNo(ChangeEventArgs e)
+        {
+            var type_Value = e.Value.ToString();
+            type_monthintpay = int.Parse(type_Value);
+            Console.WriteLine($"type_monthintpay: {type_monthintpay}");
+            if (type_monthintpay == 1)
+            {
+                await GetBookNo();
+                foreach (var item in getOfBookNo)
+                {
+                    Console.WriteLine($"book_no: {item.book_no}");
+                }
+            }
+        }
+
         // private async Task SaveData()
         // {
         //     try
@@ -590,12 +680,12 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         sign_flag = 1,
 
                         nobook_flag = item.nobook_flag,
-                        deptslip_amt = item.deptslip_amt,
-                        deptslip_netamt = item.deptslip_netamt,
+                        deptslip_amt = deptslipAmt,
+                        deptslip_netamt = deptslipAmt,
                         fee_amt = item.fee_amt,
                         oth_amt = item.oth_amt,
                         deptaccount_name = item.deptaccount_name,
-                        depttype_desc = item.depttype_desc,
+                        depttype_desc = DepttypeValue ?? item.depttype_desc,
                         dept_objective = item.dept_objective,
                         prncbal_retire = item.prncbal_retire,
                         remark = item.remark,
@@ -607,7 +697,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         account_type = item.account_type,
                         monthintpay_meth = item.monthintpay_meth,
                         traninttype_code = item.traninttype_code,
-                        tran_deptacc_no = item.tran_deptacc_no,
+                        tran_deptacc_no = tran_deptacc_no,
                         dept_tranacc_name = item.dept_tranacc_name,
                         deptmonth_status = item.deptmonth_status,
 
@@ -618,7 +708,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         adjdate_status = item.adjdate_status,
                         membcat_desc = item.membcat_desc,
 
-                        prncbal = deptslipAmt,
+                        prncbal = item.prncbal,
                         withdrawable_amt = item.withdrawable_amt,
                         tax_amt = item.tax_amt,
                         int_amt = item.int_amt,
@@ -653,7 +743,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var json = JsonConvert.SerializeObject(Reqdepoit);
                     Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfPostOpenAccount}", content);
+                    var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfPostOpenAccount}", content);
                     var responseData = await response.Content.ReadAsStringAsync();
                     // Console.WriteLine("JsonData:" + responseData);
 

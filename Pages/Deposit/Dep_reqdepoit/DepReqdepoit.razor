@@ -567,7 +567,7 @@ else
 							</div>
 							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">วิธีรับดอกเบี้ย</label>
-								<select class="form-select" @bind="Item.monthintpay_meth">
+								<select class="form-select" value="@Item.monthintpay_meth" @onchange="BookNo">
 									<option Value="0">ทบต้น</option>
 									<option value="1">โอนเข้า บ/ช</option>
 									<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
@@ -585,81 +585,16 @@ else
 									@bind-value="Item.condforwithdraw" />
 							</div>
 						</div>
-						@if (Item.monthintpay_meth == 1 || Item.monthintpay_meth == 2)
+						@if (type_monthintpay == 1 || type_monthintpay == 2)
 						{
-							@if (Item.monthintpay_meth == 1)
+							@if (type_monthintpay == 1)
 							{
 								<div class="row">
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">บัญชีเลขที่</label>
-										<div class="form-group ">
-											<div class="input-group">
-												<input type="text" class="format-money form-control" Name="tran_deptacc_no"
-													@bind="@Item.tran_deptacc_no"  />
-												<div class="input-group-addon">
-													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-														data-bs-target="#accNo" />
-												</div>
-											</div>
-										</div>
-										<!-- The Modal -->
-										<div class="modal" id="accNo">
-											<div class="modal-dialog modal-xl">
-												<div class="modal-content">
-													<!-- Modal Header -->
-													<div class="modal-header">
-														<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-													</div>
-													<!-- Modal body -->
-													<div class="modal-body">
-														<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
-															ColumnWidth="100" AllowFiltering="true"
-															FilterPopupRenderMode="PopupRenderMode.OnDemand"
-															FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-															AllowPaging="true" AllowSorting="true"
-															PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-															<Columns>
-																<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
-																	Title="ประเภทเงินฝาก" Property="deptaccount_no">
-																	<Template>
-																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-													data-bs-dismiss="modal">
-													@context.deptaccount_no
-													</div> *@
-																	</Template>
-																</RadzenDataGridColumn>
-																<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
-																	Title="เลขที่บัญชี" Property="member_no">
-																	<Template>
-																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_no
-													</div> *@
-																	</Template>
-																</RadzenDataGridColumn>
-																<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
-																	Title="ชื่อบัญชี" Property="deptaccount_name">
-																	<Template>
-																		@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-													data-bs-dismiss="modal">
-													@context.deptaccount_name
-													</div> *@
-																	</Template>
-																</RadzenDataGridColumn>
-															</Columns>
-														</RadzenDataGrid>
-														<!-- Modal footer -->
-														<div class="modal-footer">
-															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-																Close
-															</button>
-														</div>
-
-													</div>
-												</div>
-											</div>
-										</div>
+										<RadzenDropDown AllowClear="true" @bind-Value="@tran_deptacc_no" LoadData="@LoadData"
+											AllowFiltering="true" Data="@getOfBook_No" Class="form-control" TextProperty="book_no"
+											ValueProperty="book_no" Name="DropDownFilteringLoadData" />
 									</div>
 									<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">การฝากรายเดือน</label>
@@ -675,7 +610,8 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">เปิดบัญชีโดย</label>
-										<select id="recppaytypeSelect" name="recppaytype_code" @onchange="RecpPayTypeChanged" class="form-select">
+										<select id="recppaytypeSelect" name="recppaytype_code" @onchange="RecpPayTypeChanged"
+											class="form-select">
 											@if (Item.recppaytype == null || !Item.recppaytype.Any())
 											{
 												<option selected disabled></option>
@@ -816,7 +752,7 @@ else
 										<div class="form-group ">
 											<div class="input-group">
 												<input type="text" class="format-money form-control" Name="tran_deptacc_no"
-													@bind="@Item.tran_deptacc_no"  />
+													@bind="@Item.tran_deptacc_no" />
 												<div class="input-group-addon">
 													<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 														data-bs-target="#accNo" />
@@ -896,7 +832,8 @@ else
 									</div>
 									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 										<label class="form-label" for="">เปิดบัญชีโดย</label>
-										<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged" class="form-select">
+										<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
+											class="form-select">
 											@if (Item.recppaytype == null || !Item.recppaytype.Any())
 											{
 												<option selected disabled></option>
@@ -1033,7 +970,7 @@ else
 									<div class="form-group ">
 										<div class="input-group">
 											<input type="text" class="format-money form-control" readonly Name="tran_deptacc_no"
-												@bind="@Item.tran_deptacc_no"  />
+												@bind="@Item.tran_deptacc_no" />
 											<div class="input-group-addon">
 												<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 													data-bs-target="#accNo" />
@@ -1113,7 +1050,8 @@ else
 								</div>
 								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 									<label class="form-label" for="">เปิดบัญชีโดย</label>
-									<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged" class="form-select">
+									<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
+										class="form-select">
 										@if (Item.recppaytype == null || !Item.recppaytype.Any())
 										{
 											<option selected disabled></option>
@@ -1360,6 +1298,34 @@ else
 </script>
 
 @code {
+	IEnumerable<GetOfBookNo> getOfBook_No;
+
+	private async Task LoadData(LoadDataArgs args)
+	{
+		var query = GetYourData();
+
+		if (!string.IsNullOrEmpty(args.Filter))
+		{
+			query = query.Where(item => item.book_no.ToLower().Contains(args.Filter.ToLower()));
+		}
+
+		getOfBook_No = query.ToList(); // Materialize the query result
+
+		await InvokeAsync(StateHasChanged);
+	}
+
+	// Simulate fetching data from a service
+	IEnumerable<GetOfBookNo> GetYourData()
+	{
+		return getOfBookNo.Select(item => new GetOfBookNo
+			{
+				book_no = item.book_no,
+				// Map other properties accordingly
+			});
+	}
+
+
+	/////////
 	RadzenUpload upload;
 
 	int progress;

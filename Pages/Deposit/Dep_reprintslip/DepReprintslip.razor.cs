@@ -123,7 +123,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reprintslip
         {
             try
             {
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
+                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -151,7 +151,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reprintslip
         {
             try
             {
-                var response = await httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
+                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -195,7 +195,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reprintslip
             //     {
             //         isLoading = true;
             //         var response = await
-            //         httpClient.GetAsync($"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}?coop_control={coop_id}&member_no={member_no}&reqappl_flag={reqappl_flag}");
+            //         httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}?coop_control={coop_id}&member_no={member_no}&reqappl_flag={reqappl_flag}");
             //         response.EnsureSuccessStatusCode();
             //         var json = await response.Content.ReadAsStringAsync();
             //         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
@@ -258,7 +258,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reprintslip
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     // Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -315,7 +315,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reprintslip
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 // Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{Apiurl.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
                 var response = await httpClient.PostAsync(apiUrl, content);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -437,7 +437,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reprintslip
                     var json = JsonConvert.SerializeObject(DepReqdepoit);
                     // Console.WriteLine("JsonData:" + json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync($"{Apiurl.ApibaseUrl}DepOfPostDeptSaving", content);
+                    var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}DepOfPostDeptSaving", content);
                     var responseData = await response.Content.ReadAsStringAsync();
                     Console.WriteLine("JsonData:" + json);
 

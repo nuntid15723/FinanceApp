@@ -30,7 +30,7 @@
 		public string? nobook_flag { get; set; }
 		public string? prnc_no { get; set; }
 		public string? deptslip_amt { get; set; }
-		public int? deptslip_netamt { get; set; }
+		public decimal? deptslip_netamt { get; set; }
 		public decimal? fee_amt { get; set; }
 		public decimal? oth_amt { get; set; }
 		public decimal? prncbal { get; set; }
@@ -104,8 +104,8 @@
 		public string? laststmseq_no { get; set; }
 		public string? nobook_flag { get; set; }
 		public string? prnc_no { get; set; }
-		public string? deptslip_amt { get; set; }
-		public int? deptslip_netamt { get; set; }
+		public decimal? deptslip_amt { get; set; }
+		public decimal? deptslip_netamt { get; set; }
 		public decimal? fee_amt { get; set; }
 		public decimal? oth_amt { get; set; }
 		public decimal? prncbal { get; set; }
@@ -180,8 +180,8 @@
 		public string? laststmseq_no { get; set; }
 		public string? nobook_flag { get; set; }
 		public string? prnc_no { get; set; }
-		public string? deptslip_amt { get; set; }
-		public int? deptslip_netamt { get; set; }
+		public decimal? deptslip_amt { get; set; }
+		public decimal? deptslip_netamt { get; set; }
 		public decimal? fee_amt { get; set; }
 		public decimal? oth_amt { get; set; }
 		public decimal? prncbal { get; set; }
@@ -226,6 +226,11 @@
 		public int? reqappl_flag { get; set; }
 		public string? spcint_rate_status { get; set; }
 		public string? spcint_rate { get; set; }
+
+		// public static implicit operator DeptSlip(DeptSlip v)
+		// {
+		//     throw new NotImplementedException();
+		// }
 	}
 
 	public class Depttype
@@ -244,6 +249,13 @@
 		public ReqAccDetails accountDetails { get; set; }
 	}
 	//Search
+	public class GetBookNo
+	{
+		public string? coop_id { get; set; }
+		public string? depttype_code { get; set; }
+		public string? membcat_code { get; set; }
+
+	}
 	public class ReqAccDetails
 	{
 		public string? coop_id { get; set; }
