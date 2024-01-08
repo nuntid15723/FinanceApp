@@ -3,6 +3,8 @@
 @inherits FinanceApp.LoginBase
 @* @layout EmptyLayout *@
 @layout LoginLayout
+@inject HttpClient httpClient
+
 
 <title>Login Page</title>
 
@@ -51,8 +53,9 @@
                                 </select>
                             </div>
                             <div class="form-group2">
-                                <label for="username"><span class="required">*</span> ชื่อผู้ใช้ : </label>
-                                <input class="form-control" type="text" id="username" name="username" @bind="username">
+                                <label for="user_name"><span class="required">*</span> ชื่อผู้ใช้ : </label>
+                                <input class="form-control" type="text" id="user_name" name="user_name"
+                                    @bind="user_name">
                             </div>
 
                             <div class="form-group2">

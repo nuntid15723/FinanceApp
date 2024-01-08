@@ -1,13 +1,16 @@
 public static class ApiClient
 {
+    public const string UniqueId = "aCq2mUEEPMauY0OW";
+    public static string authToken { get; set; } = "";
     public static class API
     {
+        // public static string ApiKey { get; } = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhZG1pbl9hcGkiLCJuYW1lIjoiYWRtaW5fYXBpIiwiZW1haWwiOiJhZG1pbl9hcGkiLCJuYmYiOjE3MDQ0NDI2NDYsImV4cCI6MTcwNDQ0NjI0NiwiaWF0IjoxNzA0NDQyNjQ2LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.ZgklhLaCQmXIAy3BfZZsl-bWy-jCwdo5sN0kL8WjUnw";
         public static string ApibaseUrl { get; } = " https://localhost:7000/api/";
     }
     public static class Paths
     {
         //login
-        public const string UserLogin = "Login";
+        public const string UserLogin = "Login/OfAuthLogin";
         //deposit
         public const string DepOfInitDataOffline = "Deposit/DepOfInitDataOffline";
         public const string DepOfGetAccountSaving = "Deposit/DepOfGetAccountSaving";

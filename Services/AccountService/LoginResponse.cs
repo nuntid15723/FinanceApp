@@ -4,26 +4,38 @@ public class LoginResult
 {
     public string RESPONSE_CODE { get; set; }
     public string RESPONSE_MESSAGE { get; set; }
-    public string REFRESH_TOKEN { get; set; }
-    public string ACCESS_TOKEN { get; set; }
+    public string refreshToken { get; set; }
+    public string accessToken { get; set; }
     public int PIN { get; set; }
-    public bool RESULT { get; set; }
+    // public bool RESULT { get; set; }
+    public bool isSuccess { get; set; }
+    public string message { get; set; }
+    public Content content { get; set; }
 }
 
+public class Content
+{
+    public string accessToken { get; set; }
+    public string refreshToken { get; set; }
+    public bool success { get; set; }
+    public string coopControl { get; set; }
+    public string coopId { get; set; }
+    public string userName { get; set; }
+    public string fullName { get; set; }
+    public string apvLevelId { get; set; }
+}
 
 public class LoginModel
 {
-    public string app_version { get; set; }
-    public string channel { get; set; }
-    public string device_name { get; set; }
-    public string ip_address { get; set; }
-    public string is_root { get; set; }
-    public string platform { get; set; }
-    public string unique_id { get; set; }
+    public string coop_control { get; set; }
+    public string coop_id { get; set; }
     public string api_token { get; set; }
+    public string full_name { get; set; }
+    public string description { get; set; }
+    public string apvlevel_id { get; set; }
+    public bool success { get; set; }
     public string fcm_token { get; set; }
-    public string hms_token { get; set; }
-    public string member_no { get; set; }
+    public string refreshToken { get; set; }
     public string password { get; set; }
-    public string username { get; set; }
+    public string user_name { get; set; }
 }

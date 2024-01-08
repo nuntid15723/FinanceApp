@@ -14,6 +14,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
+
 namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 {
     public partial class DepWithdraw
@@ -385,11 +386,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     {
                         datadetail = new List<Models.Deposit> { apiResponse.data };
                         Console.WriteLine($"API request failed: {datadetail}");
-                        foreach (var item in datadetail)
-                        {
-                            var Item = item.deptSlip;
-                            Console.WriteLine($"Item.condforwithdraw :{Item.condforwithdraw}");
-                        }
+                        // foreach (var item in datadetail)
+                        // {
+                        //     var Item = item.deptSlip;
+                        //     Console.WriteLine($"Item.condforwithdraw :{Item.condforwithdraw}");
+                        // }
                         AnotherFunction();
                     }
                 }
@@ -457,7 +458,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         // Optional: You might want to add this to the list
                         accountDetailsList.Add(accountDetails);
 
-                        Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
+                        // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
                         // Add other properties as needed
                     }
                 }

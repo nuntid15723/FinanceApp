@@ -41,3 +41,10 @@ D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Depo
 D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_procdeptuptran\DepProcdeptuptran.razor.rz.scp.css
 D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_reprintslip\DepReprintslip.razor.rz.scp.css
 D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\0_Accounts\Login.razor.rz.scp.css
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Blazored.SessionStorage.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Authorization.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Components.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Components.Forms.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Components.Web.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Metadata.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.JSInterop.dll

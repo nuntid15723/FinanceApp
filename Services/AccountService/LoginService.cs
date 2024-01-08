@@ -4,6 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using Microsoft.JSInterop;
+using System.Text;
+using System.Net.Http;
+
 
 
 public class LoginService : IApiService
@@ -11,64 +15,57 @@ public class LoginService : IApiService
 
     private readonly IApiProvider _apiProvider;
     private readonly IHttpContextAccessor _accessor;
-
     public LoginService(IHttpContextAccessor accessor, IApiProvider apiProvider)
     {
         _apiProvider = apiProvider;
         _accessor = accessor;
-    }
 
-    public async Task<LoginResult> Login(string username, string password, string selectedDatabase)
+    }
+    public async Task<LoginResult> Login(string user_name, string password)
     {
 
-        var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-        var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
+        // var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+        // var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
 
         var payload = new
         {
-            app_version = userAgent,
-            channel = "web_app",
-            device_name = "Desktop",
-            ip_address = ip,
-            is_root = "0",
-            platform = "android",
-            unique_id = Constants.UniqueId,
-            api_token = Constants.API.ApiKey,
-            fcm_token = "",
-            hms_token = "",
-            member_no = username,
+            coop_control = "065001",
+            coop_id = "065001",
+            user_name = user_name,
             password = password,
-            username = username,
         };
-        Console.WriteLine($"username : {username}");
-        Console.WriteLine($"password : {password}");
-        var json = JsonConvert.SerializeObject(payload);
-        Console.WriteLine($"jsonData : {json}");
-        var reqUrl = Constants.Paths.UserLogin;
+        var reqUrl = ApiClient.Paths.UserLogin;
         var response = await _apiProvider.PostAsync(reqUrl, payload);
-        Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
+        Console.WriteLine($"jsonData : {payload}");
+        // Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
 
         if (response.IsSuccessStatusCode)
         {
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var loginResponse = JsonConvert.DeserializeObject<LoginResult>(jsonResponse);
+            // Console.WriteLine($"jsonResponse: {jsonResponse}");
+            Console.WriteLine($"isSuccess: {loginResponse.isSuccess}");
+
             if (loginResponse != null)
             {
-                if (loginResponse.RESULT)
+                if (loginResponse.isSuccess)
                 {
+                    Console.WriteLine($"accessToken: {loginResponse.content.accessToken}");
+
                     return new LoginResult
                     {
-                        RESULT = true,
-                        ACCESS_TOKEN = loginResponse.ACCESS_TOKEN,
-                        REFRESH_TOKEN = loginResponse.REFRESH_TOKEN,
-                        PIN = loginResponse.PIN
+                        isSuccess = true,
+                        accessToken = loginResponse.content.accessToken,
+                        refreshToken = loginResponse.content.refreshToken,
+                        PIN = loginResponse.PIN, 
                     };
+                  
                 }
                 else
                 {
                     return new LoginResult
                     {
-                        RESULT = false,
+                        isSuccess = false,
                         RESPONSE_CODE = loginResponse.RESPONSE_CODE,
                         RESPONSE_MESSAGE = loginResponse.RESPONSE_MESSAGE
                     };
@@ -78,7 +75,7 @@ public class LoginService : IApiService
             {
                 return new LoginResult
                 {
-                    RESULT = false,
+                    isSuccess = false,
                     RESPONSE_CODE = "500",
                     RESPONSE_MESSAGE = "Fecth API Error."
                 };
@@ -86,17 +83,14 @@ public class LoginService : IApiService
         }
         else
         {
-            Console.WriteLine($"Request failed with status code {response.StatusCode}.");
+            Console.WriteLine($"Request failed with status code {response}.");
             return new LoginResult
             {
-                RESULT = false,
+                isSuccess = false,
                 RESPONSE_CODE = "500",
                 RESPONSE_MESSAGE = "Fecth API Error."
             };
         }
-
     }
-
-
 }
 

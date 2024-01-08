@@ -21,16 +21,23 @@ public class ApiProvider : IApiProvider
         _httpClient = httpClient;
     }
 
+    // public async Task<HttpResponseMessage> PostAsync<T>(string uri, T item)
+    // {
+    //     uri = ApiClient.API.ApibaseUrl + uri;
+    //     var json = JsonConvert.SerializeObject(item);
+    //     var content = new StringContent(json, Encoding.UTF8, "application/json");
+    //     return await _httpClient.PostAsync(uri, content);
+    // }
     public async Task<HttpResponseMessage> PostAsync<T>(string uri, T item)
     {
-        uri = Constants.API.ApiEndpoint + uri;
+        uri = ApiClient.API.ApibaseUrl + uri;
         var json = JsonConvert.SerializeObject(item);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
         return await _httpClient.PostAsync(uri, content);
     }
     public async Task<HttpResponseMessage> PostAsyncWithAuth<T>(string uri, T item)
     {
-        uri = Constants.API.ApiEndpoint + uri;
+        uri = ApiClient.API.ApibaseUrl + uri;
         var json = JsonConvert.SerializeObject(item);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -51,13 +58,13 @@ public class ApiProvider : IApiProvider
 
     public async Task<string> GetStringAsync(string uri)
     {
-        uri = Constants.API.ApiEndpoint + uri;
+        uri = ApiClient.API.ApibaseUrl + uri;
         return await _httpClient.GetStringAsync(uri);
     }
 
     public async Task<HttpResponseMessage> GetAsync(string uri)
     {
-        uri = Constants.API.ApiEndpoint + uri;
+        uri = ApiClient.API.ApibaseUrl + uri;
         var res = await _httpClient.GetAsync(uri); ;
         HttpContent contentRes = res.Content;
         var data = await contentRes.ReadAsStringAsync();
@@ -68,7 +75,7 @@ public class ApiProvider : IApiProvider
 
     public async Task<HttpResponseMessage> GetWithAuth(string url)
     {
-        url = Constants.API.ApiEndpoint + url;
+        url = ApiClient.API.ApibaseUrl + url;
         var json = JsonConvert.SerializeObject(new
         {
             unique_id = Constants.UniqueId,
@@ -91,7 +98,7 @@ public class ApiProvider : IApiProvider
 
     public async Task<HttpResponseMessage> GetWithAuthBody<T>(string url, T bodyObject)
     {
-        url = Constants.API.ApiEndpoint + url;
+        url = ApiClient.API.ApibaseUrl + url;
         var json = JsonConvert.SerializeObject(bodyObject);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -111,7 +118,7 @@ public class ApiProvider : IApiProvider
 
     public async Task<HttpResponseMessage> DeleteAsyncWithAuth<T>(string uri, T item)
     {
-        uri = Constants.API.ApiEndpoint + uri;
+        uri = ApiClient.API.ApibaseUrl + uri;
         var json = JsonConvert.SerializeObject(item);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 

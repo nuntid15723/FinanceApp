@@ -5,6 +5,7 @@ using System.Reflection;
 using FinanceApp.Data;
 using Radzen;
 using FinanceApp.Services;
+using Blazored.SessionStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -43,6 +44,10 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 // Register API provider service
 builder.Services.AddHttpClient<IApiProvider, ApiProvider>();
+
+//SessionStorage
+builder.Services.AddBlazoredSessionStorage();
+builder.Services.AddScoped<LoginService>();
 
 // and their namespace ends with "Services"
 var assembly = Assembly.Load("FinanceApp");
