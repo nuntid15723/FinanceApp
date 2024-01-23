@@ -1,15 +1,16 @@
 namespace FinanceApp.Services;
+
+using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
 public class ApiProvider : IApiProvider
 {
     private readonly HttpClient _httpClient;
-
-
     public ApiProvider(HttpClient httpClient)
     {
         HttpClientHandler clientHandler = new HttpClientHandler();
@@ -20,7 +21,6 @@ public class ApiProvider : IApiProvider
 
         _httpClient = httpClient;
     }
-
     // public async Task<HttpResponseMessage> PostAsync<T>(string uri, T item)
     // {
     //     uri = ApiClient.API.ApibaseUrl + uri;

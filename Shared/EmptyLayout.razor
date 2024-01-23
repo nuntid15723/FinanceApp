@@ -1,9 +1,264 @@
 @inherits LayoutComponentBase
 <style>
-    @* .main{
-        margin-left: -175px;
-    } *@
+    .loading-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        /* semi-transparent white */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        /* Ensure it's on top */
+    }
+
+    ul.rz-profile-menu {
+        list-style: none;
+        margin-bottom: 0;
+        padding: var(--rz-profile-menu-padding);
+        display: inline-block;
+        background-color: transparent;
+        border-left: var(--rz-profile-menu-border);
+        position: relative;
+        z-index: 3;
+    }
+
+    .rz-navigation-item-link {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        color: transparent;
+    }
+
+    ul {
+        list-style: none;
+        align-items: center;
+    }
+
+    .display-picture {
+        margin-left: auto;
+    }
+
+    .display-picture img {
+        max-width: 50px;
+        border-radius: 50%;
+        border: 2px solid #000;
+    }
+
+    .display-picture img:hover {
+        border: 2px solid #E78341;
+    }
+
+    .w-90 {
+        width: 90% !important;
+    @*z-index:90;*@
+    }
+
+    #header img {
+        margin-right: 10px;
+        height: 40px;
+    }
+
+    #header-content {
+        margin-right: auto;
+    }
+
+    #header p {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+
+    .header_center {
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .header_center img {
+        margin-right: 10px;
+    }
+
+    #header-content {
+        margin-left: 10px;
+        text-align: center;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    #header-rcontent {
+        margin-right: auto;
+    }
+
+    .header_right {
+        display: flex;
+        align-items: center;
+    }
+
+    #header-rcontent {
+        margin-left: 10px;
+        text-align: center;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .rz-text-align-center {
+        text-align: end;
+    }
+
+    .rz-p-12 {
+        padding: 1rem !important;
+    }
+
+    .rz-button.rz-primary.rz-shade-default {
+        background-color: #ffffff;
+        color: #000000;
+        box-shadow: none;
+    }
+
+    .justify-content-center {
+        justify-content: center !important;
+    }
+
+    .shadow-sm {
+        box-shadow: var(--bs-box-shadow-sm) !important;
+        background-color: #fff;
+    }
 </style>
-<div>
-   @Body
+<div id="body-pd">
+    <header class="header shadow-sm" id="header">
+        <div class="header_center">
+            <div id="header-content">
+                <img src="https://www.freepnglogos.com/uploads/starbucks-logo-png-transparent-0.png" alt="Logo">
+                <p>Your Website Name</p>
+            </div>
+        </div>
+        <div class="header_right">
+            <div id="header-rcontent">
+                <div class="nav-right">
+                    <RadzenButton Icon="insert_drive_file" Text="Report" Click="@Report" />
+                </div>
+                <div class="nav-right">
+                    <RadzenButton Icon="grid_view" Text="App" Click="@AppAll" />
+                </div>
+            </div>
+        </div>
+        <div class="rz-p-12 rz-text-align-center">
+            <RadzenProfileMenu>
+                <Template>
+                    <nav>
+                        <ul>
+                            <a href="#" class="display-picture"><img src="https://i.pravatar.cc/85" alt=""></a>
+                            @* <a href="#" class="display-picture"><img
+                            src="https://www.finearts.cmu.ac.th/wp-content/uploads/2021/07/blank-profile-picture-973460_1280-1.png"
+                            alt=""></a> *@
+                        </ul>
+                    </nav>
+                </Template>
+                <ChildContent>
+                    <RadzenProfileMenuItem Text="Profile" Path="people/profile" Icon="manage_accounts">
+                    </RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Password" Path="menu" Icon="password"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="FileInput" Path="fileinput" Icon="attach_file"></RadzenProfileMenuItem>
+                    <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
+                    <RadzenProfileMenu @onclick="@LogOff" Style="padding: 0px;">
+                        <Template>
+                            <RadzenProfileMenuItem Text="LogOff" Style="padding: 0px;margin-left: -15px;" Icon="logout"></RadzenProfileMenuItem>
+                        </Template>
+                    </RadzenProfileMenu>
+                </ChildContent>
+            </RadzenProfileMenu>
+            
+        </div>
+    </header>
+    @* <div class="l-navbar shadow-sm mt-6" id="nav-bar">
+        <Sidebar />
+    </div> *@
+    <div class="height-100hv">
+        <div class="d-flex justify-content-center py-2" style="background-color: rgb(159, 243, 205);">
+            <RadzenNotification />
+            <div class="w-90" style="background-color: rgb(159, 243, 205); margin-left: -80px;">
+                @Body
+            </div>
+        </div>
+    </div>
+
 </div>
+@code {
+    @inject IJSRuntime JSRuntime
+
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("setupNavbar");
+            // ตรวจสอบว่ามี token หรือไม่
+            string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+            if (string.IsNullOrEmpty(bearerToken))
+            {
+                // ถ้าไม่มี token ให้แสดง alert message
+                await JSRuntime.InvokeVoidAsync("alert", "Logoff or session expired. Please login again.");
+                // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                NavigationManager.NavigateTo("/login", true);
+            }
+        }
+    }
+    private void AppAll()
+    {
+        NavigationManager.NavigateTo("index");
+    }
+    void LogOff()
+    {
+
+        // Navigate to the login page
+        NavigationManager.NavigateTo("Login");
+        Console.WriteLine("logout");
+        // Remove authToken
+        JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+        // Force a page reload using JavaScript interop
+        JSRuntime.InvokeVoidAsync("location.reload");
+    }
+    private void Report()
+    {
+        @* string dept_deposit *@
+        string currentUrl = NavigationManager.Uri;
+        Console.WriteLine($"Current URL: {currentUrl}");
+        if (currentUrl.Contains("dept/dep_reqdepoit") || currentUrl.Contains("dept/deposit") ||
+        currentUrl.Contains("dept/dep_withdraw") || currentUrl.Contains("dept/dep_conteck") ||
+        currentUrl.Contains("dept/dep_procdeptuptran") ||
+        currentUrl.Contains("dept/reprintslip"))
+        {
+            try
+            {
+                NavigationManager.NavigateTo("/");
+                Console.WriteLine("DepDeposit");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
+        }
+        else if (currentUrl.Contains("dept/deposit"))
+        {
+            try
+            {
+                NavigationManager.NavigateTo("/");
+                Console.WriteLine("DepDeposit");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+            }
+        }
+    }
+}

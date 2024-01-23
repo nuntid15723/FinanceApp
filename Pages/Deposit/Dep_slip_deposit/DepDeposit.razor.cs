@@ -13,6 +13,7 @@ using System.Globalization;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
+using System.Net.Http.Headers;
 
 namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 {
@@ -21,6 +22,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
     {
         // public DepDeposit depDeposit = new DepDeposit();
         private readonly IApiProvider _apiProvider;
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
         // private async Task CallAlert(string message)
         // {
         //     await jsRuntime.InvokeVoidAsync("alert", message);
@@ -35,7 +38,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private List<AccountDetails> depOfGetAccDetails;
 
         /// <deptSlip>
-        private string coop_id = "065001";
+        public string? coopControl { get; set; }
+        private string? coop_id { get; set; }
         public string? deptcoop_id { get; set; }
         public string? deptslip_no { get; set; }
         public string? member_no { get; set; }
@@ -131,7 +135,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         /// <summary> 
         // public string coop_id { get; set; }
         // public string memcoop_id { get; set; }
-        public string memcoop_id = "065001";
+        public string memcoop_id { get; set; }
         public string? deptaccount_No_fild { get; set; }
         public string? deptaccountNo_fild { get; set; }
         public string? deptaccount_name_fild { get; set; }
@@ -154,9 +158,22 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private bool isLoadingModals;
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
+        public string deptMaintype { get; set; }
+        public List<GetDeptMaintype>? getDeptMaintype { get; set; }
         public List<GetBank>? getBank { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
+        public async Task<(string coopControl, string userName, string fullName)> GetUserData()
+        {
+            string coopControl = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "coopControl");
+            string userName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "user_name");
+            string fullName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "fullName");
+
+            Console.WriteLine($"coopControl: {coopControl}, userName: {userName}, fullName: {fullName}");
+
+            return (coopControl, userName, fullName);
+        }
+
 
         void ShowNotification(NotificationMessage message)
         {
@@ -164,8 +181,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         }
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
+
             try
             {
+                (string coop_id, string user_name, string full_name) = await GetUserData();
                 deptno_format = data.deptaccount_no?.Trim();
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {deptaccount_no}");
@@ -182,9 +201,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(jsonReq);
                 var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDataOffline}";
-                var response = await httpClient.PostAsync(apiUrl, content);
-
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
                 response.EnsureSuccessStatusCode();
                 var jsonRes = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonRes);
@@ -219,8 +237,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     isLoading = true;
                     var depOfGetAccount = new DepOfInitDataOffline
                     {
-                        coop_id = "065001",
-                        memcoop_id = "065001",
+                        coop_id = coop_id,
+                        memcoop_id = coop_id,
                         deptaccount_no = deptaccountNo_fild,
                         deptaccount_name = deptaccount_name,
                         member_no = member_no,
@@ -241,7 +259,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDataOffline}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -299,17 +317,17 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
             isLoading = false;
         }
+
         private async Task CallApi()
         {
+            (string coop_id, string user_name, string full_name) = await GetUserData();
             try
             {
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
-                // deptno_format = deptaccount_no;
-                // deptaccount_no = deptno_format;
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
-                    coop_id = "065001",
-                    memcoop_id = "065001",
+                    coop_id = coop_id,
+                    memcoop_id = coop_id,
                     deptaccount_no = deptaccountNo_fild,
                     deptaccount_name = deptaccount_name,
                     member_no = member_no,
@@ -327,11 +345,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     entry_date = entry_date,
                     deptitem_group = deptitem_group ?? "DEP",
                 };
-                var json = JsonConvert.SerializeObject(depOfGetAccount);
-                Console.WriteLine(json);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitDataOffline}";
-                var response = await httpClient.PostAsync(apiUrl, content);
+                // var json = JsonConvert.SerializeObject(depOfGetAccount);
+                // Console.WriteLine(json);
+                // var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+                // var response = await httpClient.PostAsync(apiUrl, content);
+                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
@@ -363,45 +382,113 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         }
 
         //ค้นหาใน dlg
+        // private async Task SearchOfGetAcc()
+        // {
+        //     try
+        //     {
+        //         isLoadingModals = true;
+        //         (string coop_id, string user_name, string full_name) = await GetUserData();
+        //         var depOfGetAccount = new AccountDetails
+        //         {
+        //             coop_id = coop_id,
+        //             memcoop_id = coop_id,
+        //             deptaccount_no = deptaccount_No_fild,
+        //             deptaccount_name = deptaccount_name_fild,
+        //             member_no = member_no,
+        //             depttype_code = depttype_code,
+        //             deptclose_status = deptclose_status,
+        //             memb_name = memb_name,
+        //             memb_surname = memb_surname,
+        //             card_person = card_person,
+        //             mem_telmobile = mem_telmobile,
+        //             full_name = full_name,
+        //             salary_id = salary_id,
+        //             entry_date = entry_date ?? null
+        //         };
+        //         var json = JsonConvert.SerializeObject(depOfGetAccount);
+        //         Console.WriteLine(json);
+        //         var content = new StringContent(json, Encoding.UTF8, "application/json");
+        //         var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetAccountSaving}";
+        //         var response = await httpClient.PostAsync(apiUrl, content);
+
+        //         Console.WriteLine(response.IsSuccessStatusCode);
+        //         if (response.IsSuccessStatusCode)
+        //         {
+        //             // อ่าน response string
+        //             var jsonResponse = await response.Content.ReadAsStringAsync();
+        //             var jsonResponse1 = JObject.Parse(jsonResponse);
+        //             depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
+        //             // Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
+
+        //         }
+        //         // dataaccDetails = accountDetailsList;
+        //         var accountDetailsList = new List<Models.AccountDetails>();
+        //         if (depOfGetAccDetails != null)
+        //         {
+        //             foreach (var accDetails in depOfGetAccDetails)
+        //             {
+        //                 var accountDetails = new Models.AccountDetails
+        //                 {
+        //                     deptaccount_no = accDetails.deptaccount_no,
+        //                     deptaccount_name = accDetails.deptaccount_name,
+        //                     member_no = accDetails.member_no,
+        //                     full_name = accDetails.full_name
+        //                 };
+
+        //                 // Optional: You might want to add this to the list
+        //                 accountDetailsList.Add(accountDetails);
+
+        //                 // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
+        //                 // Add other properties as needed
+        //             }
+        //         }
+        //         // Assign the list to dataaccDetails
+        //         dataaccDetails = accountDetailsList;
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+        //         Console.WriteLine(ex.Message.ToString());
+        //     }
+        //     finally
+        //     {
+        //         isLoadingModals = false;
+        //     }
+
+        // }
+
         private async Task SearchOfGetAcc()
         {
+            isLoadingModals = true;
+            (string coop_id, string user_name, string full_name) = await GetUserData();
+            var depOfGetAccount = new AccountDetails
+            {
+                coop_id = coop_id,
+                memcoop_id = coop_id,
+                deptaccount_no = deptaccount_No_fild,
+                deptaccount_name = deptaccount_name_fild,
+                member_no = member_no,
+                depttype_code = deptMaintype,
+                deptclose_status = deptclose_status,
+                memb_name = memb_name,
+                memb_surname = memb_surname,
+                card_person = card_person,
+                mem_telmobile = mem_telmobile,
+                full_name = full_name,
+                salary_id = salary_id,
+                entry_date = entry_date ?? null
+            };
+            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetAccountSaving}";
             try
             {
-                isLoadingModals = true;
-                var depOfGetAccount = new AccountDetails
-                {
-                    coop_id = "065001",
-                    memcoop_id = "065001",
-                    deptaccount_no = deptaccount_No_fild,
-                    deptaccount_name = deptaccount_name_fild,
-                    member_no = member_no,
-                    depttype_code = depttype_code,
-                    deptclose_status = deptclose_status,
-                    memb_name = memb_name,
-                    memb_surname = memb_surname,
-                    card_person = card_person,
-                    mem_telmobile = mem_telmobile,
-                    full_name = full_name,
-                    salary_id = salary_id,
-                    entry_date = entry_date ?? null
-                };
-                var json = JsonConvert.SerializeObject(depOfGetAccount);
-                Console.WriteLine(json);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
-                var response = await httpClient.PostAsync(apiUrl, content);
+                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
 
-                Console.WriteLine(response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    // อ่าน response string
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
                     depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
-                    // Console.WriteLine("depOfGetAccDetails:" + depOfGetAccDetails);
-
                 }
-                // dataaccDetails = accountDetailsList;
                 var accountDetailsList = new List<Models.AccountDetails>();
                 if (depOfGetAccDetails != null)
                 {
@@ -414,16 +501,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                             member_no = accDetails.member_no,
                             full_name = accDetails.full_name
                         };
-
-                        // Optional: You might want to add this to the list
                         accountDetailsList.Add(accountDetails);
-
-                        // Console.WriteLine($"Coop ID: {accDetails.coop_id}, Member Name: {accDetails.memb_name}");
-                        // Add other properties as needed
                     }
                 }
                 // Assign the list to dataaccDetails
                 dataaccDetails = accountDetailsList;
+
+                // รายละเอียดอื่น ๆ ที่คุณต้องการทำ
             }
             catch (Exception ex)
             {
@@ -434,7 +518,49 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             {
                 isLoadingModals = false;
             }
+        }
+        private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
+        {
+            try
+            {
+                string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
 
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                    var json = JsonConvert.SerializeObject(payload);
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
+                    return await httpClient.PostAsync(apiUrl, content);
+                }
+            }
+            catch (Exception ex)
+            {
+                // จัดการ Exception ตามความเหมาะสม
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
+        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
+        {
+            try
+            {
+                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                    return await httpClient.GetAsync(apiUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
         }
         public class ApiResponse
         {
@@ -509,11 +635,49 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             deptslipNetamt = "50";
             Console.WriteLine($"input: {deptslipNetamt}");
         }
+        private async Task DeptMaintype(ChangeEventArgs e)
+        {
+            deptMaintype = e.Value.ToString();
+            if (deptMaintype == "null")
+            {
+                deptMaintype = null;
+            }
+            Console.WriteLine($"Depttype Code: {deptMaintype}");
+        }
+        private async Task GetDeptMaintype()
+        {
+            try
+            {
+                // ดึงข้อมูลผู้ใช้
+                (string coop_id, string user_name, string full_name) = await GetUserData();
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
+                var response = await SendApiRequestAsyncGet(apiUrl);
+                response.EnsureSuccessStatusCode();
+                var json = await response.Content.ReadAsStringAsync();
+                var GetDeptMaintype = JsonConvert.DeserializeObject<List<GetDeptMaintype>>(json);
+                getDeptMaintype = new List<GetDeptMaintype>();
+                getDeptMaintype.AddRange(GetDeptMaintype);
+                Console.WriteLine("Icon clicked!");
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
+
         private async Task GetBabk()
         {
             try
             {
-                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBank}?coop_control={coop_id}");
+                // ดึงข้อมูลผู้ใช้
+                (string coop_id, string user_name, string full_name) = await GetUserData();
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}";
+                var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -546,7 +710,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             }
             try
             {
-                var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006");
+                // ดึงข้อมูลผู้ใช้
+                (string coop_id, string user_name, string full_name) = await GetUserData();
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006";
+                var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -583,214 +750,413 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 Console.WriteLine($"เกิดข้อผิดพลาด: {ex.Message}");
             }
         }
+        // public async Task SaveDataAsync()
+        // {
+        //     try
+        //     {
+        //         (string coop_id, string user_name, string full_name) = await GetUserData();
+        //         Console.WriteLine($"deptslipAmt:{deptslipAmt}");
+        //         string hostName = Dns.GetHostName();
+        //         var hostEntry = Dns.GetHostEntry(hostName);
+        //         string machine_address = GetMachineAddress();
+        //         isLoading = true;
+
+        //         foreach (var item in datadetail)
+        //         {
+        //             var ItemdeptSlip = item.deptSlip;
+        //             var ItemdeptSlipdet = item.deptSlipdet;
+        //             var ItemdeptSlipCheque = item.deptSlipCheque;
+        //             var Deptslip = new Deptslip
+        //             {
+        //                 coop_id = coop_id,
+        //                 deptcoop_id = ItemdeptSlip.deptcoop_id,
+        //                 deptslip_no = ItemdeptSlip.deptslip_no,
+        //                 member_no = ItemdeptSlip.member_no,
+        //                 membcat_code = ItemdeptSlip.membcat_code,
+        //                 deptno_format = ItemdeptSlip.deptno_format,
+        //                 deptaccount_no = ItemdeptSlip.deptaccount_no,
+        //                 depttype_code = ItemdeptSlip.depttype_code,
+        //                 deptgroup_code = ItemdeptSlip.deptgroup_code,
+        //                 recppaytype_code = (recpPayTypeCode == null) ? ItemdeptSlip.recppaytype_code : recpPayTypeCode,
+        //                 moneytype_code = (cashTypeValue == null) ? ItemdeptSlip.moneytype_code : cashTypeValue,
+        //                 bank_code = ItemdeptSlip.bank_code,
+        //                 bankbranch_code = ItemdeptSlip.bankbranch_code,
+        //                 entry_id = full_name,
+        //                 machine_id = machine_address,
+        //                 // tofrom_accid = (toFromaccId2 == null) ? valuetoFromaccId : toFromaccId2,
+        //                 tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? ItemdeptSlip.tofrom_accid,
+        //                 operate_date = DateTime.Today,
+        //                 entry_date = DateTime.Today,
+        //                 calint_from = DateTime.Today,
+        //                 operate_code = ItemdeptSlip.operate_code,
+        //                 sign_flag = 1,
+        //                 laststmseq_no = ItemdeptSlip.laststmseq_no,
+        //                 nobook_flag = nobook_flag ?? 0,
+        //                 prnc_no = ItemdeptSlip.prnc_no,
+        //                 deptslip_amt = deptslipAmt,
+        //                 // deptslip_amt = deptslipAmt ?? ItemdeptSlip.deptslip_amt,
+        //                 deptslip_netamt = deptslipAmt,
+        //                 fee_amt = ItemdeptSlip.fee_amt,
+        //                 oth_amt = ItemdeptSlip.oth_amt,
+        //                 prncbal = ItemdeptSlip.prncbal,
+        //                 withdrawable_amt = ItemdeptSlip.withdrawable_amt,
+        //                 prncbal_bf = ItemdeptSlip.prncbal_bf,
+        //                 tax_amt = ItemdeptSlip.tax_amt,
+        //                 int_amt = ItemdeptSlip.int_amt,
+        //                 slipnetprncbal_amt = ItemdeptSlip.slipnetprncbal_amt,
+        //                 posttovc_flag = ItemdeptSlip.posttovc_flag,
+        //                 refer_slipno = ItemdeptSlip.refer_slipno,
+        //                 deptaccount_name = ItemdeptSlip.deptaccount_name,
+        //                 depttype_desc = ItemdeptSlip.depttype_desc,
+        //                 dept_objective = ItemdeptSlip.dept_objective,
+        //                 prncbal_retire = ItemdeptSlip.prncbal_retire,
+        //                 remark = ItemdeptSlip.remark,
+        //                 due_date = DateTime.Today,
+        //                 deptpassbook_no = ItemdeptSlip.deptpassbook_no,
+        //                 condforwithdraw = ItemdeptSlip.condforwithdraw,
+        //                 upint_time = ItemdeptSlip.upint_time,
+        //                 deptaccount_ename = ItemdeptSlip.deptaccount_ename,
+        //                 account_type = ItemdeptSlip.account_type,
+        //                 monthintpay_meth = ItemdeptSlip.monthintpay_meth,
+        //                 traninttype_code = ItemdeptSlip.traninttype_code,
+        //                 tran_deptacc_no = ItemdeptSlip.tran_deptacc_no,
+        //                 dept_tranacc_name = ItemdeptSlip.dept_tranacc_name,
+        //                 deptmonth_status = ItemdeptSlip.deptmonth_status,
+        //                 deptmonth_amt = ItemdeptSlip.deptmonth_amt,
+        //                 dept_status = ItemdeptSlip.dept_status,
+        //                 monthint_status = ItemdeptSlip.monthint_status,
+        //                 f_tax_rate = ItemdeptSlip.f_tax_rate,
+        //                 adjdate_status = ItemdeptSlip.adjdate_status,
+        //                 membcat_desc = ItemdeptSlip.membcat_desc,
+        //                 reqappl_flag = ItemdeptSlip.reqappl_flag,
+        //                 spcint_rate_status = ItemdeptSlip.spcint_rate_status,
+        //                 spcint_rate = ItemdeptSlip.spcint_rate,
+        //             };
+        //             var DeptSlipdet = new DeptSlipdet
+        //             {
+        //                 // coop_id = (coop_id == null) ? ItemdeptSlipdet.coop_id : null,
+        //                 // deptslip_no = (deptslip_no == null) ? ItemdeptSlipdet.deptslip_no : null,
+        //                 // deptaccount_no = (deptaccount_no == null) ? ItemdeptSlipdet.deptaccount_no : null,
+        //                 // prnc_no = (prnc_no == null) ? ItemdeptSlipdet.prnc_no : null,
+        //                 // prnc_bal = (prnc_bal == null) ? ItemdeptSlipdet.prnc_bal : null,
+        //                 // prnc_amt = (prnc_amt == null) ? ItemdeptSlipdet.prnc_amt : null,
+        //                 // prnc_date = (prnc_date == null) ? ItemdeptSlipdet.prnc_date : null,
+        //                 // calint_from = (calint_from == null) ? ItemdeptSlipdet.calint_from : null,
+        //                 // calint_to = (calint_to == null) ? ItemdeptSlipdet.calint_to : null,
+        //                 // prncdue_date = (prncdue_date == null) ? ItemdeptSlipdet.prncdue_date : null,
+        //                 // prncmindue_date = (prncmindue_date == null) ? ItemdeptSlipdet.prncmindue_date : null,
+        //                 // prncdue_nmonth = (prncdue_nmonth == null) ? ItemdeptSlipdet.prncdue_nmonth : null,
+        //                 // prncslip_amt = (prncslip_amt == null) ? ItemdeptSlipdet.prncslip_amt : null,
+        //                 // intarr_amt = (intarr_amt == null) ? ItemdeptSlipdet.intarr_amt : null,
+        //                 // intpay_amt = (intpay_amt == null) ? ItemdeptSlipdet.intpay_amt : null,
+        //                 // taxpay_amt = (taxpay_amt == null) ? ItemdeptSlipdet.taxpay_amt : null,
+        //                 // intbf_accyear = (intbf_accyear == null) ? ItemdeptSlipdet.intbf_accyear : null,
+        //                 // intcur_accyear = (intcur_accyear == null) ? ItemdeptSlipdet.intcur_accyear : null,
+        //                 // monthintdue_date = (monthintdue_date == null) ? ItemdeptSlipdet.monthintdue_date : null,
+        //                 // prncdeptdue_date = (prncdeptdue_date == null) ? ItemdeptSlipdet.prncdeptdue_date : null,
+        //                 // interest_rate = (interest_rate == null) ? ItemdeptSlipdet.interest_rate : null,
+        //                 // int_return = (int_return == null) ? ItemdeptSlipdet.int_return : null,
+        //                 // tax_return = (tax_return == null) ? ItemdeptSlipdet.tax_return : null,
+        //                 // fee_amt = (fee_amt == null) ? ItemdeptSlipdet.fee_amt : null,
+        //                 // other_amt = (other_amt == null) ? ItemdeptSlipdet.other_amt : null,
+        //                 // chequepend_amt = (chequepend_amt == null) ? ItemdeptSlipdet.chequepend_amt : null,
+        //                 // refer_prnc_no = (refer_prnc_no == null) ? ItemdeptSlipdet.refer_prnc_no : null,
+        //                 // upint_time = (upint_time == null) ? ItemdeptSlipdet.upint_time : null,
+        //             };
+        //             var DeptSlipCheque = new DeptSlipCheque();
+        //             foreach (var rowsItem in rows)
+        //             {
+        //                 DeptSlipCheque = new DeptSlipCheque
+        //                 {
+        //                     coop_id = coop_id,
+        //                     deptslip_no = deptslip_no,
+        //                     deptaccount_no = deptaccount_no,
+        //                     cheque_no = rowsItem.cheque_no,
+        //                     bank_code = rowsItem.bank_code,
+        //                     bankbranch_code = rowsItem.branch_id,
+        //                     cheque_date = DateTime.Now,
+        //                     entry_date = DateTime.Now,
+        //                     entry_time = DateTime.Now,
+        //                     chequedue_date = chequedue_date,
+        //                     cheque_type = rowsItem.cheque_type,
+        //                     cheque_amt = rowsItem.cheque_amt ?? 0,
+        //                     seq_no = rowsItem.seq_no ?? 0,
+        //                     checkclear_status = rowsItem.checkclear_status,
+        //                     entry_id = "Admin_id",
+        //                     depttype_code = ItemdeptSlip.depttype_code,
+        //                 };
+        //             };
+        //             var deptDeposit = new Models.Deposit
+        //             {
+        //                 deptSlip = Deptslip,
+        //                 deptSlipdet = null,
+        //                 deptSlipCheque = (recpPayTypeCode == "DEN") ? DeptSlipCheque : null,
+
+        //             };
+        //             // var json = JsonConvert.SerializeObject(deptDeposit);
+        //             // datadetailSave.AddRange(deptDeposit);
+        //             // Console.WriteLine("JsonData:" + json);
+        //             // var content = new StringContent(json, Encoding.UTF8, "application/json");
+        //             // var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostDeptSaving}", content);
+        //             // var responseData = await response.Content.ReadAsStringAsync();
+        //             // Console.WriteLine("JsonData:" + responseData);
+        //             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostWithSaving}";
+        //             var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+        //             var responseData = await response.Content.ReadAsStringAsync();
+
+
+        //             if (response.IsSuccessStatusCode)
+        //             {
+        //                 // var responseData = await response.Content.ReadAsStringAsync();
+        //                 var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+
+        //                 Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
+        //                 var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
+        //                 Console.WriteLine($"{apiResponse.message}");
+        //                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
+        //             }
+        //             else
+        //             {
+        //                 Console.WriteLine(responseData);
+        //                 var jsonResponse = JObject.Parse(responseData);
+        //                 var errorsProperty = jsonResponse["errors"];
+        //                 Console.WriteLine(errorsProperty);
+        //                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorsProperty + "ตรวจสอบข้อมูลให้ครบถ้วน", Duration = 2500 });
+        //             }
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
+        //         Console.WriteLine(ex.ToString());
+        //     }
+        //     finally
+        //     {
+        //         isLoading = false;
+        //     }
+        // }
         public async Task SaveDataAsync()
         {
             try
             {
-                Console.WriteLine($"deptslipAmt:{deptslipAmt}");
-                string hostName = Dns.GetHostName();
-                var hostEntry = Dns.GetHostEntry(hostName);
-                string machine_address = null;
-                foreach (IPAddress address in hostEntry.AddressList)
-                {
-                    if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        machine_address = address.ToString();
-                        break;
-                    }
-                }
-                Console.WriteLine($"machine_address: {machine_address}");
-                Console.WriteLine($"nobook_flag: {nobook_flag}");
+                // ดึงข้อมูลผู้ใช้
+                (string coop_id, string user_name, string full_name) = await GetUserData();
+
+                // หาที่อยู่ IP ของเครื่อง
+                string machine_address = GetMachineAddress();
+
                 isLoading = true;
 
                 foreach (var item in datadetail)
                 {
-                    var ItemdeptSlip = item.deptSlip;
-                    var ItemdeptSlipdet = item.deptSlipdet;
-                    var ItemdeptSlipCheque = item.deptSlipCheque;
-                    var Deptslip = new Deptslip
-                    {
-                        coop_id = coop_id,
-                        deptcoop_id = ItemdeptSlip.deptcoop_id,
-                        deptslip_no = ItemdeptSlip.deptslip_no,
-                        member_no = ItemdeptSlip.member_no,
-                        membcat_code = ItemdeptSlip.membcat_code,
-                        deptno_format = ItemdeptSlip.deptno_format,
-                        deptaccount_no = ItemdeptSlip.deptaccount_no,
-                        depttype_code = ItemdeptSlip.depttype_code,
-                        deptgroup_code = ItemdeptSlip.deptgroup_code,
-                        recppaytype_code = (recpPayTypeCode == null) ? ItemdeptSlip.recppaytype_code : recpPayTypeCode,
-                        moneytype_code = (cashTypeValue == null) ? ItemdeptSlip.moneytype_code : cashTypeValue,
-                        bank_code = ItemdeptSlip.bank_code,
-                        bankbranch_code = ItemdeptSlip.bankbranch_code,
-                        entry_id = "Admin_id",
-                        machine_id = machine_address,
-                        // tofrom_accid = (toFromaccId2 == null) ? valuetoFromaccId : toFromaccId2,
-                        tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? ItemdeptSlip.tofrom_accid,
-                        operate_date = DateTime.Today,
-                        entry_date = DateTime.Today,
-                        calint_from = DateTime.Today,
-                        operate_code = ItemdeptSlip.operate_code,
-                        sign_flag = 1,
-                        laststmseq_no = ItemdeptSlip.laststmseq_no,
-                        nobook_flag = nobook_flag?? 0,
-                        prnc_no = ItemdeptSlip.prnc_no,
-                        deptslip_amt = deptslipAmt,
-                        // deptslip_amt = deptslipAmt ?? ItemdeptSlip.deptslip_amt,
-                        deptslip_netamt = deptslipAmt,
-                        fee_amt = ItemdeptSlip.fee_amt,
-                        oth_amt = ItemdeptSlip.oth_amt,
-                        prncbal = ItemdeptSlip.prncbal,
-                        withdrawable_amt = ItemdeptSlip.withdrawable_amt,
-                        prncbal_bf = ItemdeptSlip.prncbal_bf,
-                        tax_amt = ItemdeptSlip.tax_amt,
-                        int_amt = ItemdeptSlip.int_amt,
-                        slipnetprncbal_amt = ItemdeptSlip.slipnetprncbal_amt,
-                        posttovc_flag = ItemdeptSlip.posttovc_flag,
-                        refer_slipno = ItemdeptSlip.refer_slipno,
-                        deptaccount_name = ItemdeptSlip.deptaccount_name,
-                        depttype_desc = ItemdeptSlip.depttype_desc,
-                        dept_objective = ItemdeptSlip.dept_objective,
-                        prncbal_retire = ItemdeptSlip.prncbal_retire,
-                        remark = ItemdeptSlip.remark,
-                        due_date = DateTime.Today,
-                        deptpassbook_no = ItemdeptSlip.deptpassbook_no,
-                        condforwithdraw = ItemdeptSlip.condforwithdraw,
-                        upint_time = ItemdeptSlip.upint_time,
-                        deptaccount_ename = ItemdeptSlip.deptaccount_ename,
-                        account_type = ItemdeptSlip.account_type,
-                        monthintpay_meth = ItemdeptSlip.monthintpay_meth,
-                        traninttype_code = ItemdeptSlip.traninttype_code,
-                        tran_deptacc_no = ItemdeptSlip.tran_deptacc_no,
-                        dept_tranacc_name = ItemdeptSlip.dept_tranacc_name,
-                        deptmonth_status = ItemdeptSlip.deptmonth_status,
-                        deptmonth_amt = ItemdeptSlip.deptmonth_amt,
-                        dept_status = ItemdeptSlip.dept_status,
-                        monthint_status = ItemdeptSlip.monthint_status,
-                        f_tax_rate = ItemdeptSlip.f_tax_rate,
-                        adjdate_status = ItemdeptSlip.adjdate_status,
-                        membcat_desc = ItemdeptSlip.membcat_desc,
-                        reqappl_flag = ItemdeptSlip.reqappl_flag,
-                        spcint_rate_status = ItemdeptSlip.spcint_rate_status,
-                        spcint_rate = ItemdeptSlip.spcint_rate,
-                    };
-                    var DeptSlipdet = new DeptSlipdet
-                    {
-                        // coop_id = (coop_id == null) ? ItemdeptSlipdet.coop_id : null,
-                        // deptslip_no = (deptslip_no == null) ? ItemdeptSlipdet.deptslip_no : null,
-                        // deptaccount_no = (deptaccount_no == null) ? ItemdeptSlipdet.deptaccount_no : null,
-                        // prnc_no = (prnc_no == null) ? ItemdeptSlipdet.prnc_no : null,
-                        // prnc_bal = (prnc_bal == null) ? ItemdeptSlipdet.prnc_bal : null,
-                        // prnc_amt = (prnc_amt == null) ? ItemdeptSlipdet.prnc_amt : null,
-                        // prnc_date = (prnc_date == null) ? ItemdeptSlipdet.prnc_date : null,
-                        // calint_from = (calint_from == null) ? ItemdeptSlipdet.calint_from : null,
-                        // calint_to = (calint_to == null) ? ItemdeptSlipdet.calint_to : null,
-                        // prncdue_date = (prncdue_date == null) ? ItemdeptSlipdet.prncdue_date : null,
-                        // prncmindue_date = (prncmindue_date == null) ? ItemdeptSlipdet.prncmindue_date : null,
-                        // prncdue_nmonth = (prncdue_nmonth == null) ? ItemdeptSlipdet.prncdue_nmonth : null,
-                        // prncslip_amt = (prncslip_amt == null) ? ItemdeptSlipdet.prncslip_amt : null,
-                        // intarr_amt = (intarr_amt == null) ? ItemdeptSlipdet.intarr_amt : null,
-                        // intpay_amt = (intpay_amt == null) ? ItemdeptSlipdet.intpay_amt : null,
-                        // taxpay_amt = (taxpay_amt == null) ? ItemdeptSlipdet.taxpay_amt : null,
-                        // intbf_accyear = (intbf_accyear == null) ? ItemdeptSlipdet.intbf_accyear : null,
-                        // intcur_accyear = (intcur_accyear == null) ? ItemdeptSlipdet.intcur_accyear : null,
-                        // monthintdue_date = (monthintdue_date == null) ? ItemdeptSlipdet.monthintdue_date : null,
-                        // prncdeptdue_date = (prncdeptdue_date == null) ? ItemdeptSlipdet.prncdeptdue_date : null,
-                        // interest_rate = (interest_rate == null) ? ItemdeptSlipdet.interest_rate : null,
-                        // int_return = (int_return == null) ? ItemdeptSlipdet.int_return : null,
-                        // tax_return = (tax_return == null) ? ItemdeptSlipdet.tax_return : null,
-                        // fee_amt = (fee_amt == null) ? ItemdeptSlipdet.fee_amt : null,
-                        // other_amt = (other_amt == null) ? ItemdeptSlipdet.other_amt : null,
-                        // chequepend_amt = (chequepend_amt == null) ? ItemdeptSlipdet.chequepend_amt : null,
-                        // refer_prnc_no = (refer_prnc_no == null) ? ItemdeptSlipdet.refer_prnc_no : null,
-                        // upint_time = (upint_time == null) ? ItemdeptSlipdet.upint_time : null,
-                    };
-                    var DeptSlipCheque = new DeptSlipCheque();
-                    // {
-                    // coop_id = (coop_id == null) ? ItemdeptSlipCheque.coop_id : null,
-                    // deptslip_no = (deptslip_no == null) ? ItemdeptSlipCheque.deptslip_no : null,
-                    // deptaccount_no = (deptaccount_no == null) ? ItemdeptSlipCheque.deptaccount_no : null,
-                    // cheque_no = (cheque_no == null) ? ItemdeptSlipCheque.cheque_no : null,
-                    // bank_code = (bank_code == null) ? ItemdeptSlipCheque.bank_code : null,
-                    // bankbranch_code = (bankbranch_code == null) ? ItemdeptSlipCheque.bankbranch_code : null,
-                    // cheque_date = (cheque_date == null) ? ItemdeptSlipCheque.cheque_date : null,
-                    // entry_date = (entry_date == null) ? ItemdeptSlipCheque.entry_date : null,
-                    // entry_time = (entry_time == null) ? ItemdeptSlipCheque.entry_time : null,
-                    // chequedue_date = (chequedue_date == null) ? ItemdeptSlipCheque.chequedue_date : null,
-                    // cheque_type = (cheque_type == null) ? ItemdeptSlipCheque.cheque_type : null,
-                    // cheque_amt = (cheque_amt == null) ? ItemdeptSlipCheque.cheque_amt : null,
-                    // seq_no = (seq_no == null) ? ItemdeptSlipCheque.seq_no : null,
-                    // checkclear_status = (checkclear_status == null) ? ItemdeptSlipCheque.checkclear_status : null,
-                    // entry_id = (entry_id == null) ? ItemdeptSlipCheque.entry_id : null,
-                    // depttype_code = (depttype_code == null) ? ItemdeptSlipCheque.depttype_code : null,
-                    // };
-                    foreach (var rowsItem in rows)
-                    {
-                        DeptSlipCheque = new DeptSlipCheque
-                        {
-                            coop_id = coop_id,
-                            deptslip_no = deptslip_no,
-                            deptaccount_no = deptaccount_no,
-                            cheque_no = rowsItem.cheque_no,
-                            bank_code = rowsItem.bank_code,
-                            bankbranch_code = rowsItem.branch_id,
-                            cheque_date = DateTime.Now,
-                            entry_date = DateTime.Now,
-                            entry_time = DateTime.Now,
-                            chequedue_date = chequedue_date,
-                            cheque_type = rowsItem.cheque_type,
-                            cheque_amt = rowsItem.cheque_amt ?? 0,
-                            seq_no = rowsItem.seq_no ?? 0,
-                            checkclear_status = rowsItem.checkclear_status,
-                            entry_id = "Admin_id",
-                            depttype_code = ItemdeptSlip.depttype_code,
-                        };
-                    };
+                    var Deptslip = CreateDeptSlip(coop_id, full_name, machine_address, item);
+                    var DeptSlipdet = CreateDeptSlip(coop_id, full_name, machine_address, item);
+                    var DeptSlipCheque = CreateDeptSlipCheque(coop_id, deptslip_no, deptaccount_no, item);
+
+
                     var deptDeposit = new Models.Deposit
                     {
                         deptSlip = Deptslip,
                         deptSlipdet = null,
-                        deptSlipCheque = (recpPayTypeCode == "DEN") ? DeptSlipCheque : null,
-
+                        deptSlipCheque = (recpPayTypeCode == "DEN") ? new DeptSlipCheque() : null,
                     };
-                    var json = JsonConvert.SerializeObject(deptDeposit);
-                    // datadetailSave.AddRange(deptDeposit);
-                    Console.WriteLine("JsonData:" + json);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}DepOfPostDeptSaving", content);
+
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostDeptSaving}";
+                    var response = await SendApiRequestAsync(apiUrl, deptDeposit);
                     var responseData = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("JsonData:" + responseData);
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // var responseData = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
-
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
-                        var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
-                        Console.WriteLine($"{apiResponse.message}");
-                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
                     }
                     else
                     {
-                        Console.WriteLine(responseData);
-                        var jsonResponse = JObject.Parse(responseData);
-                        var errorsProperty = jsonResponse["errors"];
-                        Console.WriteLine(errorsProperty);
-                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorsProperty + "ตรวจสอบข้อมูลให้ครบถ้วน", Duration = 2500 });
+                        HandleErrorResponse(responseData);
                     }
                 }
             }
             catch (Exception ex)
             {
-                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
-                Console.WriteLine(ex.ToString());
+                HandleException(ex);
             }
             finally
             {
                 isLoading = false;
             }
         }
+
+        private Deptslip CreateDeptSlip(string coop_id, string full_name, string machine_address, Models.Deposit item)
+        {
+            var deptSlip = new Deptslip
+            {
+                coop_id = coop_id,
+                deptcoop_id = item.deptSlip.deptcoop_id,
+                deptslip_no = item.deptSlip.deptslip_no,
+                member_no = item.deptSlip.member_no,
+                membcat_code = item.deptSlip.membcat_code,
+                deptno_format = item.deptSlip.deptno_format,
+                deptaccount_no = item.deptSlip.deptaccount_no,
+                depttype_code = item.deptSlip.depttype_code,
+                deptgroup_code = item.deptSlip.deptgroup_code,
+                recppaytype_code = (recpPayTypeCode == null) ? item.deptSlip.recppaytype_code : recpPayTypeCode,
+                moneytype_code = (cashTypeValue == null) ? item.deptSlip.moneytype_code : cashTypeValue,
+                bank_code = item.deptSlip.bank_code,
+                bankbranch_code = item.deptSlip.bankbranch_code,
+                entry_id = full_name,
+                machine_id = machine_address,
+                tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? item.deptSlip.tofrom_accid,
+                operate_date = DateTime.Today,
+                entry_date = DateTime.Today,
+                calint_from = DateTime.Today,
+                operate_code = item.deptSlip.operate_code,
+                sign_flag = 1,
+                laststmseq_no = item.deptSlip.laststmseq_no,
+                nobook_flag = nobook_flag ?? 0,
+                prnc_no = item.deptSlip.prnc_no,
+                deptslip_amt = deptslipAmt,
+                deptslip_netamt = deptslipAmt,
+                fee_amt = item.deptSlip.fee_amt,
+                oth_amt = item.deptSlip.oth_amt,
+                prncbal = item.deptSlip.prncbal,
+                withdrawable_amt = item.deptSlip.withdrawable_amt,
+                prncbal_bf = item.deptSlip.prncbal_bf,
+                tax_amt = item.deptSlip.tax_amt,
+                int_amt = item.deptSlip.int_amt,
+                slipnetprncbal_amt = item.deptSlip.slipnetprncbal_amt,
+                posttovc_flag = item.deptSlip.posttovc_flag,
+                refer_slipno = item.deptSlip.refer_slipno,
+                deptaccount_name = item.deptSlip.deptaccount_name,
+                depttype_desc = item.deptSlip.depttype_desc,
+                dept_objective = item.deptSlip.dept_objective,
+                prncbal_retire = item.deptSlip.prncbal_retire,
+                remark = item.deptSlip.remark,
+                due_date = DateTime.Today,
+                deptpassbook_no = item.deptSlip.deptpassbook_no,
+                condforwithdraw = item.deptSlip.condforwithdraw,
+                upint_time = item.deptSlip.upint_time,
+                deptaccount_ename = item.deptSlip.deptaccount_ename,
+                account_type = item.deptSlip.account_type,
+                monthintpay_meth = item.deptSlip.monthintpay_meth,
+                traninttype_code = item.deptSlip.traninttype_code,
+                tran_deptacc_no = item.deptSlip.tran_deptacc_no,
+                dept_tranacc_name = item.deptSlip.dept_tranacc_name,
+                deptmonth_status = item.deptSlip.deptmonth_status,
+                deptmonth_amt = item.deptSlip.deptmonth_amt,
+                dept_status = item.deptSlip.dept_status,
+                monthint_status = item.deptSlip.monthint_status,
+                f_tax_rate = item.deptSlip.f_tax_rate,
+                adjdate_status = item.deptSlip.adjdate_status,
+                membcat_desc = item.deptSlip.membcat_desc,
+                reqappl_flag = item.deptSlip.reqappl_flag,
+                spcint_rate_status = item.deptSlip.spcint_rate_status,
+                spcint_rate = item.deptSlip.spcint_rate,
+            };
+
+            return deptSlip;
+        }
+        private DeptSlipdet CreateDeptSlipdet(string coop_id, string full_name, string machine_address, Models.Deposit item)
+        {
+            var deptSlipdet = new DeptSlipdet
+            {
+                coop_id = item.deptSlipdet.coop_id,
+                deptslip_no = item.deptSlipdet.deptslip_no,
+                deptaccount_no = item.deptSlipdet.deptaccount_no,
+                prnc_no = item.deptSlipdet.prnc_no,
+                prnc_bal = item.deptSlipdet.prnc_bal,
+                prnc_amt = item.deptSlipdet.prnc_amt,
+                prnc_date = item.deptSlipdet.prnc_date,
+                calint_from = item.deptSlipdet.calint_from,
+                calint_to = item.deptSlipdet.calint_to,
+                prncdue_date = item.deptSlipdet.prncdue_date,
+                prncmindue_date = item.deptSlipdet.prncmindue_date,
+                prncdue_nmonth = item.deptSlipdet.prncdue_nmonth,
+                prncslip_amt = item.deptSlipdet.prncslip_amt,
+                intarr_amt = item.deptSlipdet.intarr_amt,
+                intpay_amt = item.deptSlipdet.intpay_amt,
+                taxpay_amt = item.deptSlipdet.taxpay_amt,
+                intbf_accyear = item.deptSlipdet.intbf_accyear,
+                intcur_accyear = item.deptSlipdet.intcur_accyear,
+                monthintdue_date = item.deptSlipdet.monthintdue_date,
+                prncdeptdue_date = item.deptSlipdet.prncdeptdue_date,
+                interest_rate = item.deptSlipdet.interest_rate,
+                int_return = item.deptSlipdet.int_return,
+                tax_return = item.deptSlipdet.tax_return,
+                fee_amt = item.deptSlipdet.fee_amt,
+                other_amt = item.deptSlipdet.other_amt,
+                chequepend_amt = item.deptSlipdet.chequepend_amt,
+                refer_prnc_no = item.deptSlipdet.refer_prnc_no,
+                upint_time = item.deptSlipdet.upint_time
+            };
+
+            return deptSlipdet;
+        }
+        private DeptSlipCheque CreateDeptSlipCheque(string coop_id, string deptslip_no, string deptaccount_no, Models.Deposit item)
+        {
+            var deptSlipCheque = new DeptSlipCheque();
+
+            foreach (var rowsItem in rows)
+            {
+                // Create new DeptSlipCheque for each rowsItem
+                var newDeptSlipCheque = new DeptSlipCheque
+                {
+                    coop_id = coop_id,
+                    deptslip_no = deptslip_no,
+                    deptaccount_no = deptaccount_no,
+                    cheque_no = rowsItem.cheque_no,
+                    bank_code = rowsItem.bank_code,
+                    bankbranch_code = rowsItem.branch_id,
+                    cheque_date = DateTime.Now,
+                    entry_date = DateTime.Now,
+                    entry_time = DateTime.Now,
+                    chequedue_date = chequedue_date,
+                    cheque_type = rowsItem.cheque_type,
+                    cheque_amt = rowsItem.cheque_amt ?? 0,
+                    seq_no = rowsItem.seq_no ?? 0,
+                    checkclear_status = rowsItem.checkclear_status,
+                    entry_id = "Admin_id",
+                    depttype_code = item.deptSlip.depttype_code, // Assuming depttype_code is accessible from item
+                };
+
+                // Assign the new DeptSlipCheque to deptSlipCheque
+                deptSlipCheque = newDeptSlipCheque;
+            }
+
+            return deptSlipCheque;
+        }
+        private string GetMachineAddress()
+        {
+            string hostName = Dns.GetHostName();
+            var hostEntry = Dns.GetHostEntry(hostName);
+            string machine_address = null;
+
+            foreach (IPAddress address in hostEntry.AddressList)
+            {
+                if (address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    machine_address = address.ToString();
+                    break;
+                }
+            }
+
+            return machine_address;
+        }
+        private void HandleErrorResponse(string responseData)
+        {
+            Console.WriteLine(responseData);
+            var jsonResponse = JObject.Parse(responseData);
+            var errorsProperty = jsonResponse["errors"];
+            Console.WriteLine(errorsProperty);
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorsProperty + "ตรวจสอบข้อมูลให้ครบถ้วน", Duration = 2500 });
+        }
+
+        private void HandleException(Exception ex)
+        {
+            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
+            Console.WriteLine(ex.ToString());
+        }
+
         string CH_B1000 { get; set; }
         string amount_1000 { get; set; }
         string CH_B500 { get; set; }

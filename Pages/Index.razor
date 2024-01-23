@@ -1,4 +1,10 @@
 ﻿@page "/index"
+@inject IJSRuntime jsRuntime;
+@layout EmptyLayout;
+@inject HttpClient httpClient;
+@inject StateContainer State;
+@using FinanceApp.Services;
+
 <PageTitle>Dashboard</PageTitle>
 <style>
     a {
@@ -33,44 +39,100 @@
 </div>
 <div class="card col-12 body-page">
     <div class="row mt-3" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-        <div class="row">
-            <div class="col-xl-3 col-md-4 col-sm-6">
-                <a href="dept/deposit">
-                    <div class="card" style="width: 18rem;" @bind="App1">
-                        <div class="card-body">
-                            <div class="group-app">
-                                <div class="ions-app">
-                                    <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
-                                </div>
-                                @* <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image"> *@
-                                <div class="text-app">
-                                    <h5 class="card-title">ระบบ การเงิน</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-xl-3 col-md-4 col-sm-6">
-                <a href="dept/deposit">
-                    <div class="card" style="width: 18rem;" @bind="App1">
-                        <div class="card-body">
-                            <div class="group-app">
-                                <div class="ions-app">
-                                    <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
-                                </div>
-                                @* <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image"> *@
-                                <div class="text-app">
-                                    <h5 class="card-title">ระบบ การเงิน</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+        @* <div class="row">
+        <div class="col-xl-3 col-md-4 col-sm-6">
+        <a href="dept/dep_reqdepoit">
+        <div class="card" style="width: 18rem;" @bind="App1">
+        <div class="card-body">
+        <div class="group-app">
+        <div class="ions-app">
+        <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
         </div>
+        </div> *@
+        @if (State.AmsecUseappss != null && State.AmsecUseappss.Any())
+        {
+            <div class="row">
+                @foreach (var item in State.AmsecUseappss)
+                {
+                    if (@item.permiss_flag == true)
+                    {
+                        <div class="col-xl-3 col-md-4 col-sm-6 mt-3">
+                            <a href="@item.application" @onclick="() => HandleItemClick(item.application,item.application_name)">
+                                <div class="card" style="width: 18rem;">
+                                    <div class="card-body">
+                                        <div class="group-app">
+                                            <div class="ions-app">
+                                                <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
+                                            </div>
+                                            <div class="text-app">
+                                                <h5 class="card-title">@item.application_name</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-xl-3 col-md-4 col-sm-6 mt-3">
+                                <a href="">
+                                    <div class="card" style="width: 18rem;">
+                                        <div class="card-body">
+                                            <div class="group-app">
+                                                <div class="ions-app">
+                                                    <i class="fa-solid fa-spinner icons-app"></i>
+                                                </div>
+                                                <div class="text-app">
+                                                    <h5 class="card-title">ไม่มี Application</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            @if (NavigationManager != null)
+            {
+                // ทำการ redirect ไปที่ "/login"
+                NavigationManager.NavigateTo("/login", true);
+            }
+            else
+            {
+                <p>ไม่พบ Application</p>
+            }
+        }
     </div>
-</div>
+</div> @* <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image"> *@
+@* <script>
+window.getItemApplication = (application, application_name) => {
+DotNet.invokeMethodAsync('YourAssemblyName', 'HandleApplicationClick', application);
+};
+</script> *@
 @code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+    protected async Task bearerToken()
+    {
+        string Token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+        string refreshToken = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "refreshToken");
 
+        var request = new HttpRequestMessage(HttpMethod.Get, Token);
+
+        // Add the Authorization header
+        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Token);
+        Console.WriteLine($"request :{request}");
+        Console.WriteLine($"refreshToken :{refreshToken}");
+    }
+    @* protected override async void OnInitialized()
+    {
+        StateHasChanged();
+    } *@
 }

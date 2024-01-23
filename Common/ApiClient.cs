@@ -10,7 +10,8 @@ public static class ApiClient
     public static class Paths
     {
         //login
-        public const string UserLogin = "Login/OfAuthLogin";
+        public const string UserLogin = "Login/OfAuthLogin"; 
+        public const string UseOfAuthPagePermiss= "Login/OfAuthPagePermiss"; 
         //deposit
         public const string DepOfInitDataOffline = "Deposit/DepOfInitDataOffline";
         public const string DepOfGetAccountSaving = "Deposit/DepOfGetAccountSaving";
@@ -19,8 +20,9 @@ public static class ApiClient
         public const string DepOfInitOpenAccount = "Deposit/DepOfInitOpenAccount";
         public const string DepOfPostOpenAccount = "Deposit/DepOfPostOpenAccount";
         public const string DepOfGetMemberOpenAccount = "Deposit/DepOfGetMemberOpenAccount";
-        public const string DepOfGetBank = "Deposit/DepOfGetBank";
+        public const string DepOfGetBank = "Deposit/DepOfGetBank"; 
         public const string DepOfGetBankBranch = "Deposit/DepOfGetBankBranch";
+        public const string DepOfGetDeptMaintype = "Deposit/DepOfGetDeptMaintype";
         public const string DepOfInitDeptPassbook = "Deposit/DepOfInitDeptPassbook";
 
     }

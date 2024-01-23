@@ -36,10 +36,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2F2ZUJ1dHRvbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/EmptyLayout.razor]
-build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVtcHR5TGF5b3V0LnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/LoginLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luTGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
@@ -64,6 +60,10 @@ build_metadata.AdditionalFiles.CssScope = b-vqh5auax0z
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfY29udGVja1xEZXBDb250ZWNrLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-fxyna2yoyt
 
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_deptdetail/DepDeptdetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfZGVwdGRldGFpbFxEZXBEZXB0ZGV0YWlsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-887kgmytr6
+
 [D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_procdeptuptran/DepProcdeptuptran.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfcHJvY2RlcHR1cHRyYW5cRGVwUHJvY2RlcHR1cHRyYW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-kyd3k094o5
@@ -83,6 +83,10 @@ build_metadata.AdditionalFiles.CssScope = b-jevbfxu0ld
 [D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_slip_withdraw/DepWithdraw.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfc2xpcF93aXRoZHJhd1xEZXBXaXRoZHJhdy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-38i8sy31j1
+
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/EmptyLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVtcHR5TGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-gcrgsn8xyi
 
 [D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=

@@ -1,4 +1,5 @@
-@page "/dept/deposit"
+@* @page "/dept/deposit" *@
+@page "/ws_dep_slip_deposit"
 @using Newtonsoft.Json
 @using Radzen.Blazor
 @using System.Runtime.InteropServices.JavaScript
@@ -152,8 +153,8 @@ else
 								<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
 									Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 								<div class="input-group-addon">
-									<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-										data-bs-target="#ModalSearch" />
+									<RadzenIcon class="icons icon-search" @onclick="GetDeptMaintype" Icon="ballot"
+										data-bs-toggle="modal" data-bs-target="#ModalSearch" />
 								</div>
 							</div>
 						</div>
@@ -170,35 +171,19 @@ else
 										<div class="row" style="margin-left:-4px;margin-right:-4px;">
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ประเภทบัญชี</label>
-												@* @foreach (var item in datadetail)
-										{
-										var Item = item.deptSlip;
-										<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
-										@onchange="RecpPayTypeChanged">
-										<option selected disabled></option>
-										@foreach (var recppaytypeItem in Item.recppaytype)
-										{
-										if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-										{
-										isCurrentOptionSelected = true;
-
-										}
-										else
-										{
-										isCurrentOptionSelected = false;
-										}
-										if (recppaytypeItem.genvc_flag == 1)
-										{
-										<option value="@recppaytypeItem.recppaytype_code"
-										selected="@isCurrentOptionSelected">
-										@recppaytypeItem.recppaytype_desc
-										</option>
-										}
-										}
-										}
-
-										</select>
-										} *@
+													@if (getDeptMaintype != null)
+												{
+													<select id="DeptMaintype" name="DeptMaintype" class="form-select"
+														@onchange="DeptMaintype">
+														<option value="null" selected>--กรุณาเลือก--</option>
+														@foreach (var MaintypeItem in getDeptMaintype)
+														{
+															<option value="@MaintypeItem.deptmain_type">
+																@MaintypeItem.deptmain_type - @MaintypeItem.deptmain_desc
+															</option>
+														}
+													</select>
+												}
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขที่บัญชี</label>
@@ -1045,8 +1030,8 @@ else
 										<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format "
 											Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 										<div class="input-group-addon">
-											<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-												data-bs-target="#anotherModal" />
+											<RadzenIcon class="icons icon-search" @onclick="GetDeptMaintype" Icon="ballot"
+										data-bs-toggle="modal" data-bs-target="#ModalSearch" />
 										</div>
 									</div>
 								</div>
@@ -1063,35 +1048,19 @@ else
 												<div class="row" style="margin-left:-4px;margin-right:-4px;">
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">ประเภทบัญชี</label>
-														@* @foreach (var item in datadetail)
-											{
-											var Item = item.deptSlip;
-											<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
-											@onchange="RecpPayTypeChanged">
-											<option selected disabled></option>
-											@foreach (var recppaytypeItem in Item.recppaytype)
-											{
-											if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-											{
-											isCurrentOptionSelected = true;
-
-											}
-											else
-											{
-											isCurrentOptionSelected = false;
-											}
-											if (recppaytypeItem.genvc_flag == 1)
-											{
-											<option value="@recppaytypeItem.recppaytype_code"
-											selected="@isCurrentOptionSelected">
-											@recppaytypeItem.recppaytype_desc
-											</option>
-											}
-											}
-											}
-
-											</select>
-											} *@
+															@if (getDeptMaintype != null)
+												{
+													<select id="DeptMaintype" name="DeptMaintype" class="form-select"
+														@onchange="DeptMaintype">
+														<option value="null" selected>--กรุณาเลือก--</option>
+														@foreach (var MaintypeItem in getDeptMaintype)
+														{
+															<option value="@MaintypeItem.deptmain_type">
+																@MaintypeItem.deptmain_type - @MaintypeItem.deptmain_desc
+															</option>
+														}
+													</select>
+												}
 													</div>
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">เลขที่บัญชี</label>
@@ -1763,7 +1732,7 @@ else
 				}
 			</div>
 		</div>
-		<div class="card mt-4">
+		<div  class="card mt-4" hidden>
 			<div class="row mt-2"
 				style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 				<RadzenTabs @bind-SelectedIndex=@selectedIndex>

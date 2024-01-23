@@ -1,8 +1,9 @@
-﻿@using Microsoft.JSInterop
-@using Radzen.Blazor
-@inject IJSRuntime JSRuntime
-@inject NavigationManager NavManager
-
+﻿@using Microsoft.JSInterop;
+@using Radzen.Blazor;
+@inject IJSRuntime JSRuntime;
+@inject NavigationManager NavManager;
+@using System.Net.Http.Headers;
+@using Newtonsoft.Json.Linq;
 <style>
     li.rz-navigation-item>.rz-navigation-item-wrapper>.rz-navigation-item-link>i.rzi:first-child {
         color: #095696;
@@ -13,45 +14,81 @@
         color: #6c8aba;
         /* Light Steel Blue */
     }
+
     .rz-panel-menu {
         white-space: nowrap;
         overflow-y: auto;
     }
 </style>
 <nav class="nav">
+    @* <RadzenPanelMenu Multiple="@multiple">
+    <RadzenPanelMenuItem Text="ประจำวัน" Icon="savings">
+    <RadzenPanelMenuItem Text="เปิดบัญชี" Path="dept/dep_reqdepoit" Icon="import_contacts">
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ฝากเงิน" Path="dept/deposit" Icon="savings"></RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ถอนเงิน/ปิดบัญชี" Path="dept/dep_withdraw" Icon="payments"></RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ตรวจสอบรายการเคลื่อนไหว" Path="dept/dep_conteck" Icon="compare_arrows">
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ประมวลผลจากระบบอื่น" Path="dept/dep_procdeptuptran"
+    Icon="published_with_changes"></RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="พิมพ์ใบรายการ" Path="dept/dep_reprintslip" Icon="print"></RadzenPanelMenuItem>
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ข้อมูล" Icon="savings">
+    <RadzenPanelMenuItem Text="ข้อมูลรายละเอียดบัญชี" Path="dept/dep_tdetail" Icon="import_contacts">
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ฝากเงิน" Path="dept/deposit" Icon="savings"></RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ถอนเงิน/ปิดบัญชี" Path="dept/dep_withdraw" Icon="payments"></RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ตรวจสอบรายการเคลื่อนไหว" Path="dept/dep_conteck" Icon="compare_arrows">
+    </RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="ประมวลผลจากระบบอื่น" Path="dept/dep_procdeptuptran"
+    Icon="published_with_changes"></RadzenPanelMenuItem>
+    <RadzenPanelMenuItem Text="พิมพ์ใบรายการ" Path="dept/dep_reprintslip" Icon="print"></RadzenPanelMenuItem>
+    </RadzenPanelMenuItem>
+    </RadzenPanelMenu> *@
     <RadzenPanelMenu Multiple="@multiple">
-        <RadzenPanelMenuItem Text=" ระบบ เงินฝาก" Icon="savings">
-            <RadzenPanelMenuItem Text="เปิดบัญชี" Path="dept/dep_reqdepoit" Icon="import_contacts"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="ฝากเงิน" Path="dept/deposit" Icon="savings"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="ถอนเงิน/ปิดบัญชี" Path="dept/dep_withdraw" Icon="payments"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="ตรวจสอบรายการเคลื่อนไหว" Path="dept/dep_conteck" Icon="compare_arrows"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="ประมวลผลจากระบบอื่น" Path="dept/dep_procdeptuptran"Icon="published_with_changes"></RadzenPanelMenuItem>
-            <RadzenPanelMenuItem Text="พิมพ์ใบรายการ" Path="dept/dep_reprintslip" Icon="print"></RadzenPanelMenuItem>
-        </RadzenPanelMenuItem>
+        @if (GetContent != null)
+        {
+            @foreach (var groupPermission in GetContent)
+            {
+                <RadzenPanelMenuItem Text="@groupPermission.GroupDesc" Icon="@groupPermission.IconName">
+                    @foreach (var windowPermission in groupPermission.Children)
+                    {
+                        <RadzenPanelMenuItem Text="@windowPermission.win_description" Path="@windowPermission.win_object"
+                            Click="() => HandleApplicationClick(windowPermission.save_status, windowPermission.check_flag)"
+                            Icon="@windowPermission.icon_name">
+                        </RadzenPanelMenuItem>
+                    }
+                </RadzenPanelMenuItem>
+            }
+        }
+        else
+        {
+            <div>
+                <i class="fa-solid fa-spinner" style="font-size: 1.5rem;margin-left: 15px;margin-top: 5px;"></i>
+            </div>
+        }
     </RadzenPanelMenu>
 </nav>
-@if (isLoading)
+@* @if (isLoading)
 {
-    <div class="loading-backdrop">
-        Loading...
-    </div>
-}
-
+<div class="loading-backdrop">
+Loading...
+</div>
+} *@
 @code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
     bool multiple = false;
-}
-
-
-@inject NavigationManager NavManager
-
-@code {
     private bool isLoading = false;
+    private string bearerToken;
 
     protected override void OnInitialized()
     {
-        NavManager.LocationChanged += HandleLocationChanged;
-    }
+        NavigationManager.LocationChanged += HandleLocationChanged;
+        PagePermiss();
+        StateHasChanged();
 
+    }
     private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
     {
         isLoading = true;
@@ -60,6 +97,7 @@
         {
             isLoading = false;
             StateHasChanged();
+
         });
     }
 }

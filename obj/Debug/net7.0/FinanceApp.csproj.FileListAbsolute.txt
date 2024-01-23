@@ -48,3 +48,5 @@ D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore
 D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Components.Web.dll
 D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.AspNetCore.Metadata.dll
 D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.JSInterop.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dep_deptdetail\DepDeptdetail.razor.rz.scp.css
+D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Shared\EmptyLayout.razor.rz.scp.css

@@ -1,33 +1,18 @@
 ﻿@inherits LayoutComponentBase
 @using Newtonsoft.Json;
-
-
 <PageTitle>FinanceApp</PageTitle>
-
-@* <div class="page">
-<div class="sidebar">
-<NavMenu />
-</div>
-
-<main>
-<div class="top-row px-4">
-<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-</div>
-
-<article class="content px-4">
-@Body
-</article>
-</main>
-</div> *@
 @inject IJSRuntime JSRuntime
 
 @using FinanceApp.Services;
 @using Microsoft.JSInterop
 @using Radzen.Blazor
-@using FinanceApp.Pages.Deposit.Dep_reqdepoit
-@using FinanceApp.Pages.Deposit.Dep_slip_deposit
 @inject ISaveService SaveService
-
+@using Newtonsoft.Json.Linq
+@using Newtonsoft.Json;
+@using FinanceApp.Models;
+@using System.Net;
+@using Microsoft.AspNetCore.Components;
+@using System.Text;
 
 <style>
     .loading-backdrop {
@@ -210,12 +195,13 @@
                     <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
                     <RadzenProfileMenu @onclick="@LogOff" Style="padding: 0px;">
                         <Template>
-                            <RadzenProfileMenuItem Text="LogOff" Style="padding: 0px;margin-left: -15px;" Icon="logout"></RadzenProfileMenuItem>
+                            <RadzenProfileMenuItem Text="LogOff" Style="padding: 0px;margin-left: -15px;" Icon="logout">
+                            </RadzenProfileMenuItem>
                         </Template>
                     </RadzenProfileMenu>
                 </ChildContent>
             </RadzenProfileMenu>
-            
+
         </div>
     </header>
     <div class="l-navbar shadow-sm mt-6" id="nav-bar">
@@ -240,7 +226,123 @@
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
+            @* // ตรวจสอบว่ามี token หรือไม่
+string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+if (string.IsNullOrEmpty(bearerToken))
+{
+// ถ้าไม่มี token ให้แสดง alert message
+// await JSRuntime.InvokeVoidAsync("alert", "Logoff or session expired. Please login again.");
+// ถ้าไม่มี token ให้เด้งไปยังหน้า login
+NavigationManager.NavigateTo("/login", true);
+}
+var applications = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+
+var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "windowIds");
+// Print the value of 'jsons' to the console
+var windowIdData = Newtonsoft.Json.JsonConvert.DeserializeObject<WindowIdData>(jsons);
+// Check if the deserialization was successful
+if (windowIdData != null && windowIdData.WindowIds != null)
+{
+// Get the current page windowId (replace this with your logic to get the current windowId)
+var currentPageWindowId = GetCurrentPageWindowId();
+Console.WriteLine($"currentPageWindowId :{currentPageWindowId}");
+if (windowIdData != null && windowIdData.WindowIds != null)
+{
+// Check if currentPageWindowId exists in windowIdData.WindowIds
+bool isMatch = windowIdData.WindowIds.Any(windowId => windowId.Trim() == currentPageWindowId.Trim());
+
+if (isMatch)
+{
+// Found a match
+Console.WriteLine($"Match found for {currentPageWindowId}");
+// Perform actions for a match, if needed
+}
+else
+{
+if (currentPageWindowId == applications)
+{
+Console.WriteLine($"Match found for {currentPageWindowId}");
+}
+else
+{
+// No match
+NavigationManager.NavigateTo("/index", true);
+Console.WriteLine($"No match for {currentPageWindowId}");
+// Perform actions for non-matching items, if needed
+}
+
+}
+}
+
+}
+else
+{
+Console.WriteLine("Error deserializing or empty WindowIds array.");
+} *@
+            if (await IsUserAuthenticated())
+            {
+                // Get the current page windowId (replace this with your logic to get the current windowId)
+                var currentPageWindowId = GetCurrentPageWindowId();
+                Console.WriteLine($"currentPageWindowId: {currentPageWindowId}");
+
+                // Get the stored token
+                string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+                // Get the stored applications
+                var applications = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+
+                // Get the stored windowIds
+                var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "winObject");
+
+                    // Deserialize the stored windowIds
+                @* var windowIdData = JsonConvert.DeserializeObject<WindowIdData>(jsons); *@
+                var windowIdData = JsonConvert.DeserializeObject<WindowIdData>(jsons);
+
+
+                // Check if the deserialization was successful and windowIds exist
+                if (windowIdData != null && windowIdData.winObject != null)
+                {
+                    // Check if currentPageWindowId exists in windowIdData.WindowIds
+                    bool isMatch = windowIdData.winObject.Any(windowId => windowId.Trim() == currentPageWindowId.Trim());
+
+                    if (!isMatch && currentPageWindowId != applications)
+                    {
+                        // No match, redirect to "/index"
+                        NavigationManager.NavigateTo("/index", true);
+                        Console.WriteLine($"No match for {currentPageWindowId}");
+                        // Perform actions for non-matching items, if needed
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Error deserializing or empty WindowIds array.");
+                }
+            }
         }
+    }
+    private async Task<bool> IsUserAuthenticated()
+    {
+        // Check if there is a valid token
+        string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+        return !string.IsNullOrEmpty(bearerToken);
+    }
+    private string GetCurrentPageWindowId()
+    {
+        string currentUrl = NavigationManager.Uri;
+        // ดึงส่วน path ต่อจากโดเมนและพร็อทโคลอน
+        string path = new Uri(currentUrl).AbsolutePath;
+
+        // ตัด '/' ด้านหน้า
+        path = path.TrimStart('/');
+
+        Console.WriteLine($"Remaining Path: {path}");
+        return path;
+
+    }
+    public class WindowIdData
+    {
+        public List<string> winObject { get; set; }
+        public string Application { get; set; }
     }
     private void AppAll()
     {
@@ -252,44 +354,15 @@
         // Navigate to the login page
         NavigationManager.NavigateTo("Login");
         Console.WriteLine("logout");
-
+        // Remove authToken
+        JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
         // Force a page reload using JavaScript interop
         JSRuntime.InvokeVoidAsync("location.reload");
     }
     private void Report()
     {
-        @* string dept_deposit *@
         string currentUrl = NavigationManager.Uri;
         Console.WriteLine($"Current URL: {currentUrl}");
-        if (currentUrl.Contains("dept/dep_reqdepoit") || currentUrl.Contains("dept/deposit") ||
-        currentUrl.Contains("dept/dep_withdraw") || currentUrl.Contains("dept/dep_conteck") ||
-        currentUrl.Contains("dept/dep_procdeptuptran") ||
-        currentUrl.Contains("dept/reprintslip"))
-        {
-            try
-            {
-                NavigationManager.NavigateTo("/");
-                Console.WriteLine("DepDeposit");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
-            }
-        }
-        else if (currentUrl.Contains("dept/deposit"))
-        {
-            try
-            {
-                NavigationManager.NavigateTo("/");
-                Console.WriteLine("DepDeposit");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
-            }
-        }
     }
 
 }

@@ -41,6 +41,7 @@ builder.Services.AddScoped<ISaveService, SaveService>();
 // Singleton services
 builder.Services.AddScoped<NotificationService>();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddSingleton<StateContainer>();
 
 // Register API provider service
 builder.Services.AddHttpClient<IApiProvider, ApiProvider>();
@@ -84,7 +85,7 @@ app.Run();
 // Method to handle all the application configurations
 static void ConfigureApplication(WebApplication app)
 {
-    // Use HSTS and redirect to HTTPS in non-development environments
+    // ใช้ HSTS และ redirect ไปที่ HTTPS ในสภาพแวดล้อมที่ไม่ใช่การพัฒนา
     if (!app.Environment.IsDevelopment())
     {
         // Customize the error handling middleware to log the errors
@@ -110,7 +111,6 @@ static void ConfigureApplication(WebApplication app)
                    .AllowAnyMethod();
         });
     }
-
     // Static file handling
     app.UseStaticFiles();
     app.UseCors("AllowAll");

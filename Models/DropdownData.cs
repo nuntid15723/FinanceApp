@@ -22,5 +22,12 @@
 	{
 		public string book_no { get; set; }
 	}
+	
+	public class GetDeptMaintype
+	{
+		public string coop_id { get; set; }
+		public string deptmain_type { get; set; }
+		public string deptmain_desc { get; set; }
+	}
 
 }
