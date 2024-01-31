@@ -17,9 +17,11 @@ public partial class LoginBase : ComponentBase
 
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
+    
+
     protected string user_name;
     protected string password;
-    protected string selectedDatabase;
+    protected string selectedDatabase ="1";
     protected string errorMessage;
     protected LoginResult loginResponse;
     private bool isLoading = true;
@@ -28,12 +30,10 @@ public partial class LoginBase : ComponentBase
     {
         string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
         var request = new HttpRequestMessage(HttpMethod.Get, bearerToken);
-
         // Add the Authorization header
         request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bearerToken);
         Console.WriteLine($"request :{request.Headers.Authorization}");
-        loginResponse = await LoginService.Login(user_name, password);
-
+        loginResponse = await LoginService.Login(user_name, password, selectedDatabase);
         if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(password))
         {
             errorMessage = "Username และ password ไม่สามารถเว้นว่างได้.";
@@ -49,7 +49,10 @@ public partial class LoginBase : ComponentBase
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "coopControl", loginResponse.coopControl);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "coopId", loginResponse.coopId);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "fullName", loginResponse.fullName);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
+            var amsecUseappssJson = JsonConvert.SerializeObject(loginResponse.amsecUseappss);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", amsecUseappssJson);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "base_type", selectedDatabase);
+            // await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
             NavigationManager.NavigateTo("index", true);
         }
         else
@@ -59,4 +62,5 @@ public partial class LoginBase : ComponentBase
         }
 
     }
+    
 }

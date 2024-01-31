@@ -1212,9 +1212,6 @@ else
 							</div>
 							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 								<label class="form-label" for="">รายการ</label>
-								@* <select id="recppaytypeSelect" @ref="recepPayTypeSelect" name="recppaytype_code"
-					class="form-select"
-					@onchange="RecpPayTypeChanged"> *@
 								<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
 									@onchange="RecpPayTypeChanged">
 
@@ -1732,7 +1729,7 @@ else
 				}
 			</div>
 		</div>
-		<div  class="card mt-4" hidden>
+		<div  class="card mt-4">
 			<div class="row mt-2"
 				style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 				<RadzenTabs @bind-SelectedIndex=@selectedIndex>

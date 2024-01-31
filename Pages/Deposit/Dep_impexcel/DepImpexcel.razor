@@ -1,0 +1,296 @@
+﻿@page "/dept/dep_impexcel"
+@page "/ws_dep_imp_excel"
+@using FinanceApp.Models;
+@using Newtonsoft.Json
+@using Radzen.Blazor
+@using System.Runtime.InteropServices.JavaScript
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@using System.Linq.Dynamic.Core
+@inject NotificationService NotificationService
+@using System.Globalization
+@using System.Text.Json
+@using System.ComponentModel
+@using Microsoft.AspNetCore.Components
+
+<style>
+	.icon-search {
+		display: inline-flex !important;
+		justify-content: space-evenly !important;
+		align-items: center !important;
+		position: relative !important;
+		top: 3px !important;
+		padding: 15px !important;
+		flex-wrap: nowrap !important;
+	}
+
+	.table> :not(caption)>*>* {
+		padding: 0.2rem 0.2rem;
+	}
+
+	.save_top {
+		border: #adacac solid 1px;
+	}
+
+	.header-right {
+		text-align: start;
+	}
+
+	.header-left {
+		text-align: end;
+	}
+
+	.card {
+		background-color: #f9f9f9;
+	}
+
+	.rz-fileupload-buttonbar {
+		background-color: transparent;
+	}
+
+	.rz-fileupload-files {
+		font-size: 12px;
+	}
+
+	.rz-card {
+		padding: 2px;
+	}
+</style>
+<div class="header-page">
+	<div class="row-header d-flex justify-content-between ">
+		<div class="header-left">
+			<h4>ระบบ เงินฝาก - Import Excel</h4>
+		</div>
+		<div class="header-right">
+			<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
+		</div>
+	</div>
+</div>
+@* @if (isLoading)
+{ *@
+@* <div
+style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%;
+justify-content: center; align-items: center; z-index: 90;">
+<div class="spinner-border text-primary" role="status">
+<span class="visually-hidden">Loading...</span>
+</div>
+</div> *@
+@* }
+else
+{
+@if (repReqdepoit != null)
+{ *@
+<div class="card body-page">
+	<div class="row" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+		<div class="row">
+			<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">วันที่</label>
+				@* <input class="form-control" type="text" DateFormat="dd/MM/yyyy" name="operate_date"
+				@bind="Item.operate_date" /> *@
+				<RadzenDatePicker @bind-Value=@operate_date Name="operate_date" ReadOnly DateFormat="dd/MM/yyyy" />
+			</div>
+			<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">ประเภทรายการ</label>
+				<select class="form-select" name="" id=""></select>
+				@* <select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
+				@onchange="RecpPayTypeChanged">
+
+				@if (Item.recppaytype == null || !Item.recppaytype.Any())
+				{
+				<option selected disabled></option>
+				}
+				else
+				{
+				<option selected disabled></option>
+				@foreach (var recppaytypeItem in Item.recppaytype)
+				{
+				if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+				{
+				isCurrentOptionSelected = true;
+
+				}
+				else
+				{
+				isCurrentOptionSelected = false;
+				}
+				if (recppaytypeItem.genvc_flag == 1)
+				{
+				<option
+				value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}")"
+				selected="@isCurrentOptionSelected">
+				@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+				</option>
+				}
+				}
+				}
+
+				</select> *@
+			</div>
+			<div class="col-xl-2 col-md-2 col-sm-6 d-flex flex-column">
+				<button type="button" class="btn btn-outline-secondary" @onclick="Search">ตรวจสอบไฟล์</button>
+			</div>
+			<div class="col-xl-2 col-md-2 col-sm-6 d-flex flex-column">
+				<button type="button" class="btn btn-outline-secondary" @onclick="Search">Import ข้อมูล</button>
+			</div>
+			<div class="col-xl-2 col-md-2 col-sm-6 d-flex flex-column">
+				<button type="button" class="btn btn-outline-secondary" @onclick="Search">ลบข้อมูลที่ Import</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">File Path</label>
+				<RadzenCard Style="background-color: transparent;box-shadow: revert;">
+					<RadzenUpload @ref="upload" Auto="false" Multiple="true" Url="upload/multiple" Change=@(args =>
+						OnChange(args, "Manual Upload")) Progress=@(args => OnProgress(args, "Manual Upload"))
+						class="w-100" />
+					<p style="font-size: 12px; color: red;">*** หมายเหตุ ไฟล์ที่จะ Import จะต้องเป็นไฟล์ .xlsx
+						เท่านั้น***
+					</p>
+					<p style="font-size: 14px;"><a href="">ดาวน์โหลดไฟล์ตัวอย่าง</a></p>
+				</RadzenCard>
+			</div>
+			<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">ข้อมูลที่ไม่ถูกต้อง</label>
+				<button type="button" style="margin-top: 5px;" class="btn btn-outline-secondary"
+					@onclick="Search">ดาวน์โหลดไฟล์</button>
+			</div>
+		</div>
+	</div>
+</div>
+@* }
+else
+{ *@
+<div class="card body-page">
+	<div class="from">
+		@* @foreach (var Item in repReqdepoit)
+		{ *@
+		@* <div class="row" style="margin-left: calc(var(--bs-gutter-x) * .0);margin-bottom: 15px;"> *@
+			@* <div class="row mt-2"
+			style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom:
+			15px;"> *@
+			<div class="row mt-2"
+				style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+				<h6>ตารางแสดงรายการเคลื่อนไหว</h6>
+				<div class="row">
+					<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="180px"
+						AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+						FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+						AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+						<Columns>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ลำดับ" Property="prnc_no">
+							</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Title="เลขบัญชี"Property="prnc_bal">
+							</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Title="เลขสมาชิก" Property="prncslip_amt">
+							</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Title="จำนวนเงิน " Property="prnc_date">
+							</RadzenDataGridColumn>
+						</Columns>
+					</RadzenDataGrid>
+				</div>
+		</div>
+	</div>
+
+	@* } *@
+</div>
+@* } *@
+@* } *@
+@code {
+	RadzenUpload upload;
+	int progress;
+	bool showProgress;
+	private string file_name;
+
+	bool showComplete;
+	string completionMessage;
+	bool cancelUpload = false;
+
+	void CompleteUpload(UploadCompleteEventArgs args)
+	{
+		if (!args.Cancelled)
+			completionMessage = "Upload Complete!";
+		else
+			completionMessage = "Upload Cancelled!";
+
+		showProgress = false;
+		showComplete = true;
+	}
+
+	void TrackProgress(UploadProgressArgs args)
+	{
+		showProgress = true;
+		showComplete = false;
+		@* progress = args.Progress; *@
+
+		// cancel upload
+		args.Cancel = cancelUpload;
+
+		// reset cancel flag
+		cancelUpload = false;
+	}
+
+	void CancelUpload()
+	{
+		cancelUpload = true;
+	}
+
+	int customParameter = 1;
+	void OnChange(UploadChangeEventArgs args, string name)
+	{
+		foreach (var file in args.Files)
+		{
+			Console.WriteLine($"File: {file.Name} / {file.Size} bytes");
+			file_name = file.Name;
+		}
+		Console.WriteLine($"{file_name} changed");
+	}
+
+	void OnProgress(UploadProgressArgs args, string name)
+	{
+		Console.WriteLine($"{args.Progress}% '{name}' / {args.Loaded} of {args.Total} bytes.");
+
+		if (args.Progress == 100)
+		{
+			foreach (var file in args.Files)
+			{
+				Console.WriteLine($"Uploaded: {file.Name} / {file.Size} bytes");
+			}
+		}
+	}
+
+	void OnComplete(UploadCompleteEventArgs args)
+	{
+		Console.WriteLine($"Server response: {args.RawResponse}");
+	}
+	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+
+	private async Task OnBankBranchChanged(ChangeEventArgs e)
+	{
+		BankBranchValues = e.Value.ToString();
+	}
+	private void OnBankBranchSelectChanged(ChangeEventArgs e)
+	{
+		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
+		bankbranch_code = e.Value.ToString();
+		BankBranchValues = bankbranch_code;
+	}
+	private async Task OnGetBankChanged(ChangeEventArgs e)
+	{
+		BankValues = e.Value.ToString();
+		Console.WriteLine($"BankValues: {BankValues}");
+	}
+	private void OnGetBankSelectChanged(ChangeEventArgs e)
+	{
+		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
+		bank_code = e.Value.ToString();
+		Console.WriteLine($"BankValues: {bank_code}");
+		BankValues = bank_code;
+
+	}
+	private bool chk_tranacc;
+	private bool chk_deptacc;
+	private bool chk_deptpassbookno;
+}

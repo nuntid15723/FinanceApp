@@ -18,55 +18,76 @@
 </head>
 @* <link href="css/PageStyles/Login.css" rel="stylesheet" /> *@
 
-    <body>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="column left">
-                        <div class="img">
-                            <img class="item"
-                                src="http://nodsacc2.dyndns-blog.com:8080/SPW/GCOOP/Saving/Image/band_black.jpg"
-                                style="border-radius: 50%;max-width: 150px;" alt=" Logo">
+<body>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="column left">
+                    <div class="img">
+                        <img class="item"
+                            src="http://nodsacc2.dyndns-blog.com:8080/SPW/GCOOP/Saving/Image/band_black.jpg"
+                            style="border-radius: 50%;max-width: 150px;" alt=" Logo">
+                    </div>
+                    <br>
+                    <h2 class="title-name">SMSK</h2>
+                    <div class="title-desc">สหกรณ์ออมทรัพย์สาธารณสุขสมุทรสงคราม จำกัด</div>
+                </div>
+                <div class="column right">
+                    <h3 class="header-title">เข้าสู่ระบบ</h3>
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
                         </div>
-                        <br>
-                        <h2 class="title-name">SMSK</h2>
-                        <div class="title-desc">สหกรณ์ออมทรัพย์สาธารณสุขสมุทรสงคราม จำกัด</div>
-                    </div>
-                    <div class="column right">
-                        <h3 class="header-title">เข้าสู่ระบบ</h3>
-                        @if (!string.IsNullOrEmpty(errorMessage))
-                        {
-                            <div class="alert alert-danger" role="alert">
-                                @errorMessage
+                    }
+                    <form @onsubmit="SubmitForm">
+                        <div class="item">
+                            <div class="form-group2">
+                                <label for="database"><span class="required">*</span>ฐานข้อมูล </label>
+                                <select class="form-control" id="database" name="database" @bind="selectedDatabase">
+                                    <option value="1">ฐานข้อมูลหลัก</option>
+                                    <option value="2">ฐานข้อมูลทดสอบ</option>
+                                </select>
                             </div>
-                        }
-                        <form @onsubmit="SubmitForm">
-                            <div class="item">
-                                <div class="form-group2">
-                                    <label for="database"><span class="required">*</span>ฐานข้อมูล </label>
-                                    <select class="form-control" id="database" name="database" @bind="selectedDatabase">
-                                        <option value="main-database">ฐานข้อมูลหลัก</option>
-                                        <option value="2nd-database">ฐานข้อมูลทดสอบ</option>
-                                    </select>
-                                </div>
-                                <div class="form-group2">
-                                    <label for="user_name"><span class="required">*</span> ชื่อผู้ใช้ : </label>
-                                    <input class="form-control" type="text" id="user_name" name="user_name"
-                                        @bind="user_name">
-                                </div>
+                            <div class="form-group2">
+                                <label for="user_name"><span class="required">*</span> ชื่อผู้ใช้ : </label>
+                                <input class="form-control" type="text" id="user_name" name="user_name"
+                                    @bind="user_name">
+                            </div>
 
-                                <div class="form-group2">
-                                    <label for="password"><span class="required">*</span> รหัสผ่าน : </label>
-                                    <input class="form-control" type="password" id="password" name="password"
-                                        @bind="password">
-                                </div>
+                            <div class="form-group2">
+                                <label for="password"><span class="required">*</span> รหัสผ่าน : </label>
+                                <input class="form-control" type="password" id="password" name="password"
+                                    @bind="password">
                             </div>
-                            <div class="form-group3">
-                                <button class="btn-container" type="submit">เข้าสู่ระบบ</button>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div class="form-group3">
+                            <button class="btn-container" type="submit">เข้าสู่ระบบ</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
+@code {
+  
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // ตรวจสอบว่า User ได้ Authenticated หรือไม่
+            if (await IsUserAuthenticated())
+            {
+                Console.WriteLine("User is login page.");
+                JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+            }
+        }
+    }
+    private async Task<bool> IsUserAuthenticated()
+    {
+        // Check if there is a valid token
+        string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+        return !string.IsNullOrEmpty(bearerToken);
+    }
+}

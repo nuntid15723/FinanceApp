@@ -8,7 +8,6 @@
 @using Radzen.Blazor
 @inject ISaveService SaveService
 @using Newtonsoft.Json.Linq
-@using Newtonsoft.Json;
 @using FinanceApp.Models;
 @using System.Net;
 @using Microsoft.AspNetCore.Components;
@@ -69,7 +68,6 @@
 
     .w-90 {
         width: 90% !important;
-    @*z-index:90;*@
     }
 
     #header img {
@@ -155,7 +153,7 @@
         <div class="header_center">
             <div id="header-content">
                 <img src="https://www.freepnglogos.com/uploads/starbucks-logo-png-transparent-0.png" alt="Logo">
-                <p>Your Website Name</p>
+                <p>@Coop_name</p>
                 <!-- Add more content or links here if needed -->
             </div>
         </div>
@@ -221,64 +219,35 @@
 @code {
     [Inject]
     private NavigationManager NavigationManager { get; set; }
+    private string Coop_name;
+    private string baseType;
+    
+
+    @* protected override async Task OnInitializedAsync()
+    {
+        await BaseType();
+    } *@
+
+    private async Task BaseType()
+    {
+        baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+        @* Console.WriteLine($"baseType: {baseType}"); *@
+        if (baseType=="1"){
+            Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+        }else{
+            Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+        }
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
-            @* // ตรวจสอบว่ามี token หรือไม่
-string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-if (string.IsNullOrEmpty(bearerToken))
-{
-// ถ้าไม่มี token ให้แสดง alert message
-// await JSRuntime.InvokeVoidAsync("alert", "Logoff or session expired. Please login again.");
-// ถ้าไม่มี token ให้เด้งไปยังหน้า login
-NavigationManager.NavigateTo("/login", true);
-}
-var applications = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+            await BaseType();
 
-var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "windowIds");
-// Print the value of 'jsons' to the console
-var windowIdData = Newtonsoft.Json.JsonConvert.DeserializeObject<WindowIdData>(jsons);
-// Check if the deserialization was successful
-if (windowIdData != null && windowIdData.WindowIds != null)
-{
-// Get the current page windowId (replace this with your logic to get the current windowId)
-var currentPageWindowId = GetCurrentPageWindowId();
-Console.WriteLine($"currentPageWindowId :{currentPageWindowId}");
-if (windowIdData != null && windowIdData.WindowIds != null)
-{
-// Check if currentPageWindowId exists in windowIdData.WindowIds
-bool isMatch = windowIdData.WindowIds.Any(windowId => windowId.Trim() == currentPageWindowId.Trim());
-
-if (isMatch)
-{
-// Found a match
-Console.WriteLine($"Match found for {currentPageWindowId}");
-// Perform actions for a match, if needed
-}
-else
-{
-if (currentPageWindowId == applications)
-{
-Console.WriteLine($"Match found for {currentPageWindowId}");
-}
-else
-{
-// No match
-NavigationManager.NavigateTo("/index", true);
-Console.WriteLine($"No match for {currentPageWindowId}");
-// Perform actions for non-matching items, if needed
-}
-
-}
-}
-
-}
-else
-{
-Console.WriteLine("Error deserializing or empty WindowIds array.");
-} *@
+            // Get the stored windowIds
+            var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "winObject");
+            // Assuming this code is inside an asynchronous method or event handler
             if (await IsUserAuthenticated())
             {
                 // Get the current page windowId (replace this with your logic to get the current windowId)
@@ -290,27 +259,17 @@ Console.WriteLine("Error deserializing or empty WindowIds array.");
 
                 // Get the stored applications
                 var applications = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
-
-                // Get the stored windowIds
-                var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "winObject");
-
-                    // Deserialize the stored windowIds
-                @* var windowIdData = JsonConvert.DeserializeObject<WindowIdData>(jsons); *@
+                // Deserialize the stored windowIds
                 var windowIdData = JsonConvert.DeserializeObject<WindowIdData>(jsons);
-
-
                 // Check if the deserialization was successful and windowIds exist
                 if (windowIdData != null && windowIdData.winObject != null)
                 {
-                    // Check if currentPageWindowId exists in windowIdData.WindowIds
                     bool isMatch = windowIdData.winObject.Any(windowId => windowId.Trim() == currentPageWindowId.Trim());
 
                     if (!isMatch && currentPageWindowId != applications)
                     {
-                        // No match, redirect to "/index"
                         NavigationManager.NavigateTo("/index", true);
                         Console.WriteLine($"No match for {currentPageWindowId}");
-                        // Perform actions for non-matching items, if needed
                     }
                 }
                 else
@@ -318,6 +277,12 @@ Console.WriteLine("Error deserializing or empty WindowIds array.");
                     Console.WriteLine("Error deserializing or empty WindowIds array.");
                 }
             }
+            else
+            {
+                // ลบ token จาก localStorage
+                await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+            }
+            StateHasChanged();
         }
     }
     private async Task<bool> IsUserAuthenticated()
@@ -342,7 +307,6 @@ Console.WriteLine("Error deserializing or empty WindowIds array.");
     public class WindowIdData
     {
         public List<string> winObject { get; set; }
-        public string Application { get; set; }
     }
     private void AppAll()
     {

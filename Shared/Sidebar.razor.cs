@@ -93,7 +93,7 @@ namespace FinanceApp.Shared
                             // Console.WriteLine($"isSuccess: {windowPermission.isSuccess}"); 
                             // Console.WriteLine($"message: {windowPermission.message}"); 
                             // Console.WriteLine($"win_object: {windowPermission.win_object}");
-                            Console.WriteLine($"win_description: {windowPermission.win_description}");
+                            // Console.WriteLine($"win_description: {windowPermission.win_description}");
                             // เพิ่ม PageDetails เข้าไปใน ContentList
                             ContentList.Add(windowPermission);
                         }
@@ -108,9 +108,10 @@ namespace FinanceApp.Shared
                 }
                 else
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
-                    // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    NavigationManager.NavigateTo("/login", true);
+                    // await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                    // // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                    // NavigationManager.NavigateTo("/login", true);
                 }
             }
             catch (Exception ex)
@@ -121,7 +122,7 @@ namespace FinanceApp.Shared
         public class WindowIdData
         {
             public List<string> winObject { get; set; }
-            public string Application { get; set; }
+            // public string Application { get; set; }
         }
 
         private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
@@ -135,7 +136,7 @@ namespace FinanceApp.Shared
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
 
                     var json = JsonConvert.SerializeObject(payload);
-                    Console.WriteLine($"payload content :{payload}");
+                    Console.WriteLine($"payload content :{json}");
 
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");

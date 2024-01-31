@@ -138,8 +138,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public int? checkclear_status { get; set; }
         /// <summary> 
         // public string coop_id { get; set; }
-        // public string memcoop_id { get; set; }
-        public string memcoop_id = "065001";
+        public string memcoop_id { get; set; }
+        // public string memcoop_id = "065001";
         public string? deptaccount_No_fild { get; set; }
         public string? deptaccountNo_fild { get; set; }
         public string? deptaccount_name_fild { get; set; }

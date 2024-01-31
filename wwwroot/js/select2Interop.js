@@ -1,3 +1,3 @@
-window.initializeSelect2 = (elementId) => {
+window.initializeFinanceApp = (elementId) => {
     $(`#${elementId}`).select2();
 };

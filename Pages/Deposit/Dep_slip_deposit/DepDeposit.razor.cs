@@ -305,7 +305,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         }
         private async Task PerformSearch()
         {
-            isLoading = true;
+            // isLoading = true;
             if (string.IsNullOrEmpty(deptno_format ?? deptaccount_no))
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
@@ -315,7 +315,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 await CallApi();
             }
 
-            isLoading = false;
+            // isLoading = false;
         }
 
         private async Task CallApi()

@@ -9,7 +9,7 @@ using Radzen;
 using System.IO;
 using Microsoft.AspNetCore.Components.Web;
 using System.Net.Http.Headers;
-
+using System.Globalization;
 
 namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 {
@@ -35,7 +35,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? entry_id { get; set; }
         public string? machine_id { get; set; }
         public string? tofrom_accid { get; set; }
-        public DateTime? operate_date { get; set; }
+        public DateTime operate_date { get; set; }
         public DateTime? entry_date { get; set; }
         public string? operate_code { get; set; }
         public DateTime? calint_from { get; set; }
@@ -62,7 +62,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? remark { get; set; }
         public string? bank { get; set; }
         public string? branch { get; set; }
-        public string? due_date { get; set; }
+        public DateTime due_date { get; set; }
         public string? deptpassbook_no { get; set; }
         public string? condforwithdraw { get; set; }
         public string? passbook_flag { get; set; }
@@ -130,8 +130,15 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         private List<ReqAccDetails> depOfGetAccDetails;
 
         private string DepttypeValue;
-        private string Valueselecte;
+        private string selectedValue;
+        private string AcctypeValue;
+        private string selectAcctype;
+        private string TofromaccValue;
+        private string selectTofromacc;
+
         private string recpPayTypeCode;
+        private string selectRecpPayType;
+        private bool success_status = false;
         public async Task<(string coopControl, string userName, string fullName, string save_status, string check_flag)> GetUserData()
         {
             string coopControl = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "coopControl");
@@ -208,20 +215,88 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 isLoading = false;
             }
         }
-
+        private async Task RecpPayTypeChanged(ChangeEventArgs e)
+        {
+            string[] values = e.Value.ToString().Split('|');
+            recpPayTypeCode = values[0];
+            selectRecpPayType = values[0]+ "-" +values[1];
+            Console.WriteLine($" Recp Pay Type Code: {selectRecpPayType}");
+            // if (recpPayTypeCode == "DEN")
+            // {
+            //     GetBabk();
+            //     BankBranch();
+            // }
+        }
         private async Task DepttypeChanged(ChangeEventArgs e)
         {
-            DepttypeValue = e.Value.ToString();
+            string[] values = e.Value.ToString().Split('|');
+            DepttypeValue = values[0];
+            selectedValue = values[1];
+            // DepttypeValue = e.Value.ToString();
             depttype_code = DepttypeValue;
-            Console.WriteLine($"Depttype Code: {DepttypeValue}");
+            Console.WriteLine($"selectedValue : {selectedValue}");
         }
-        private void AnotherFunction()
+        private async Task AcctypeChanged(ChangeEventArgs e)
+        {
+            string[] values = e.Value.ToString().Split('|');
+            AcctypeValue = values[0];
+            selectAcctype = values[0]+"-"+ values[1];
+            account_type = AcctypeValue;
+            DepttypeValue = e.Value.ToString();
+            Console.WriteLine($"selectAcctype : {selectAcctype}");
+        }
+        private async Task TofromaccChanged(ChangeEventArgs e)
+        {
+            string[] values = e.Value.ToString().Split('|');
+            TofromaccValue = values[0];
+            selectTofromacc = values[0]+ "-" +values[1];
+            Console.WriteLine($" Recp Pay Type Code: {selectTofromacc}");
+            // if (recpPayTypeCode == "DEN")
+            // {
+            //     GetBabk();
+            //     BankBranch();
+            // }
+        }
+    private void AnotherFunction()
         {
             GetBank();
             BankBranch();
             GetBookNo();
             Status();
+            // FormatDate(operate_date);
+            // FormatDate(due_date);
+            FormatDate();
         }
+        private void FormatDate()
+        {
+            // Get the current user's culture
+            CultureInfo userCulture = CultureInfo.CurrentCulture;
+
+            // Format the date using the user's culture
+            formattedDate = operate_date.ToString("d", userCulture);
+            Console.WriteLine("operate_date");
+        }
+        // private void FormatDate(DateTime dateToFormat)
+        // {
+        //     // ดึงข้อมูลวัฒนธรรมปัจจุบันของผู้ใช้
+        //     CultureInfo userCulture = CultureInfo.CurrentCulture;
+
+        //     // จัดรูปแบบวันที่โดยใช้วัฒนธรรมของผู้ใช้
+        //     if (dateToFormat == operate_date)
+        //     {
+        //         formattedOperateDate = dateToFormat.ToString("d", userCulture);
+        //         Console.WriteLine("Formatted Operate Date: " + formattedOperateDate);
+        //     }
+        //     else if (dateToFormat == due_date)
+        //     {
+        //         formattedDueDate = dateToFormat.ToString("d", userCulture);
+        //         Console.WriteLine("Formatted Due Date: " + formattedDueDate);
+        //     }
+        // }
+
+        private string formattedDate;
+        private string formattedOperateDate;
+        private string formattedDueDate;
         private decimal deptslipAmt { get; set; }
         private string deptslipNetamt { get; set; }
         private string DeptslipAmt { get; set; }
@@ -607,13 +682,13 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             }
         }
 
-        private async Task HandleEnterKeyPress(KeyboardEventArgs e)
-        {
-            if (e.Code == "Enter")
-            {
-                await PerformSearch();
-            }
-        }
+        // private async Task HandleEnterKeyPress(KeyboardEventArgs e)
+        // {
+        //     if (e.Code == "Enter")
+        //     {
+        //         await PerformSearch();
+        //     }
+        // }
         private async Task PerformSearch()
         {
             isLoading = true;
@@ -693,16 +768,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 Console.WriteLine(ex.Message.ToString());
             }
         }
-        private async Task RecpPayTypeChanged(ChangeEventArgs e)
-        {
-            recpPayTypeCode = e.Value.ToString();
-            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}");
-            // if (recpPayTypeCode == "DEN")
-            // {
-            //     GetBabk();
-            //     BankBranch();
-            // }
-        }
+       
         private async Task GetBookNo()
         {
             try
@@ -803,6 +869,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 string machine_address = GetMachineAddress();
                 string hostName = Dns.GetHostName();
                 var hostEntry = Dns.GetHostEntry(hostName);
+               int MonthintpayMeth = type_monthintpay;
                 isLoading = true;
                 foreach (var item in repReqdepoit)
                 {
@@ -827,7 +894,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         bankbranch_code = item.bankbranch_code,
                         entry_id = full_name,
                         machine_id = machine_id,
-                        tofrom_accid = item.tofrom_accid,
+                        tofrom_accid = TofromaccValue ?? item.tofrom_accid,
                         operate_date = DateTime.Today,
                         entry_date = DateTime.Today,
                         operate_code = item.operate_code,
@@ -849,7 +916,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         upint_time = item.upint_time,
                         deptaccount_ename = item.deptaccount_ename,
                         account_type = item.account_type,
-                        monthintpay_meth = item.monthintpay_meth,
+                        monthintpay_meth = (type_monthintpay != null) ? type_monthintpay :  item.monthintpay_meth,
                         traninttype_code = item.traninttype_code,
                         tran_deptacc_no = tran_deptacc_no,
                         dept_tranacc_name = item.dept_tranacc_name,
@@ -909,6 +976,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                         var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
+                        success_status = true;
+                        if (success_status)
+                        {
+                            currentStep++;
+                        }
                     }
                     else
                     {
@@ -921,6 +993,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             }
             catch (Exception ex)
             {
+                success_status = true;
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
                 Console.WriteLine(ex.ToString());
             }

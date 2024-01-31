@@ -274,6 +274,224 @@ body[b-vqh5auax0z] {
     text-align: center;
   }
 }
+/* _content/FinanceApp/Pages/Deposit/Dep_acceptchq/DepAcceptchq.razor.rz.scp.css */
+.form-check[b-4xv9h1h2qf] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-4xv9h1h2qf] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-4xv9h1h2qf] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-4xv9h1h2qf] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-4xv9h1h2qf] {
+  padding: 10px;
+}
+
+.profile-pic img[b-4xv9h1h2qf] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-4xv9h1h2qf] {
+  margin-top: 5px;
+}
+
+.separator[b-4xv9h1h2qf] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-4xv9h1h2qf] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-4xv9h1h2qf] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-4xv9h1h2qf] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-4xv9h1h2qf] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-4xv9h1h2qf] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-4xv9h1h2qf] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-4xv9h1h2qf] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-4xv9h1h2qf] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-4xv9h1h2qf] {
+    margin-top: -35px;
+  }
+}
+
+/* _content/FinanceApp/Pages/Deposit/Dep_apvchq/DepApvchq.razor.rz.scp.css */
+.form-check[b-9aelt725ff] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-9aelt725ff] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-9aelt725ff] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-9aelt725ff] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-9aelt725ff] {
+  padding: 10px;
+}
+
+.profile-pic img[b-9aelt725ff] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-9aelt725ff] {
+  margin-top: 5px;
+}
+
+.separator[b-9aelt725ff] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-9aelt725ff] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-9aelt725ff] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-9aelt725ff] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-9aelt725ff] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-9aelt725ff] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-9aelt725ff] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-9aelt725ff] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-9aelt725ff] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-9aelt725ff] {
+    margin-top: -35px;
+  }
+}
+
 /* _content/FinanceApp/Pages/Deposit/Dep_conteck/DepConteck.razor.rz.scp.css */
 .form-check[b-fxyna2yoyt] {
   display: block;
@@ -488,6 +706,115 @@ body[b-vqh5auax0z] {
 }
 @media (max-width: 575px) {
   .row .mt-button[b-887kgmytr6] {
+    margin-top: -35px;
+  }
+}
+
+/* _content/FinanceApp/Pages/Deposit/Dep_impexcel/DepImpexcel.razor.rz.scp.css */
+.form-check[b-mn04jopnig] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-mn04jopnig] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-mn04jopnig] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-mn04jopnig] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-mn04jopnig] {
+  padding: 10px;
+}
+
+.profile-pic img[b-mn04jopnig] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-mn04jopnig] {
+  margin-top: 5px;
+}
+
+.separator[b-mn04jopnig] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-mn04jopnig] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-mn04jopnig] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-mn04jopnig] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-mn04jopnig] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-mn04jopnig] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-mn04jopnig] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-mn04jopnig] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-mn04jopnig] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-mn04jopnig] {
     margin-top: -35px;
   }
 }
@@ -1042,6 +1369,224 @@ body[b-vqh5auax0z] {
 }
 @media (max-width: 575px) {
   .row .mt-button[b-38i8sy31j1] {
+    margin-top: -35px;
+  }
+}
+
+/* _content/FinanceApp/Pages/Deposit/Dep_trndeptpx/DepTrndeptpx.razor.rz.scp.css */
+.form-check[b-hx88lo8j4u] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-hx88lo8j4u] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-hx88lo8j4u] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-hx88lo8j4u] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-hx88lo8j4u] {
+  padding: 10px;
+}
+
+.profile-pic img[b-hx88lo8j4u] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-hx88lo8j4u] {
+  margin-top: 5px;
+}
+
+.separator[b-hx88lo8j4u] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-hx88lo8j4u] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-hx88lo8j4u] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-hx88lo8j4u] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-hx88lo8j4u] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-hx88lo8j4u] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-hx88lo8j4u] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-hx88lo8j4u] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-hx88lo8j4u] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-hx88lo8j4u] {
+    margin-top: -35px;
+  }
+}
+
+/* _content/FinanceApp/Pages/Deposit/Dep_truncate/DepTruncate.razor.rz.scp.css */
+.form-check[b-hcjoanjbgu] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-hcjoanjbgu] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-hcjoanjbgu] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-hcjoanjbgu] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-hcjoanjbgu] {
+  padding: 10px;
+}
+
+.profile-pic img[b-hcjoanjbgu] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-hcjoanjbgu] {
+  margin-top: 5px;
+}
+
+.separator[b-hcjoanjbgu] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-hcjoanjbgu] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-hcjoanjbgu] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-hcjoanjbgu] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-hcjoanjbgu] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-hcjoanjbgu] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-hcjoanjbgu] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-hcjoanjbgu] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-hcjoanjbgu] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-hcjoanjbgu] {
     margin-top: -35px;
   }
 }

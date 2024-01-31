@@ -1,4 +1,5 @@
 @inherits LayoutComponentBase
+@using Newtonsoft.Json;
 <style>
     .loading-backdrop {
         position: fixed;
@@ -136,7 +137,7 @@
         <div class="header_center">
             <div id="header-content">
                 <img src="https://www.freepnglogos.com/uploads/starbucks-logo-png-transparent-0.png" alt="Logo">
-                <p>Your Website Name</p>
+                <p>@Coop_name</p>
             </div>
         </div>
         <div class="header_right">
@@ -195,11 +196,25 @@
 
     [Inject]
     private NavigationManager NavigationManager { get; set; }
+    private string Coop_name;
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
+            string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+            if (baseType == "1")
+            {
+                Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+            }
+            else if (baseType == "1")
+            {
+                Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+            }
+            else
+            {
+                Coop_name = "error";
+            }
             // ตรวจสอบว่ามี token หรือไม่
             string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
             if (string.IsNullOrEmpty(bearerToken))
@@ -209,8 +224,22 @@
                 // ถ้าไม่มี token ให้เด้งไปยังหน้า login
                 NavigationManager.NavigateTo("/login", true);
             }
+            StateHasChanged();
         }
     }
+ 
+    @* private async Task BaseType()
+    {
+        string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+        if (baseType=="1"){
+            Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+        }else if(baseType=="1"){
+             Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+        }else{
+            Coop_name = "error";
+        }
+         
+    }*@
     private void AppAll()
     {
         NavigationManager.NavigateTo("index");

@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.JSInterop;
 using System.Text;
 using System.Net.Http;
-
-
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Components;
 
 public class LoginService : IApiService
 {
@@ -24,7 +24,11 @@ public class LoginService : IApiService
         _state = state;
 
     }
-    public async Task<LoginResult> Login(string user_name, string password)
+    [Inject]
+    public IJSRuntime JSRuntime { get; set; }
+
+
+    public async Task<LoginResult> Login(string user_name, string password, string selectedDatabase)
     {
         var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
         var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
@@ -34,11 +38,12 @@ public class LoginService : IApiService
             coop_id = "065001",
             user_name = user_name,
             password = password,
+            base_type = selectedDatabase,
         };
         var reqUrl = ApiClient.Paths.UserLogin;
         var response = await _apiProvider.PostAsync(reqUrl, payload);
         Console.WriteLine($"jsonData : {payload}");
-        // Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
+        Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
 
         if (response.IsSuccessStatusCode)
         {
@@ -47,16 +52,19 @@ public class LoginService : IApiService
             Console.WriteLine($"isSuccess: {loginResponse.isSuccess}");
             _state.SetAmsecUseappss(loginResponse.content.amsecUseappss);
             // getAmsecUseappss = new List<AmsecUseappss>();
-            // getAmsecUseappss.AddRange(loginResponse.content.amsecUseappss);
-            // foreach (var item in getAmsecUseappss)
-            // {
-            //     Console.WriteLine($"amsecUseappss: {item.application_name}");
-            // }
+            //     // getAmsecUseappss.AddRange(loginResponse.content.amsecUseappss);
+            //     // foreach (var item in getAmsecUseappss)
+            //     // {
+            //     //     Console.WriteLine($"amsecUseappss: {item.application_name}");
+            //     // }
             if (loginResponse != null)
             {
                 if (loginResponse.isSuccess)
                 {
-                    // Console.WriteLine($"amsecUseappssList: {getAmsecUseappss}");
+                    Console.WriteLine($"isSuccess: {loginResponse.isSuccess}");
+                    Console.WriteLine($"message: {loginResponse.message}");
+                    Console.WriteLine($"accessToken: {loginResponse.content.accessToken}");
+                    Console.WriteLine($"refreshToken: {loginResponse.content.refreshToken}");
                     return new LoginResult
                     {
                         isSuccess = true,
@@ -103,6 +111,33 @@ public class LoginService : IApiService
                 RESPONSE_MESSAGE = "Username หรือ password ไม่ถูกต้อง."
             };
         }
+    }
+
+    private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
+    {
+        try
+        {
+            string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                var json = JsonConvert.SerializeObject(payload);
+                Console.WriteLine($"payload content :{json}");
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
+                Console.WriteLine($"json content :{json},{content}");
+                return await httpClient.PostAsync(apiUrl, content);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            throw;
+        }
+
     }
 }
 

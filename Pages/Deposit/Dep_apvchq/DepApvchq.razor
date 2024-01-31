@@ -1,0 +1,287 @@
+﻿@page "/dept/ws_dep_apvchq"
+@page "/ws_dep_apvchq"
+@using FinanceApp.Models;
+@using Newtonsoft.Json
+@using Radzen.Blazor
+@using System.Runtime.InteropServices.JavaScript
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@using System.Linq.Dynamic.Core
+@inject NotificationService NotificationService
+@using System.Globalization
+@using System.Text.Json
+@using System.ComponentModel
+@using Microsoft.AspNetCore.Components
+
+<style>
+	.icon-search {
+		display: inline-flex !important;
+		justify-content: space-evenly !important;
+		align-items: center !important;
+		position: relative !important;
+		top: 3px !important;
+		padding: 15px !important;
+		flex-wrap: nowrap !important;
+	}
+
+	.table> :not(caption)>*>* {
+		padding: 0.2rem 0.2rem;
+	}
+
+	.save_top {
+		border: #adacac solid 1px;
+	}
+
+	.header-right {
+		text-align: start;
+	}
+
+	.header-left {
+		text-align: end;
+	}
+
+	.card {
+		background-color: #f9f9f9;
+	}
+
+	.format-money {
+		text-align: right;
+	}
+
+	.rz-fileupload-buttonbar {
+		background-color: transparent;
+	}
+
+	.rz-fileupload-files {
+		font-size: 12px;
+	}
+
+	.rz-card {
+		padding: 2px;
+	}
+</style>
+<div class="header-page">
+	<div class="row-header d-flex justify-content-between ">
+		<div class="header-left">
+			<h4>ระบบ เงินฝาก - ผ่านเช็ค</h4>
+		</div>
+		<div class="header-right">
+			<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
+		</div>
+	</div>
+</div>
+@* @if (isLoading)
+{ *@
+@* <div
+style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%;
+justify-content: center; align-items: center; z-index: 90;">
+<div class="spinner-border text-primary" role="status">
+<span class="visually-hidden">Loading...</span>
+</div>
+</div> *@
+@* }
+else
+{
+@if (repReqdepoit != null)
+{ *@
+<div class="card body-page">
+	<div class="row" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+		<div class="row">
+			<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">แสดงรายละเอียดข้อมูลวันที่</label>
+				<RadzenDatePicker @bind-Value=@operate_date Name="operate_date" DateFormat="dd/MM/yyyy" />
+			</div>
+			<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+				<button type="button" class="btn btn-outline-secondary" @onclick="Search">ดึงข้อมูล</button>
+			</div>
+		</div>
+		@* <div class="row"> *@
+		<div class="row mt-2"
+			style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px; padding: 0px;">
+			<h6>รายการ</h6>
+			<div class="row">
+				<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="180px"
+					AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+					FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+					AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+					<Columns>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title="ลำดับ"
+							Property="prnc_no">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title="ธนาคาร "
+							Property="prnc_bal">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title="สาขา "
+							Property="prncslip_amt">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="11%" Title="เลขที่เช็ค "
+							Property="prnc_date">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="11%" Title=" วันที่นำส่ง  "
+							Property="prnc_date">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="12%" Title=" วันที่หน้าเช็ค  "
+							Property="prnc_date">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="15%" Title=" จำนวนเงิน  "
+							Property="prnc_date">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="11%" Title=" สถานะเช็ค  "
+							Property="prnc_date">
+						</RadzenDataGridColumn>
+						<RadzenDataGridColumn TItem="Models.AccountDetails" Width="10%" Title=" วันที่ผ่าน  "
+							Property="prnc_date">
+						</RadzenDataGridColumn>
+
+					</Columns>
+				</RadzenDataGrid>
+			</div>
+		</div>
+		@* </div> *@
+		<div class="row">
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">รวม</label>
+				<div class="form-group ">
+					<div class="input-group">
+						<input type="text" class="format-money form-control" style="color: green;" placeholder="0.00"
+							Name="s_cheque_amt" value="@deptaccount_no" />
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for=""> รวมผ่านเช็ค </label>
+				<div class="form-group ">
+					<div class="input-group">
+						<input type="text" class="format-money form-control" style="color: red;" placeholder="0.00"
+							Name="s_checkclear_amt" value="@deptaccount_no" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<label class="form-label" for="">รายละเอียด</label>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for=""> หมายเลขบัญชี</label>
+
+				<div class="input-group">
+					<input type="text" class="form-control" Name="deptaccount_no" value="@deptaccount_no" />
+				</div>
+
+			</div>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">ชื่อบัญชี</label>
+
+				<div class="input-group">
+					<input type="text" class="form-control" Name="deptaccount_name" value="@deptaccount_no" />
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">ประเภทเงินฝาก</label>
+				<div class="input-group">
+					<input type="text" class="form-control" Name="deptmain_desc" value="@deptaccount_no" />
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">กลุ่มเงินฝาก</label>
+				@* <div class="input-group">
+					<input type="text" class="form-control" Name="deptgroup_code" value="@deptaccount_no" />
+				</div> *@
+				<select class="form-select" @bind="selectedMonth" name="deptgroup_code" id="" style="text-align:center">
+					<option value="1">มกราคม</option>
+					<option value="2"> กุมภาพันธ์ </option>
+					<option value="3"> มีนาคม </option>
+					<option value="4"> เมษายน </option>
+					<option value="5"> พฤษภาคม </option>
+					<option value="6"> มิถุนายน </option>
+					<option value="7"> กรกฎาคม </option>
+					<option value="8"> สิงหาคม </option>
+					<option value="9"> กันยายน </option>
+					<option value="10"> ตุลาคม </option>
+					<option value="11"> พฤศจิกายน </option>
+					<option value="12"> ธันวาคม </option>
+				</select>
+			</div>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for="">ธนาคาร </label>
+				<div class="input-group">
+					<input type="text" class="form-control" Name="bank_desc" value="@deptaccount_no" />
+				</div>
+			</div>
+			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+				<label class="form-label" for=""> ธนาคารสาขา </label>
+				<div class="input-group">
+					<input type="text" class="form-control" Name="branch_name" value="@deptaccount_no" />
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@* }
+else
+{ *@
+<div class="card body-page">
+	<div class="from">
+		@* @foreach (var Item in repReqdepoit)
+		{ *@
+		@* <div class="row" style="margin-left: calc(var(--bs-gutter-x) * .0);margin-bottom: 15px;"> *@
+		@* <div class="row mt-2"
+		style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom:
+		15px;"> *@
+
+	</div>
+
+	@* } *@
+</div>
+@* } *@
+@* } *@
+@code {
+	@* private DateTime operate_date = DateTime.Now;
+
+	// Function to convert the date to Buddhist Era format
+	private string ConvertToBuddhistEra(DateTime date)
+	{
+		int buddhistYear = date.Year + 543;
+		return $"{date.Day}/{date.Month}/{buddhistYear}";
+	} *@
+	private string selectedMonth;
+
+	protected override void OnInitialized()
+	{
+		// Get the current month (1-12)
+		var currentMonth = DateTime.Now.Month;
+		// Set the selected value
+		selectedMonth = currentMonth.ToString();
+	}
+	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+
+	private async Task OnBankBranchChanged(ChangeEventArgs e)
+	{
+		BankBranchValues = e.Value.ToString();
+	}
+	private void OnBankBranchSelectChanged(ChangeEventArgs e)
+	{
+		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
+		bankbranch_code = e.Value.ToString();
+		BankBranchValues = bankbranch_code;
+	}
+	private async Task OnGetBankChanged(ChangeEventArgs e)
+	{
+		BankValues = e.Value.ToString();
+		Console.WriteLine($"BankValues: {BankValues}");
+	}
+	private void OnGetBankSelectChanged(ChangeEventArgs e)
+	{
+		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
+		bank_code = e.Value.ToString();
+		Console.WriteLine($"BankValues: {bank_code}");
+		BankValues = bank_code;
+
+	}
+	private bool chk_tranacc;
+	private bool chk_deptacc;
+	private bool chk_deptpassbookno;
+}
