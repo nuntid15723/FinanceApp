@@ -163,18 +163,26 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private bool isLoadingModals;
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
+        private bool success_status = false;
+        private int currentStep = 0;
+        public string? SaveStatus { get; set; }
+        public string? group_itemtype { get; set; }
+
+
         public List<GetBank>? getBank { get; set; }
         public List<GetDeptMaintype>? getDeptMaintype { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
-        public async Task<(string coopControl, string userName, string fullName)> GetUserData()
+        public async Task<(string coopControl, string userName, string fullName, string save_status, string check_flag)> GetUserData()
         {
             string coopControl = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "coopControl");
             string userName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "user_name");
             string fullName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "fullName");
+            string save_status = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "save_status");
+            string checkFlag = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "check_flag");
 
-            Console.WriteLine($"coopControl: {coopControl}, userName: {userName}, fullName: {fullName}");
-
-            return (coopControl, userName, fullName);
+            Console.WriteLine($"coopControl: {coopControl}, userName: {userName}, fullName: {fullName}, SaveStatus: {save_status}, checkFlag: {checkFlag}");
+            SaveStatus = save_status;
+            return (coopControl, userName, fullName, SaveStatus, checkFlag);
         }
         private async Task DeptMaintype(ChangeEventArgs e)
         {
@@ -190,7 +198,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name) = await GetUserData();
+                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -215,7 +223,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name) = await GetUserData();
+                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -243,7 +251,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name) = await GetUserData();
+                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -270,7 +278,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //RetriveDataFromDeptNo
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
-            (string coop_id, string user_name, string full_name) = await GetUserData();
+            (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
 
             try
             {
@@ -402,7 +410,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         }
         private async Task CallApi()
         {
-            (string coop_id, string user_name, string full_name) = await GetUserData();
+            (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
             try
             {
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
@@ -412,12 +420,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     coop_id = coop_id,
                     memcoop_id = coop_id,
                     deptno_format = deptno_format,
-                    entry_date = entry_date,
+                    entry_date = DateTime.Today,
                     deptitem_group = deptitem_group ?? "WID",
                     reqappl_flag = reqappl_flag ?? 0,
                 };
-                // var json = JsonConvert.SerializeObject(depOfGetAccount);
-                // Console.WriteLine(json);
+                var json = JsonConvert.SerializeObject(depOfGetAccount);
+                Console.WriteLine(json);
                 // var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
                 // var response = await httpClient.PostAsync(apiUrl, content);
@@ -436,8 +444,14 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         Console.WriteLine($"API request failed: {datadetail}");
                         AnotherFunction();
                     }
+                    else
+                    {
+                        var Error = JsonConvert.SerializeObject(apiResponse.message);
+
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Error, Duration = 5000 });
+
+                    }
                 }
-                // โค้ดเกี่ยวกับการเรียก API ที่เหมือนเดิม
             }
             catch (Exception ex)
             {
@@ -451,7 +465,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //     try
         //     {
         //         isLoadingModals = true;
-        //         (string coop_id, string user_name, string full_name) = await GetUserData();
+        //         (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
         //         var depOfGetAccount = new AccountDetails
         //         {
         //             coop_id = coop_id,
@@ -523,7 +537,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private async Task SearchOfGetAcc()
         {
             isLoadingModals = true;
-            (string coop_id, string user_name, string full_name) = await GetUserData();
+            (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
             var depOfGetAccount = new AccountDetails
             {
                 coop_id = coop_id,
@@ -637,7 +651,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
         private string cashTypeValue;
         private string Valueselecte;
-        private string Recppaytype_code;
+        private string Recppaytype_code; 
+        private string selectedRecppaytype; 
         private string recpPayTypeCode { get; set; }
         private string bankaccount_name { get; set; }
         private string check_no { get; set; }
@@ -647,17 +662,18 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private string deptslipNetamt { get; set; }
         private string DeptslipAmt { get; set; }
         private decimal deptslipAmt { get; set; }
+        private decimal book_balance { get; set; }
         private async Task RecpPayTypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('_');
-            string[] valuestoFo = e.Value.ToString().Split('|');
             selectedValue = values[0];
             recpPayTypeCode = values[1];
-            cashTypeValue = values[2];
+            selectedRecppaytype = values[1]+" - "+values[2];
             bookCode = selectedValue;
             string[] toFromaccId1 = bookCode.Split('|');
+            cashTypeValue = toFromaccId1[0];
             valuetoFromaccId = toFromaccId1[1];
-            Console.WriteLine($"Cash Type: {cashTypeValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{valuetoFromaccId}");
+            Console.WriteLine($"Cash Type: {cashTypeValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{valuetoFromaccId},selectedRecppaytype:{selectedRecppaytype}");
             if (recpPayTypeCode == "DEN")
             {
                 GetBank();
@@ -694,7 +710,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         // {
         //     try
         //     {
-        //         (string coop_id, string user_name, string full_name) = await GetUserData();
+        //         (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
         //         string hostName = Dns.GetHostName();
         //         var hostEntry = Dns.GetHostEntry(hostName);
         //         isLoading = true;
@@ -905,7 +921,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name) = await GetUserData();
+                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
 
                 // หาที่อยู่ IP ของเครื่อง
                 string machine_address = GetMachineAddress();
@@ -933,6 +949,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     if (response.IsSuccessStatusCode)
                     {
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        success_status = true;
+                        if (success_status)
+                        {
+                            this.currentStep = 2;
+                            await InvokeAsync(() => StateHasChanged());
+                        }
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
                     }

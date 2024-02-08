@@ -238,13 +238,20 @@
             Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
         }
     }
+    @* protected override async Task OnInitializedAsync()
+    {
+        // เรียกใช้ JavaScript Interop เพื่อโหลดไฟล์ sessionInterop.js
+        await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
+    } *@
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
             await BaseType();
-
+            await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
             // Get the stored windowIds
             var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "winObject");
             // Assuming this code is inside an asynchronous method or event handler

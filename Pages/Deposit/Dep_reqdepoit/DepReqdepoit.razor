@@ -3,6 +3,7 @@
 @page "/deposit"
 @using FinanceApp.Models;
 @using Newtonsoft.Json
+@using Newtonsoft.Json.Linq;
 @using Radzen.Blazor
 @using System.Runtime.InteropServices.JavaScript
 @using Microsoft.AspNetCore.Components
@@ -16,6 +17,7 @@
 @using System.Text.Json
 @using System.ComponentModel
 @using Microsoft.AspNetCore.Components
+@using System.Net;
 @inherits LayoutComponentBase
 <style>
 	.icon-search {
@@ -96,24 +98,27 @@
 		background-color: #e9ecef;
 		opacity: 1;
 	}
-	.label-group{
+
+	.label-group {
 		margin-left: 10px;
 	}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
 		<div class="header-left">
-			<h4>ระบบ เงินฝาก - หน้าจอเปิดบัญชี @currentStep</h4>
+			<h4>ระบบ เงินฝาก - หน้าจอเปิดบัญชี</h4>
 		</div>
 		<div class="header-right">
-			@if(currentStep == 1){
-			<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync"
-				disabled="@(!IsSaveEnabled)" />
-				}
-			else if(currentStep == 2){
+			@if (currentStep != 2)
+			{
+				<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync"
+					disabled="@(!IsSaveEnabled)" />
+			}
+			else if (currentStep == 2)
+			{
 				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@SaveDataAsync"
-				disabled="@(!success_status)" />
-				}
+					disabled="@(!success_status)" />
+			}
 		</div>
 	</div>
 </div>
@@ -130,7 +135,7 @@ else
 {
 	<div class="card body-page">
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
-			<RadzenSteps Change="@OnChange" CanChange="@CanChange"  @bind-Value="currentStep">
+			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
 				<Steps>
 					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
 						<RadzenRow>
@@ -190,7 +195,7 @@ else
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">ประเภทบุคคล</label>
 																		<select class="form-select" @bind="membcat_code"
-																			aria-label="Default select example">
+																			>
 																			<option selected>--เลือก--</option>
 																			<option Value="10">สามัญ</option>
 																			<option Value="20">สมทบ</option>
@@ -351,7 +356,7 @@ else
 																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																						<label class="form-label" for="">ประเภทบุคคล</label>
 																						<select class="form-select" @bind="membcat_code"
-																							aria-label="Default select example">
+																							>
 																							<option selected>--เลือก--</option>
 																							<option Value="10">สามัญ</option>
 																							<option Value="20">สมทบ</option>
@@ -455,7 +460,7 @@ else
 																</div>
 															</div>
 															<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-																<button type="btn" class="btn btn-outline-secondary">ค้นหา</button>
+																<button type="btn" class="btn btn-outline-secondary" @onsubmit="PerformSearch">ค้นหา</button>
 															</div>
 															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">ประเภทบัญชี</label>
@@ -579,7 +584,7 @@ else
 														<div class="row">
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">ระยะเวลาการรับด/บ</label>
-																<select class="form-select" @bind="Item.upint_time" aria-label="Default select example">
+																<select class="form-select" @bind="Item.upint_time" >
 																	<option Value="1">ตามประเภท</option>
 																	<option Value="2">รายเดือน</option>
 																	<option Value="3">ราย 3 เดือน</option>
@@ -619,7 +624,7 @@ else
 																	</div>
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">การฝากรายเดือน</label>
-																		<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
+																		<select class="form-select" @bind="Item.deptmonth_status" >
 																			<option Value="0">ไม่ต้องการฝาก</option>
 																			<option Value="1">ต้องการฝาก</option>
 																		</select>
@@ -844,7 +849,7 @@ else
 																	</div>
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">การฝากรายเดือน</label>
-																		<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
+																		<select class="form-select" @bind="Item.deptmonth_status" >
 																			<option Value="0">ไม่ต้องการฝาก</option>
 																			<option Value="1">ต้องการฝาก</option>
 																		</select>
@@ -1064,7 +1069,7 @@ else
 																</div>
 																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">การฝากรายเดือน</label>
-																	<select class="form-select" @bind="Item.deptmonth_status" aria-label="Default select example">
+																	<select class="form-select" @bind="Item.deptmonth_status" >
 																		<option Value="0">ไม่ต้องการฝาก</option>
 																		<option Value="1">ต้องการฝาก</option>
 																	</select>
@@ -1203,7 +1208,7 @@ else
 														<div class="row">
 															@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">เลือกกลุ่มงาน</label>
-													<select class="form-select" @bind="membcat_code" aria-label="Default select example">
+													<select class="form-select" @bind="membcat_code" >
 													<option selected>--เลือก--</option>
 													<option Value="10">สามัญ</option>
 													<option Value="20">สมทบ</option>
@@ -1212,7 +1217,7 @@ else
 													</div>
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">เลือกรูปแบบข้อมูล</label>
-													<select class="form-select" @bind="membcat_code" aria-label="Default select example">
+													<select class="form-select" @bind="membcat_code" >
 													<option selected>--เลือก--</option>
 													<option Value="10">สามัญ</option>
 													<option Value="20">สมทบ</option>
@@ -1274,7 +1279,7 @@ else
 									</div>
 								}
 					</RadzenStepsItem>
-					<RadzenStepsItem Text="ยืนยัน" Next='@(currentStep == 2)'>
+					<RadzenStepsItem  Disabled="@(currentStep == 2)" Text="ยืนยัน">
 					@* <RadzenStepsItem Disabled="@(repReqdepoit == null)" Text='@(currentStep == 2 ? "เสร็จสิ้น" : "ยืนยัน")' Next='@(currentStep == 2)'> *@
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
@@ -1654,7 +1659,7 @@ else
 									@* </div> *@
 								}
 					</RadzenStepsItem>
-					<RadzenStepsItem   Text="เสร็จสิ้น" next='@(currentStep == 2)'>
+					<RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
 							<RadzenText Text="Enter about me" />
 						</RadzenRow>
@@ -1664,7 +1669,6 @@ else
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>
-		
 		</div>
 	</div>
 
@@ -1723,32 +1727,179 @@ else
 	private NavigationManager NavigationManager { get; set; }
 	private bool IsSaveEnabled => SaveStatus == "1";
 	IEnumerable<GetOfBookNo> getOfBook_No;
-  	private int currentStep = 0;
-	private string finalStepText;
+	private int currentStep = 0;
+	// Define your button click function here
+	@* public async Task SaveDataAsync()
+	{
+		try
+		{
+			// ดึงข้อมูลผู้ใช้
+			(string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+			// หาที่อยู่ IP ของเครื่อง
+			string machine_address = GetMachineAddress();
+			string hostName = Dns.GetHostName();
+			var hostEntry = Dns.GetHostEntry(hostName);
+			int MonthintpayMeth = type_monthintpay;
+			isLoading = true;
+			foreach (var item in repReqdepoit)
+			{
+				var SlipOpen = item.deptSlip;
+				var ItemdeptSlipdet = item.deptSlipdet;
+				var ItemdeptSlipCheque = item.deptSlipCheque;
+				var DeptSlip = new DeptSlip
+					{
+						coop_id = coop_id,
+						deptcoop_id = coop_id,
+						deptslip_no = item.deptslip_no,
+						member_no = item.member_no,
+						depttype_code = DepttypeValue ?? item.depttype_code,
+						membcat_code = item.membcat_code,
+						deptgroup_code = item.deptgroup_code,
+						recppaytype_code = recpPayTypeCode ?? item.recppaytype_code,
+						deptno_format = item.deptno_format ?? "null",
+						deptaccount_no = item.deptaccount_no ?? "null",
 
-	// Event handlers
-	private void SaveNameAndAddress()
-	{
-		// Implement the logic to save name and address
-		// You can use the 'name' and 'address' variables here
-		// For example: Save to a database or perform any necessary operations
-	}
-	private void SaveAboutMe()
-	{
-		// Implement the logic to save about me information
-		// You can use the 'aboutMe' variable here
-		// For example: Save to a database or perform any necessary operations
-	}
+						moneytype_code = item.moneytype_code,
+						bank_code = item.bank_code,
+						bankbranch_code = item.bankbranch_code,
+						entry_id = full_name,
+						machine_id = machine_id,
+						tofrom_accid = TofromaccValue ?? item.tofrom_accid,
+						operate_date = DateTime.Today,
+						entry_date = DateTime.Today,
+						operate_code = item.operate_code,
+						sign_flag = 1,
+
+						nobook_flag = item.nobook_flag,
+						deptslip_amt = deptslipAmt,
+						deptslip_netamt = deptslipAmt,
+						fee_amt = item.fee_amt,
+						oth_amt = item.oth_amt,
+						deptaccount_name = item.deptaccount_name,
+						depttype_desc = DepttypeValue ?? item.depttype_desc,
+						dept_objective = item.dept_objective,
+						prncbal_retire = item.prncbal_retire,
+						remark = item.remark,
+
+						deptpassbook_no = item.deptpassbook_no,
+						condforwithdraw = item.condforwithdraw,
+						upint_time = item.upint_time,
+						deptaccount_ename = item.deptaccount_ename,
+						account_type = item.account_type,
+						monthintpay_meth = (type_monthintpay != null) ? type_monthintpay : item.monthintpay_meth,
+						traninttype_code = item.traninttype_code,
+						tran_deptacc_no = tran_deptacc_no,
+						dept_tranacc_name = item.dept_tranacc_name,
+						deptmonth_status = item.deptmonth_status,
+
+						deptmonth_amt = item.deptmonth_amt,
+						dept_status = item.dept_status,
+						monthint_status = item.monthint_status,
+						f_tax_rate = item.f_tax_rate,
+						adjdate_status = item.adjdate_status,
+						membcat_desc = item.membcat_desc,
+
+						prncbal = item.prncbal,
+						withdrawable_amt = item.withdrawable_amt,
+						tax_amt = item.tax_amt,
+						int_amt = item.int_amt,
+						slipnetprncbal_amt = item.slipnetprncbal_amt,
+						prnc_no = item.prnc_no,
+
+
+						calint_from = DateTime.Today,
+						laststmseq_no = item.laststmseq_no,
+						prncbal_bf = item.prncbal_bf,
+						posttovc_flag = item.posttovc_flag,
+						refer_slipno = item.refer_slipno,
+						due_date = item.due_date,
+						passbook_flag = item.passbook_flag,
+						deptrequest_docno = item.deptrequest_docno,
+						reqappl_flag = item.reqappl_flag,
+						spcint_rate_status = item.spcint_rate_status,
+						spcint_rate = item.spcint_rate
+
+
+
+					};
+				var DeptSlipdet = new DeptSlipdet();
+				var DeptSlipCheque = new DeptSlipCheque();
+				var Reqdepoit = new Models.DepReqdepoit
+					{
+						deptSlip = DeptSlip,
+						deptSlipdet = null,
+						deptSlipCheque = null,
+
+					};
+				var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostOpenAccount}";
+				var response = await SendApiRequestAsync(apiUrl, Reqdepoit);
+				var responseData = await response.Content.ReadAsStringAsync();
+
+				if (response.IsSuccessStatusCode)
+				{
+					var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+					var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
+					ShowNotification(new NotificationMessage
+						{
+							Severity = NotificationSeverity.Success,
+							Summary = "Success",
+							Detail =
+						notificationDetail,
+							Duration = 2500
+						});
+					success_status = true;
+					if (success_status)
+					{
+						this.currentStep = 2;
+						await InvokeAsync(() => StateHasChanged());
+					}
+				}
+				else
+				{
+					var jsonResponse = JObject.Parse(responseData);
+					var errorsProperty = jsonResponse["errors"];
+					Console.WriteLine(errorsProperty);
+					ShowNotification(new NotificationMessage
+						{
+							Severity = NotificationSeverity.Error,
+							Summary = "Error",
+							Detail =
+						errorsProperty + "ตรวจสอบข้อมูลให้ครบถ้วน",
+							Duration = 2500
+						});
+				}
+			}
+		}
+		catch (Exception ex)
+		{
+			success_status = true;
+			ShowNotification(new NotificationMessage
+				{
+					Severity = NotificationSeverity.Error,
+					Summary = "Error",
+					Detail =
+				ex.Message,
+					Duration = 2500
+				});
+			Console.WriteLine(ex.ToString());
+		}
+		finally
+		{
+			isLoading = false;
+		}
+	} *@
 
 	// Event handler for RadzenSteps change
 	private void OnChange(int newStep)
 	{
-	currentStep = newStep;
+		currentStep = newStep;
+
 	}
 
 	// Event handler for RadzenSteps CanChange
 	private bool CanChange()
 	{
+		Console.WriteLine($"return true;{true}");
 		return true;
 	}
 

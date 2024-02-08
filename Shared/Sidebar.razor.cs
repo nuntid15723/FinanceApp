@@ -41,20 +41,13 @@ namespace FinanceApp.Shared
         {
 
             (string coop_id, string user_name, string full_name, string application) = await GetUserData();
-            var depOfGetAccount = new
-            {
-                coop_control = coop_id,
-                coop_id = coop_id,
-                application = application,
-                user_name = user_name,
-            };
-            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}";
+            Console.WriteLine($"application :{application}");
+
+            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}?application={application}";
             try
             {
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
-                Console.WriteLine($"depOfGetAccount :{depOfGetAccount}");
-
-                Console.WriteLine($"IsSuccessStatusCode :{response.IsSuccessStatusCode}");
+            var response = await SendApiRequestAsyncGet(apiUrl);
+                Console.WriteLine($"IsSuccessStatusCode :{response}");
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -108,10 +101,10 @@ namespace FinanceApp.Shared
                 }
                 else
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
-                    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                    // await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
                     // // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    NavigationManager.NavigateTo("/login", true);
+                    // NavigationManager.NavigateTo("/login", true);
                 }
             }
             catch (Exception ex)
@@ -124,7 +117,32 @@ namespace FinanceApp.Shared
             public List<string> winObject { get; set; }
             // public string Application { get; set; }
         }
+        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
+        {
+            try
+            {
+                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+                var handler = new HttpClientHandler();
+                handler.UseCookies = true;
 
+                Console.WriteLine($"bearerToken: {bearerToken}");
+
+                // สร้างคุกกี้และเพิ่มลงใน CookieContainer
+                //handler.CookieContainer.Add(new Uri(apiUrl), new Cookie("workdate_deposit", "10%2F30%2F2023%2000%3A00%3A00"));
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                    return await httpClient.GetAsync(apiUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
         private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
         {
             try
@@ -173,8 +191,8 @@ namespace FinanceApp.Shared
             savedCheckFlag = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "check_flag");
 
             // แสดงผลลัพธ์ใน console ของเบราว์เซอร์
-            Console.WriteLine($"Saved Save Status: {savedSaveStatus}");
-            Console.WriteLine($"Saved Check Flag: {savedCheckFlag}");
+            // Console.WriteLine($"Saved Save Status: {savedSaveStatus}");
+            // Console.WriteLine($"Saved Check Flag: {savedCheckFlag}");
         }
 
         public class ApiResponse

@@ -10,6 +10,7 @@ using System.IO;
 using Microsoft.AspNetCore.Components.Web;
 using System.Net.Http.Headers;
 using System.Globalization;
+using Radzen.Blazor;
 
 namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 {
@@ -691,7 +692,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         // }
         private async Task PerformSearch()
         {
-            isLoading = true;
+            // isLoading = true;
 
             AnotherFunction();
 
@@ -704,7 +705,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 await CallApi();
             }
 
-            isLoading = false;
+            // isLoading = false;
         }
 
         private async Task CallApi()
@@ -970,16 +971,19 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostOpenAccount}";
                     var response = await SendApiRequestAsync(apiUrl, Reqdepoit);
                     var responseData = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(response);
 
                     if (response.IsSuccessStatusCode)
                     {
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                         var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
+
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
                         success_status = true;
                         if (success_status)
                         {
-                            currentStep++;
+                            this.currentStep = 2;
+                            await InvokeAsync(() => StateHasChanged());
                         }
                     }
                     else

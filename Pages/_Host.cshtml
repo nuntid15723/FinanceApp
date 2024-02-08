@@ -32,7 +32,19 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
-
+    <script>
+        window.SubmitHTML = async (fileName, contentStreamReference) => {
+            const arrayBuffer = await contentStreamReference.arrayBuffer();
+            const blob = new Blob([arrayBuffer]);
+            const url = URL.createObjectURL(blob);
+            const anchorElement = document.createElement('a');
+            anchorElement.href = url;
+            anchorElement.download = fileName ?? '';
+            anchorElement.click();
+            anchorElement.remove();
+            URL.revokeObjectURL(url);
+        }
+    </script>
     <script src="_framework/blazor.server.js"></script>
     <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -48,5 +60,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="/js/select2Interop.js"></script>
     <script src="/js/imageUpload.js"></script>
+    <script src="/js/sessionInterop.js"></script>
+    <script src="/js/blazorInterop.js"></script>
 </body>
 </html>

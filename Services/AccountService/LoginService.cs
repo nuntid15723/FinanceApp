@@ -34,15 +34,19 @@ public class LoginService : IApiService
         var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
         var payload = new
         {
-            coop_control = "065001",
-            coop_id = "065001",
+            coop_control = selectedDatabase == "1" ? "065001" : "079001",
+            coop_id = selectedDatabase == "1" ? "065001" : "079001",
             user_name = user_name,
             password = password,
-            base_type = selectedDatabase,
+            base_id = selectedDatabase,
         };
         var reqUrl = ApiClient.Paths.UserLogin;
+        var json = JsonConvert.SerializeObject(payload);
+        Console.WriteLine($"reqUrl:{reqUrl}");
+        Console.WriteLine($"payload content :{json}");
         var response = await _apiProvider.PostAsync(reqUrl, payload);
-        Console.WriteLine($"jsonData : {payload}");
+        Console.WriteLine($"presponse:{response}");
+
         Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
 
         if (response.IsSuccessStatusCode)
