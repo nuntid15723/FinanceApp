@@ -29,6 +29,8 @@ builder.Services.AddCors();
 
 // HTTP Client service
 builder.Services.AddHttpClient();
+builder.Services.AddHttpContextAccessor();
+
 
 // HttpContextAccessor
 builder.Services.AddHttpContextAccessor();
