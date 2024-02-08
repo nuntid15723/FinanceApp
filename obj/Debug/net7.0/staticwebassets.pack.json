@@ -57,6 +57,10 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\blazorInterop.js",
+      "PackagePath": "staticwebassets\\js\\blazorInterop.js"
+    },
+    {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\formatNumber.js",
       "PackagePath": "staticwebassets\\js\\formatNumber.js"
     },
@@ -87,6 +91,10 @@
     {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\selected.js",
       "PackagePath": "staticwebassets\\js\\selected.js"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\sessionInterop.js",
+      "PackagePath": "staticwebassets\\js\\sessionInterop.js"
     },
     {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\site.js",
