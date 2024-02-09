@@ -59,24 +59,17 @@ namespace FinanceApp.Pages
             string fullName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "fullName");
             string application = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
 
-            // Console.WriteLine($"coopControl: {coopControl}, userName: {userName}, fullName: {fullName}, application: {application}");
+            Console.WriteLine($"coopControl: {coopControl}, userName: {userName}, fullName: {fullName}, application: {application}");
 
             return (coopControl, userName, fullName, application);
         }
         private async Task PagePermiss()
         {
             (string coop_id, string user_name, string full_name, string application) = await GetUserData();
-            var depOfGetAccount = new
-            {
-                coop_control = coop_id,
-                coop_id = coop_id,
-                application = application,
-                user_name = user_name,
-            };
-            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}";
+            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}?application={application}";
             try
             {
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await SendApiRequestAsyncGet(apiUrl);
                 // Console.WriteLine($"depOfGetAccount :{response}");
 
                 Console.WriteLine($"IsSuccessStatusCode :{response.IsSuccessStatusCode}");
@@ -107,10 +100,10 @@ namespace FinanceApp.Pages
                 }
                 else
                 {
-                    await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
-                    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
-                    // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    NavigationManager.NavigateTo("/login", true);
+                //     await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                //     await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                //     // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                //     NavigationManager.NavigateTo("/login", true);
                     var errorResponse = await response.Content.ReadAsStringAsync();
                     Console.WriteLine($"Error response: {errorResponse}");
                 }
@@ -124,32 +117,32 @@ namespace FinanceApp.Pages
         {
             public List<string> winObject { get; set; }
         }
-        // private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
-        // {
-        //     try
-        //     {
-        //         string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
+        {
+            try
+            {
+                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+                var handler = new HttpClientHandler();
+                handler.UseCookies = true;
 
-        //         using (var httpClient = new HttpClient())
-        //         {
-        //             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+                Console.WriteLine($"bearerToken: {bearerToken}");
 
-        //             var json = JsonConvert.SerializeObject(payload);
-        //             Console.WriteLine($"payload content :{json}");
+                // สร้างคุกกี้และเพิ่มลงใน CookieContainer
+                //handler.CookieContainer.Add(new Uri(apiUrl), new Cookie("workdate_deposit", "10%2F30%2F2023%2000%3A00%3A00"));
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
 
-        //             var content = new StringContent(json, Encoding.UTF8, "application/json");
-        //             Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
-        //             Console.WriteLine($"json content :{json},{content}");
-        //             return await httpClient.PostAsync(apiUrl, content);
-        //         }
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         Console.WriteLine($"Error: {ex.Message}");
-        //         throw;
-        //     }
-
-        // }
+                    return await httpClient.GetAsync(apiUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
         private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
         {
             try
