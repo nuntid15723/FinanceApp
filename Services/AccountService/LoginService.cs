@@ -53,8 +53,8 @@ public class LoginService : IApiService
         {
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var loginResponse = JsonConvert.DeserializeObject<LoginResult>(jsonResponse);
-            Console.WriteLine($"isSuccess: {loginResponse.isSuccess}");
-            _state.SetAmsecUseappss(loginResponse.content.amsecUseappss);
+            Console.WriteLine($"isSuccess: {loginResponse.Success}");
+            _state.SetAmsecUseappss((List<AmsecUseappss>)loginResponse.Content.Content);
             // getAmsecUseappss = new List<AmsecUseappss>();
             //     // getAmsecUseappss.AddRange(loginResponse.content.amsecUseappss);
             //     // foreach (var item in getAmsecUseappss)
@@ -63,21 +63,21 @@ public class LoginService : IApiService
             //     // }
             if (loginResponse != null)
             {
-                if (loginResponse.isSuccess)
+                if (loginResponse.Success)
                 {
-                    Console.WriteLine($"isSuccess: {loginResponse.isSuccess}");
-                    Console.WriteLine($"message: {loginResponse.message}");
-                    Console.WriteLine($"accessToken: {loginResponse.content.accessToken}");
-                    Console.WriteLine($"refreshToken: {loginResponse.content.refreshToken}");
+                    Console.WriteLine($"isSuccess: {loginResponse.Success}");
+                    Console.WriteLine($"message: {loginResponse.Message}");
+                    Console.WriteLine($"accessToken: {loginResponse.Content.AccessToken}");
+                    Console.WriteLine($"refreshToken: {loginResponse.Content.RefreshToken}");
                     return new LoginResult
                     {
-                        isSuccess = true,
-                        accessToken = loginResponse.content.accessToken,
-                        refreshToken = loginResponse.content.refreshToken,
-                        coopControl = loginResponse.content.coopControl,
-                        coopId = loginResponse.content.coopId,
-                        fullName = loginResponse.content.fullName,
-                        amsecUseappss = loginResponse.content.amsecUseappss,
+                        Success = true,
+                        accessToken = loginResponse.Content.AccessToken,
+                        refreshToken = loginResponse.Content.RefreshToken,
+                        //coopControl = loginResponse.content.coopControl,
+                        //coopId = loginResponse.content.coopId,
+                        //fullName = loginResponse.content.fullName,
+                        amsecUseappss = (List<AmsecUseappss>)loginResponse.Content.Content,
                         PIN = loginResponse.PIN,
 
                     };
@@ -88,7 +88,7 @@ public class LoginService : IApiService
                 {
                     return new LoginResult
                     {
-                        isSuccess = false,
+                        Success = false,
                         RESPONSE_CODE = loginResponse.RESPONSE_CODE,
                         RESPONSE_MESSAGE = loginResponse.RESPONSE_MESSAGE
                     };
@@ -99,7 +99,7 @@ public class LoginService : IApiService
                 Console.WriteLine($"Request failed with status code {response.StatusCode}.");
                 return new LoginResult
                 {
-                    isSuccess = false,
+                    Success = false,
                     RESPONSE_CODE = "500",
                     RESPONSE_MESSAGE = "Username หรือ password ไม่ถูกต้อง."
                 };
@@ -110,7 +110,7 @@ public class LoginService : IApiService
             Console.WriteLine($"Request failed with status code {response.StatusCode}.");
             return new LoginResult
             {
-                isSuccess = false,
+                Success = false,
                 RESPONSE_CODE = "500",
                 RESPONSE_MESSAGE = "Username หรือ password ไม่ถูกต้อง."
             };

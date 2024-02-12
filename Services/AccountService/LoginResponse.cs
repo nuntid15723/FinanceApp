@@ -13,26 +13,21 @@ public class LoginResult
     public string userName { get; set; }
     public int PIN { get; set; }
     // public bool RESULT { get; set; }
-    public bool isSuccess { get; set; }
-    public string message { get; set; }
+    public bool Success { get; set; }
+    public string Message { get; set; }
     public string application_name { get; set; }
     public string application { get; set; }
 
-    public Content content { get; set; }
+    public AuthenticationRes Content { get; set; }
     public List<AmsecUseappss> amsecUseappss { get; set; }
 }
 
-public class Content
+public class AuthenticationRes
 {
-    public string accessToken { get; set; }
-    public string refreshToken { get; set; }
-    public bool success { get; set; }
-    public string coopControl { get; set; }
-    public string coopId { get; set; }
-    public string userName { get; set; }
-    public string fullName { get; set; }
-    public string apvLevelId { get; set; }
-    public List<AmsecUseappss> amsecUseappss { get; set; }
+    public string AccessToken { get; set; }
+    public string RefreshToken { get; set; }
+    public bool Success { get; set; }
+    public object Content { get; set; }
 }
 public class AmsecUseappss
 {

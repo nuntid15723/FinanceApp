@@ -39,7 +39,7 @@ public partial class LoginBase : ComponentBase
             errorMessage = "Username และ password ไม่สามารถเว้นว่างได้.";
             return;
         }
-        if (loginResponse.isSuccess)
+        if (loginResponse.Success)
         {
             ApiClient.authToken = loginResponse.accessToken;
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", loginResponse.accessToken);
