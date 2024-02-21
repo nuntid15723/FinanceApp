@@ -184,6 +184,21 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             SaveStatus = save_status;
             return (coopControl, userName, fullName, SaveStatus, checkFlag);
         }
+        public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
+        {
+            var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+            string accessToken = bearerToken;
+            string application = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+            string save_status = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "save_status");
+            string checkFlag = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "check_flag");
+
+
+            var (coopControl, coop_id, name, email, actort, apvlevelId, workDate) = TokenHelper.DecodeToken(accessToken);
+            Console.WriteLine($"coopControl: {coopControl}, userName: {name}, SaveStatus: {SaveStatus}, checkFlag: {checkFlag}");
+            SaveStatus = save_status;
+            return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application, save_status, checkFlag);
+        }
+        // (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
         private async Task DeptMaintype(ChangeEventArgs e)
         {
             deptMaintype = e.Value.ToString();
@@ -198,7 +213,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -223,7 +238,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -251,7 +266,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -278,7 +293,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //RetriveDataFromDeptNo
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
-            (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
 
             try
             {
@@ -410,7 +425,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         }
         private async Task CallApi()
         {
-            (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
             try
             {
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
@@ -465,7 +480,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //     try
         //     {
         //         isLoadingModals = true;
-        //         (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+        //         (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
         //         var depOfGetAccount = new AccountDetails
         //         {
         //             coop_id = coop_id,
@@ -537,7 +552,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private async Task SearchOfGetAcc()
         {
             isLoadingModals = true;
-            (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
             var depOfGetAccount = new AccountDetails
             {
                 coop_id = coop_id,
@@ -710,7 +725,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         // {
         //     try
         //     {
-        //         (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+        //         (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
         //         string hostName = Dns.GetHostName();
         //         var hostEntry = Dns.GetHostEntry(hostName);
         //         isLoading = true;
@@ -921,7 +936,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_id, string user_name, string full_name, string save_status, string check_flag) = await GetUserData();
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
 
                 // หาที่อยู่ IP ของเครื่อง
                 string machine_address = GetMachineAddress();

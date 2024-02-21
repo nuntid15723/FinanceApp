@@ -41,6 +41,8 @@ public partial class LoginBase : ComponentBase
         }
         if (loginResponse.Success)
         {
+            // string accessToken = loginResponse.Content.AccessToken;
+            // TokenHelper.DecodeToken(accessToken);
             ApiClient.authToken = loginResponse.accessToken;
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", loginResponse.accessToken);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "refreshToken", loginResponse.refreshToken);
@@ -52,7 +54,7 @@ public partial class LoginBase : ComponentBase
             var amsecUseappssJson = JsonConvert.SerializeObject(loginResponse.amsecUseappss);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", amsecUseappssJson);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "base_type", selectedDatabase);
-            // await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
+            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
             NavigationManager.NavigateTo("index", true);
         }
         else

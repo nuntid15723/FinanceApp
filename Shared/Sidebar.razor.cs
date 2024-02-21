@@ -9,6 +9,8 @@ using Radzen;
 using System.IO;
 using Microsoft.AspNetCore.Components.Web;
 using System.Net.Http.Headers;
+using FinanceApp.Services;
+
 namespace FinanceApp.Shared
 {
     public partial class Sidebar
@@ -37,16 +39,25 @@ namespace FinanceApp.Shared
 
             return (coopControl, userName, fullName, application);
         }
+        public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application)> GetDataList()
+        {
+            var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+            string accessToken = bearerToken;
+            string application = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+
+            var (coopControl, coop_id, name, email, actort, apvlevelId, workDate) = TokenHelper.DecodeToken(accessToken);
+            return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application);
+        }
+
         private async Task PagePermiss()
         {
-
-            (string coop_id, string user_name, string full_name, string application) = await GetUserData();
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application) = await GetDataList();
             Console.WriteLine($"application :{application}");
 
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}?application={application}";
             try
             {
-            var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await SendApiRequestAsyncGet(apiUrl);
                 Console.WriteLine($"IsSuccessStatusCode :{response}");
                 if (response.IsSuccessStatusCode)
                 {

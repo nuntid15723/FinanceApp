@@ -545,3 +545,8 @@ D:\CoopAPI_DEP\FinanceApp\obj\Debug\net7.0\refint\FinanceApp.dll
 D:\CoopAPI_DEP\FinanceApp\obj\Debug\net7.0\FinanceApp.pdb
 D:\CoopAPI_DEP\FinanceApp\obj\Debug\net7.0\FinanceApp.genruntimeconfig.cache
 D:\CoopAPI_DEP\FinanceApp\obj\Debug\net7.0\ref\FinanceApp.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.IdentityModel.Abstractions.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.IdentityModel.JsonWebTokens.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.IdentityModel.Logging.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.IdentityModel.Tokens.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\System.IdentityModel.Tokens.Jwt.dll

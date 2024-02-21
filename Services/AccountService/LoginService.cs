@@ -9,6 +9,7 @@ using System.Text;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Components;
+using System.IdentityModel.Tokens.Jwt;
 
 public class LoginService : IApiService
 {
@@ -54,7 +55,6 @@ public class LoginService : IApiService
             var jsonResponse = await response.Content.ReadAsStringAsync();
             var loginResponse = JsonConvert.DeserializeObject<LoginResult>(jsonResponse);
             Console.WriteLine($"isSuccess: {loginResponse.Success}");
-            _state.SetAmsecUseappss((List<AmsecUseappss>)loginResponse.Content.Content);
             // getAmsecUseappss = new List<AmsecUseappss>();
             //     // getAmsecUseappss.AddRange(loginResponse.content.amsecUseappss);
             //     // foreach (var item in getAmsecUseappss)
@@ -69,6 +69,14 @@ public class LoginService : IApiService
                     Console.WriteLine($"message: {loginResponse.Message}");
                     Console.WriteLine($"accessToken: {loginResponse.Content.AccessToken}");
                     Console.WriteLine($"refreshToken: {loginResponse.Content.RefreshToken}");
+                    Console.WriteLine($"AmsecUseappss: {loginResponse.Content.Content}");
+
+                    string accessToken = loginResponse.Content.AccessToken;
+                    TokenHelper.DecodeToken(accessToken);
+
+                    var amsecUseappss = JsonConvert.DeserializeObject<List<AmsecUseappss>>(loginResponse.Content.Content.ToString());
+                    // Console.WriteLine($"AmsecUseappss: {amsecUseappss}");
+                    _state.SetAmsecUseappss((List<AmsecUseappss>)amsecUseappss);
                     return new LoginResult
                     {
                         Success = true,
@@ -77,12 +85,11 @@ public class LoginService : IApiService
                         //coopControl = loginResponse.content.coopControl,
                         //coopId = loginResponse.content.coopId,
                         //fullName = loginResponse.content.fullName,
-                        amsecUseappss = (List<AmsecUseappss>)loginResponse.Content.Content,
-                        PIN = loginResponse.PIN,
+                        // amsecUseappssJson = JsonConvert.SerializeObject(loginResponse.amsecUseappss),
+                        amsecUseappss = amsecUseappss,
+                        // PIN = loginResponse.PIN,
 
                     };
-
-
                 }
                 else
                 {
