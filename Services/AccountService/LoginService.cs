@@ -69,13 +69,16 @@ public class LoginService : IApiService
                     Console.WriteLine($"message: {loginResponse.Message}");
                     Console.WriteLine($"accessToken: {loginResponse.Content.AccessToken}");
                     Console.WriteLine($"refreshToken: {loginResponse.Content.RefreshToken}");
-                    Console.WriteLine($"AmsecUseappss: {loginResponse.Content.Content}");
+                    // Console.WriteLine($"AmsecUseappss: {loginResponse.Content.Content}");
 
                     string accessToken = loginResponse.Content.AccessToken;
                     TokenHelper.DecodeToken(accessToken);
 
                     var amsecUseappss = JsonConvert.DeserializeObject<List<AmsecUseappss>>(loginResponse.Content.Content.ToString());
-                    // Console.WriteLine($"AmsecUseappss: {amsecUseappss}");
+                    // foreach (var item in amsecUseappss)
+                    // {
+                    //     Console.WriteLine($"AmsecUseappss: {item.coop_control},{item.coop_id},{item.user_name},{item.application},{item.application_name},{item.permiss_flag}");
+                    // }
                     _state.SetAmsecUseappss((List<AmsecUseappss>)amsecUseappss);
                     return new LoginResult
                     {

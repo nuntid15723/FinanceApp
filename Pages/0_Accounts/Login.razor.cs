@@ -54,8 +54,9 @@ public partial class LoginBase : ComponentBase
             var amsecUseappssJson = JsonConvert.SerializeObject(loginResponse.amsecUseappss);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", amsecUseappssJson);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "base_type", selectedDatabase);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
+            // await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
             NavigationManager.NavigateTo("index", true);
+            Console.WriteLine($"amsecUseappssJson :{amsecUseappssJson}");
         }
         else
         {
