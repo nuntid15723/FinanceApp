@@ -51,6 +51,7 @@
 		public List<Depttype> depttype { get; set; }
 		public string trandepttype { get; set; }
 		public List<Acctype> acctype { get; set; }
+		public List<TranDeptno> tranDeptno { get; set; }
 		public string? bank { get; set; }
 		public string? branch { get; set; }
 		public string? due_date { get; set; }
@@ -243,6 +244,12 @@
 	{
 		public string account_type { get; set; }
 		public string account_desc { get; set; }
+	}
+	public class TranDeptno
+	{
+		public string deptaccount_no { get; set; }
+		public string deptaccount_name { get; set; }
+		public string depttype_code { get; set; }
 	}
 	public class DepOfGetMemberOpenAccount
 	{

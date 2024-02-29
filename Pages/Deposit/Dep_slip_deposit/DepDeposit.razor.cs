@@ -235,6 +235,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 Console.WriteLine(ex.Message.ToString());
             }
         }
+       
         void ShowNotification(NotificationMessage message)
         {
             NotificationService.Notify(message);
