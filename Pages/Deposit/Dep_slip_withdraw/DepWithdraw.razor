@@ -1255,7 +1255,7 @@ else
 							</div>
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ยืนยัน">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
 						</RadzenRow>
@@ -2057,7 +2057,7 @@ else
 							</div>
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
 							<RadzenText Text="Enter about me" />
 						</RadzenRow>
@@ -2124,6 +2124,11 @@ else
 	private void OnChange(int newStep)
 	{
 		currentStep = newStep;
+		StateHasChanged();
+		@if (currentStep == 2)
+		{
+			PrintPdf();
+		}
 	}
 
 	// Event handler for RadzenSteps CanChange

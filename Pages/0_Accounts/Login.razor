@@ -4,7 +4,8 @@
 @* @layout EmptyLayout *@
 @layout LoginLayout
 @inject HttpClient httpClient
-
+@using System.Text.Json
+@using System.Text.Json.Serialization;
 
 <title>Login Page</title>
 
@@ -44,9 +45,16 @@
                         <div class="item">
                             <div class="form-group2">
                                 <label for="database"><span class="required">*</span>ฐานข้อมูล </label>
-                                <select class="form-control" id="database" name="database" @bind="selectedDatabase">
-                                    <option value="1">ฐานข้อมูลหลัก</option>
-                                    <option value="2">ฐานข้อมูลทดสอบ</option>
+                                @* <select class="form-control" id="database" name="database" @bind="selectedDatabase">
+                                <option value="1">ฐานข้อมูลหลัก</option>
+                                <option value="2">ฐานข้อมูลทดสอบ</option>
+                                </select> *@
+                                <select class="form-control" id="database" name="database"
+                                    @onchange="selectedBase">
+                                    @foreach (var item in connections)
+                                    {
+                                        <option value="@($"{item.Id}_{item.ConnectionName}")">@item.ConnectionName</option>
+                                    }
                                 </select>
                             </div>
                             <div class="form-group2">
@@ -71,7 +79,6 @@
     </div>
 </body>
 @code {
-  
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -84,10 +91,8 @@
             }
         }
     }
-    private async Task<bool> IsUserAuthenticated()
+    protected override async Task OnInitializedAsync()
     {
-        // Check if there is a valid token
-        string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-        return !string.IsNullOrEmpty(bearerToken);
+        await LoadConnections();
     }
 }

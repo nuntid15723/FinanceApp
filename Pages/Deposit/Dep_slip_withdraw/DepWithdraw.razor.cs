@@ -172,18 +172,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public List<GetBank>? getBank { get; set; }
         public List<GetDeptMaintype>? getDeptMaintype { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
-        public async Task<(string coopControl, string userName, string fullName, string save_status, string check_flag)> GetUserData()
-        {
-            string coopControl = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "coopControl");
-            string userName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "user_name");
-            string fullName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "fullName");
-            string save_status = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "save_status");
-            string checkFlag = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "check_flag");
-
-            Console.WriteLine($"coopControl: {coopControl}, userName: {userName}, fullName: {fullName}, SaveStatus: {save_status}, checkFlag: {checkFlag}");
-            SaveStatus = save_status;
-            return (coopControl, userName, fullName, SaveStatus, checkFlag);
-        }
+      
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
             var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
@@ -199,6 +188,57 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application, save_status, checkFlag);
         }
         // (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+        private async Task PrintPdf()
+        {
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+            try
+            {
+                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                foreach (var item in datadetail)
+                {
+                    var Item = item.deptSlip;
+                    var depOfGetAccount = new
+                    {
+                        coop_id = coop_id,
+                        memcoop_id = coop_id,
+                        deptaccount_no = deptno_format,
+                        deptaccount_name = Item.deptaccount_name,
+                        recppaytype_code = (selectedValue == null) ? Item.recppaytype_code : selectedValue,
+                        deptslip_amt = deptslipAmt,
+                        deptslip_tdate = DateTime.Today,
+                        printter_name = "Bullzip PDF Printer",
+                    };
+                    var json = JsonConvert.SerializeObject(depOfGetAccount);
+                    Console.WriteLine($"depOfGetAccount{json}");
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPrintSlip}";
+                    Console.WriteLine($"apiUrl {apiUrl}");
+                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+
+                    Console.WriteLine(response.IsSuccessStatusCode);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        PrintResponse responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                        responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                        if (responseObj.Success)
+                        {
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = responseObj.Message, Duration = 5000 });
+                        }
+                        else
+                        {
+
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorResponse, Duration = 5000 });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
         private async Task DeptMaintype(ChangeEventArgs e)
         {
             deptMaintype = e.Value.ToString();

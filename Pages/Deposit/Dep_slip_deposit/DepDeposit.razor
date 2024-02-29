@@ -164,7 +164,7 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ทำรายการ">
 						<RadzenRow>
 							<RadzenText Text="Enter user information" />
 						</RadzenRow>
@@ -1403,14 +1403,14 @@ else
 
 														@if (tofromaccItem.cash_type == cashTypeValue)
 														{
-															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
 																	selected="@isCurrentOptionSelected">
 																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 															</option>
 														}
 														else if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
 														{
-															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
 																	selected="@isCurrentOptionSelected">
 																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 															</option>
@@ -1773,7 +1773,7 @@ else
 							}
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ยืนยัน">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
 						</RadzenRow>
@@ -2153,17 +2153,11 @@ else
 						<RadzenRow>
 							<RadzenText Text="Enter about me" />
 						</RadzenRow>
-							<h1>HTML to PDF Conversion</h1>
-					<button class="btn btn-primary" @onclick="GenerateAndDownloadPdf">Generate PDF</button>
+								<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
+							@* <h1>HTML to PDF Conversion</h1> *@
+					@* <button class="btn btn-primary" @onclick="GenerateAndDownloadPdf">Generate PDF</button>
 					 <h3>IronPdfComponent</h3>
-					@* <EditForm Model="@_InputMsgModel" id="inputText"> *@
-					@* <div>
-						<InputTextArea @bind-Value="@_InputMsgModel.HTML" rows="20" />
-					</div> *@
-					<div>
-						<button onclick="@SubmitHTML">Render HTML</button>
-					</div>
-					@* </EditForm> *@
+					 <input class="form-control"style="width:100%;text-align: center; "placeholder="0" type="text" value="55555" /> *@
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>
@@ -2172,8 +2166,9 @@ else
 	<div class="card body-page">
 		<div class="from">
 		</div>
+		
 	</div>
-	<div class="card mt-4">
+	<div class="card mt-4" hidden="@(currentStep == 1 ||currentStep == 2 )">
 		<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 			<RadzenTabs @bind-SelectedIndex=@selectedIndex>
@@ -2296,58 +2291,234 @@ else
 	}
 </script>
 @code {
-	
-    @* InputHTMLModel _InputMsgModel = new InputHTMLModel(); *@
- @* private async Task SubmitHTML()
-{
-    IronPdf.License.LicenseKey = "IRONSUITE.NUNTIDLOVE555.GMAIL.COM.19356-5EF597365A-DZIS5GE-ERJBRTEJGDO4-XLVOO7ZE5OWK-2HROPNUZ5BMO-RCU3FWPVBSPI-QKNZHEMBRPH2-56KVQLEQSUWJ-QBZS5U-TQR5VWOWR3SLUA-DEPLOYMENT.TRIAL-UWUADT.TRIAL.EXPIRES.07.MAR.2024";
-    var renderer = new IronPdf.HtmlToPdf();
-    var doc = renderer.RenderHtmlAsPdf(_InputMsgModel.HTML);
-    var fileName = "iron.pdf";
-    using var streamRef = new DotNetStreamReference(stream: doc.Stream);
-    await jsRuntime.InvokeVoidAsync("SubmitHTML", fileName, streamRef);
-} *@
- private async Task SubmitHTML()
-    {
-        // Setting IronPdf license key
-        IronPdf.License.LicenseKey = "IRONSUITE.NUNTIDLOVE555.GMAIL.COM.19356-5EF597365A-DZIS5GE-ERJBRTEJGDO4-XLVOO7ZE5OWK-2HROPNUZ5BMO-RCU3FWPVBSPI-QKNZHEMBRPH2-56KVQLEQSUWJ-QBZS5U-TQR5VWOWR3SLUA-DEPLOYMENT.TRIAL-UWUADT.TRIAL.EXPIRES.07.MAR.2024";
+@* 
+	private async Task PrintPdf()
+	{
+	// รับ HTML จาก GetPdfData()
+		string htmlData = await GetPdfData();
 
-        // Build HTML content from datadetail
-        StringBuilder htmlBuilder = new StringBuilder();
-        htmlBuilder.Append("<html><body>");
-			
-        foreach (var item in datadetail)
-        {var Item = item.deptSlip; 
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+		await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
+
+    } *@
+	private async Task<string> GetPdfData()
+	{
+		var InputHtml = $@"<!DOCTYPE html>
+		<html lang=""en"" dir=""ltr"">
+		<head>
+		<meta charset=""utf-8""/>
+		<style>
+			.form-control {{
+				border: solid 1px #fff;
+			}}
+			.form-label{{
+				font-weight: normal;
+			}}
+			.form-select {{
+
+            font-size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}}
+			.row {{
+				--bs-gutter-x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}}
+		</style>
+		<title>Test Page</title>
+		</head>
+		<body><br/>";
+		foreach (var item in datadetail)
+		{
+			var Item = item.deptSlip;
+			var operateDate = Item.operate_date.GetValueOrDefault(DateTime.MinValue);
+			var operateDate_TH = operateDate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
+			InputHtml += $@"
+			<img src='https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/IMG_Academy_Logo.svg/1200px-IMG_Academy_Logo.svg.png'
+			alt = '' style = 'width: 150px;' >
+			<div class='row'>
+			<div class='col-xl-2 col-md-4 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ทะเบียนสมาชิก</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<div class='input-group-addon'>
+							<input class='form-control' value='{deptno_format}' />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
+        <label class='form-label' for=''>รายการ</label>
+        <div class='form-group '>
+            <div class='input-group'>";
+			if (selectedRecppaytype == null)
+			{
+				string firstValue = null;
+				{
+					foreach (var recppaytypeItem in Item.recppaytype)
+					{
+						if (firstValue == null)
+						{
+							firstValue = $"{recppaytypeItem.recppaytype_code} - {recppaytypeItem.recppaytype_desc}";
+						}
+					}
+				}
+
+				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
+			}
+			else
+			{
+				InputHtml += $@"<input class='form-control' value='{selectedRecppaytype}' />";
+			}
+			InputHtml += $@"
+							</div>
+						</div>
+					</div>
+		<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+		<label class='form-label' for=''>วันที่</label>
+			<div class='form-group '>
+				<div class='label-group'>
+					<input class='form-control' value='{operateDate_TH}' />
+				</div>
+			</div>
+		</div>
+		<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>เลขสมุด</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<input class='form-control' value='{Item.deptpassbook_no}' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ชื่อบัญชี</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<input class='form-control' value='{Item.deptaccount_name}' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ประเภทบัญชี</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<input class='form-control' value='{Item.depttype_desc}' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ประเภทเงิน</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<RadzenText Text='@Item.moneytype_code' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>รหัสคู่บัญชี</label>
+				<div class='form-group '>
+					<div class='input-group'>";
+			if (selectedRecppaytype == null)
+			{
+				string firstValue = null;
+				{
+					foreach (var tofromaccItem in Item.tofromacc)
+					{
+						if (firstValue == null)
+						{
+							firstValue = $"{tofromaccItem.tofrom_accid} - {tofromaccItem.tofrom_accdesc}";
+						}
+					}
+				}
+
+				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
+			}
+			else
+			{
+				InputHtml += $@"<input class='form-control' value='{selectedToFromAcc}' />";
+			}
+			InputHtml += $@"
+					</div>
+				</div>
+			</div>
+
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>คงเหลือ</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<RadzenText Text='@Item.prncbal?.ToString()' />
+						<input class='form-control' value='{Item.prncbal}' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ทำรายการโดย</label>";
+			if (nobook_flag == 0)
+			{
+				InputHtml += $@"<input class='form-control' value='มีสมุด'/>";
+			}
+			else if (nobook_flag == 1)
+			{
+				InputHtml += $@"<input class='form-control' value='ไม่มีสมุด' />";
+			}
+			InputHtml += $@"</div>
+							</div>";
+				}
+				InputHtml += @"
+						</body>
+					</html>";
+				return InputHtml;
+	}
+	private async Task SubmitHTML()
+	{
+		// Setting IronPdf license key
+		IronPdf.License.LicenseKey = "IRONSUITE.NUNTIDLOVE555.GMAIL.COM.19356-5EF597365A-DZIS5GE-ERJBRTEJGDO4-XLVOO7ZE5OWK-2HROPNUZ5BMO-RCU3FWPVBSPI-QKNZHEMBRPH2-56KVQLEQSUWJ-QBZS5U-TQR5VWOWR3SLUA-DEPLOYMENT.TRIAL-UWUADT.TRIAL.EXPIRES.07.MAR.2024";
+
+		// Build HTML content from datadetail
+		StringBuilder htmlBuilder = new StringBuilder();
+		htmlBuilder.Append("<html><body>");
+
+		foreach (var item in datadetail)
+		{
+			var Item = item.deptSlip;
 			List<string> recppaytype_desc = new List<string>();
-			@foreach (var recppaytypeItem in Item.recppaytype){
-			 if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+			@foreach (var recppaytypeItem in Item.recppaytype)
+			{
+				if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
 				{
 					recppaytype_desc.Add($"{recppaytypeItem.recppaytype_code}-{recppaytypeItem.recppaytype_desc}");
 				}
 			}
-            htmlBuilder.Append($"<div>{deptno_format}: {Item.deptaccount_name}</div>"); 
-			if(selectedRecppaytype != null){
+			htmlBuilder.Append($"<div>{deptno_format}: {Item.deptaccount_name}</div>");
+			if (selectedRecppaytype != null)
+			{
 				htmlBuilder.Append($"<div class='input-group'>{selectedRecppaytype}</div>");
-				}else{
+			}
+			else
+			{
 				htmlBuilder.Append($"<div class='input-group'>");
 				foreach (var desc in recppaytype_desc)
-					{
-						htmlBuilder.Append($"<div>{desc}</div>");
-					}
+				{
+					htmlBuilder.Append($"<div>{desc}</div>");
+				}
 				htmlBuilder.Append("</div>");
 			}
-						
-        }
-        htmlBuilder.Append("</body></html>");
 
-        // Rendering HTML to PDF
-        var renderer = new IronPdf.HtmlToPdf();
-        var doc = renderer.RenderHtmlAsPdf(htmlBuilder.ToString());
-        var fileName =  $"example_{DateTime.Now:yyyyMMddHH}.pdf";
-        // Invoking JavaScript function to submit HTML
-        using var streamRef = new DotNetStreamReference(stream: doc.Stream);
-        await jsRuntime.InvokeVoidAsync("SubmitHTML", fileName, streamRef);
-    }
+		}
+		htmlBuilder.Append("</body></html>");
+
+		// Rendering HTML to PDF
+		var renderer = new IronPdf.HtmlToPdf();
+		var doc = renderer.RenderHtmlAsPdf(htmlBuilder.ToString());
+		var fileName = $"example_{DateTime.Now:yyyyMMddHH}.pdf";
+		// Invoking JavaScript function to submit HTML
+		using var streamRef = new DotNetStreamReference(stream: doc.Stream);
+		await jsRuntime.InvokeVoidAsync("SubmitHTML", fileName, streamRef);
+	}
     @* public class InputHTMLModel
     {
         public string HTML { get; set; }
@@ -2369,6 +2540,11 @@ else
 	private void OnChange(int newStep)
 	{
 		currentStep = newStep;
+		StateHasChanged();
+		@if (currentStep == 2)
+		{
+			PrintPdf();
+		}
 	}
 
 	// Event handler for RadzenSteps CanChange
@@ -2410,6 +2586,10 @@ else
 	{
 		AddRow();
 		StateHasChanged();
+		@if (currentStep == 2)
+		{
+			PrintPdf();
+		}
     
 	}
 	private void AddRow()

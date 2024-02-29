@@ -39,13 +39,14 @@ namespace FinanceApp.Pages
         {
             // ทำอะไรกับค่า application ที่คุณได้รับ
             // ตัวอย่าง: ส่งค่าไปยัง C# method
+            
 
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "application", application);
             await JSRuntime.InvokeVoidAsync("localStorage.setItem", "applicationName", applicationName);
 
             string applicationValue = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
             string applicationNames = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "applicationName");
-
+       
             Console.WriteLine($"application :{applicationValue}");
             Console.WriteLine($"applicationNames :{applicationNames}");
 
@@ -66,7 +67,7 @@ namespace FinanceApp.Pages
 
             return (coopControl, userName, fullName, application);
         }
-        public async Task<(string coopControl,string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate ,string application)> GetDataList()
+        public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application)> GetDataList()
         {
             var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
             string accessToken = bearerToken;
@@ -79,7 +80,7 @@ namespace FinanceApp.Pages
         private async Task PagePermiss()
         {
             // (string coop_id, string user_name, string full_name, string application) = await GetUserData();
-            (string coop_control, string coop_id, string name,string email,string actort,string apvlevelId,string workDate, string application) = await GetDataList();
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application) = await GetDataList();
             Console.WriteLine($"coop_control  :{coop_control},coop_id :{coop_id},name :{name},email :{email},apvlevelId :{apvlevelId},workDate :{workDate},application :{application},");
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}?application={application}";
             try
@@ -115,12 +116,12 @@ namespace FinanceApp.Pages
                 }
                 else
                 {
-                    //     await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
-                    //     await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
-                    //     // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    //     NavigationManager.NavigateTo("/login", true);
-                    var errorResponse = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Error response: {errorResponse}");
+                    // await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                    // // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                    // NavigationManager.NavigateTo("/login", true);
+                    // var errorResponse = await response.Content.ReadAsStringAsync();
+                    // Console.WriteLine($"Error response: {errorResponse}");
                 }
             }
             catch (Exception ex)
@@ -187,9 +188,9 @@ namespace FinanceApp.Pages
         private async Task LoadAmsecUseappssFromLocalStorage()
         {
             var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "amsecUseappss");
-            // Console.WriteLine($"amsecUseappss JSON:{jsons}");
+            Console.WriteLine($"amsecUseappss JSON:{jsons}");
             amsecUseappss = JsonConvert.DeserializeObject<List<AmsecUseapp>>(jsons);
-
+            StateHasChanged();
             // Check if the deserialization was successful
             if (amsecUseappss != null)
             {

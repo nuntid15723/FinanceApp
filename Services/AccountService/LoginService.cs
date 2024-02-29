@@ -35,8 +35,8 @@ public class LoginService : IApiService
         var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
         var payload = new
         {
-            coop_control = selectedDatabase == "1" ? "065001" : "079001",
-            coop_id = selectedDatabase == "1" ? "065001" : "079001",
+            coop_control = selectedDatabase == "4654564654" ? "065001" : "079001",
+            coop_id = selectedDatabase == "4654564654" ? "065001" : "079001",
             user_name = user_name,
             password = password,
             base_id = selectedDatabase,
@@ -56,11 +56,11 @@ public class LoginService : IApiService
             var loginResponse = JsonConvert.DeserializeObject<LoginResult>(jsonResponse);
             Console.WriteLine($"isSuccess: {loginResponse.Success}");
             // getAmsecUseappss = new List<AmsecUseappss>();
-            //     // getAmsecUseappss.AddRange(loginResponse.content.amsecUseappss);
-            //     // foreach (var item in getAmsecUseappss)
-            //     // {
-            //     //     Console.WriteLine($"amsecUseappss: {item.application_name}");
-            //     // }
+            // getAmsecUseappss.AddRange(loginResponse.Content.Content);
+            // foreach (var item in getAmsecUseappss)
+            // {
+            //     Console.WriteLine($"amsecUseappss: {item.application_name}");
+            // }
             if (loginResponse != null)
             {
                 if (loginResponse.Success)
@@ -70,15 +70,17 @@ public class LoginService : IApiService
                     Console.WriteLine($"accessToken: {loginResponse.Content.AccessToken}");
                     Console.WriteLine($"refreshToken: {loginResponse.Content.RefreshToken}");
                     // Console.WriteLine($"AmsecUseappss: {loginResponse.Content.Content}");
-
+                   
+                
                     string accessToken = loginResponse.Content.AccessToken;
                     TokenHelper.DecodeToken(accessToken);
 
                     var amsecUseappss = JsonConvert.DeserializeObject<List<AmsecUseappss>>(loginResponse.Content.Content.ToString());
-                    // foreach (var item in amsecUseappss)
-                    // {
-                    //     Console.WriteLine($"AmsecUseappss: {item.coop_control},{item.coop_id},{item.user_name},{item.application},{item.application_name},{item.permiss_flag}");
-                    // }
+                    foreach (var item in amsecUseappss)
+                    {
+                        Console.WriteLine($"AmsecUseappss: {item.coop_control},{item.coop_id},{item.user_name},{item.application},{item.application_name},{item.permiss_flag}");
+                    }
+                    // getAmsecUseappss.AddRange(amsecUseappss);
                     _state.SetAmsecUseappss((List<AmsecUseappss>)amsecUseappss);
                     return new LoginResult
                     {

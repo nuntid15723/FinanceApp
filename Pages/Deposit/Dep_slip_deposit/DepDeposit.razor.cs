@@ -14,6 +14,8 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Net.Http.Headers;
+using System.Text.Json.Serialization;
+
 
 namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 {
@@ -166,6 +168,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public List<GetBank>? getBank { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
+        public List<PrintResponse> connections = new List<PrintResponse>();
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
             var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
@@ -181,7 +184,57 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application, save_status, checkFlag);
         }
         // (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+        private async Task PrintPdf()
+        {
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+            try
+            {
+                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                foreach (var item in datadetail)
+                {
+                    var Item = item.deptSlip;
+                    var depOfGetAccount = new
+                    {
+                        coop_id = coop_id,
+                        memcoop_id = coop_id,
+                        deptaccount_no = deptno_format,
+                        deptaccount_name = Item.deptaccount_name,
+                        recppaytype_code = (selectedValue == null) ? Item.recppaytype_code : selectedValue,
+                        deptslip_amt = deptslipAmt,
+                        deptslip_tdate = DateTime.Today,
+                        printter_name = "Bullzip PDF Printer",
+                    };
+                    var json = JsonConvert.SerializeObject(depOfGetAccount);
+                    Console.WriteLine($"depOfGetAccount{json}");
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPrintSlip}";
+                    Console.WriteLine($"apiUrl {apiUrl}");
+                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
 
+                    Console.WriteLine(response.IsSuccessStatusCode);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        PrintResponse responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                        responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                        if (responseObj.Success)
+                        {
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = responseObj.Message, Duration = 5000 });
+                        }
+                        else
+                        {
+
+                            var errorResponse = await response.Content.ReadAsStringAsync();
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorResponse, Duration = 5000 });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
         void ShowNotification(NotificationMessage message)
         {
             NotificationService.Notify(message);
@@ -497,7 +550,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
-                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
+                    depOfGetAccDetails = jsonResponse1["content"].ToObject<List<AccountDetails>>();
                 }
                 var accountDetailsList = new List<Models.AccountDetails>();
                 if (depOfGetAccDetails != null)
@@ -578,6 +631,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             public Models.Deposit data { get; set; }
             public string message { get; set; }
         }
+        public class Response
+        {
+            public bool success { get; set; }
+            public Models.Deposit content { get; set; }
+            public string message { get; set; }
+        }
         private string selectedValue;
         private string moneytypeCode;
 
@@ -586,14 +645,15 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private string Recppaytype_code;
         private string recpPayTypeCode { get; set; }
         private string selectedRecppaytype { get; set; }
+        private string selectedToFromAcc { get; set; }
         private string valuetoFromaccId { get; set; }
         private string toFromaccId2 { get; set; }
         private string bookCode { get; set; }
         private decimal deptslipAmt { get; set; }
         private string deptslipNetamt { get; set; }
         private string DeptslipAmt { get; set; }
-        
-     
+
+
         private void FormatNumber()
         {
 
@@ -641,7 +701,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             string[] values = e.Value.ToString().Split('|');
             Valueselecte = values[0];
             toFromaccId2 = values[1];
-            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId}");
+            // selectedToFromAcc = values[2];
+            selectedToFromAcc = values[1] + " - " + values[2];
+            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId},selectedToFromAcc:{selectedToFromAcc}");
 
         }
         private async Task CheckNumber()
@@ -966,8 +1028,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
                 foreach (var item in datadetail)
                 {
-                    var Deptslip = CreateDeptSlip(coop_id, full_name, machine_address, item);
-                    var DeptSlipdet = CreateDeptSlip(coop_id, full_name, machine_address, item);
+                    var Deptslip = CreateDeptSlip(coop_id, name, machine_address, item);
+                    var DeptSlipdet = CreateDeptSlip(coop_id, name, machine_address, item);
                     var DeptSlipCheque = CreateDeptSlipCheque(coop_id, deptslip_no, deptaccount_no, item);
 
 
@@ -1010,7 +1072,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             }
         }
 
-        private Deptslip CreateDeptSlip(string coop_id, string full_name, string machine_address, Models.Deposit item)
+        private Deptslip CreateDeptSlip(string coop_id, string name, string machine_address, Models.Deposit item)
         {
             var deptSlip = new Deptslip
             {
@@ -1027,7 +1089,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 moneytype_code = (cashTypeValue == null) ? item.deptSlip.moneytype_code : cashTypeValue,
                 bank_code = item.deptSlip.bank_code,
                 bankbranch_code = item.deptSlip.bankbranch_code,
-                entry_id = full_name,
+                entry_id = name,
                 machine_id = machine_address,
                 tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? item.deptSlip.tofrom_accid,
                 operate_date = DateTime.Today,
@@ -1079,7 +1141,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
             return deptSlip;
         }
-        private DeptSlipdet CreateDeptSlipdet(string coop_id, string full_name, string machine_address, Models.Deposit item)
+        private DeptSlipdet CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
         {
             var deptSlipdet = new DeptSlipdet
             {

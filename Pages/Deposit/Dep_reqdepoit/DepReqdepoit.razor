@@ -137,7 +137,7 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ทำรายการ">
 						<RadzenRow>
 							@* <RadzenText Text="Enter user information" /> *@
 						</RadzenRow>
@@ -1279,7 +1279,7 @@ else
 									</div>
 								}
 					</RadzenStepsItem>
-					<RadzenStepsItem  Disabled="@(currentStep == 2)" Text="ยืนยัน">
+					<RadzenStepsItem  Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
 					@* <RadzenStepsItem Disabled="@(repReqdepoit == null)" Text='@(currentStep == 2 ? "เสร็จสิ้น" : "ยืนยัน")' Next='@(currentStep == 2)'> *@
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
@@ -1659,13 +1659,13 @@ else
 									@* </div> *@
 								}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
 							<RadzenText Text="Enter about me" />
 						</RadzenRow>
 						@* <RadzenTextArea Placeholder="About me" @bind-Value="aboutMe" /> *@
 						<input type="text">
-						@* <RadzenButton Text="Save" Click="@SaveAboutMe" /> *@
+						<RadzenButton Text="Save" Click="@PrintPdf" />
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>
@@ -1888,11 +1888,206 @@ else
 			isLoading = false;
 		}
 	} *@
+	@* private async Task PrintPdf()
+	{
+	// รับ HTML จาก GetPdfData()
+		string htmlData = await GetPdfData();
 
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+		await jsRuntime.InvokeVoidAsync("printPdf", htmlData);
+		
+	} *@
+	private async Task<string> GetPdfData()
+	{
+		var InputHtml = $@"<!DOCTYPE html>
+		<html lang=""en"" dir=""ltr"">
+		<head>
+		<meta charset=""utf-8""/>
+		<style>
+			.form-control {{
+				border: solid 1px #fff;
+			}}
+			.form-label{{
+				font-weight: normal;
+			}}
+			.form-select {{
+
+            font-size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}}
+			.row {{
+				--bs-gutter-x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}}
+		</style>
+		<title>Test Page</title>
+		</head>
+		<body><br/>";
+		@* foreach (var item in datadetail)
+		{
+			var Item = item.deptSlip;
+			var operateDate = Item.operate_date.GetValueOrDefault(DateTime.MinValue);
+			var operateDate_TH = operateDate.ToString("dd/MM/yyyy", new CultureInfo("th-TH")); *@
+			InputHtml += $@"
+			<img src='https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/IMG_Academy_Logo.svg/1200px-IMG_Academy_Logo.svg.png'
+			alt = '' style = 'width: 150px;' >
+			<div class='row'>
+			<div class='col-xl-2 col-md-4 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ทะเบียนสมาชิก</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<div class='input-group-addon'>
+							<input class='form-control' value='{deptno_format}' />
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
+        <label class='form-label' for=''>รายการ</label>
+        <div class='form-group '>
+            <div class='input-group'>";
+			@* if (selectedRecppaytype == null)
+			{
+				string firstValue = null;
+				{
+					foreach (var recppaytypeItem in Item.recppaytype)
+					{
+						if (firstValue == null)
+						{
+							firstValue = $"{recppaytypeItem.recppaytype_code} - {recppaytypeItem.recppaytype_desc}";
+						}
+					}
+				}
+
+				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
+			}
+			else
+			{
+				InputHtml += $@"<input class='form-control' value='{selectedRecppaytype}' />";
+			} *@
+			InputHtml += $@"
+							</div>
+						</div>
+					</div>
+		<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+		<label class='form-label' for=''>วันที่</label>
+			<div class='form-group '>
+				<div class='label-group'>
+					<input class='form-control' value='operateDate_TH' />
+				</div>
+			</div>
+		</div>
+		<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>เลขสมุด</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<input class='form-control' value='Item.deptpassbook_no' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ชื่อบัญชี</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<input class='form-control' value='Item.deptaccount_name' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ประเภทบัญชี</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<input class='form-control' value='Item.depttype_desc' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ประเภทเงิน</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<RadzenText Text='@Item.moneytype_code' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>รหัสคู่บัญชี</label>
+				<div class='form-group '>
+					<div class='input-group'>";
+			@* if (selectedRecppaytype == null)
+			{
+				string firstValue = null;
+				{
+					foreach (var tofromaccItem in Item.tofromacc)
+					{
+						if (firstValue == null)
+						{
+							firstValue = $"{tofromaccItem.tofrom_accid} - {tofromaccItem.tofrom_accdesc}";
+						}
+					}
+				}
+
+				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
+			}
+			else
+			{
+				InputHtml += $@"<input class='form-control' value='{selectedToFromAcc}' />";
+			} *@
+			InputHtml += $@"
+					</div>
+				</div>
+			</div>
+
+			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>คงเหลือ</label>
+				<div class='form-group '>
+					<div class='label-group'>
+						<RadzenText Text='@Item.prncbal?.ToString()' />
+						<input class='form-control' value='Item.prncbal' />
+					</div>
+				</div>
+			</div>
+			<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
+				<label class='form-label' for=''>ทำรายการโดย</label>";
+			@* if (nobook_flag == 0)
+			{
+				InputHtml += $@"<input class='form-control' value='มีสมุด'/>";
+			}
+			else if (nobook_flag == 1)
+			{
+				InputHtml += $@"<input class='form-control' value='ไม่มีสมุด' />";
+			} *@
+			@* InputHtml += $@"</div>
+							</div>";
+				} *@
+				InputHtml += @"
+						</body>
+					</html>";
+				return InputHtml;
+	}
+@* private void OnInitialized()
+	{
+		StateHasChanged();
+		@if (currentStep == 2)
+		{
+			PrintPdf();
+		}
+    
+	} *@
 	// Event handler for RadzenSteps change
 	private void OnChange(int newStep)
 	{
 		currentStep = newStep;
+		Console.WriteLine(newStep); // This will print the current step
+		StateHasChanged();
+		@if (currentStep == 2)
+		{
+			PrintPdf();
+		}
 
 	}
 

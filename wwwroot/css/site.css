@@ -68,7 +68,7 @@ a, .btn-link {
     } */
 @import url("open-iconic/font/css/open-iconic-bootstrap.min.css");
 
-@font-face {
+/* @font-face {
   font-family: "CustomFontBold";
   src: url("../Content/ChakraPetch-Bold.ttf") format("truetype");
 }
@@ -76,7 +76,7 @@ a, .btn-link {
 @font-face {
   font-family: "CustomFontLight";
   src: url("../Content/ChakraPetch-Light.ttf") format("truetype");
-}
+} */
 
 @font-face {
   font-family: "CustomFontMedium";

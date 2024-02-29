@@ -214,7 +214,7 @@
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
             string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
-            if (baseType == "1")
+            if (baseType == "4654564654")
             {
                 Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
             }
@@ -242,15 +242,14 @@
     @* private async Task BaseType()
     {
         string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
-        if (baseType=="1"){
+        if (baseType == "4654564654")
+        {
             Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
-        }else if(baseType=="1"){
-             Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
         }else{
-            Coop_name = "error";
+            Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
         }
          
-    }*@
+    } *@
     private void AppAll()
     {
         NavigationManager.NavigateTo("index");
