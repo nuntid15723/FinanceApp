@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\CoopAPI_DEP\\FinanceApp\\FinanceApp.csproj": {}
+    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj": {}
   },
   "projects": {
-    "D:\\CoopAPI_DEP\\FinanceApp\\FinanceApp.csproj": {
+    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\CoopAPI_DEP\\FinanceApp\\FinanceApp.csproj",
+        "projectUniqueName": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj",
         "projectName": "FinanceApp",
-        "projectPath": "D:\\CoopAPI_DEP\\FinanceApp\\FinanceApp.csproj",
-        "packagesPath": "C:\\Users\\kiadt\\.nuget\\packages\\",
-        "outputPath": "D:\\CoopAPI_DEP\\FinanceApp\\obj\\",
+        "projectPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj",
+        "packagesPath": "C:\\Users\\nunti\\.nuget\\packages\\",
+        "outputPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kiadt\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\nunti\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -44,10 +44,6 @@
               "target": "Package",
               "version": "[2.4.0, )"
             },
-            "IronPdf": {
-              "target": "Package",
-              "version": "[2024.2.2, )"
-            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -56,13 +52,9 @@
               "target": "Package",
               "version": "[4.20.1, )"
             },
-            "iTextSharp": {
+            "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
-              "version": "[5.5.13.3, )"
-            },
-            "itext7": {
-              "target": "Package",
-              "version": "[8.0.2, )"
+              "version": "[7.4.0, )"
             }
           },
           "imports": [
@@ -84,7 +76,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

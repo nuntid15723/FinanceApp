@@ -1,0 +1,82 @@
+@page "/print"
+@using System.Text;
+@inject IJSRuntime JS
+@using Microsoft.JSInterop;
+@using System.Threading.Tasks;
+<div class="header-page">
+	<div class="row-header d-flex justify-content-between ">
+		<div class="header-left">
+            <h3>IronPdfComponent</h3>
+            <RadzenButton class="save_top" Icon="print" Text="Print PDF" Click="@PrintPdf" />
+            <RadzenButton class="save_top" Icon="print" Text="Print Slip" Click="@PrintSlip" />
+		</div>
+    </div>
+</div>
+@code {
+    
+    private async Task PrintPdf()
+    {
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPdfData();
+
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+        await JS.InvokeVoidAsync("printPdf", htmlData);
+    }
+    private async Task PrintSlip()
+    {
+        string htmlData = await GetPdfData();
+
+        await JS.InvokeVoidAsync("printHtml",htmlData);
+    }
+    // List<DEMO> demoData = new List<DEMO>();
+    public class DEMO
+    {
+        public string name { get; set; }
+        public string lastname { get; set; }
+        public string id { get; set; }
+    }
+
+    private async Task<string> GetPdfData()
+    {
+        List<DEMO> demoData = new List<DEMO>();
+        // Create instances of DEMO class and add them to demoData list
+        DEMO item1 = new DEMO { name = "John", lastname = "Doe", id = "1" };
+        DEMO item2 = new DEMO { name = "Jane", lastname = "Smith", id = "2" };
+        demoData.Add(item1);
+        demoData.Add(item2);
+
+        var InputHtml = $@"<!DOCTYPE html>
+<html lang=""en"" dir=""ltr"">
+<head>
+<meta charset=""utf-8""/>
+<title>Test Page</title>
+</head>
+<body>
+This is a test page for the Blazor component.<br/>
+<b style='font-size: 40px;'>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</b><
+The text you entered was: ทดสอบบบ<br/>
+<img src='https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/IMG_Academy_Logo.svg/1200px-IMG_Academy_Logo.svg.png'
+alt = '' style = 'width: 150px;' >
+<table style='border-collapse: collapse; width: 100%;font-size: 20px;'>
+<thead>
+<tr style='border: 1px solid black;'>
+<th style='border: 1px solid black;'>Header 1</th>
+<th style='border: 1px solid black;'>Header 2</th>
+<th style='border: 1px solid black;'>Header 3</th>
+</tr>
+</thead>
+<tbody>";
+        foreach (var item in demoData) // Replace 'items' with your actual data source
+        {
+            InputHtml += $@"<tr style='border: 1px solid black;'>
+<td style='border: 1px solid black;'>{item.id}, ทดสอบ 1</td>
+<td style='border: 1px solid black;'>{item.name}, ทดสอบ 2</td>
+<td style='border: 1px solid black;'>{item.lastname}, ทดสอบ 3</td>
+</tr>";
+        }
+        InputHtml += @"
+</body>
+</html>";
+        return InputHtml;
+    }
+}

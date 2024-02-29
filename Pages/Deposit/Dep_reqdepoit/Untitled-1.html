@@ -1124,3 +1124,48 @@
 			</div>
 		</div>
 	}
+
+
+	 public async Task<LoginResult> Login(string user_name, string password, string selectedDatabase)
+    {
+        var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
+        var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
+        var payload = new
+        {
+            coop_control = selectedDatabase == "1" ? "065001" : "079001",
+            coop_id = selectedDatabase == "1" ? "065001" : "079001",
+            user_name = user_name,
+            password = password,
+            base_id = selectedDatabase,
+        };
+        var reqUrl = ApiClient.Paths.UserLogin;
+        var json = JsonConvert.SerializeObject(payload);
+        Console.WriteLine($"reqUrl:{reqUrl}");
+        Console.WriteLine($"payload content :{json}");
+        var response = await _apiProvider.PostAsync(reqUrl, payload);
+        Console.WriteLine($"presponse:{response}");
+
+        Console.WriteLine($"response.IsSuccessStatusCode :{response.IsSuccessStatusCode}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+            var loginResponse = JsonConvert.DeserializeObject<LoginResult>(jsonResponse);
+            Console.WriteLine($"isSuccess: {loginResponse.Success}");
+            _state.SetAmsecUseappss((List<AmsecUseappss>)loginResponse.Content.Content);
+            if (loginResponse != null)
+            {
+                if (loginResponse.Success)
+                {
+                    Console.WriteLine($"isSuccess: {loginResponse.Success}");
+                    Console.WriteLine($"message: {loginResponse.Message}");
+                    Console.WriteLine($"accessToken: {loginResponse.Content.AccessToken}");
+                    Console.WriteLine($"refreshToken: {loginResponse.Content.RefreshToken}");
+                    Console.WriteLine($"AmsecUseappss: {loginResponse.Content.Content}");
+                    return new LoginResult
+                    {
+                        Success = true,
+                        accessToken = loginResponse.Content.AccessToken,
+                        refreshToken = loginResponse.Content.RefreshToken,
+                        amsecUseappss = (List<AmsecUseappss>)loginResponse.Content.Content,
+                    };
