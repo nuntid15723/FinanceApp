@@ -14,10 +14,7 @@
 @using System.Text.Json
 @using System.ComponentModel
 @using System.ComponentModel.DataAnnotations
-@using FinanceApp.Helpers
 @using System.Text;
-@using IronPdf
-@using IronPdf.Rendering
 
 <style>
 	.icon-search {
@@ -2473,68 +2470,9 @@ else
 					</html>";
 				return InputHtml;
 	}
-	private async Task SubmitHTML()
-	{
-		// Setting IronPdf license key
-		IronPdf.License.LicenseKey = "IRONSUITE.NUNTIDLOVE555.GMAIL.COM.19356-5EF597365A-DZIS5GE-ERJBRTEJGDO4-XLVOO7ZE5OWK-2HROPNUZ5BMO-RCU3FWPVBSPI-QKNZHEMBRPH2-56KVQLEQSUWJ-QBZS5U-TQR5VWOWR3SLUA-DEPLOYMENT.TRIAL-UWUADT.TRIAL.EXPIRES.07.MAR.2024";
 
-		// Build HTML content from datadetail
-		StringBuilder htmlBuilder = new StringBuilder();
-		htmlBuilder.Append("<html><body>");
 
-		foreach (var item in datadetail)
-		{
-			var Item = item.deptSlip;
-			List<string> recppaytype_desc = new List<string>();
-			@foreach (var recppaytypeItem in Item.recppaytype)
-			{
-				if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-				{
-					recppaytype_desc.Add($"{recppaytypeItem.recppaytype_code}-{recppaytypeItem.recppaytype_desc}");
-				}
-			}
-			htmlBuilder.Append($"<div>{deptno_format}: {Item.deptaccount_name}</div>");
-			if (selectedRecppaytype != null)
-			{
-				htmlBuilder.Append($"<div class='input-group'>{selectedRecppaytype}</div>");
-			}
-			else
-			{
-				htmlBuilder.Append($"<div class='input-group'>");
-				foreach (var desc in recppaytype_desc)
-				{
-					htmlBuilder.Append($"<div>{desc}</div>");
-				}
-				htmlBuilder.Append("</div>");
-			}
 
-		}
-		htmlBuilder.Append("</body></html>");
-
-		// Rendering HTML to PDF
-		var renderer = new IronPdf.HtmlToPdf();
-		var doc = renderer.RenderHtmlAsPdf(htmlBuilder.ToString());
-		var fileName = $"example_{DateTime.Now:yyyyMMddHH}.pdf";
-		// Invoking JavaScript function to submit HTML
-		using var streamRef = new DotNetStreamReference(stream: doc.Stream);
-		await jsRuntime.InvokeVoidAsync("SubmitHTML", fileName, streamRef);
-	}
-    @* public class InputHTMLModel
-    {
-        public string HTML { get; set; }
-        public string deptno_format { get; set; }
-    } *@
-
-	private string pdfPath;
-    private string name ="นายโกโก้";
-
-    private async Task GenerateAndDownloadPdf()
-    {
-        var sb = new StringBuilder(); // Create a new StringBuilder
-        sb.Append($"<header class='clearfix'><h1>INVOICE</h1>                                                                                                                       <div id='company'class='clearfix' style='color:blue;'>                                                                                                                  <div>Company Name นายโกโก้</div><div>455 John Tower,<br /> AZ 85004, US</div><div>(602) 519-0450</div><div><a href='mailto:company@example.com'>company@example.com</a></div></div><div id='project'><div><span>PROJECT</span> Website development</div><div><span>CLIENT</span> John Doe</div><div><span>ADDRESS</span> 796 Silver Harbour, TX 79273, US</div><div><span>EMAIL</span> <a href='mailto:john@example.com'>john@example.com</a></div><div><span>DATE</span> April 13, 2016</div><div><span>DUE DATE</span> May 13, 2016</div></div></header><main><table><thead><tr><th class='service'>SERVICE</th><th class='desc'>DESCRIPTION</th><th>PRICE</th><th>QTY</th><th>TOTAL</th></tr></thead><tbody><tr><td class='service'>Design</td><td class='desc'>Creating a recognizable design solution based on the company's existing visual identity</td><td class='unit'>$400.00</td><td class='qty'>2</td><td class='total'>$800.00</td></tr><tr><td colspan='4'>SUBTOTAL</td><td class='total'>$800.00</td></tr><tr><td colspan='4'>TAX 25%</td><td class='total'>$200.00</td></tr><tr><td colspan='4' class='grand total'>GRAND TOTAL</td><td class='grand total'>$1,000.00</td></tr></tbody></table><div id='notices'><div>NOTICE:</div><div class='notice'>A finance charge of 1.5% will be made on unpaid balances after 30 days.</div></div></main>");
-        var pdfBytes = PdfGenerator.GeneratePdfFromHtml(sb.ToString());
-        var pdfPath = Path.Combine(Directory.GetCurrentDirectory());
-    } 
 	private bool IsSaveEnabled => SaveStatus == "1";
 
 	private void OnChange(int newStep)
