@@ -983,8 +983,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
                 foreach (var item in datadetail)
                 {
-                    var Deptslip = CreateDeptSlip(coop_id, full_name, machine_address, item);
-                    var DeptSlipdet = CreateDeptSlip(coop_id, full_name, machine_address, item);
+                    var Deptslip = CreateDeptSlip(coop_id, name, machine_address, item);
+                    var DeptSlipdet = CreateDeptSlip(coop_id, name, machine_address, item);
                     var DeptSlipCheque = CreateDeptSlipCheque(coop_id, deptslip_no, deptaccount_no, item);
 
 
@@ -1029,7 +1029,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             }
         }
 
-        private Deptslip CreateDeptSlip(string coop_id, string full_name, string machine_address, Models.Deposit item)
+        private Deptslip CreateDeptSlip(string coop_id, string name, string machine_address, Models.Deposit item)
         {
             var deptSlip = new Deptslip
             {
@@ -1046,7 +1046,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 moneytype_code = (cashTypeValue == null) ? item.deptSlip.moneytype_code : cashTypeValue,
                 bank_code = item.deptSlip.bank_code,
                 bankbranch_code = item.deptSlip.bankbranch_code,
-                entry_id = full_name,
+                entry_id = name,
                 machine_id = machine_address,
                 tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? item.deptSlip.tofrom_accid,
                 operate_date = DateTime.Today,
@@ -1098,7 +1098,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
             return deptSlip;
         }
-        private DeptSlipdet CreateDeptSlipdet(string coop_id, string full_name, string machine_address, Models.Deposit item)
+        private DeptSlipdet CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
         {
             var deptSlipdet = new DeptSlipdet
             {
