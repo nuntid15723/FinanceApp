@@ -284,8 +284,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             DepttypeValue = values[0];
             selectedValue = values[1];
             // DepttypeValue = e.Value.ToString();
-            depttype_code = DepttypeValue;
-            Console.WriteLine($"selectedValue : {selectedValue}");
+            depttype_code= DepttypeValue.Trim();
+            Console.WriteLine($"selectedValue : {selectedValue},DepttypeValue:'{depttype_code}'");
         }
         private async Task AcctypeChanged(ChangeEventArgs e)
         {
@@ -883,10 +883,10 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             if (type_monthintpay == 1)
             {
                 await GetBookNo();
-                foreach (var item in getOfBookNo)
-                {
-                    Console.WriteLine($"book_no: {item.book_no}");
-                }
+                // foreach (var item in getOfBookNo)
+                // {
+                //     Console.WriteLine($"book_no: {item.book_no}");
+                // }
             }
         }
 
@@ -958,14 +958,14 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         prncbal_retire = item.prncbal_retire,
                         remark = item.remark,
 
-                        deptpassbook_no = item.deptpassbook_no,
+                        deptpassbook_no = deptpassbook_no,
                         condforwithdraw = item.condforwithdraw,
                         upint_time = item.upint_time,
                         deptaccount_ename = item.deptaccount_ename,
                         account_type = item.account_type,
                         monthintpay_meth = (type_monthintpay != null) ? type_monthintpay : item.monthintpay_meth,
                         traninttype_code = item.traninttype_code,
-                        tran_deptacc_no = tran_deptacc_no,
+                        tran_deptacc_no = item.tran_deptacc_no,
                         dept_tranacc_name = item.dept_tranacc_name,
                         deptmonth_status = item.deptmonth_status,
 
