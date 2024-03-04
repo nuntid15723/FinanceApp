@@ -143,6 +143,12 @@
         box-shadow: var(--bs-box-shadow-sm) !important;
         background-color: #fff;
     }
+
+    .rz-panel-menu .rz-navigation-menu .rz-navigation-item .rz-navigation-item-link {
+        margin-left: -30px;
+    }
+
+    @*.rz-panel-menu{margin-left:-30px;}*@
 </style>
 <div id="body-pd">
     <header class="header shadow-sm" id="header">
@@ -152,7 +158,7 @@
         </div>
         <div class="header_center">
             <div id="header-content">
-                <img src="https://www.freepnglogos.com/uploads/starbucks-logo-png-transparent-0.png" alt="Logo">
+                <img class="img-app" src="Images/coop_img/band_black.jpg" alt="Logo">
                 <p>@Coop_name</p>
                 <!-- Add more content or links here if needed -->
             </div>
@@ -221,12 +227,12 @@
     private NavigationManager NavigationManager { get; set; }
     private string Coop_name;
     private string baseType;
-    
+
 
     @* protected override async Task OnInitializedAsync()
-    {
-        await BaseType();
-    } *@
+{
+await BaseType();
+} *@
 
     private async Task BaseType()
     {
@@ -235,19 +241,21 @@
         if (baseType == "4654564654")
         {
             Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
-        }else{
+        }
+        else
+        {
             Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
         }
     }
     @* protected override async Task OnInitializedAsync()
-    {
-        // เรียกใช้ JavaScript Interop เพื่อโหลดไฟล์ sessionInterop.js
-        await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
-    } *@
+{
+// เรียกใช้ JavaScript Interop เพื่อโหลดไฟล์ sessionInterop.js
+await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
+} *@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        
+
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");

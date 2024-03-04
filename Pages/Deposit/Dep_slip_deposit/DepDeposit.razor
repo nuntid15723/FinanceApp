@@ -127,7 +127,7 @@
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
 		<div class="header-left">
-			<h4>ระบบ เงินฝาก - ฝากเงิน @currentStep</h4>
+			<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
 		</div>
 		@* <div class="header-right">
 		<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
@@ -137,11 +137,6 @@
 			{
 				<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync"
 							  Disabled="@(!IsSaveEnabled)" />
-			}
-			else if (currentStep == 2)
-			{
-				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@SaveDataAsync"
-							  Disabled="@(!success_status)" />
 			}
 		</div>
 	</div>
@@ -163,7 +158,7 @@ else
 				<Steps>
 					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ทำรายการ">
 						<RadzenRow>
-							<RadzenText Text="Enter user information" />
+							<RadzenText Text="ทำรายการ" />
 						</RadzenRow>
 						@if (datadetail == null)
 						{
@@ -2148,13 +2143,9 @@ else
 					@* <RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true"> *@
 					<RadzenStepsItem  Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
-							<RadzenText Text="Enter about me" />
+							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
 								<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
-							@* <h1>HTML to PDF Conversion</h1> *@
-					@* <button class="btn btn-primary" @onclick="GenerateAndDownloadPdf">Generate PDF</button>
-					 <h3>IronPdfComponent</h3>
-					 <input class="form-control"style="width:100%;text-align: center; "placeholder="0" type="text" value="55555" /> *@
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>

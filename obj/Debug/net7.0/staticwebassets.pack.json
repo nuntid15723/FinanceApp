@@ -5,6 +5,82 @@
       "PackagePath": "staticwebassets\\FinanceApp.bundle.scp.css"
     },
     {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\account.jpg",
+      "PackagePath": "staticwebassets\\Images\\account.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\admin.jpg",
+      "PackagePath": "staticwebassets\\Images\\admin.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\assist.jpg",
+      "PackagePath": "staticwebassets\\Images\\assist.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\borrow.jpg",
+      "PackagePath": "staticwebassets\\Images\\borrow.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\coop_img\\band_black.jpg",
+      "PackagePath": "staticwebassets\\Images\\coop_img\\band_black.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\deposit.jpg",
+      "PackagePath": "staticwebassets\\Images\\deposit.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\divavg.jpg",
+      "PackagePath": "staticwebassets\\Images\\divavg.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\dur.jpg",
+      "PackagePath": "staticwebassets\\Images\\dur.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\finance.jpg",
+      "PackagePath": "staticwebassets\\Images\\finance.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\fom.jpg",
+      "PackagePath": "staticwebassets\\Images\\fom.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\hr.jpg",
+      "PackagePath": "staticwebassets\\Images\\hr.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\insurance.jpg",
+      "PackagePath": "staticwebassets\\Images\\insurance.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\ixp.jpg",
+      "PackagePath": "staticwebassets\\Images\\ixp.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\keeping.jpg",
+      "PackagePath": "staticwebassets\\Images\\keeping.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\loan.jpg",
+      "PackagePath": "staticwebassets\\Images\\loan.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\mbshr.jpg",
+      "PackagePath": "staticwebassets\\Images\\mbshr.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\mis.jpg",
+      "PackagePath": "staticwebassets\\Images\\mis.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\rdc.jpg",
+      "PackagePath": "staticwebassets\\Images\\rdc.jpg"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\walfare.jpg",
+      "PackagePath": "staticwebassets\\Images\\walfare.jpg"
+    },
+    {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },

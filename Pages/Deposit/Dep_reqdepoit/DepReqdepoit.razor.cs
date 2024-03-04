@@ -124,6 +124,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public List<BankBranch>? bankBranch { get; set; }
         private string BankBranchValues { get; set; }
         private string BankValues { get; set; }
+        private int currentStep = 0;
+
         void ShowNotification(NotificationMessage message)
         {
             NotificationService.Notify(message);
@@ -1026,8 +1028,9 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         success_status = true;
                         if (success_status)
                         {
-                            this.currentStep = 2;
-                            await InvokeAsync(() => StateHasChanged());
+                            currentStep = 2;
+                            PrintPdf();
+                            StateHasChanged();
                         }
                     }
                     else

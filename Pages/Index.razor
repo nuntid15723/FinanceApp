@@ -5,7 +5,7 @@
 @inject StateContainer State
 @using FinanceApp.Services
 @using Newtonsoft.Json
-
+@using FinanceApp.Shared
 <PageTitle>Dashboard</PageTitle>
 <style>
     a {
@@ -19,7 +19,8 @@
     }
 
     .img-app {
-        max-width: 200px;
+        max-width: 150px;
+        height: auto;
     }
 
     .group-app {
@@ -47,13 +48,14 @@
                 {
                     if (@item.permiss_flag == true)
                     {
-                        <div class="col-xl-3 col-md-4 col-sm-6 mt-3">
+                        <div class="col-xl-3 col-md-4 col-sm-12 mt-3">
                             <a href="@item.application" @onclick="() => HandleItemClick(item.application,item.application_name)">
-                                <div class="card" style="width: 18rem;">
-                                    <div class="card-body">
+                                <div class="card" style="width: 100%;height: 100%;">
+                                    <div class="card-body" style="height: 100%;">
                                         <div class="group-app">
                                             <div class="ions-app">
-                                                <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
+                                                @* <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i> *@
+                                                <img class="img-app" src="Images/@(item.application).jpg" alt="App Image">
                                             </div>
                                             <div class="text-app">
                                                 <h5 class="card-title">@item.application_name</h5>
@@ -90,8 +92,6 @@
         }
         else
         {
-            @* @if (NavigationManager != null)
-            { *@
             <div class="row">
                 @if (amsecUseappss != null)
                 {
@@ -100,13 +100,14 @@
                         if (@item.permiss_flag == true)
                         {
                             <div class="col-xl-3 col-md-4 col-sm-6 mt-3">
-                            <h6>localStorage</h6>
                                 <a href="@item.application" @onclick="() => HandleItemClick(item.application,item.application_name)">
-                                    <div class="card" style="width: 18rem;">
+                                    <div class="card" style="width: 100%;">
                                         <div class="card-body">
                                             <div class="group-app">
                                                 <div class="ions-app">
-                                                    <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i>
+                                                    @* <i class="fa-solid fa-piggy-bank icons-app" style="color: #29b402;"></i> *@
+                                                    <img class="img-app" src="Images/@(item.application).jpg" alt="App Image">
+
                                                 </div>
                                                 <div class="text-app">
                                                     <h5 class="card-title">@item.application_name</h5>
@@ -140,17 +141,12 @@
                         }
                     }
                 }
-            @* } *@
-            @* else
-            {
-                <p>ไม่พบ Application</p>
-                // ทำการ redirect ไปที่ "/login"
-                NavigationManager.NavigateTo("/login", true);
-            } *@
             </div>
         }
     </div>
-</div> @* <img class="img-app" src="Images/deposit.jpg" alt="Deposit Image"> *@
+
+
+</div>
 @* <script>
 window.getItemApplication = (application, application_name) => {
 DotNet.invokeMethodAsync('YourAssemblyName', 'HandleApplicationClick', application);
@@ -159,6 +155,7 @@ DotNet.invokeMethodAsync('YourAssemblyName', 'HandleApplicationClick', applicati
 @code {
     [Inject]
     private NavigationManager NavigationManager { get; set; }
+    public string appimg = "icon_appstore.png";
     protected async Task bearerToken()
     {
         string Token = await jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");

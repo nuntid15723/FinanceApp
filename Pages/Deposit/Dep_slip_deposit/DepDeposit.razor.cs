@@ -1052,6 +1052,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         if (success_status)
                         {
                             this.currentStep = 2;
+                            PrintPdf();
                             await InvokeAsync(() => StateHasChanged());
                         }
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");

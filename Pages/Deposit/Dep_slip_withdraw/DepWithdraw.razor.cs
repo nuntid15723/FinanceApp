@@ -5,10 +5,8 @@ using Radzen;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Net.Http.Json;
-using System.Text.Json;
 using FinanceApp.Services;
 using System.Text;
-using Microsoft.AspNetCore.Components;
 using System.Globalization;
 using System.Net;
 using Newtonsoft.Json.Linq;
@@ -172,7 +170,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public List<GetBank>? getBank { get; set; }
         public List<GetDeptMaintype>? getDeptMaintype { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
-      
+
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
             var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
@@ -337,12 +335,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
             try
             {
-                
+
                 deptno_format = data.deptaccount_no?.Trim();
 
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
-                await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+                await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
                     coop_id = coop_id,
@@ -706,8 +704,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
         private string cashTypeValue;
         private string Valueselecte;
-        private string Recppaytype_code; 
-        private string selectedRecppaytype; 
+        private string Recppaytype_code;
+        private string selectedRecppaytype;
         private string recpPayTypeCode { get; set; }
         private string bankaccount_name { get; set; }
         private string check_no { get; set; }
@@ -723,7 +721,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             string[] values = e.Value.ToString().Split('_');
             selectedValue = values[0];
             recpPayTypeCode = values[1];
-            selectedRecppaytype = values[1]+" - "+values[2];
+            selectedRecppaytype = values[1] + " - " + values[2];
             bookCode = selectedValue;
             string[] toFromaccId1 = bookCode.Split('|');
             cashTypeValue = toFromaccId1[0];
@@ -1007,8 +1005,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         success_status = true;
                         if (success_status)
                         {
-                            this.currentStep = 2;
-                            await InvokeAsync(() => StateHasChanged());
+                            currentStep = 2;
+                            PrintPdf();
+                            StateHasChanged();
+
                         }
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
