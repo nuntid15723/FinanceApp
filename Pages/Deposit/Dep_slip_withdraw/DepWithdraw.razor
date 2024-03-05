@@ -1359,7 +1359,7 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขบัตรประชาชน</label>
 												<div class="form-group ">
 													<div class="label-group">
@@ -1368,7 +1368,7 @@ else
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> *@
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">วันที่</label>
 												<div class="form-group ">
@@ -1379,13 +1379,13 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ทำรายการโดย</label>
 												<select class="form-select" @bind="nobook_flag" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
 													<option Value="0">มีสมุด</option>
 													<option Value="1">ไม่มีสมุด</option>
 												</select>
-											</div>
+											</div> *@
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ประเภทเงิน</label>
 												<div class="form-group ">
@@ -1672,18 +1672,17 @@ else
 														</div>
 													</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">อายัดรวม</label>
 												<div class="form-group ">
-														<div class="label-group">
-															<div class="input-group-addon">
-															<RadzenText Text="@sequest_amont?.ToString()" />
-															</div>
+													<div class="label-group">
+														<div class="input-group-addon">
+														<RadzenText Text="@sequest_amont?.ToString()" />
 														</div>
 													</div>
-											
-											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+												</div>
+											</div> *@
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เช็คเรียกเก็บ</label>
 													<div class="form-group ">
 														<div class="label-group">
@@ -1692,9 +1691,10 @@ else
 															</div>
 														</div>
 													</div>
-											</div>
-										</div>
-										<div class="row">
+											</div> *@
+										@* </div>
+										<div class="row"> *@
+											@if (group_itemtype == "CLS"){
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ</label>
 												<div class="form-group ">
@@ -1755,6 +1755,7 @@ else
 														</div>
 													</div>
 											</div>
+											}
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดทำรายการ</label>
 												<div class="form-group ">
@@ -1765,7 +1766,8 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เพื่อ</label>
 												<div class="form-group ">
 													<div class="label-group">
@@ -1774,7 +1776,7 @@ else
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> 
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดในสมุด</label>
 												<div class="form-group ">
@@ -1784,7 +1786,7 @@ else
 														</div>
 													</div>
 												</div>
-											</div>
+											</div>*@
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดสุทธิ</label>
 													<div class="form-group ">
@@ -1795,7 +1797,7 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เงื่อนไขการถอน</label>
 													<div class="form-group ">
 													<div class="label-group">
@@ -1804,7 +1806,7 @@ else
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> *@
 										</div>
 									</div>
 									@if (recpPayTypeCode == "DEN")

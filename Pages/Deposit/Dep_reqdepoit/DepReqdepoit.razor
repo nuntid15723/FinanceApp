@@ -1289,9 +1289,7 @@ else
 						</RadzenRow>
 							@if (repReqdepoit != null)
 								{
-									@* <div class="card body-page"> *@
 										<div class="from">
-											@* <form @onsubmit="PerformSearch"> *@
 												@foreach (var Item in repReqdepoit)
 												{
 													<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
@@ -1657,9 +1655,7 @@ else
 														</div>
 													</div>
 												}
-											@* </form> *@
 										</div>
-									@* </div> *@
 								}
 					</RadzenStepsItem>
 					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">

@@ -63,7 +63,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public int? operate_code { get; set; }
         public int? sign_flag { get; set; }
         public int? laststmseq_no { get; set; }
-        public int? nobook_flag { get; set; }
+        public int? nobook_flag { get; set; } = 0;
         public int? prnc_no { get; set; }
         public decimal? deptslip_amt { get; set; }
         public decimal? deptslip_netamt { get; set; }
@@ -1043,6 +1043,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostDeptSaving}";
                     var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+                    Console.WriteLine($"response: {deptDeposit}");
                     var responseData = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)

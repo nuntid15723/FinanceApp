@@ -1786,19 +1786,6 @@ else
 												</div>
 											</div>
 										</div>
-										@* <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
-							<label class="form-label" for="">เลขที่บัญชี</label>
-							<div class="form-group ">
-							<div class="input-group">
-							<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format "
-							Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
-							<div class="input-group-addon">
-							<RadzenIcon class="icons icon-search" @onclick="GetDeptMaintype" Icon="ballot"
-							data-bs-toggle="modal" data-bs-target="#ModalSearch" />
-							</div>
-							</div>
-							</div>
-							</div> *@
 										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">รายการ</label>
 											<div class="form-group ">
@@ -1843,52 +1830,6 @@ else
 												</div>
 											</div>
 										</div>
-
-										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">วันที่</label>
-											<div class="form-group ">
-												<div class="label-group">
-													@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.operate_date)</label> *@
-													<RadzenText Text="@String.Format("{0:dd/MM/yyyy}", Item.operate_date)" />
-
-												</div>
-											</div>
-
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">เลขสมุด</label>
-											<div class="form-group ">
-												<div class="label-group">
-													<RadzenText Text="@Item.deptpassbook_no" />
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">ชื่อบัญชี</label>
-											<div class="form-group ">
-												<div class="label-group">
-													<RadzenText Text="@Item.deptaccount_name" />
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">ประเภทบัญชี</label>
-											<div class="form-group ">
-												<div class="label-group">
-													<RadzenText Text="@Item.depttype_desc" />
-												</div>
-											</div>
-										</div>
-										@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">เพื่อ</label>
-											<div class="form-group ">
-												<div class="label-group">
-													<RadzenText Text="@Item.dept_objective" />
-												</div>
-											</div>
-										</div> *@
 										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ประเภทเงิน</label>
 											<div class="form-group ">
@@ -1897,6 +1838,52 @@ else
 												</div>
 											</div>
 										</div>
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">วันที่</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@String.Format("{0:dd/MM/yyyy}", Item.operate_date)" />
+
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="row">
+										@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลขสมุด</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@Item.deptpassbook_no" />
+												</div>
+											</div>
+										</div> *@
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ชื่อบัญชี</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@Item.deptaccount_name" />
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ประเภทบัญชี</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@Item.depttype_desc" />
+												</div>
+											</div>
+										</div>
+									
+										@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เพื่อ</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@Item.dept_objective" />
+												</div>
+											</div>
+										</div> *@
+										
 										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">รหัสคู่บัญชี</label>
 											<div class="form-group ">
@@ -1935,7 +1922,7 @@ else
 											</div>
 										</div>
 
-										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">คงเหลือ</label>
 											<div class="form-group ">
 												<div class="label-group">
@@ -1943,37 +1930,40 @@ else
 												</div>
 											</div>
 										</div>
-										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ทำรายการโดย</label>
 											<select class="form-select" @bind="nobook_flag" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
 												<option Value="0">มีสมุด</option>
 												<option Value="1">ไม่มีสมุด</option>
 											</select>
-										</div>
-										@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										</div> *@
+										@if (nobook_flag.ToString() == "0")
+{
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">อ้างอิงรายการ</label>
 											<div class="form-group ">
 												<div class="label-group">
-													<RadzenText Text="@Item.refer_slipno" />
+													<RadzenText  Text="@Item.refer_slipno" />
 												</div>
 											</div>
-										</div> *@
+										</div>
+										}
 										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ยอดทำรายการ</label>
 											<div class="form-group ">
 												<div class="label-group">
-													<RadzenText Text="@DeptslipAmt?.ToString()" />
+													<RadzenText  Text="@(DeptslipAmt?.ToString()  ?? "0")" />
 												</div>
 											</div>
 										</div>
-										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+										@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">คงเหลือสูงสุด</label>
 											<div class="form-group ">
 												<div class="label-group">
 													<RadzenText Text="@Item.withdrawable_amt?.ToString()" />
 												</div>
 											</div>
-										</div>
+										</div> *@
 										@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">หมายเหตุ</label>
 											<div class="form-group ">
@@ -1986,21 +1976,21 @@ else
 											<label class="form-label" for="">ยอดสุทธิ</label>
 											<div class="form-group ">
 												<div class="label-group">
-													<RadzenText Text="@DeptslipAmt?.ToString()" />
+													<RadzenText  Text="@(DeptslipAmt?.ToString()  ?? "0")" />
 												</div>
 											</div>
 										</div>
-										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+										@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ยอดฝากได้</label>
 											<div class="form-group ">
 												<div class="label-group">
 													<RadzenText Text="@deptmax_amt?.ToString()" />
 												</div>
 											</div>
-										</div>
+										</div> *@
 									</div>
 								</div>
-								@if (recpPayTypeCode == "DEN")
+								@if (recpPayTypeCode == "TRB")
 								{
 
 									<div class="row mt-5">
