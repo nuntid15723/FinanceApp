@@ -116,12 +116,12 @@ namespace FinanceApp.Pages
                 }
                 else
                 {
-                    // await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
-                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
-                    // // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    // NavigationManager.NavigateTo("/login", true);
-                    // var errorResponse = await response.Content.ReadAsStringAsync();
-                    // Console.WriteLine($"Error response: {errorResponse}");
+                    await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                    // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                    NavigationManager.NavigateTo("/login", true);
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error response: {errorResponse}");
                 }
             }
             catch (Exception ex)
