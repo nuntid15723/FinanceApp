@@ -102,6 +102,11 @@
 	.label-group {
 		margin-left: 10px;
 	}
+	.form-label-preview{
+    margin-bottom: 0.1rem;
+    margin-top: 5px;
+	font-size: 19px;
+	}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -627,7 +632,7 @@ else
 																	</div>
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">การฝากรายเดือน</label>
-																		<select class="form-select" @bind="Item.deptmonth_status" >
+																		<select class="form-select" @bind="Item.deptmonth_status">
 																			<option Value="0">ไม่ต้องการฝาก</option>
 																			<option Value="1">ต้องการฝาก</option>
 																		</select>
@@ -749,12 +754,12 @@ else
 																			</div>
 																		</div>
 																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																	@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																		<div class="form-check" style="margin-top: 35px;">
-																			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+																			<input class="form-check-input" type="checkbox" @bind="dept_status" id="flexCheckDefault">
 																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
 																		</div>
-																	</div>
+																	</div> *@
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">อ้างอิง</label>
 																		<div class="form-group ">
@@ -971,7 +976,7 @@ else
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																		<div class="form-check" style="margin-top: 35px;">
 																			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน1</label>
 																		</div>
 																	</div>
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
@@ -1174,8 +1179,8 @@ else
 																</div>
 																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																	<div class="form-check" style="margin-top: 35px;">
-																		<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-																		<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+																		<input class="form-check-input" type="checkbox" @bind="@dept_status1" @onclick="CheckboxChanged">
+																		<label class="form-check-label">ค้ำประกัน</label>
 																	</div>
 																</div>
 																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
@@ -1295,7 +1300,7 @@ else
 													<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
 														<div class="row">
 															<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ทะเบียนสมาชิก</label>
+																<label class="form-label-preview" for="">ทะเบียนสมาชิก</label>
 																<div class="form-group ">
 																	<div class="label-group">
 																		<div class="input-group-addon">
@@ -1304,8 +1309,8 @@ else
 																	</div>
 																</div>
 															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ประเภทบัญชี</label>
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">ประเภทบัญชี</label>
 																<div class="form-group ">
 																		<div class="input-group">
 																			@if (selectedValue == null)
@@ -1335,34 +1340,40 @@ else
 																		</div> 
 																</div>
 															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขที่สมุดเงินฝาก</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptpassbook_no" />
-																	</div>
-																</div>
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">เปิดบัญชีโดย</label>
+																@if(selectRecpPayType == null){
+																	<select id="recppaytypeSelect" name="recppaytype_code"class="form-select" 
+																		disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+																		@if (Item.recppaytype == null || !Item.recppaytype.Any())
+																			{
+																				<option selected disabled></option>
+																			}
+																			else
+																			{
+																				@foreach (var recppaytypeItem in Item.recppaytype)
+																				{
+																					if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+																					{
+																						isCurrentOptionSelected = true;
+
+																					}
+																					else
+																					{
+																						isCurrentOptionSelected = false;
+																					}
+																					<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
+																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+																					</option>
+																				}
+																			}
+																	</select>
+																}else{
+																	<RadzenText Text="@selectRecpPayType" />
+																	}
 															</div>
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขที่บัญชี</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptaccount_no" />
-																		</div>
-																	</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ประเภทบุคคล</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.membcat_desc" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วันที่เปิดบัญชี</label>
+																<label class="form-label-preview" for="">วันที่เปิดบัญชี</label>
 																<div class="form-group ">
 																	<div class="label-group">
 																		@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.operate_date)</label> *@
@@ -1372,7 +1383,7 @@ else
 																</div>
 															</div>
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วันครบกำหนด</label>
+																<label class="form-label-preview" for="">วันครบกำหนด</label>
 																<div class="form-group ">
 																	<div class="label-group">
 																	@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.due_date)</label> *@
@@ -1380,8 +1391,10 @@ else
 																	</div>
 																</div>
 															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ผู้ถือบัญชี</label>
+														</div>
+														<div class="row">
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">ผู้ถือบัญชี</label>
 																<div class="form-group ">
 																	<div class="input-group">
 																		@if(selectAcctype ==null){
@@ -1414,16 +1427,156 @@ else
 																		}
 																	</div>
 																</div>
-																
 															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ชื่อบัญชี(TH)</label>
+															@* @if(){} *@
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">รหัสคู่บัญชี</label>
+																@if(selectTofromacc == null){
+																	<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+																		@foreach (var tofromaccItem in Item.tofromacc)
+																			{
+																				if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+																				{
+																					isCurrentOptionSelected = true;
+
+																				}
+																				else
+																				{
+																					isCurrentOptionSelected = false;
+																				}
+																				<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																				</option>
+
+																			}
+																	</select>
+																}else{
+																	<RadzenText Text="@selectTofromacc" />
+																}
+															</div>
+															@{
+																string colSizeClass = (recpPayTypeCode == "OTR") ? "col-xl-2" : "col-xl-3";
+															}
+															<div class="@colSizeClass col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">ระยะเวลาการรับดอกเบี้ย</label>
+																<select class="form-select"  @bind="Item.upint_time" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+																	<option Value="1">ตามประเภท</option>
+																	<option Value="2">รายเดือน</option>
+																	<option Value="3">ราย 3 เดือน</option>
+																	
+																</select>
+															</div>
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">วิธีรับดอกเบี้ย</label>
+																<select class="form-select" value="@type_monthintpay" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+																	<option Value="0">ทบต้น</option>
+																	<option value="1">โอนเข้า บ/ช</option>
+																	<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
+																	<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
+																	<option Value="5">รับเป็นธนาณัติ</option>
+																</select>
+															</div>
+															@if(recpPayTypeCode == "OTR"){
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">อ้างอิง</label>
+																<div class="form-group ">
+																	<div class="lable-group">
+																		<RadzenText Text="@Item.deptslip_no" />
+																	</div>
+																</div>
+															</div>}
+															
+														</div>
+														<div class="row">
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">ชื่อบัญชี</label>
 																<div class="form-group ">
 																	<div class="label-group">
 																		<RadzenText Text="@Item.deptaccount_name" />
 																	</div>
 																</div>
 															</div>
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">เงื่อนไขการถอน</label>
+																<div class="form-group ">
+																	<div class="label-group">
+																		<RadzenText Text="@Item.condforwithdraw" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<div class="form-check" style="margin-top: 35px;">
+																	<input class="form-check-input" style="opacity: 1;" disabled type="checkbox" @bind="dept_status1" >
+																	<label class="form-check-label" style="opacity: 1;" >ค้ำประกัน</label>
+																</div>
+															</div>
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<div class="form-check" style="margin-top: 35px;">
+																	@if(Item.deptmonth_status.ToString() == "1"){
+																	<input class="form-check-input" style="opacity: 1;" disabled type="checkbox" id="flexCheckDefault" checked>
+																	<label class="form-check-label" style="opacity: 100;" for="flexCheckDefault">การฝากรายเดือน</label>
+																	}else{
+																	<input class="form-check-input" style="opacity: 1; disabled type="checkbox" id="deptMonthCheckbox">
+           									 						<label class="form-check-label" style="opacity: 100;" for="deptMonthCheckbox">การฝากรายเดือน</label>
+																	}
+																</div>
+															</div>
+															@if(dept_status == 1){
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">จำนวนส่งรายงวด</label>
+																<div class="form-group ">
+																	<div class="label-group">
+																		<RadzenText Text="@Item.deptmonth_amt" />
+																	</div>
+																</div>
+															</div>
+															}
+														</div>
+														<div class="row">
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column"></div>
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column"></div>
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">ยอดรวมสุทธิ</label>
+																<div class="form-group ">
+																	<div class="label-group">
+																		@* <RadzenText  Text="@DeptslipAmt ?? 0" style="text-align: end; font-size: 40px;"/> *@
+																		<RadzenText  Text="@(DeptslipAmt?.ToString()  ?? "0")" />
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="row">
+															@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label-preview" for="">การฝากรายเดือน</label>
+																<select class="form-select" @bind="Item.deptmonth_status" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+																	<option Value="0">ไม่ต้องการฝาก</option>
+																	<option Value="1">ต้องการฝาก</option>
+																</select>
+															</div> *@
+															@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">เลขที่สมุดเงินฝาก</label>
+																<div class="form-group ">
+																	<div class="label-group">
+																		<RadzenText Text="@Item.deptpassbook_no" />
+																	</div>
+																</div>
+															</div> *@
+															@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">เลขที่บัญชี</label>
+																<div class="form-group ">
+																	<div class="label-group">
+																		<RadzenText Text="@Item.deptaccount_no" />
+																		</div>
+																	</div>
+															</div>
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ประเภทบุคคล</label>
+																<div class="form-group ">
+																	<div class="label-group">
+																		<RadzenText Text="@Item.membcat_desc" />
+																	</div>
+																</div>
+															</div> *@
 														</div>
 														<div class="row">
 															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
@@ -1434,25 +1587,7 @@ else
 																	</div>
 																</div>
 															</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ระยะเวลาการรับด/บ</label>
-																<select class="form-select"  @bind="Item.upint_time" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																	<option Value="1">ตามประเภท</option>
-																	<option Value="2">รายเดือน</option>
-																	<option Value="3">ราย 3 เดือน</option>
-																	
-																</select>
-															</div>
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วิธีรับดอกเบี้ย</label>
-																<select class="form-select" value="@type_monthintpay" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																	<option Value="0">ทบต้น</option>
-																	<option value="1">โอนเข้า บ/ช</option>
-																	<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
-																	<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
-																	<option Value="5">รับเป็นธนาณัติ</option>
-																</select>
-															</div>
+															
 															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">เพื่อ</label>
 																<div class="form-group ">
@@ -1463,14 +1598,7 @@ else
 															</div>
 														</div>
 														<div class="row">
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เงื่อนไขการถอน</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.condforwithdraw" />
-																	</div>
-																</div>
-															</div>
+															
 															@if(type_monthintpay ==1 || type_monthintpay==2){
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
@@ -1481,53 +1609,6 @@ else
 																</div>
 															</div>
 															}
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">การฝากรายเดือน</label>
-																<select class="form-select" @bind="Item.deptmonth_status" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																	<option Value="0">ไม่ต้องการฝาก</option>
-																	<option Value="1">ต้องการฝาก</option>
-																</select>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">จำนวนส่งรายงวด</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptmonth_amt" />
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เปิดบัญชีโดย</label>
-																@if(selectRecpPayType == null){
-																	<select id="recppaytypeSelect" name="recppaytype_code"class="form-select" 
-																		disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																		@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																			{
-																				<option selected disabled></option>
-																			}
-																			else
-																			{
-																				@foreach (var recppaytypeItem in Item.recppaytype)
-																				{
-																					if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-																					{
-																						isCurrentOptionSelected = true;
-
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
-																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																					</option>
-																				}
-																			}
-																	</select>
-																}else{
-																	<RadzenText Text="@selectRecpPayType" />
-																	}
-															</div>
 															@if(type_monthintpay ==1 || type_monthintpay==2){
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">ชื่อบัญชี</label>
@@ -1567,31 +1648,7 @@ else
 																</div>
 																}
 															}
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">รหัสคู่บัญชี</label>
-																@if(selectTofromacc == null){
-																	<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																		@foreach (var tofromaccItem in Item.tofromacc)
-																			{
-																				if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-																				{
-																					isCurrentOptionSelected = true;
-
-																				}
-																				else
-																				{
-																					isCurrentOptionSelected = false;
-																				}
-																				<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																				</option>
-
-																			}
-																	</select>
-																}else{
-																	<RadzenText Text="@selectTofromacc" />
-																}
-															</div>
+															
 															@if(type_monthintpay == 2){
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">ธนาคาร</label>
@@ -1631,10 +1688,10 @@ else
 															</div>
 															}
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<div class="form-check" style="margin-top: 35px;">
-																	<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-																	<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
-																</div>
+																		<div class="form-check" style="margin-top: 35px;">
+																			<input class="form-check-input" type="checkbox" @bind="dept_status" id="flexCheckDefault">
+																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+																		</div>
 															</div>
 															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">อ้างอิง</label>
@@ -1644,14 +1701,7 @@ else
 																	</div>
 																</div>
 															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">รวมสุทธิ</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@DeptslipAmt" style="text-align: end; font-size: 40px;"/>
-																	</div>
-																</div>
-															</div>
+															
 														</div>
 													</div>
 												}
@@ -1726,6 +1776,22 @@ else
 	private NavigationManager NavigationManager { get; set; }
 	private bool IsSaveEnabled => SaveStatus == "1";
 	IEnumerable<GetOfBookNo> getOfBook_No;
+		 private bool dept_status1 = false;
+
+    // เมื่อ checkbox ถูกติกเลือก
+    @* private void CheckboxChanged()
+    {
+        dept_status1 = dept_status1 == 0 ? false : true;
+    } *@
+	private void CheckboxChanged()
+	{
+    // ทำการคำนวณค่าของ dept_status
+    dept_status = dept_status1 ? 0 : 1;
+
+    // สามารถใส่คำสั่ง Console.WriteLine เพื่อ debug หรือตรวจสอบค่า dept_status ได้
+    Console.WriteLine("dept_status : " + dept_status);
+    }
+
 	// Define your button click function here
 	@* private async Task PrintPdf()
 	{

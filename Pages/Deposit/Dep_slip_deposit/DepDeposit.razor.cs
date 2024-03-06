@@ -94,7 +94,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public string? dept_tranacc_name { get; set; }
         public int? deptmonth_status { get; set; }
         public decimal? deptmonth_amt { get; set; }
-        public int? dept_status { get; set; }
+        public int? dept_status { get; set; } = 0;
         public int? monthint_status { get; set; }
         public decimal? f_tax_rate { get; set; }
         public int? adjdate_status { get; set; }
@@ -249,7 +249,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 deptno_format = data.deptaccount_no?.Trim();
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {deptaccount_no}");
-                await jsRuntime.InvokeVoidAsync("alert", $"เลือก {deptaccount_no}, {data.deptaccount_name}");
+                await JSRuntime.InvokeVoidAsync("alert", $"เลือก {deptaccount_no}, {data.deptaccount_name}");
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
                     coop_id = coop_id,

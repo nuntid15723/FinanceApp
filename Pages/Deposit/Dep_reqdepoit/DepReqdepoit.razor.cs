@@ -79,7 +79,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public string? dept_tranacc_name { get; set; }
         public int? deptmonth_status { get; set; }
         public string? deptmonth_amt { get; set; }
-        public string? dept_status { get; set; }
+        public int? dept_status { get; set; } = 0;
         public int? monthint_status { get; set; }
         public int? f_tax_rate { get; set; }
         public int? adjdate_status { get; set; }
@@ -271,7 +271,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             string[] values = e.Value.ToString().Split('|');
             recpPayTypeCode = values[0];
             selectRecpPayType = values[0] + "-" + values[1];
-            Console.WriteLine($" Recp Pay Type Code: {selectRecpPayType}");
+            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}");
             // if (recpPayTypeCode == "DEN")
             // {
             //     GetBabk();
@@ -917,6 +917,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 string hostName = Dns.GetHostName();
                 var hostEntry = Dns.GetHostEntry(hostName);
                 int MonthintpayMeth = type_monthintpay;
+                Console.WriteLine("dept_status : " + dept_status);
                 isLoading = true;
                 foreach (var item in repReqdepoit)
                 {
