@@ -1,5 +1,8 @@
 @inherits LayoutComponentBase
+@inject NotificationService NotificationService
+@using FinanceApp.Services;
 @using Newtonsoft.Json
+@using System.Net.Http.Headers;
 <style>
     .loading-backdrop {
         position: fixed;
@@ -137,7 +140,21 @@
         <div class="header_center">
             <div id="header-content">
                 <img class="img-app" src="Images/coop_img/band_black.jpg" alt="Logo">
-                <p>@Coop_name</p>
+                @if (getCoopid == null)
+                {
+                    <p>ERROR</p>
+                }
+                else
+                {
+
+                    @foreach (var item in getCoopid)
+                    {
+                        if (item.coop_id == Coop_id)
+                        {
+                            <p>@item.coop_name</p>
+                        }
+                    }
+                }
             </div>
         </div>
         <div class="header_right">
@@ -197,35 +214,95 @@
     [Inject]
     private NavigationManager NavigationManager { get; set; }
     private string Coop_name;
-    public async Task<(string coopControl, string userName, string fullName, string application)> GetUserData()
+    private string baseType;
+
+    private string Coop_id;
+    public List<Connection>? getCoopid { get; set; }
+    void ShowNotification(NotificationMessage message)
+    {
+        NotificationService.Notify(message);
+    }
+
+    private  async Task GetUserData()
+    {
+        var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+        string accessToken = bearerToken;
+        var (coopControl, coop_id, name, email, actort, apvlevelId, workDate) = TokenHelper.DecodeToken(accessToken);
+        Coop_id = coop_id;
+    }
+    private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
+    {
+        try
         {
-            string coopControl = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "coopControl");
-            string userName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "user_name");
-            string fullName = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "fullName");
-            string application = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+            var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
 
-             Console.WriteLine($"coopControlllll: {coopControl}, userName: {userName}, fullName: {fullName}, application: {application}");
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
 
-            return (coopControl, userName, fullName, application);
+                return await httpClient.GetAsync(apiUrl);
+            }
         }
+        catch (Exception ex)
+        {
+            // Handle exceptions here
+            Console.WriteLine($"Error: {ex.Message}");
+            throw;
+        }
+    }
+    private async Task GetCoopid()
+    {
+        try
+        {
+            baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.OfGetCoopid}?databaseid={baseType}";
+            var response = await SendApiRequestAsyncGet(apiUrl);
+            response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                getCoopid = JsonConvert.DeserializeObject<List<Connection>>(jsonString);
+                foreach (var item in getCoopid)
+                {
+                    Console.WriteLine($"coop_id: {item.coop_id}, coop_control: {item.coop_control}, coop_name: {item.coop_name}");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail =
+                ex.Message,
+                    Duration = 5000
+                });
+            Console.WriteLine(ex.Message.ToString());
+        }
+        finally
+        {
+        }
+    }
+    public class Connection
+    {
+        [JsonProperty("coop_id")]
+        public string coop_id { get; set; }
+
+        [JsonProperty("coop_control")]
+        public string coop_control { get; set; }
+
+        [JsonProperty("coop_name")]
+        public string coop_name { get; set; }
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
             string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
-            if (baseType == "4654564654")
-            {
-                Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
-            }
-            else if (baseType == "2")
-            {
-                Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
-            }
-            else
-            {
-                Coop_name = "error";
-            }
+            await GetCoopid();
+            await GetUserData();
             // ตรวจสอบว่ามี token หรือไม่
             string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
             if (string.IsNullOrEmpty(bearerToken))

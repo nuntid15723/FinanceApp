@@ -12,6 +12,10 @@
 @using System.Net;
 @using Microsoft.AspNetCore.Components;
 @using System.Text;
+@using System.Text.Json.Serialization;
+@using System.Net.Http.Headers;
+@inject NotificationService NotificationService
+
 
 <style>
     .loading-backdrop {
@@ -159,8 +163,21 @@
         <div class="header_center">
             <div id="header-content">
                 <img class="img-app" src="Images/coop_img/band_black.jpg" alt="Logo">
-                <p>@Coop_name</p>
-                <!-- Add more content or links here if needed -->
+                @if (getCoopid == null)
+                {
+                    <p>ERROR</p>
+                }
+                else
+                {
+
+                    @foreach (var item in getCoopid)
+                    {
+                        if (item.coop_id == Coop_id)
+                        {
+                            <p>@item.coop_name</p>
+                        }
+                    }
+                }
             </div>
         </div>
         <div class="header_right">
@@ -227,39 +244,97 @@
     private NavigationManager NavigationManager { get; set; }
     private string Coop_name;
     private string baseType;
-
-
-    @* protected override async Task OnInitializedAsync()
-{
-await BaseType();
-} *@
-
-    private async Task BaseType()
+    private string Coop_id;
+    public List<Connection>? getCoopid { get; set; }
+    void ShowNotification(NotificationMessage message)
     {
-        baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
-        @* Console.WriteLine($"baseType: {baseType}"); *@
-        if (baseType == "4654564654")
+        NotificationService.Notify(message);
+    }
+
+    private async Task GetUserData()
+    {
+        var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+        string accessToken = bearerToken;
+        var (coopControl, coop_id, name, email, actort, apvlevelId, workDate) = TokenHelper.DecodeToken(accessToken);
+        Console.WriteLine($"coopControl: {coopControl}, coop_id: {coop_id}");
+        Coop_id = coop_id;
+        // return (coopControl, coop_id, name, email, actort, apvlevelId, workDate);
+    }
+
+    private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
+    {
+        try
         {
-            Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+            var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                return await httpClient.GetAsync(apiUrl);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+            // Handle exceptions here
+            Console.WriteLine($"Error: {ex.Message}");
+            throw;
         }
     }
-    @* protected override async Task OnInitializedAsync()
-{
-// เรียกใช้ JavaScript Interop เพื่อโหลดไฟล์ sessionInterop.js
-await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
-} *@
+    private async Task GetCoopid()
+    {
+        try
+        {
 
+            baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.OfGetCoopid}?databaseid={baseType}";
+            var response = await SendApiRequestAsyncGet(apiUrl);
+            response.EnsureSuccessStatusCode();
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                getCoopid = JsonConvert.DeserializeObject<List<Connection>>(jsonString);
+                foreach (var item in getCoopid)
+                {
+                    Console.WriteLine($"coop_id: {item.coop_id}, coop_control: {item.coop_control}, coop_name: {item.coop_name}");
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowNotification(new NotificationMessage
+                {
+                    Severity = NotificationSeverity.Error,
+                    Summary = "Error",
+                    Detail =
+                ex.Message,
+                    Duration = 5000
+                });
+            Console.WriteLine(ex.Message.ToString());
+        }
+        finally
+        {
+        }
+    }
+    public class Connection
+    {
+        [JsonProperty("coop_id")]
+        public string coop_id { get; set; }
+
+        [JsonProperty("coop_control")]
+        public string coop_control { get; set; }
+
+        [JsonProperty("coop_name")]
+        public string coop_name { get; set; }
+    }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
-            await BaseType();
+            await GetCoopid();
+            await GetUserData();
             await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
             // Get the stored windowIds
             var jsons = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "winObject");
@@ -272,7 +347,13 @@ await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
 
                 // Get the stored token
                 string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
+                if (string.IsNullOrEmpty(bearerToken))
+                {
+                    // ถ้าไม่มี token ให้แสดง alert message
+                    await JSRuntime.InvokeVoidAsync("alert", "Logoff or session expired. Please login again.");
+                    // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                    NavigationManager.NavigateTo("/login", true);
+                }
                 // Get the stored applications
                 var applications = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
                 // Deserialize the stored windowIds
@@ -280,7 +361,8 @@ await JSRuntime.InvokeVoidAsync("loadScript", "js/sessionInterop.js");
                 // Check if the deserialization was successful and windowIds exist
                 if (windowIdData != null && windowIdData.winObject != null)
                 {
-                    bool isMatch = windowIdData.winObject.Any(windowId => windowId.Trim() == currentPageWindowId.Trim());
+                    bool isMatch = windowIdData.winObject.Any(windowId => windowId.Trim() ==
+                    currentPageWindowId.Trim());
 
                     if (!isMatch && currentPageWindowId != applications)
                     {

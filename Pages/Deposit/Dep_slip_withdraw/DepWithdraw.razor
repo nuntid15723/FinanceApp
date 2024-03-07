@@ -143,8 +143,6 @@ else
 																	<label class="form-label" for="">เลขที่บัญชี</label>
 																	<div class="form-group ">
 																		<div class="input-group">
-																			@* <input class="form-control" type="text" name="emp_name"
-																	@bind-value="deptaccount_no"> *@
 																			<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
 																			@bind-value="deptaccount_No_fild" Name="deptaccount_No_fild"
 																						class="form-control" />
@@ -347,8 +345,6 @@ else
 																		<label class="form-label" for="">เลขที่บัญชี</label>
 																		<div class="form-group ">
 																			<div class="input-group">
-																				@* <input class="form-control" type="text" name="emp_name"
-																	@bind-value="deptaccount_no"> *@
 																				<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
 																				@bind-value="deptaccount_No_fild" Name="deptaccount_no"
 																							class="form-control" />
@@ -491,8 +487,6 @@ else
 												</div>
 											</div>
 											<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-												@* <button type="button" class="btn btn-outline-secondary"
-									@onclick="PerformSearch">ค้นหา</button> *@
 												<button type="submit" class="btn btn-outline-secondary">ค้นหา</button>
 
 											</div>
@@ -505,7 +499,6 @@ else
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รายการ</label>
-												@* @if(selectedRecppaytype == null){ *@
 												<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
 												@onchange="RecpPayTypeChanged">
 
@@ -538,30 +531,6 @@ else
 													}
 
 												</select>
-												@* } else {
-													<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
-												@onchange="RecpPayTypeChanged">
-													@foreach (var recppaytypeItem in Item.recppaytype)
-														{
-															if (recppaytypeItem.recppaytype_code == selectedRecppaytype)
-															{
-																isCurrentOptionSelected = true;
-
-															}
-															else
-															{
-																isCurrentOptionSelected = false;
-															}
-															if (recppaytypeItem.genvc_flag == 1)
-															{
-																<option value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.recppaytype_desc}")"
-																		selected="@isCurrentOptionSelected">
-																	@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																</option>
-															}
-														}
-													</select>
-												} *@
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขสมุด</label>
@@ -605,13 +574,12 @@ else
 													<input class="form-control" readonly type="text" name="cash_type"
 														   value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
 												</div>
-												@if (cashTypeValue == "CSH")
+												 @if (cashTypeValue == "CSH")
 											{
 												@if (recpPayTypeCode == "WTD")
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-														@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
 														<select id="tofromaccSelect" class="form-select" value="@bookCode"
 														@onchange="OnToFromAccChanged">
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
@@ -639,7 +607,6 @@ else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-														@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
 														<select id="tofromaccSelect" class="form-select" value="@bookCode"
 														@onchange="OnToFromAccChanged">
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
@@ -651,15 +618,6 @@ else
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var tofromaccItem in Item.tofromacc)
 																{
-																	@* if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-										{
-										isCurrentOptionSelected = true;
-
-										}
-										else
-										{
-										isCurrentOptionSelected = false;
-										} *@
 																	@if (tofromaccItem.cash_type == cashTypeValue)
 																	{
 																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
@@ -679,7 +637,6 @@ else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-														@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
 														<select id="tofromaccSelect" class="form-select" @onchange="OnToFromAccChanged">
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
 															{
@@ -708,7 +665,6 @@ else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-														@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
 														<select id="tofromaccSelect" class="form-select" @onchange="OnToFromAccChanged">
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
 															{
@@ -791,8 +747,7 @@ else
 												</div>
 												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">รหัสคู่บัญชี</label>
-													@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
-													<select id="tofromaccSelect" class="form-select" value="@bookCode"
+													 <select id="tofromaccSelect" class="form-select" value="@bookCode"
 													@onchange="OnToFromAccChanged">
 														@if (Item.tofromacc == null || !Item.tofromacc.Any())
 														{
@@ -802,24 +757,24 @@ else
 														{
 															<option selected disabled>--กรุณาเลือก--</option>
 															@foreach (var tofromaccItem in Item.tofromacc)
-															{
+															{ 
 																@* if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-										{
-										isCurrentOptionSelected = true;
+																	{
+																	isCurrentOptionSelected = true;
 
-										}
-										else
-										{
-										isCurrentOptionSelected = false;
-										} *@
+																	}
+																	else
+																	{
+																	isCurrentOptionSelected = false;
+																	} *@
 																@if (tofromaccItem.cash_type == cashTypeValue)
 																{
 																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
 																			selected="@isCurrentOptionSelected">
 																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 																	</option>
-																}
-															}
+																} 
+															 }
 														}
 													</select>
 												</div>
@@ -831,7 +786,6 @@ else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-														@* <select id="tofromaccSelect" class="form-select" @bind="selectedValue"> *@
 														<select id="tofromaccSelect" class="form-select" value="@bookCode"
 														@onchange="OnToFromAccChanged">
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
@@ -899,39 +853,39 @@ else
 												<label class="form-label" for="">ด/บ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
 													   Name="int_amt" value="@(int_amt!= null ? Item.int_amt:int_amt)" placeholder="0.00"
-													   onblur="formattNumberr(this)" />
+													/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">โบนัส</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
 													   Name="intbonus_amt" value="@intbonus_amt" placeholder="0.00"
-													   onblur="formattNumberr(this)" />
+													/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ภาษี ด/บ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
 													   Name="tax_amt" value="@(tax_amt!= null ? Item.tax_amt:tax_amt)" placeholder="0.00"
-													   onblur="formattNumberr(this)" />
+													/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ คืน</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_return" value="@int_return" placeholder="0.00" onblur="formattNumberr(this)" />
+													   Name="int_return" value="@int_return" placeholder="0.00"/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ภาษี คืน</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="tax_return" value="@tax_return" placeholder="0.00" onblur="formattNumberr(this)" />
+													   Name="tax_return" value="@tax_return" placeholder="0.00" />
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ สุทธิ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_netamt" value="@int_netamt" placeholder="0.00" onblur="formattNumberr(this)" />
+													   Name="int_netamt" value="@int_netamt" placeholder="0.00"  />
 
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -1090,12 +1044,12 @@ else
 																						</option>
 																					}
 																				</select>
-																				@* <RadzenDropDown @ref="radzenDropDown" @bind-SearchText="searchText"
+																				<RadzenDropDown @ref="radzenDropDown" @bind-SearchText="searchText"
 														FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
 														FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
 														Data="@getBank" TextProperty="bank_desc" ValueProperty="bank_code"
 														AllowClear="true" @bind-Value="selectedCustomer"
-														Style="width: 100%; max-width: 400px;" /> *@
+														Style="width: 100%; max-width: 400px;" />
 
 																			</td>
 
@@ -1267,7 +1221,7 @@ else
 									var Item = item.deptSlip;
 									<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
 										<div class="row">
-											<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขที่บัญชี</label>
 												<div class="form-group ">
 													<div class="label-group">
@@ -1284,91 +1238,41 @@ else
 													<option value="CLS">(/) ปิดบัญชี</option>
 												</select>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รายการ</label>
-													<div class="form-group ">
-												<div class="input-group">
-												@if (selectedRecppaytype == null)
-												{
-													<select id="recppaytypeSelect" name="recppaytype_code" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-														@foreach (var recppaytypeItem in Item.recppaytype)
+												<div class="form-group ">
+													<div class="input-group">
+														@if (selectedRecppaytype == null)
 														{
-															if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-															{
-																isCurrentOptionSelected = true;
+															<select id="recppaytypeSelect" name="recppaytype_code" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																@foreach (var recppaytypeItem in Item.recppaytype)
+																{
+																	if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+																	{
+																		isCurrentOptionSelected = true;
 
-															}
-															else
-															{
-																isCurrentOptionSelected = false;
-															}
-															if (recppaytypeItem.genvc_flag == 1)
-															{
-																<option value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}")"
-																		selected="@isCurrentOptionSelected">
-																	@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																</option>
-															}
+																	}
+																	else
+																	{
+																		isCurrentOptionSelected = false;
+																	}
+																	if (recppaytypeItem.genvc_flag == 1)
+																	{
+																		<option value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}")"
+																				selected="@isCurrentOptionSelected">
+																			@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+																		</option>
+																	}
+																}
+															</select>
 														}
-													</select>
-												}
-												else
-												{
-													<RadzenText Text="@selectedRecppaytype" />
-												}
-												</div>
-													</div>
-											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมุด</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@Item.deptpassbook_no" />
-														</div>
+														else
+														{
+															<RadzenText Text="@selectedRecppaytype" />
+														}
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ชื่อบัญชี</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@Item.deptaccount_name" />
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ประเภทบัญชี</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@Item.depttype_desc" />
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมาชิก</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@Item.member_no" />
-														</div>
-													</div>
-												</div>
-											</div>
-											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขบัตรประชาชน</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@card_person" />
-														</div>
-													</div>
-												</div>
-											</div> *@
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">วันที่</label>
 												<div class="form-group ">
@@ -1379,13 +1283,57 @@ else
 													</div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขสมาชิก</label>
+												<div class="form-group ">
+													<div class="label-group">
+														<div class="input-group-addon">
+															<RadzenText Text="@Item.member_no" />
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อบัญชี</label>
+												<div class="form-group ">
+													<div class="label-group">
+														<div class="input-group-addon">
+															<RadzenText Text="@Item.deptaccount_name" />
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ประเภทบัญชี</label>
+												<div class="form-group ">
+													<div class="label-group">
+														<div class="input-group-addon">
+															<RadzenText Text="@Item.depttype_desc" />
+														</div>
+													</div>
+												</div>
+											</div>
+
 											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ทำรายการโดย</label>
-												<select class="form-select" @bind="nobook_flag" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-													<option Value="0">มีสมุด</option>
-													<option Value="1">ไม่มีสมุด</option>
-												</select>
-											</div> *@
+								<label class="form-label" for="">เลขบัตรประชาชน</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<div class="input-group-addon">
+								<RadzenText Text="@card_person" />
+								</div>
+								</div>
+								</div>
+								</div> *@
+
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ทำรายการโดย</label>
+								<select class="form-select" @bind="nobook_flag" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+								<option Value="0">มีสมุด</option>
+								<option Value="1">ไม่มีสมุด</option>
+								</select>
+								</div> *@
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ประเภทเงิน</label>
 												<div class="form-group ">
@@ -1396,68 +1344,80 @@ else
 													</div>
 												</div>
 											</div>
+										</div>
+										<div class="row">
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขสมุด</label>
+												<div class="form-group ">
+													<div class="label-group">
+														<div class="input-group-addon">
+															<RadzenText Text="@Item.deptpassbook_no" />
+														</div>
+													</div>
+												</div>
+											</div>
 											@if (cashTypeValue == "CSH")
 											{
 												@if (recpPayTypeCode == "WTD")
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-															<div class="form-group ">
-												<div class="input-group">
-														<select id="tofromaccSelect" class="form-select" value="@bookCode"
-														 style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-															@if (Item.tofromacc == null || !Item.tofromacc.Any())
-															{
-																<option selected disabled></option>
-															}
-															else
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var tofromaccItem in Item.tofromacc)
-																{
-																	@if (tofromaccItem.cash_type == cashTypeValue)
+														<div class="form-group ">
+															<div class="input-group">
+																<select id="tofromaccSelect" class="form-select" value="@bookCode"
+																		style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		<option selected disabled></option>
 																	}
-																}
-															}
-														</select>
-													</div>
+																	else
+																	{
+																		<option selected disabled>--กรุณาเลือก--</option>
+																		@foreach (var tofromaccItem in Item.tofromacc)
+																		{
+																			@if (tofromaccItem.cash_type == cashTypeValue)
+																			{
+																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																						selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																				</option>
+																			}
+																		}
+																	}
+																</select>
 															</div>
+														</div>
 													</div>
 												}
 												else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-															<div class="form-group ">
-												<div class="input-group">
-														<select id="tofromaccSelect" class="form-select" value="@bookCode"
-														style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-															@if (Item.tofromacc == null || !Item.tofromacc.Any())
-															{
-																<option selected disabled></option>
-															}
-															else
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var tofromaccItem in Item.tofromacc)
-																{
-																	@if (tofromaccItem.cash_type == cashTypeValue)
+														<div class="form-group ">
+															<div class="input-group">
+																<select id="tofromaccSelect" class="form-select" value="@bookCode"
+																		style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		<option selected disabled></option>
 																	}
-																}
-															}
-														</select>
-													</div>
+																	else
+																	{
+																		<option selected disabled>--กรุณาเลือก--</option>
+																		@foreach (var tofromaccItem in Item.tofromacc)
+																		{
+																			@if (tofromaccItem.cash_type == cashTypeValue)
+																			{
+																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																						selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																				</option>
+																			}
+																		}
+																	}
+																</select>
 															</div>
+														</div>
 													</div>
 												}
 											}
@@ -1467,76 +1427,85 @@ else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-															<div class="form-group ">
-												<div class="input-group">
-														<select id="tofromaccSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-															@if (Item.tofromacc == null || !Item.tofromacc.Any())
-															{
-																<option selected disabled></option>
-															}
-															else
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var tofromaccItem in Item.tofromacc)
-																{
-																	isCurrentOptionSelected = true;
-																	@if (tofromaccItem.cash_type == cashTypeValue)
+														<div class="form-group ">
+															<div class="input-group">
+																<select id="tofromaccSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		<option selected disabled></option>
 																	}
+																	else
+																	{
+																		<option selected disabled>--กรุณาเลือก--</option>
+																		@foreach (var tofromaccItem in Item.tofromacc)
+																		{
+																			isCurrentOptionSelected = true;
+																			@if (tofromaccItem.cash_type == cashTypeValue)
+																			{
+																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																						selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																				</option>
+																			}
 
-																}
-															}
-														</select>
-													</div>
+																		}
+																	}
+																</select>
 															</div>
+														</div>
 													</div>
 												}
 												else
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
-															<div class="form-group ">
-												<div class="input-group">
-														<select id="tofromaccSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-															@if (Item.tofromacc == null || !Item.tofromacc.Any())
-															{
-																<option selected disabled></option>
-															}
-															else
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var tofromaccItem in Item.tofromacc)
-																{
-																	isCurrentOptionSelected = true;
-																	@if (tofromaccItem.cash_type == cashTypeValue)
+														<div class="form-group ">
+															<div class="input-group">
+																<select id="tofromaccSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		<option selected disabled></option>
 																	}
+																	else
+																	{
+																		<option selected disabled>--กรุณาเลือก--</option>
+																		@foreach (var tofromaccItem in Item.tofromacc)
+																		{
+																			isCurrentOptionSelected = true;
+																			@if (tofromaccItem.cash_type == cashTypeValue)
+																			{
+																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																						selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																				</option>
+																			}
 
-																}
-															}
-														</select>
-													</div>
+																		}
+																	}
+																</select>
 															</div>
+														</div>
 													</div>
 												}
 											}
 											else if (cashTypeValue == "CBT" || Item.moneytype_code == "CBT" || cashTypeValue == "CHQ" ||
 											Item.moneytype_code == "CHQ")
 											{
-												<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">เลขที่บัญชี</label>
+													<div class="form-group ">
+														<div class="label-group">
+															<div class="input-group-addon">
+																<RadzenText Text="@check_no" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">ธนาคาร</label>
-														<div class="form-group ">
-												<div class="input-group">
-															<select id="getBankSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled
-																	>
+													<div class="form-group ">
+														<div class="input-group">
+															<select id="getBankSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var getBankItem in getBank)
 																{
@@ -1549,10 +1518,10 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">สาขา</label>
-														<div class="form-group ">
-												<div class="input-group">
+													<div class="form-group ">
+														<div class="input-group">
 															<select id="getBankSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url() " disabled>
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var bankBranchItem in bankBranch)
@@ -1566,17 +1535,7 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">เลขที่บัญชี</label>
-													<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@check_no" />
-														</div>
-													</div>
-												</div>
-												</div>
-												<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">ชื่อบัญชี</label>
 													<div class="form-group ">
 														<div class="label-group">
@@ -1589,29 +1548,29 @@ else
 												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">รหัสคู่บัญชี</label>
 													<div class="form-group ">
-												<div class="input-group">
-													<select id="tofromaccSelect" class="form-select" value="@bookCode"
-													 style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-														@if (Item.tofromacc == null || !Item.tofromacc.Any())
-														{
-															<option selected disabled></option>
-														}
-														else
-														{
-															<option selected disabled>--กรุณาเลือก--</option>
-															@foreach (var tofromaccItem in Item.tofromacc)
-															{
-																@if (tofromaccItem.cash_type == cashTypeValue)
+														<div class="input-group">
+															<select id="tofromaccSelect" class="form-select" value="@bookCode"
+																	style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																{
-																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																			selected="@isCurrentOptionSelected">
-																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																	</option>
+																	<option selected disabled></option>
 																}
-															}
-														}
-													</select>
-												</div>
+																else
+																{
+																	<option selected disabled>--กรุณาเลือก--</option>
+																	@foreach (var tofromaccItem in Item.tofromacc)
+																	{
+																		@if (tofromaccItem.cash_type == cashTypeValue)
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isCurrentOptionSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																			</option>
+																		}
+																	}
+																}
+															</select>
+														</div>
 													</div>
 												</div>
 											}
@@ -1623,138 +1582,139 @@ else
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
 														<div class="form-group ">
-												<div class="input-group">
-														<select id="tofromaccSelect" class="form-select" value="@bookCode"
-														style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-															@if (Item.tofromacc == null || !Item.tofromacc.Any())
-															{
-																<option selected disabled></option>
-															}
-															else
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var tofromaccItem in Item.tofromacc)
-																{
-																	isCurrentOptionSelected = true;
-																	@if (tofromaccItem.cash_type == Item.moneytype_code)
+															<div class="input-group">
+																<select id="tofromaccSelect" class="form-select" value="@bookCode"
+																		style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		<option selected disabled></option>
 																	}
-																}
-															}
-														</select>
-													</div>
+																	else
+																	{
+																		<option selected disabled>--กรุณาเลือก--</option>
+																		@foreach (var tofromaccItem in Item.tofromacc)
+																		{
+																			isCurrentOptionSelected = true;
+																			@if (tofromaccItem.cash_type == Item.moneytype_code)
+																			{
+																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																						selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																				</option>
+																			}
+																		}
+																	}
+																</select>
+															</div>
 														</div>
 													</div>
 												}
 											}
 
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">คงเหลือ</label>
-												<div class="form-group ">
-														<div class="label-group">
-															<div class="input-group-addon">
-																<RadzenText Text="@Item.prncbal?.ToString()" />
-															</div>
-														</div>
-													</div>
-											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ถอนได้</label>
-												<div class="form-group ">
-														<div class="label-group">
-															<div class="input-group-addon">
-																<RadzenText Text="@Item.withdrawable_amt?.ToString()" />
-															</div>
-														</div>
-													</div>
-											</div>
-											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">อายัดรวม</label>
 												<div class="form-group ">
 													<div class="label-group">
 														<div class="input-group-addon">
-														<RadzenText Text="@sequest_amont?.ToString()" />
+															<RadzenText Text="@Item.prncbal?.ToString()" />
 														</div>
 													</div>
 												</div>
-											</div> *@
-											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เช็คเรียกเก็บ</label>
-													<div class="form-group ">
-														<div class="label-group">
-															<div class="input-group-addon">
-																<RadzenText Text="@checkpend_amt?.ToString()" />
-															</div>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ถอนได้</label>
+												<div class="form-group ">
+													<div class="label-group">
+														<div class="input-group-addon">
+															<RadzenText Text="@Item.withdrawable_amt?.ToString()" />
 														</div>
 													</div>
-											</div> *@
-										@* </div>
-										<div class="row"> *@
-											@if (group_itemtype == "CLS"){
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ด/บ</label>
-												<div class="form-group ">
+												</div>
+											</div>
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">อายัดรวม</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<div class="input-group-addon">
+								<RadzenText Text="@sequest_amont?.ToString()" />
+								</div>
+								</div>
+								</div>
+								</div> *@
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">เช็คเรียกเก็บ</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<div class="input-group-addon">
+								<RadzenText Text="@checkpend_amt?.ToString()" />
+								</div>
+								</div>
+								</div>
+								</div> *@
+										</div>
+										<div class="row">
+											@if (group_itemtype == "CLS")
+											{
+												<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ด/บ</label>
+													<div class="form-group ">
 														<div class="label-group">
 															<div class="input-group-addon">
 																<RadzenText Text="@(int_amt?.ToString()!= null ? Item.int_amt?.ToString():int_amt?.ToString())" />
 															</div>
 														</div>
 													</div>
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">โบนัส</label>
-												<div class="form-group ">
+												</div>
+												<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">โบนัส</label>
+													<div class="form-group ">
 														<div class="label-group">
 															<div class="input-group-addon">
 																<RadzenText Text="@(intbonus_amt?.ToString())" />
 															</div>
 														</div>
 													</div>
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ภาษี ด/บ</label>
-												<div class="form-group ">
+												</div>
+												<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ภาษี ด/บ</label>
+													<div class="form-group ">
 														<div class="label-group">
 															<div class="input-group-addon">
 																<RadzenText Text="@(tax_amt?.ToString()!= null ? Item.tax_amt?.ToString():tax_amt?.ToString())" />
 															</div>
 														</div>
 													</div>
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ด/บ คืน</label>
-												<div class="form-group ">
+												</div>
+												<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ด/บ คืน</label>
+													<div class="form-group ">
 														<div class="label-group">
 															<div class="input-group-addon">
 																<RadzenText Text="@(int_return?.ToString())" />
 															</div>
 														</div>
 													</div>
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ภาษี คืน</label>
-												<div class="form-group ">
+												</div>
+												<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ภาษี คืน</label>
+													<div class="form-group ">
 														<div class="label-group">
 															<div class="input-group-addon">
 																<RadzenText Text="@(tax_return?.ToString())" />
 															</div>
 														</div>
 													</div>
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ด/บ สุทธิ</label>
-												<div class="form-group ">
+												</div>
+												<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ด/บ สุทธิ</label>
+													<div class="form-group ">
 														<div class="label-group">
 															<div class="input-group-addon">
 																<RadzenText Text="@(int_netamt?.ToString())" />
 															</div>
 														</div>
 													</div>
-											</div>
+												</div>
 											}
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดทำรายการ</label>
@@ -1766,30 +1726,29 @@ else
 													</div>
 												</div>
 											</div>
-											
 											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เพื่อ</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@Item.dept_objective" />
-														</div>
-													</div>
-												</div>
-											</div> 
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ยอดในสมุด</label>
-												<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@(book_balance.ToString())" />
-														</div>
-													</div>
-												</div>
-											</div>*@
+								<label class="form-label" for="">เพื่อ</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<div class="input-group-addon">
+								<RadzenText Text="@Item.dept_objective" />
+								</div>
+								</div>
+								</div>
+								</div>
+								<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ยอดในสมุด</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<div class="input-group-addon">
+								<RadzenText Text="@(book_balance.ToString())" />
+								</div>
+								</div>
+								</div>
+								</div> *@
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดสุทธิ</label>
-													<div class="form-group ">
+												<div class="form-group ">
 													<div class="label-group">
 														<div class="input-group-addon">
 															<RadzenText Text="@(DeptslipAmt?.ToString())" />
@@ -1798,160 +1757,160 @@ else
 												</div>
 											</div>
 											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เงื่อนไขการถอน</label>
-													<div class="form-group ">
-													<div class="label-group">
-														<div class="input-group-addon">
-															<RadzenText Text="@Item.condforwithdraw" />
-														</div>
-													</div>
-												</div>
-											</div> *@
+								<label class="form-label" for="">เงื่อนไขการถอน</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<div class="input-group-addon">
+								<RadzenText Text="@Item.condforwithdraw" />
+								</div>
+								</div>
+								</div>
+								</div>  *@
 										</div>
+										@*</div>
+							@if (recpPayTypeCode == "DEN")
+							{
+
+							<div class="row mt-5">
+							<div class="col-12">
+							<div class="row">
+							<div class="col-2" style="text-align: end;">
+							<h4>รายการเช็ค:</h4>
+							</div>
+							<div class="col-4">
+							<button class="btn btn-outline-primary" style="border: solid 1px #d1d1d1;"
+							@onclick="AddRow">
+							เพิ่มแถว
+							</button>
+							</div>
+							</div>
+							</div>
+							<div class=" mt-1">
+							<div class="row mt-2">
+							<div class="col-12">
+							<table class="table table-bordered" style="width: 100%;">
+							<thead>
+							<tr>
+							<th style="text-align: center;width:10%;background-color: rgb(166, 207, 243);">
+							เลขที่เช็ค
+							</th>
+							<th style="text-align: center;width:13%;background-color: rgb(166, 207, 243);">
+							วันที่หน้าchq
+							</th>
+							<th style="text-align: center;width:8%;background-color: rgb(166, 207, 243);">
+							รหัส
+							</th>
+							<th style="text-align: center;width:20%;background-color: rgb(166, 207, 243);">
+							ธนาคาร
+							</th>
+							<th style="text-align: center;width:8%;background-color: rgb(166, 207, 243);">
+							รหัส
+							</th>
+							<th style="text-align: center;width:20%;background-color: rgb(166, 207, 243);">
+							สาขา
+							</th>
+							<th style="text-align: center;width:3%;background-color: rgb(166, 207, 243);">
+							</th>
+							<th style="text-align: center;width:15%;background-color: rgb(166, 207, 243);">
+							จำนวนเงิน
+							</th>
+							<th style="text-align: center;width:3%;background-color: rgb(166, 207, 243);">
+							ลบ
+							</th>
+							</tr>
+							</thead>
+							<tbody>
+							@if (rows != null && rows.Count > 0)
+							{
+							@foreach (var row in rows)
+							@* @for (var index = 0; index < rows.Count; index++)
+							{
+							<tr>
+							<td>
+							<input class="form-control"
+							style="width:100%;text-align: center; border: solid 1px #fff;"
+							placeholder="0" type="text" @bind="row.cheque_no" />
+							</td>
+							<td>
+							<RadzenDatePicker class="inputrPicker" @bind-Value=row.cheque_date
+							Name="operate_date" DateFormat="dd/MM/yyyy" />
+							</td>
+							<td>
+							<input class="form-control"
+							style="width:100%;text-align: center; border: solid 1px #fff;"
+							type="text" @bind-value="row.bank_code" @oninput="OnGetBankChanged" />
+							</td>
+							<td>
+							<select id="getBankSelect" class="form-select"
+							@onchange="OnGetBankSelectChanged">
+							<option selected disabled>--กรุณาเลือก--</option>
+							@foreach (var getBankItem in getBank)
+							{
+							bool isCurrentOptionSelected = getBankItem.bank_code == row.bank_code;
+							<option value="@getBankItem.bank_code"
+							selected="@isCurrentOptionSelected">
+							@getBankItem.bank_code - @getBankItem.bank_desc
+							</option>
+							}
+							</select>
+							@* <RadzenDropDown @ref="radzenDropDown" @bind-SearchText="searchText"
+							FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+							FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
+							Data="@getBank" TextProperty="bank_desc" ValueProperty="bank_code"
+							AllowClear="true" @bind-Value="selectedCustomer"
+							Style="width: 100%; max-width: 400px;" />
+
+							</td>
+
+							<td>
+							<input class="form-control"
+							style="width:100%;text-align: center; border: solid 1px #fff;"
+							type="text" @bind="row.branch_id" />
+
+							</td>
+							<td>
+							<select class="form-select">
+							<option selected disabled>--กรุณาเลือก--</option>
+							@foreach (var bankBranchItem in bankBranch)
+							{
+							bool isCurrentOptionSelected = bankBranchItem.branch_id ==
+							row.branch_id;
+							<option value="@bankBranchItem.branch_id"
+							selected="@isCurrentOptionSelected">
+							@bankBranchItem.branch_id - @bankBranchItem.branch_name
+							</option>
+							}
+							</select>
+							</td>
+							<td>
+							<RadzenIcon style="width:100%" class="icons icon-search" Icon="ballot"
+							data-bs-toggle="modal" data-bs-target="#myModal1" />
+							</td>
+							<td>
+							<input class="form-control"
+							style="width:100%;text-align: end;border: solid 1px #fff;"
+							placeholder="0.00" onblur="formattNumberr(this)" type="text"
+							@bind="row.cheque_amt" />
+							</td>
+							<td style="width:100%">
+							<button class="btn btn-outline-danger"
+							@onclick="() => RemoveRow(row)">
+							ลบ
+							</button>
+							</td>
+							</tr>
+							}
+							}
+							</tbody>
+							</table>
+							</div>
+							</div>
+							</div>*@
 									</div>
-									@if (recpPayTypeCode == "DEN")
-									{
-
-										<div class="row mt-5">
-											<div class="col-12">
-												<div class="row">
-													<div class="col-2" style="text-align: end;">
-														<h4>รายการเช็ค:</h4>
-													</div>
-													<div class="col-4">
-														<button class="btn btn-outline-primary" style="border: solid 1px #d1d1d1;"
-														@onclick="AddRow">
-															เพิ่มแถว
-														</button>
-													</div>
-												</div>
-											</div>
-											<div class=" mt-1">
-												<div class="row mt-2">
-													<div class="col-12">
-														<table class="table table-bordered" style="width: 100%;">
-															<thead>
-																<tr>
-																	<th style="text-align: center;width:10%;background-color: rgb(166, 207, 243);">
-																		เลขที่เช็ค
-																	</th>
-																	<th style="text-align: center;width:13%;background-color: rgb(166, 207, 243);">
-																		วันที่หน้าchq
-																	</th>
-																	<th style="text-align: center;width:8%;background-color: rgb(166, 207, 243);">
-																		รหัส
-																	</th>
-																	<th style="text-align: center;width:20%;background-color: rgb(166, 207, 243);">
-																		ธนาคาร
-																	</th>
-																	<th style="text-align: center;width:8%;background-color: rgb(166, 207, 243);">
-																		รหัส
-																	</th>
-																	<th style="text-align: center;width:20%;background-color: rgb(166, 207, 243);">
-																		สาขา
-																	</th>
-																	<th style="text-align: center;width:3%;background-color: rgb(166, 207, 243);">
-																	</th>
-																	<th style="text-align: center;width:15%;background-color: rgb(166, 207, 243);">
-																		จำนวนเงิน
-																	</th>
-																	<th style="text-align: center;width:3%;background-color: rgb(166, 207, 243);">
-																		ลบ
-																	</th>
-																</tr>
-															</thead>
-															<tbody>
-																@if (rows != null && rows.Count > 0)
-																{
-																	@foreach (var row in rows)
-																	@* @for (var index = 0; index < rows.Count; index++) *@
-																	{
-																		<tr>
-																			<td>
-																				<input class="form-control"
-																					   style="width:100%;text-align: center; border: solid 1px #fff;"
-																					   placeholder="0" type="text" @bind="row.cheque_no" />
-																			</td>
-																			<td>
-																				<RadzenDatePicker class="inputrPicker" @bind-Value=row.cheque_date
-																								  Name="operate_date" DateFormat="dd/MM/yyyy" />
-																			</td>
-																			<td>
-																				<input class="form-control"
-																					   style="width:100%;text-align: center; border: solid 1px #fff;"
-																					   type="text" @bind-value="row.bank_code" @oninput="OnGetBankChanged" />
-																			</td>
-																			<td>
-																				<select id="getBankSelect" class="form-select"
-																				@onchange="OnGetBankSelectChanged">
-																					<option selected disabled>--กรุณาเลือก--</option>
-																					@foreach (var getBankItem in getBank)
-																					{
-																						bool isCurrentOptionSelected = getBankItem.bank_code == row.bank_code;
-																						<option value="@getBankItem.bank_code"
-																								selected="@isCurrentOptionSelected">
-																							@getBankItem.bank_code - @getBankItem.bank_desc
-																						</option>
-																					}
-																				</select>
-																				@* <RadzenDropDown @ref="radzenDropDown" @bind-SearchText="searchText"
-														FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-														FilterOperator="StringFilterOperator.StartsWith" AllowFiltering="true"
-														Data="@getBank" TextProperty="bank_desc" ValueProperty="bank_code"
-														AllowClear="true" @bind-Value="selectedCustomer"
-														Style="width: 100%; max-width: 400px;" /> *@
-
-																			</td>
-
-																			<td>
-																				<input class="form-control"
-																					   style="width:100%;text-align: center; border: solid 1px #fff;"
-																					   type="text" @bind="row.branch_id" />
-
-																			</td>
-																			<td>
-																				<select class="form-select">
-																					<option selected disabled>--กรุณาเลือก--</option>
-																					@foreach (var bankBranchItem in bankBranch)
-																					{
-																						bool isCurrentOptionSelected = bankBranchItem.branch_id ==
-																						row.branch_id;
-																						<option value="@bankBranchItem.branch_id"
-																								selected="@isCurrentOptionSelected">
-																							@bankBranchItem.branch_id - @bankBranchItem.branch_name
-																						</option>
-																					}
-																				</select>
-																			</td>
-																			<td>
-																				<RadzenIcon style="width:100%" class="icons icon-search" Icon="ballot"
-																							data-bs-toggle="modal" data-bs-target="#myModal1" />
-																			</td>
-																			<td>
-																				<input class="form-control"
-																					   style="width:100%;text-align: end;border: solid 1px #fff;"
-																					   placeholder="0.00" onblur="formattNumberr(this)" type="text"
-																				@bind="row.cheque_amt" />
-																			</td>
-																			<td style="width:100%">
-																				<button class="btn btn-outline-danger"
-																				@onclick="() => RemoveRow(row)">
-																					ลบ
-																				</button>
-																			</td>
-																		</tr>
-																	}
-																}
-															</tbody>
-														</table>
-													</div>
-												</div>
-											</div>
-										</div>
-									}
+									@* } *@
 								}
 							</form>
-							<div class="card mt-4" hidden>
+							@* <div class="card mt-4" hidden>
 								<div class="row mt-2"
 									 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 									<RadzenTabs @bind-SelectedIndex=@selectedIndex>
@@ -2056,7 +2015,7 @@ else
 										</Tabs>
 									</RadzenTabs>
 								</div>
-							</div>
+							</div> *@
 						}
 					</RadzenStepsItem>
 					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">

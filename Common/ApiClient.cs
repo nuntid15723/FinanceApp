@@ -18,7 +18,9 @@ public static class ApiClient
         //login
         public const string OfGetConnection = "Login/OfGetConnection"; 
         public const string UserLogin = "Login/OfAuthLogin"; 
-        public const string UseOfAuthPagePermiss= "Login/OfAuthPagePermiss"; 
+        public const string UseOfAuthPagePermiss= "Login/OfAuthPagePermiss";
+        public const string OfGetCoopid = "Login/OfGetCoopid";
+
         //deposit
         public const string DepOfInitDataOffline = "Deposit/DepOfInitDataOffline";
         public const string DepOfGetAccountSaving = "Deposit/DepOfGetAccountSaving";

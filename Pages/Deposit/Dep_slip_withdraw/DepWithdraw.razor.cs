@@ -18,21 +18,20 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 {
     public partial class DepWithdraw
     {
+        private readonly IApiProvider _apiProvider;
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
-
-        private readonly IApiProvider _apiProvider;
-        private List<Models.Deposit> datadetail;
+        public List<Models.Deposit> datadetail;
         private List<Recppaytype> recppaytype;
         private List<Tofromacc> tofromacc;
         private Deptslip? deptSlip;
         private DeptSlipdet? deptSlipdet;
-        // private DeptSlipCheque? deptSlipCheque;
+        private DeptSlipCheque? deptSlipCheque;
         private DepOfGetAccount? depOfGetAccount;
         private List<AccountDetails> depOfGetAccDetails;
-
         /// <deptSlip>
-        private string coop_id { get; set; }
+        public string? coopControl { get; set; }
+        private string? coop_id { get; set; }
         public string? deptcoop_id { get; set; }
         public string? deptslip_no { get; set; }
         public string? member_no { get; set; }
@@ -54,7 +53,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public int? operate_code { get; set; }
         public int? sign_flag { get; set; }
         public int? laststmseq_no { get; set; }
-        public int? nobook_flag { get; set; }
+        public int? nobook_flag { get; set; } = 0;
         public int? prnc_no { get; set; }
         public decimal? deptslip_amt { get; set; }
         public decimal? deptslip_netamt { get; set; }
@@ -85,11 +84,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public string? dept_tranacc_name { get; set; }
         public int? deptmonth_status { get; set; }
         public decimal? deptmonth_amt { get; set; }
-        public int? dept_status { get; set; }
+        public int? dept_status { get; set; } = 0;
         public int? monthint_status { get; set; }
         public decimal? f_tax_rate { get; set; }
         public int? adjdate_status { get; set; }
-        public int? membcat_desc { get; set; }
+        public string? membcat_desc { get; set; }
+        public string? deptmax_amt { get; set; }
         public int? sequest_amont { get; set; }
         public int? checkpend_amt { get; set; }
         public decimal? intbonus_amt { get; set; }
@@ -97,11 +97,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         // public int? tax_return { get; set; }
         public decimal? int_netamt { get; set; }
 
-
-
-
-
-        /// < deptSlipdet>
+        /// < deptSlipdet>  
         public decimal? prnc_bal { get; set; }
         public decimal? prnc_amt { get; set; }
         public DateTime? prnc_date { get; set; }
@@ -136,8 +132,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public int? checkclear_status { get; set; }
         /// <summary> 
         // public string coop_id { get; set; }
+        // public string memcoop_id { get; set; }
         public string memcoop_id { get; set; }
-        // public string memcoop_id = "065001";
         public string? deptaccount_No_fild { get; set; }
         public string? deptaccountNo_fild { get; set; }
         public string? deptaccount_name_fild { get; set; }
@@ -154,7 +150,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public string? membgroup_desc { get; set; }
         public string? deptitem_group { get; set; }
         public int? reqappl_flag { get; set; }
-        public string deptMaintype { get; set; }
+
 
         /// </summary>        
         private bool isLoading;
@@ -165,11 +161,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private int currentStep = 0;
         public string? SaveStatus { get; set; }
         public string? group_itemtype { get; set; }
-
-
         public List<GetBank>? getBank { get; set; }
         public List<GetDeptMaintype>? getDeptMaintype { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
+        public string deptMaintype { get; set; }
+        public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
+        public List<PrintResponse> connections = new List<PrintResponse>();
 
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
@@ -464,10 +461,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private async Task CallApi()
         {
             (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+            Console.WriteLine($"GetDataList: {coopControl}, {coop_id}, {name},  {email}, {actort}, {apvlevelId}, {workDate}, {application}, {save_status}, {check_flag}");
             try
             {
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
-                isLoading = true;
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
                     coop_id = coop_id,
@@ -484,18 +481,20 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 // var response = await httpClient.PostAsync(apiUrl, content);
                 var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
 
-
                 Console.WriteLine(response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
                     // อ่าน response string
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    // Console.WriteLine(apiResponse.status == true);
                     if (apiResponse.status == true)
                     {
                         datadetail = new List<Models.Deposit> { apiResponse.data };
                         Console.WriteLine($"API request failed: {datadetail}");
-                        AnotherFunction();
+                       await GetBank();
+                       await BankBranch();
+                       await GetDeptMaintype();
                     }
                     else
                     {
@@ -505,6 +504,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
                     }
                 }
+                // โค้ดเกี่ยวกับการเรียก API ที่เหมือนเดิม
             }
             catch (Exception ex)
             {
@@ -512,6 +512,58 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 Console.WriteLine(ex.Message.ToString());
             }
         }
+
+        // private async Task CallApi()
+        // {
+        //     (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+        //      Console.WriteLine($"GetDataList:, {coop_id}, {name},  {email}, {actort}, {apvlevelId}, {workDate}, {application}, {save_status}, {check_flag}");
+        //     try
+        //     {
+        //         deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+        //         isLoading = true;
+        //         var depOfGetAccount = new DepOfInitDataOffline
+        //         {
+        //             coop_id = coop_id,
+        //             memcoop_id = coop_id,
+        //             deptno_format = deptno_format,
+        //             entry_date = DateTime.Today,
+        //             deptitem_group = deptitem_group ?? "WID",
+        //             reqappl_flag = reqappl_flag ?? 0,
+        //         };
+        //         var json = JsonConvert.SerializeObject(depOfGetAccount);
+        //         Console.WriteLine(json);
+        //         // var content = new StringContent(json, Encoding.UTF8, "application/json");
+        //         var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+        //         // var response = await httpClient.PostAsync(apiUrl, content);
+        //         var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+
+        //         Console.WriteLine(response.IsSuccessStatusCode);
+        //         if (response.IsSuccessStatusCode)
+        //         {
+        //             // อ่าน response string
+        //             var jsonResponse = await response.Content.ReadAsStringAsync();
+        //             var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+        //             // Console.WriteLine(apiResponse.status == true);
+        //             if (apiResponse.status == true)
+        //             {
+        //                 datadetail = new List<Models.Deposit> { apiResponse.data };
+        //                 Console.WriteLine($"API request failed: {datadetail}");
+        //             }
+        //             else
+        //             {
+        //                 var Error = JsonConvert.SerializeObject(apiResponse.message);
+
+        //                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Error, Duration = 5000 });
+
+        //             }
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+        //         Console.WriteLine(ex.Message.ToString());
+        //     }
+        // }
         //ค้นหาใน dlg
         // private async Task SearchOfGetAcc()
         // {
@@ -697,6 +749,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         {
             public bool status { get; set; }
             public Models.Deposit data { get; set; }
+            public string? message { get; set; }
+        }
+        public class Response
+        {
+            public bool success { get; set; }
+            public Models.Deposit content { get; set; }
             public string message { get; set; }
         }
         private string selectedValue;

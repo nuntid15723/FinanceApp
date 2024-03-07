@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Deposit\Dep_slip_withdraw\DepWithdraw1.razor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="Pages\Deposit\Dep_reqdepoit\DepReqdepoit1.razor" />
   </ItemGroup>
 
