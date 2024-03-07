@@ -112,10 +112,10 @@ namespace FinanceApp.Shared
                 }
                 else
                 {
-                    // await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
-                    // await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
-                    // // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    // NavigationManager.NavigateTo("/login", true);
+                    await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                    await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                    // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                    NavigationManager.NavigateTo("/login", true);
                 }
             }
             catch (Exception ex)
