@@ -82,6 +82,9 @@ namespace FinanceApp.Pages
             // (string coop_id, string user_name, string full_name, string application) = await GetUserData();
             (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application) = await GetDataList();
             Console.WriteLine($"coop_control  :{coop_control},coop_id :{coop_id},name :{name},email :{email},apvlevelId :{apvlevelId},workDate :{workDate},application :{application},");
+           if(application ==null){
+                    application = "deposit";
+                }
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}?application={application}";
             try
             {
