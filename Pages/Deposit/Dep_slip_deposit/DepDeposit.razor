@@ -127,7 +127,7 @@
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
 		<div class="header-left">
-			<h4>ระบบ เงินฝาก - ฝากเงิน</h4>
+			<h4>ระบบ เงินฝาก - ฝากเงิน @currentStep</h4>
 		</div>
 		@* <div class="header-right">
 		<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" />
@@ -156,14 +156,14 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ทำรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 2)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
 						<RadzenRow>
 							<RadzenText Text="ทำรายการ" />
 						</RadzenRow>
 						@if (datadetail == null)
 						{
 							@* <div class="card body-page"> *@
-								<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+								<div class="row"  @onkeydown="OnKeyDownAsync" tabindex="0"  style="margin-left: calc(var(--bs-gutter-x) * -.21)">
 									<div class="row">
 										<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">เลขที่บัญชี</label>
@@ -172,10 +172,10 @@ else
 													@* <RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
 											Name="deptaccount_no" class="form-control"
 											@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
-													<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
-																Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
+													<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format" 
+																Name="deptaccount_no" class="form-control"@onkeydown="@(async (e) => { await HandleEnterKeyPress(e); await OnKeyDownAsync(e); })" />
 													<div class="input-group-addon">
-														<RadzenIcon class="icons icon-search" @onclick="GetDeptMaintype" Icon="ballot"
+														<RadzenIcon class="icons icon-search" @onclick="GetDeptMaintype"  Icon="ballot"
 																	data-bs-toggle="modal" data-bs-target="#ModalSearch" />
 													</div>
 												</div>
@@ -354,7 +354,7 @@ else
 											</div>
 										</div>
 										<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-											<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+											<button type="button" class="btn btn-outline-secondary"@onclick="PerformSearch" @onkeydown="OnKeyDownAsync">ค้นหา</button>
 										</div>
 										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ยอดทำรายการ</label>
@@ -1044,7 +1044,7 @@ else
 							@foreach (var item in datadetail)
 							{
 								var Item = item.deptSlip;
-								<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
+								<div class="row" @onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
 									<div class="row">
 										<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">เลขที่บัญชี</label>
@@ -1246,18 +1246,9 @@ else
 												}
 												else
 												{
-													<option selected disabled></option>
 													@foreach (var recppaytypeItem in Item.recppaytype)
 													{
-														if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-														{
-															isCurrentOptionSelected = true;
-
-														}
-														else
-														{
-															isCurrentOptionSelected = false;
-														}
+														 isCurrentOptionSelected = (recppaytypeItem.recppaytype_code == Item.recppaytype_code || recppaytypeItem.recppaytype_code == recpPayTypeCode);
 														if (recppaytypeItem.genvc_flag == 1)
 														{
 															<option value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}_{recppaytypeItem.recppaytype_desc}")"
@@ -1391,21 +1382,44 @@ else
 													<option selected disabled>--กรุณาเลือก--</option>
 													@foreach (var tofromaccItem in Item.tofromacc)
 													{
-														isCurrentOptionSelected = true;
-
-														@if (tofromaccItem.cash_type == cashTypeValue)
+														bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
+														bool isItemAccIdSelected = (tofromaccItem.tofrom_accid == Item.tofrom_accid);
+														bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+														if (isCashTypeSelected)
 														{
-															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																	selected="@isCurrentOptionSelected">
-																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-															</option>
+															// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+															if (valuetoFromaccId == null|| toFromaccId2 == null)
+															{
+																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																		selected="@isCurrentOptionSelected">
+																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@toFromaccId2:@valuetoFromaccId</p>
+																</option>
+															}
+															else
+															{
+																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																		selected="@isCurrentOptionSelected">
+																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
+																</option>
+															}
 														}
-														else if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+														else if (isItemAccIdSelected)
 														{
-															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																	selected="@isCurrentOptionSelected">
-																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-															</option>
+															// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+															if (valuetoFromaccId == null|| toFromaccId2 == null)
+															{
+																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																		selected="@isItemAccIdSelected">
+																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>3</p>
+																</option>
+															}
+															else
+															{
+																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																		selected="@isItemAccIdSelected">
+																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>4</p>
+																</option>
+															}
 														}
 													}
 												}
@@ -1765,7 +1779,7 @@ else
 							}
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ตรวจสอบรายการ">
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
 						</RadzenRow>
@@ -2131,11 +2145,13 @@ else
 						}
 					</RadzenStepsItem>
 					@* <RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true"> *@
-					<RadzenStepsItem  Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(currentStep != 2)"  Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
-								<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
+						@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf(deptslip_no)" /> *@
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@(() => PrintPdf(deptslip_no))" />
+
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>
@@ -2462,7 +2478,7 @@ else
 		StateHasChanged();
 		@if (currentStep == 2)
 		{
-			PrintPdf();
+			PrintPdf(deptslip_no);
 		}
 	}
 
@@ -2507,10 +2523,24 @@ else
 		StateHasChanged();
 		@if (currentStep == 2)
 		{
-			PrintPdf();
+			PrintPdf(deptslip_no);
 		}
-    
+		@* OnKeyDownAsync(e); *@
 	}
+	public async Task NextStep()
+    {
+        // เพิ่มค่า currentStep ทีละหนึ่ง
+        @* currentStep++; *@
+        currentStep = 1;
+    }
+
+    @* private async Task OnKeyDownAsync(KeyboardEventArgs e)
+	{
+		if (e.Key == "F9")
+		{
+			currentStep = 1;
+		}
+	} *@
 	private void AddRow()
 	{
 		@* rows.Add(new TableRow()); *@
@@ -2634,6 +2664,7 @@ else
 		showProgress = false;
 		showComplete = true;
 	}
+
 
 	void TrackProgress(UploadProgressArgs args)
 	{

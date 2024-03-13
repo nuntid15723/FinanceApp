@@ -639,7 +639,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
-                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<ReqAccDetails>>();
+                    depOfGetAccDetails = jsonResponse1["content"].ToObject<List<ReqAccDetails>>();
                 }
                 var accountDetailsList = new List<Models.ReqAccDetails>();
                 if (depOfGetAccDetails != null)

@@ -167,6 +167,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public List<GetDeptMaintype>? getDeptMaintype { get; set; }
         public List<GetBank>? getBank { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
+        public List<Content>? Listcontent { get; set; }
+        public List<Printbook_data>? printbook_data { get; set; }
+        public List<Statement_list>? statement_list { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
         public List<PrintResponse> connections = new List<PrintResponse>();
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
@@ -184,48 +187,69 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application, save_status, checkFlag);
         }
         // (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
-        private async Task PrintPdf()
+        private async Task PrintPdf(string deptslip_no)
         {
+            Console.WriteLine($"deptslip_no {deptslip_no}");
             (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
             try
             {
-                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
-                foreach (var item in datadetail)
+                // deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                // foreach (var item in datadetail)
+                // {
+                //     var Item = item.deptSlip;
+                //     var depOfGetAccount = new
+                //     {
+                //         coop_id = coop_id,
+                //         memcoop_id = coop_id,
+                //         deptaccount_no = deptno_format,
+                //         deptaccount_name = Item.deptaccount_name,
+                //         recppaytype_code = (selectedValue == null) ? Item.recppaytype_code : selectedValue,
+                //         deptslip_amt = deptslipAmt,
+                //         deptslip_tdate = DateTime.Today,
+                //         printter_name = "Bullzip PDF Printer",
+                //     };
+                //     var json = JsonConvert.SerializeObject(depOfGetAccount);
+                //     Console.WriteLine($"depOfGetAccount{json}");
+                //     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPrintSlip}";
+                //     Console.WriteLine($"apiUrl {apiUrl}");
+                //     var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+
+                //     Console.WriteLine(response.IsSuccessStatusCode);
+                //     if (response.IsSuccessStatusCode)
+                //     {
+                //         var jsonResponse = await response.Content.ReadAsStringAsync();
+                //         PrintResponse responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                //         responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                //         if (responseObj.Success)
+                //         {
+                //             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = responseObj.Message, Duration = 5000 });
+                //         }
+                //         else
+                //         {
+
+                //             var errorResponse = await response.Content.ReadAsStringAsync();
+                //             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorResponse, Duration = 5000 });
+                //         }
+                //     }
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DeptOfGetPrintSlip}={deptslip_no}";
+                Console.WriteLine($"apiUrl {apiUrl}");
+                var response = await SendApiRequestAsyncGet(apiUrl);
+
+                Console.WriteLine(response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
                 {
-                    var Item = item.deptSlip;
-                    var depOfGetAccount = new
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    PrintResponse responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                    responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
+                    if (responseObj.Success)
                     {
-                        coop_id = coop_id,
-                        memcoop_id = coop_id,
-                        deptaccount_no = deptno_format,
-                        deptaccount_name = Item.deptaccount_name,
-                        recppaytype_code = (selectedValue == null) ? Item.recppaytype_code : selectedValue,
-                        deptslip_amt = deptslipAmt,
-                        deptslip_tdate = DateTime.Today,
-                        printter_name = "Bullzip PDF Printer",
-                    };
-                    var json = JsonConvert.SerializeObject(depOfGetAccount);
-                    Console.WriteLine($"depOfGetAccount{json}");
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPrintSlip}";
-                    Console.WriteLine($"apiUrl {apiUrl}");
-                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
-
-                    Console.WriteLine(response.IsSuccessStatusCode);
-                    if (response.IsSuccessStatusCode)
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = responseObj.Message, Duration = 5000 });
+                    }
+                    else
                     {
-                        var jsonResponse = await response.Content.ReadAsStringAsync();
-                        PrintResponse responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
-                        responseObj = JsonConvert.DeserializeObject<PrintResponse>(jsonResponse);
-                        if (responseObj.Success)
-                        {
-                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = responseObj.Message, Duration = 5000 });
-                        }
-                        else
-                        {
 
-                            var errorResponse = await response.Content.ReadAsStringAsync();
-                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorResponse, Duration = 5000 });
-                        }
+                        var errorResponse = await response.Content.ReadAsStringAsync();
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorResponse, Duration = 5000 });
                     }
                 }
             }
@@ -235,7 +259,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 Console.WriteLine(ex.Message.ToString());
             }
         }
-       
+
         void ShowNotification(NotificationMessage message)
         {
             NotificationService.Notify(message);
@@ -357,11 +381,21 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 }
             }
         }
+        bool chkSerach = false;
         private async Task HandleEnterKeyPress(KeyboardEventArgs e)
         {
-            if (e.Code == "Enter")
+            if (e.Key == "Enter")
             {
-                await PerformSearch();
+               
+                await PerformSearch(); 
+            }
+
+        }
+        private async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key == "F9")
+            {
+                currentStep = 1;
             }
         }
         private async Task PerformSearch()
@@ -388,30 +422,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
-                    // coop_id = coop_id,
-                    // memcoop_id = coop_id,
-                    // deptaccount_no = deptaccountNo_fild,
-                    // deptaccount_name = deptaccount_name,
-                    // member_no = member_no,
-                    // depttype_code = depttype_code,
-                    // deptclose_status = 0,
-                    // memb_name = memb_name,
-                    // memb_surname = memb_surname,
-                    // card_person = card_person,
-                    // mem_telmobile = mem_telmobile,
-                    // full_name = full_name,
-                    // salary_id = salary_id,
-                    // membgroup_code = membgroup_code,
-                    // membgroup_desc = membgroup_desc,
-                    // deptno_format = deptno_format,
-                    // entry_date = DateTime.Today,
-                    // deptitem_group = deptitem_group ?? "DEP",
-
                     coop_id = coop_id,
                     memcoop_id = coop_id,
                     deptno_format = deptno_format,
                     entry_date = DateTime.Today,
-                    deptitem_group = deptitem_group ?? "WID",
+                    deptitem_group = deptitem_group ?? "DEP",
                     reqappl_flag = reqappl_flag ?? 0,
                 };
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
@@ -431,6 +446,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     if (apiResponse.status == true)
                     {
                         datadetail = new List<Models.Deposit> { apiResponse.data };
+                        chkSerach = true;
                         Console.WriteLine($"API request failed: {datadetail}");
                     }
                     else
@@ -601,8 +617,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
 
                     var json = JsonConvert.SerializeObject(payload);
+                    Console.WriteLine($"response: {payload}");
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
+                    // Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
+
                     return await httpClient.PostAsync(apiUrl, content);
                 }
             }
@@ -637,6 +655,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         {
             public bool status { get; set; }
             public Models.Deposit data { get; set; }
+            public string message { get; set; }
+        }
+        public class SaveResponse
+        {
+            public bool success { get; set; }
+            public Models.Content content { get; set; }
             public string message { get; set; }
         }
         public class Response
@@ -696,7 +720,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             string[] toFromaccId1 = bookCode.Split('|');
             cashTypeValue = toFromaccId1[0];
             valuetoFromaccId = toFromaccId1[1];
-            Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {recpPayTypeCode},cashTypeValue:{cashTypeValue},selectedRecppaytype:{selectedRecppaytype},");
+            Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {valuetoFromaccId},cashTypeValue:{cashTypeValue},selectedRecppaytype:{selectedRecppaytype},");
 
             if (recpPayTypeCode == "DEN")
             {
@@ -711,7 +735,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             toFromaccId2 = values[1];
             // selectedToFromAcc = values[2];
             selectedToFromAcc = values[1] + " - " + values[2];
-            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId},selectedToFromAcc:{selectedToFromAcc}");
+            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{toFromaccId2},selectedToFromAcc:{selectedToFromAcc}");
 
         }
         private async Task CheckNumber()
@@ -1039,36 +1063,53 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     var Deptslip = CreateDeptSlip(coop_id, name, machine_address, item);
                     var DeptSlipdet = CreateDeptSlip(coop_id, name, machine_address, item);
                     var DeptSlipCheque = CreateDeptSlipCheque(coop_id, deptslip_no, deptaccount_no, item);
-
-
                     var deptDeposit = new Models.Deposit
                     {
                         deptSlip = Deptslip,
                         deptSlipdet = null,
                         deptSlipCheque = (recpPayTypeCode == "DEN") ? new DeptSlipCheque() : null,
                     };
+                    // แสดงข้อมูลเพิ่มเติมตามที่ต้องการ
 
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostDeptSaving}";
                     var response = await SendApiRequestAsync(apiUrl, deptDeposit);
-                    Console.WriteLine($"response: {deptDeposit}");
                     var responseData = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        // Console.WriteLine($"jsonResponse {jsonResponse}");
+                        var Response = JsonConvert.DeserializeObject<SaveResponse>(responseData);
+                        // var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        Console.WriteLine($"Response.message {Response.message}");
                         success_status = true;
-                        if (success_status)
+                        if (response.IsSuccessStatusCode)
                         {
+                            Listcontent = new List<Models.Content> { Response.content };
+                            // string deptslip_no;
+                            foreach (var content in Listcontent)
+                            {
+                                Console.WriteLine($"deptslip_no: {content.deptslip_no}");
+                                deptslip_no = content.deptslip_no;
+                            }
                             this.currentStep = 2;
-                            PrintPdf();
+                            await PrintPdf(deptslip_no);
                             await InvokeAsync(() => StateHasChanged());
+                            Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = Response.message, Duration = 2500 });
                         }
-                        Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
-                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
+                        else
+                        {
+                            this.currentStep = 0;
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Response.message, Duration = 2500 });
+                        }
+
                     }
                     else
                     {
                         HandleErrorResponse(responseData);
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = responseData, Duration = 2500 });
+                        Console.WriteLine($"responseData {responseData}");
                     }
                 }
             }
@@ -1148,6 +1189,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 spcint_rate_status = item.deptSlip.spcint_rate_status,
                 spcint_rate = item.deptSlip.spcint_rate,
             };
+            // string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
+
+            // // Print JSON string to console
+            // Console.WriteLine(json);
 
             return deptSlip;
         }

@@ -91,13 +91,13 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 2)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
 						<RadzenRow>
 							<RadzenText Text="Enter user information" />
 						</RadzenRow>
 						@if (datadetail == null)
 						{
-							<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+							<div class="row"@onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
 								<form @onsubmit="PerformSearch">
 									<div class="row">
 										<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
@@ -298,7 +298,7 @@ else
 								@foreach (var item in datadetail)
 								{
 									var Item = item.deptSlip;
-									<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
+									<div class="row"  @onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
 										<div class="row">
 											<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขที่บัญชี</label>
@@ -1910,7 +1910,7 @@ else
 									@* } *@
 								}
 							</form>
-							@* <div class="card mt-4" hidden>
+							<div class="card mt-4" hidden>
 								<div class="row mt-2"
 									 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 									<RadzenTabs @bind-SelectedIndex=@selectedIndex>
@@ -2015,7 +2015,7 @@ else
 										</Tabs>
 									</RadzenTabs>
 								</div>
-							</div> *@
+							</div>
 						}
 					</RadzenStepsItem>
 					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">

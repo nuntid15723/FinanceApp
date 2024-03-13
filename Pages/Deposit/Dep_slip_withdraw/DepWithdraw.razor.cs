@@ -167,6 +167,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public string deptMaintype { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
         public List<PrintResponse> connections = new List<PrintResponse>();
+        public List<Content>? Listcontent { get; set; }
+        public List<Printbook_data>? printbook_data { get; set; }
+        public List<Statement_list>? statement_list { get; set; }
 
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
@@ -252,11 +255,14 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
                 var response = await SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
-                var json = await response.Content.ReadAsStringAsync();
-                var GetDeptMaintype = JsonConvert.DeserializeObject<List<GetDeptMaintype>>(json);
-                getDeptMaintype = new List<GetDeptMaintype>();
-                getDeptMaintype.AddRange(GetDeptMaintype);
-                Console.WriteLine("Icon clicked!");
+                Console.WriteLine("IsSuccessStatusCode : " + response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var GetDeptMaintype = JsonConvert.DeserializeObject<List<GetDeptMaintype>>(json);
+                    getDeptMaintype = new List<GetDeptMaintype>();
+                    getDeptMaintype.AddRange(GetDeptMaintype);
+                }
             }
             catch (Exception ex)
             {
@@ -492,9 +498,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     {
                         datadetail = new List<Models.Deposit> { apiResponse.data };
                         Console.WriteLine($"API request failed: {datadetail}");
-                       await GetBank();
-                       await BankBranch();
-                       await GetDeptMaintype();
+                        await GetBank();
+                        await BankBranch();
+                        await GetDeptMaintype();
                     }
                     else
                     {
@@ -744,7 +750,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 throw;
             }
         }
-
+        public class SaveResponse
+        {
+            public bool success { get; set; }
+            public Models.Content content { get; set; }
+            public string message { get; set; }
+        }
         public class ApiResponse
         {
             public bool status { get; set; }
@@ -798,6 +809,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             toFromaccId2 = values[1];
             Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId}");
 
+        }
+        private async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key == "F9")
+            {
+                currentStep = 1;
+            }
         }
         private async Task CheckNumber()
         {
@@ -1059,17 +1077,32 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
                     if (response.IsSuccessStatusCode)
                     {
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var Response = JsonConvert.DeserializeObject<SaveResponse>(jsonResponse);
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                         success_status = true;
-                        if (success_status)
+                        if (response.IsSuccessStatusCode)
                         {
+
+                            Listcontent = new List<Models.Content> { Response.content };
+                            foreach (var content in Listcontent)
+                            {
+                                Console.WriteLine($"deptslip_no: {content.deptslip_no}");
+                            }
                             currentStep = 2;
                             PrintPdf();
                             StateHasChanged();
 
+                            Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
                         }
-                        Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
-                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
+                        else
+                        {
+                            this.currentStep = 0;
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 2500 });
+                        }
+                        // Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
+                        // ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
                     }
                     else
                     {
@@ -1153,7 +1186,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 spcint_rate_status = item.deptSlip.spcint_rate_status,
                 spcint_rate = item.deptSlip.spcint_rate,
             };
-
+            string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
+            Console.WriteLine(json);
             return deptSlip;
         }
         private DeptSlipdet CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)

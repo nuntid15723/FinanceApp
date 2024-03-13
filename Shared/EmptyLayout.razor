@@ -187,16 +187,17 @@
                     <RadzenProfileMenuItem Text="Dialog" Path="dialog" Icon="perm_media"></RadzenProfileMenuItem>
                     <RadzenProfileMenu @onclick="@LogOff" Style="padding: 0px;">
                         <Template>
-                            <RadzenProfileMenuItem Text="LogOff" Style="padding: 0px;margin-left: -15px;" Icon="logout"></RadzenProfileMenuItem>
+                            <RadzenProfileMenuItem Text="LogOff" Style="padding: 0px;margin-left: -15px;" Icon="logout">
+                            </RadzenProfileMenuItem>
                         </Template>
                     </RadzenProfileMenu>
                 </ChildContent>
             </RadzenProfileMenu>
-            
+
         </div>
     </header>
     @* <div class="l-navbar shadow-sm mt-6" id="nav-bar">
-        <Sidebar />
+    <Sidebar />
     </div> *@
     <div class="height-100hv">
         <div class="d-flex justify-content-center py-2" style="background-color: rgb(159, 243, 205);">
@@ -223,7 +224,7 @@
         NotificationService.Notify(message);
     }
 
-    private  async Task GetUserData()
+    private async Task GetUserData()
     {
         var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
         string accessToken = bearerToken;
@@ -301,8 +302,36 @@
         {
             await JSRuntime.InvokeVoidAsync("setupNavbar");
             string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+            string refreshToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "refreshToken");
             await GetCoopid();
             await GetUserData();
+            @* var client = new HttpClient();
+
+            var requestData = new Dictionary<string, string>
+{
+{"grant_type", "refresh_token"},
+{"refresh_token", refreshToken}
+};
+
+            var requestContent = new FormUrlEncodedContent(requestData);
+
+            var response = await client.PostAsync("your-token-endpoint-url", requestContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(jsonResponse);
+                var newBearerToken = tokenResponse.access_token;
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", tokenResponse.access_token);
+            }
+            else
+            {
+                await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
+                await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
+                // ถ้าไม่มี token ให้เด้งไปยังหน้า login
+                NavigationManager.NavigateTo("/login", true);
+            } *@
+
             // ตรวจสอบว่ามี token หรือไม่
             string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
             if (string.IsNullOrEmpty(bearerToken))
@@ -315,18 +344,23 @@
             StateHasChanged();
         }
     }
- 
-    @* private async Task BaseType()
+    public class TokenResponse
     {
-        string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
-        if (baseType == "4654564654")
-        {
-            Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
-        }else{
-            Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
-        }
-         
-    } *@
+        public bool success { get; set; }
+        public string access_token { get; set; }
+        public string message { get; set; }
+    }
+    @* private async Task BaseType()
+{
+string baseType = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "base_type");
+if (baseType == "4654564654")
+{
+Coop_name = "สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+}else{
+Coop_name = "เบสเทส สหกรณ์ออมทรัพย์การไฟฟ้าฝ่ายผลิตแห่งประเทศไทย จำกัด";
+}
+
+} *@
     private void AppAll()
     {
         NavigationManager.NavigateTo("index");
