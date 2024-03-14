@@ -98,7 +98,7 @@ else
 						@if (datadetail == null)
 						{
 							<div class="row"@onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
-								<form @onsubmit="PerformSearch">
+								@* <form @onsubmit="PerformSearch"> *@
 									<div class="row">
 										<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">เลขที่บัญชี</label>
@@ -284,17 +284,16 @@ else
 											</div>
 										</div>
 										<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-											@* <button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
-									*@
-											<button type="submit" class="btn btn-outline-secondary">ค้นหา</button>
+											<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+											@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
 										</div>
 									</div>
-								</form>
+								@* </form> *@
 							</div>
 						}
 						else
 						{
-							<form @onsubmit="PerformSearch">
+							@* <form @onsubmit="PerformSearch"> *@
 								@foreach (var item in datadetail)
 								{
 									var Item = item.deptSlip;
@@ -487,8 +486,8 @@ else
 												</div>
 											</div>
 											<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-												<button type="submit" class="btn btn-outline-secondary">ค้นหา</button>
-
+												@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
+												<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ทำรายการ</label>
@@ -1100,7 +1099,7 @@ else
 										</div>
 									}
 								}
-							</form>
+							@* </form> *@
 							<div class="card mt-4" hidden>
 								<div class="row mt-2"
 									 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
@@ -2020,8 +2019,37 @@ else
 					</RadzenStepsItem>
 					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
-							<RadzenText Text="Enter about me" />
+							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
+						@* <div class="row mt-2"
+			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
+										AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+										FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+										AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"> 
+							<Columns>
+								<RadzenDataGridColumn Width="10%" TItem="Models.Statement_list" Title="ลำดับ" Property="coop_id">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn  Width="13%" TItem="Models.Statement_list" Title="วันที่"
+													  Property="operate_date">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="รายการ"
+													  Property="deptitemtype_code">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ถอน"
+													  Property="withdraw_amt">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ฝาก"
+													  Property="deposit_amt">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ยอดคงเหลือ"
+													  Property="prncbal">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="12%" TItem="Models.Statement_list" Title="พิมพ์ Book" Property="item_status">
+								</RadzenDataGridColumn>
+							</Columns>
+						</RadzenDataGrid>
+								</div> *@
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>

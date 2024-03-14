@@ -167,9 +167,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public string deptMaintype { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
         public List<PrintResponse> connections = new List<PrintResponse>();
-        public List<Content>? Listcontent { get; set; }
-        public List<Printbook_data>? printbook_data { get; set; }
+        public List<Book_data>? book_data { get; set; }
         public List<Statement_list>? statement_list { get; set; }
+        public List<Content>? statement_data { get; set; }
+        public List<Slip_data>? slip_data { get; set; }
+        public IEnumerable<Models.Statement_list> statementDetails { get; set; }
 
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
@@ -365,6 +367,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 if (apiResponse.status == true)
                 {
                     datadetail = new List<Models.Deposit> { apiResponse.data };
+                    await GetBank();
+                    await BankBranch();
+                    await GetDeptMaintype();
                     StateHasChanged();
                     Console.WriteLine($"API request failed: {datadetail}");
                 }
@@ -675,7 +680,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
-                    depOfGetAccDetails = jsonResponse1["data"].ToObject<List<AccountDetails>>();
+                    depOfGetAccDetails = jsonResponse1["content"].ToObject<List<AccountDetails>>();
                 }
                 var accountDetailsList = new List<Models.AccountDetails>();
                 if (depOfGetAccDetails != null)
@@ -1084,10 +1089,58 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         if (response.IsSuccessStatusCode)
                         {
 
-                            Listcontent = new List<Models.Content> { Response.content };
-                            foreach (var content in Listcontent)
+                            statement_data = new List<Models.Content> { Response.content };
+                            foreach (var content in statement_data)
                             {
-                                Console.WriteLine($"deptslip_no: {content.deptslip_no}");
+                                var statementDetailsList = new List<Models.Statement_list>();
+                                if (content.book_data != null)
+                                {
+                                    var printbookData = JsonConvert.DeserializeObject<Book_data>(content.book_data.ToString());
+                                    var slipdata = JsonConvert.DeserializeObject<Slip_data>(content.slip_data.ToString());
+                                    Console.WriteLine($"slipdata : {content.slip_data.ToString()}");
+                                    if (printbookData != null)
+                                    {
+                                        foreach (var statement in printbookData.statement_list)
+                                        {
+                                            var deptaccountNo = statement.deptaccount_no.Replace(" ", "");
+                                            DateTime operatedate = statement.operate_date.GetValueOrDefault(DateTime.MinValue);
+                                            string operatedate_TH = operatedate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
+                                            DateTime? operate_datee_TH = null;
+                                            if (DateTime.TryParseExact(operatedate_TH, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                                            {
+                                                operate_datee_TH = parsedDate;
+                                            }
+                                            Console.WriteLine($"deptaccount_noo :{deptaccountNo}");
+                                            var statementDetails = new Models.Statement_list
+                                            {
+                                                coop_id = statement.coop_id,
+                                                deptaccount_no = deptaccountNo,
+                                                seq_no = statement.seq_no,
+                                                deptitemtype_code = statement.deptitemtype_code,
+                                                operate_date = operate_datee_TH,
+                                                entry_date = statement.entry_date,
+                                                prncbal = statement.prncbal,
+                                                entry_id = statement.entry_id,
+                                                item_status = statement.item_status,
+                                                sign_flag = statement.sign_flag,
+                                                print_code = statement.print_code,
+                                                prnc_no = statement.prnc_no,
+                                                tax_amt = statement.tax_amt,
+                                                accuint_amt = statement.accuint_amt,
+                                                int_amt = statement.int_amt,
+                                                printbook_status = statement.printbook_status,
+                                                deptslip_no = statement.deptslip_no,
+                                                deptitem_amt = statement.deptitem_amt,
+                                                deptint_amt = statement.deptint_amt,
+                                                deposit_amt = statement.deposit_amt,
+                                                withdraw_amt = statement.withdraw_amt,
+                                            };
+                                            Console.WriteLine($"coop_id: {statement.coop_id}, deptaccount_no: {statement.deptaccount_no}");
+                                            statementDetailsList.Add(statementDetails);
+                                        }
+                                    }
+                                    statementDetails = statementDetailsList;
+                                }
                             }
                             currentStep = 2;
                             PrintPdf();

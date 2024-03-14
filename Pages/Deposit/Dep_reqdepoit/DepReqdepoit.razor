@@ -158,7 +158,7 @@ else
 												Name="member_no"
 												class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
 														<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
-															class="form-control" />
+															class="form-control" @onkeydown="@HandleEnterKeyPress" />
 														<div class="input-group-addon">
 															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																data-bs-target="#ModalSearch" />
@@ -302,7 +302,8 @@ else
 												</div>
 											</div>
 											<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-												<button type="submit" class="btn btn-outline-secondary">ค้นหา</button>
+												@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
+												<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
 											</div>
 										</div>
 									</form>
@@ -319,7 +320,7 @@ else
 																<div class="form-group ">
 																	<div class="input-group">
 																		<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no"
-																			Name="member_no" class="form-control" @onkeydown="@PerformSearch" />
+																			Name="member_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 																		<div class="input-group-addon">
 																			<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																				data-bs-target="#ModalSearch" />
@@ -465,7 +466,7 @@ else
 																</div>
 															</div>
 															<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-																<button type="btn" class="btn btn-outline-secondary" @onsubmit="PerformSearch">ค้นหา</button>
+																<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
 															</div>
 															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label" for="">ประเภทบัญชี</label>
@@ -1710,11 +1711,38 @@ else
 					</RadzenStepsItem>
 					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
-							<RadzenText Text="Enter about me" />
+							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
-						@* <RadzenTextArea Placeholder="About me" @bind-Value="aboutMe" /> *@
-						<input type="text">
-						<RadzenButton Text="Save" Click="@PrintPdf" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@GetPdfData" />
+						<div class="row mt-2"
+			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
+										AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+										FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+										AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"> 
+							<Columns>
+								<RadzenDataGridColumn Width="10%" TItem="Models.Statement_list" Title="ลำดับ" Property="coop_id">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn  Width="13%" TItem="Models.Statement_list" Title="วันที่"
+													  Property="operate_date">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="รายการ"
+													  Property="deptitemtype_code">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ถอน"
+													  Property="withdraw_amt">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ฝาก"
+													  Property="deposit_amt">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ยอดคงเหลือ"
+													  Property="prncbal">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="12%" TItem="Models.Statement_list" Title="พิมพ์ Book" Property="item_status">
+								</RadzenDataGridColumn>
+							</Columns>
+						</RadzenDataGrid>
+								</div>
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>

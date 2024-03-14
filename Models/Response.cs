@@ -12,12 +12,10 @@ namespace FinanceApp.Models
       public string? deptslip_no_fee { get; set; }
       public string? deptslip_no_oth { get; set; }
       public string? message { get; set; }
-      // public string? printslip_data { get; set; }
-      // public string? frontbook_data { get; set; }
-      // public List<Printbook_data> printbook_data { get; set; }
-      public object? printbook_data { get; set; }
+      public object? book_data { get; set; }
+      public object? slip_data { get; set; }
    }
-   public class Printbook_data
+   public class Book_data
    {
       public string? deptaccount_no { get; set; }
       public string? deptpassbook_no { get; set; }
@@ -26,6 +24,26 @@ namespace FinanceApp.Models
       public int? lastpage_no { get; set; }
       public int? lastline_no { get; set; }
       public List<Statement_list> statement_list { get; set; }
+
+   }
+   public class Slip_data
+   {
+      public string? deptaccount_no { get; set; }
+      public string? deptaccount_name { get; set; }
+      public string? coop_name { get; set; }
+      public string? recppaytype_code { get; set; }
+      public string? entry_id { get; set; }
+      public DateTime? deptslip_date { get; set; }
+      public DateTime? entry_date { get; set; }
+      public string? time_date { get; set; }
+      public decimal? deptslip_amt { get; set; }
+      public decimal? deptslip_netamt { get; set; }
+      public decimal? fee_amt { get; set; }
+      public decimal? oth_amt { get; set; }
+      public decimal? prncbal { get; set; }
+      public string? readtihaibath { get; set; }
+      public string? int_amt { get; set; }
+      public string? t_net { get; set; }
 
    }
    public class Statement_list
@@ -49,7 +67,7 @@ namespace FinanceApp.Models
       public string? deptslip_no { get; set; }
       public int? deptitem_amt { get; set; }
       public int? deptint_amt { get; set; }
-      public int? deposit_amt { get; set; }
-      public int? withdraw_amt { get; set; }
+      public decimal deposit_amt { get; set; }
+      public decimal? withdraw_amt { get; set; }
    }
 }

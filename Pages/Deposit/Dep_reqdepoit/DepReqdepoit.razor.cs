@@ -122,6 +122,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public List<GetOfBookNo>? getOfBookNo { get; set; }
         public List<GetBookNo>? getBookNo { get; set; }
         public List<BankBranch>? bankBranch { get; set; }
+        public List<Content>? statement_data { get; set; }
+        public List<Book_data>? book_data { get; set; }
+        public List<Slip_data>? slip_data { get; set; }
+        public List<Statement_list>? statement_list { get; set; }
+	    public IEnumerable<Models.Statement_list> statementDetails { get; set; }
         private string BankBranchValues { get; set; }
         private string BankValues { get; set; }
         private int currentStep = 0;
@@ -206,7 +211,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
 
             var (coopControl, coop_id, name, email, actort, apvlevelId, workDate) = TokenHelper.DecodeToken(accessToken);
-                Console.WriteLine($"coopControl: {coopControl}, userName: {name}, SaveStatus: {SaveStatus}, checkFlag: {checkFlag}");
+            Console.WriteLine($"coopControl: {coopControl}, userName: {name}, SaveStatus: {SaveStatus}, checkFlag: {checkFlag}");
             SaveStatus = save_status;
             return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application, save_status, checkFlag);
         }
@@ -284,7 +289,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             DepttypeValue = values[0];
             selectedValue = values[1];
             // DepttypeValue = e.Value.ToString();
-            depttype_code= DepttypeValue.Trim();
+            depttype_code = DepttypeValue.Trim();
             Console.WriteLine($"selectedValue : {selectedValue},DepttypeValue:'{depttype_code}'");
         }
         private async Task AcctypeChanged(ChangeEventArgs e)
@@ -732,13 +737,13 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             }
         }
 
-        // private async Task HandleEnterKeyPress(KeyboardEventArgs e)
-        // {
-        //     if (e.Code == "Enter")
-        //     {
-        //         await PerformSearch();
-        //     }
-        // }
+        private async Task HandleEnterKeyPress(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+                await PerformSearch();
+            }
+        }
         private async Task PerformSearch()
         {
             isLoading = true;
@@ -1022,16 +1027,74 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
-                        var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
-
-                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
-                        success_status = true;
-                        if (success_status)
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var Response = JsonConvert.DeserializeObject<SaveResponse>(responseData);
+                        if (response.IsSuccessStatusCode)
                         {
-                            currentStep = 2;
-                            PrintPdf();
-                            StateHasChanged();
+                            statement_data = new List<Models.Content> { Response.content };
+                            foreach (var content in statement_data)
+                            {
+                                var statementDetailsList = new List<Models.Statement_list>();
+                                if (content.book_data != null)
+                                {
+                                    var printbookData = JsonConvert.DeserializeObject<Book_data>(content.book_data.ToString());
+                                    var slipdata = JsonConvert.DeserializeObject<Slip_data>(content.slip_data.ToString());
+                                    Console.WriteLine($"slipdata : {content.slip_data.ToString()}");
+                                    if (printbookData != null)
+                                    {
+                                        foreach (var statement in printbookData.statement_list)
+                                        {
+                                            var deptaccountNo = statement.deptaccount_no.Replace(" ", "");
+                                            DateTime operatedate = statement.operate_date.GetValueOrDefault(DateTime.MinValue);
+                                            string operatedate_TH = operatedate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
+                                            DateTime? operate_datee_TH = null;
+                                            if (DateTime.TryParseExact(operatedate_TH, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                                            {
+                                                operate_datee_TH = parsedDate;
+                                            }
+                                            Console.WriteLine($"deptaccount_noo :{deptaccountNo}");
+                                            var statementDetails = new Models.Statement_list
+                                            {
+                                                coop_id = statement.coop_id,
+                                                deptaccount_no = deptaccountNo,
+                                                seq_no = statement.seq_no,
+                                                deptitemtype_code = statement.deptitemtype_code,
+                                                operate_date = operate_datee_TH,
+                                                entry_date = statement.entry_date,
+                                                prncbal = statement.prncbal,
+                                                entry_id = statement.entry_id,
+                                                item_status = statement.item_status,
+                                                sign_flag = statement.sign_flag,
+                                                print_code = statement.print_code,
+                                                prnc_no = statement.prnc_no,
+                                                tax_amt = statement.tax_amt,
+                                                accuint_amt = statement.accuint_amt,
+                                                int_amt = statement.int_amt,
+                                                printbook_status = statement.printbook_status,
+                                                deptslip_no = statement.deptslip_no,
+                                                deptitem_amt = statement.deptitem_amt,
+                                                deptint_amt = statement.deptint_amt,
+                                                deposit_amt = statement.deposit_amt,
+                                                withdraw_amt = statement.withdraw_amt,
+                                            };
+                                            Console.WriteLine($"coop_id: {statement.coop_id}, deptaccount_no: {statement.deptaccount_no}");
+                                            statementDetailsList.Add(statementDetails);
+                                        }
+                                    }
+                                    statementDetails = statementDetailsList;
+                                }
+                            }
+                            Console.WriteLine($"Response.message {Response.message}");
+                            var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                            var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
+                            success_status = true;
+                            if (success_status)
+                            {
+                                currentStep = 2;
+                                PrintPdf();
+                                StateHasChanged();
+                            }
                         }
                     }
                     else
@@ -1076,6 +1139,12 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             public bool success { get; set; }
             public Models.DepReqdepoit content { get; set; }
+            public string message { get; set; }
+        }
+        public class SaveResponse
+        {
+            public bool success { get; set; }
+            public Models.Content content { get; set; }
             public string message { get; set; }
         }
     }

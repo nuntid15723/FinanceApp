@@ -156,7 +156,7 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
 						<RadzenRow>
 							<RadzenText Text="ทำรายการ" />
 						</RadzenRow>
@@ -1054,7 +1054,7 @@ else
 																Name="deptaccount_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
 													<div class="input-group-addon">
 														<RadzenIcon class="icons icon-search" @onclick="GetDeptMaintype" Icon="ballot"
-																	data-bs-toggle="modal" data-bs-target="#ModalSearch" />
+																	data-bs-toggle="modal" data-bs-target="#anotherModal" />
 													</div>
 												</div>
 											</div>
@@ -1779,7 +1779,7 @@ else
 							}
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ตรวจสอบรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
 						</RadzenRow>
@@ -2145,13 +2145,41 @@ else
 						}
 					</RadzenStepsItem>
 					@* <RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true"> *@
-					<RadzenStepsItem Disabled="@(currentStep != 2)"  Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(currentStep == 3)"  Text="เสร็จสิ้น" Last="true">
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
-						@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf(deptslip_no)" /> *@
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@(() => PrintPdf(deptslip_no))" />
-
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
+								<div class="row mt-2"
+			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
+										AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+										FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+										AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"> 
+							<Columns>
+								<RadzenDataGridColumn Width="10%" TItem="Models.Statement_list" Title="ลำดับ" Property="coop_id">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn  Width="13%" TItem="Models.Statement_list" Title="วันที่"
+													  Property="operate_date">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="รายการ"
+													  Property="deptitemtype_code">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ถอน"
+													  Property="withdraw_amt">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ฝาก"
+													  Property="deposit_amt">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="ยอดคงเหลือ"
+													  Property="prncbal">
+								</RadzenDataGridColumn>
+								<RadzenDataGridColumn Width="12%" TItem="Models.Statement_list" Title="พิมพ์ Book" Property="item_status">
+								</RadzenDataGridColumn>
+							</Columns>
+						</RadzenDataGrid>
+								</div>
+						@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@(() => PrintPdf(deptslip_no))" /> *@
 					</RadzenStepsItem>
 				</Steps>
 			</RadzenSteps>
@@ -2285,23 +2313,59 @@ else
 	}
 </script>
 @code {
-@* 
-	private async Task PrintPdf()
-	{
-	// รับ HTML จาก GetPdfData()
-		string htmlData = await GetPdfData();
 
+    private async Task PrintPdf()
+    {
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPdfData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
-		await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
+        await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
 
-    } *@
-	private async Task<string> GetPdfData()
-	{
-		var InputHtml = $@"<!DOCTYPE html>
+    }
+    private async Task<string> GetPdfData()
+    {
+        var InputHtml = $@"<!DOCTYPE html>
 		<html lang=""en"" dir=""ltr"">
 		<head>
 		<meta charset=""utf-8""/>
 		<style>
+
+			.col-12{{
+				 width: 100%;
+			}}
+			.col-11{{
+				 width: 91.67%;
+			}}
+			.col-10{{
+				 width: 83.33%;
+			}}
+			.col-9{{
+				 width: 75%;
+			}}
+			.col-8{{
+				 width: 66.67%;
+			}}
+			.col-7{{
+				 width: 58.33%;
+			}}
+			.col-6{{
+				 width: 50%;
+			}}
+			.col-5{{
+				 width: 41.67%;
+			}}
+			.col-4{{
+				 width: 33.33%;
+			}}
+			.col-3{{
+				 width: 25%;
+			}}
+			.col-2{{
+				 width: 16.67%;
+			}}
+			.col-1{{
+				 width: 8.33%;
+			}}
 			.form-control {{
 				border: solid 1px #fff;
 			}}
@@ -2322,149 +2386,132 @@ else
 				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
 				margin-left: calc(var(--bs-gutter-x)* -0.5); */
 			}}
+			 @page {{   /* size: landscape;*/
+			    size: A4; 
+				width: 297mm; 
+				height: 210mm; 
+				margin: 0;  }}
 		</style>
 		<title>Test Page</title>
 		</head>
 		<body><br/>";
-		foreach (var item in datadetail)
-		{
-			var Item = item.deptSlip;
-			var operateDate = Item.operate_date.GetValueOrDefault(DateTime.MinValue);
-			var operateDate_TH = operateDate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
-			InputHtml += $@"
+        foreach (var content  in statement_data)
+        {
+		
+            var item = JsonConvert.DeserializeObject<Models.Slip_data>(content.slip_data.ToString());
+			var deptaccountNo = item.deptaccount_no.Replace(" ", "");
+			var deptaccNo_ws = string.Join(" ", deptaccountNo.ToCharArray());
+            var deptslipDate = item.deptslip_date.GetValueOrDefault(DateTime.MinValue);
+			var deptslip_date_TH = deptslipDate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
+			@* InputHtml += $@"
 			<img src='https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/IMG_Academy_Logo.svg/1200px-IMG_Academy_Logo.svg.png'
-			alt = '' style = 'width: 150px;' >
-			<div class='row'>
-			<div class='col-xl-2 col-md-4 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ทะเบียนสมาชิก</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<div class='input-group-addon'>
-							<input class='form-control' value='{deptno_format}' />
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
-        <label class='form-label' for=''>รายการ</label>
-        <div class='form-group '>
-            <div class='input-group'>";
-			if (selectedRecppaytype == null)
-			{
-				string firstValue = null;
-				{
-					foreach (var recppaytypeItem in Item.recppaytype)
-					{
-						if (firstValue == null)
-						{
-							firstValue = $"{recppaytypeItem.recppaytype_code} - {recppaytypeItem.recppaytype_desc}";
-						}
-					}
-				}
-
-				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
-			}
-			else
-			{
-				InputHtml += $@"<input class='form-control' value='{selectedRecppaytype}' />";
-			}
+			alt = '' style = 'width: 150px;' > *@
 			InputHtml += $@"
+			<div class='col-12'>
+				<div class='row'>
+					<div class='col-6 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<div class='input-group-addon'>
+									<input class='form-control' style='text-align: end;' value='{deptaccountNo}' />
+								</div>
+							</div>
+						</div>
+					</div> 
+					<div class='col-1 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='input-group'>
+								<input class='form-control' style='text-align: start;' value='{item.recppaytype_code}' />
 							</div>
 						</div>
 					</div>
-		<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-		<label class='form-label' for=''>วันที่</label>
-			<div class='form-group '>
-				<div class='label-group'>
-					<input class='form-control' value='{operateDate_TH}' />
-				</div>
-			</div>
-		</div>
-		<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>เลขสมุด</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<input class='form-control' value='{Item.deptpassbook_no}' />
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control'style='text-align: center;' value='{item.deptslip_amt}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-2 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' style='text-align: start;' value='{item.fee_amt}' />
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ชื่อบัญชี</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<input class='form-control' value='{Item.deptaccount_name}' />
+				<div class='row'>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{item.int_amt}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{item.t_net}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{deptslip_date_TH}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-4 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='input-group'><input class='form-control' value='{item.entry_id}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{deptslip_date_TH}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-6 d-flex flex-column'>
+						<input class='form-control' value='{item.coop_name}' />
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{item.readtihaibath}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{item.deptaccount_name}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='{deptaccNo_ws}' />
+							</div>
+						</div>
+					</div>
+					<div class='col-3 d-flex flex-column'>
+						<div class='form-group '>
+							<div class='label-group'>
+								<input class='form-control' value='= {item.deptslip_amt}' />
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ประเภทบัญชี</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<input class='form-control' value='{Item.depttype_desc}' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ประเภทเงิน</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<RadzenText Text='@Item.moneytype_code' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>รหัสคู่บัญชี</label>
-				<div class='form-group '>
-					<div class='input-group'>";
-			if (selectedRecppaytype == null)
-			{
-				string firstValue = null;
-				{
-					foreach (var tofromaccItem in Item.tofromacc)
-					{
-						if (firstValue == null)
-						{
-							firstValue = $"{tofromaccItem.tofrom_accid} - {tofromaccItem.tofrom_accdesc}";
-						}
-					}
-				}
-
-				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
-			}
-			else
-			{
-				InputHtml += $@"<input class='form-control' value='{selectedToFromAcc}' />";
-			}
-			InputHtml += $@"
-					</div>
-				</div>
-			</div>
-
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>คงเหลือ</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<RadzenText Text='@Item.prncbal?.ToString()' />
-						<input class='form-control' value='{Item.prncbal}' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ทำรายการโดย</label>";
-			if (nobook_flag == 0)
-			{
-				InputHtml += $@"<input class='form-control' value='มีสมุด'/>";
-			}
-			else if (nobook_flag == 1)
-			{
-				InputHtml += $@"<input class='form-control' value='ไม่มีสมุด' />";
-			}
-			InputHtml += $@"</div>
-							</div>";
-				}
-				InputHtml += @"
-						</body>
-					</html>";
+			</div>";		
+		}
+		InputHtml += @"
+	</body>
+</html>";
 				return InputHtml;
 	}
 
@@ -2478,7 +2525,7 @@ else
 		StateHasChanged();
 		@if (currentStep == 2)
 		{
-			PrintPdf(deptslip_no);
+			// PrintPdf(deptslip_no);
 		}
 	}
 
@@ -2495,6 +2542,7 @@ else
 	private RadzenDropDown<Models.GetBank> radzenDropDown;
 	IList<IDictionary<string, object>> accDetails; // Assuming this is your original data
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+	public IEnumerable<Models.Statement_list> statementDetails { get; set; }
 	private List<TableRow> rows = new List<TableRow>();
 	private List<string> bankValuesList = new List<string>();
 
@@ -2523,7 +2571,7 @@ else
 		StateHasChanged();
 		@if (currentStep == 2)
 		{
-			PrintPdf(deptslip_no);
+			@* PrintPdf(deptslip_no); *@
 		}
 		@* OnKeyDownAsync(e); *@
 	}
