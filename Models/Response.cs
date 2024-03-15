@@ -13,7 +13,8 @@ namespace FinanceApp.Models
       public string? deptslip_no_oth { get; set; }
       public string? message { get; set; }
       public object? book_data { get; set; }
-      public object? slip_data { get; set; }
+      public List<Slip_data>? slip_data { get; set; }
+      // public object? slip_data1 { get; set; }
    }
    public class Book_data
    {
@@ -26,24 +27,39 @@ namespace FinanceApp.Models
       public List<Statement_list> statement_list { get; set; }
 
    }
+   // public class Slip_data
+   // {
+   //    public string? deptaccount_no { get; set; }
+   //    public string? deptaccount_name { get; set; }
+   //    public string? coop_name { get; set; }
+   //    public string? recppaytype_code { get; set; }
+   //    public string? entry_id { get; set; }
+   //    public DateTime? deptslip_date { get; set; }
+   //    public DateTime? entry_date { get; set; }
+   //    public string? time_date { get; set; }
+   //    public decimal? deptslip_amt { get; set; }
+   //    public decimal? deptslip_netamt { get; set; }
+   //    public decimal? fee_amt { get; set; }
+   //    public decimal? oth_amt { get; set; }
+   //    public decimal? prncbal { get; set; }
+   //    public string? readtihaibath { get; set; }
+   //    public int? int_amt { get; set; }
+   //    public int? t_net { get; set; }
+
+   // }
+
    public class Slip_data
    {
-      public string? deptaccount_no { get; set; }
-      public string? deptaccount_name { get; set; }
-      public string? coop_name { get; set; }
-      public string? recppaytype_code { get; set; }
-      public string? entry_id { get; set; }
-      public DateTime? deptslip_date { get; set; }
-      public DateTime? entry_date { get; set; }
-      public string? time_date { get; set; }
-      public decimal? deptslip_amt { get; set; }
-      public decimal? deptslip_netamt { get; set; }
-      public decimal? fee_amt { get; set; }
-      public decimal? oth_amt { get; set; }
-      public decimal? prncbal { get; set; }
-      public string? readtihaibath { get; set; }
-      public string? int_amt { get; set; }
-      public string? t_net { get; set; }
+      public string? column_name { get; set; }
+      public string? column_value { get; set; }
+      public decimal? point_top { get; set; }
+      public decimal? point_left { get; set; }
+      public decimal? point_width { get; set; }
+      public decimal? point_height { get; set; }
+      public string? align { get; set; }
+      public string? valign { get; set; }
+      public string? font_name { get; set; }
+      public int? font_size { get; set; }
 
    }
    public class Statement_list
