@@ -11,8 +11,39 @@ window.createPdf = function (pdfData) {
   var doc = iframe.contentWindow.document;
   doc.open();
   // doc.write(pdfData);
-   doc.write(
-     `<html><head><style>@page { size: landscape; }</style></head><body>${pdfData}</body></html>`
+  doc.write(
+     `<!DOCTYPE html>
+		<html lang=""en"" dir=""ltr"">
+		<head>
+		<meta charset=""utf-8""/>
+		<style>
+			.form-control {
+				border: solid 1px #fff;
+			}
+			.form-label{
+				font-weight: normal;
+			}
+			.form-select {
+
+            font-size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}
+			.row {
+				--bs-gutter-x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}
+			 @page {   /* size: landscape;*/
+			    size: A4; 
+				width: 297mm; 
+				height: 210mm; 
+				margin: 0;  }
+		</style>
+		${pdfData}</html>`
    );
   doc.close();
 console.log(doc);

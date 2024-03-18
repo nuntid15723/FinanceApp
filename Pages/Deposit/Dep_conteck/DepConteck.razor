@@ -57,453 +57,471 @@
 		</div>
 	</div>
 </div>
-@* @if (isLoading)
-{ *@
-@* <div
-style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%;
+@if (isLoading)
+{
+	<div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%;
 justify-content: center; align-items: center; z-index: 90;">
-<div class="spinner-border text-primary" role="status">
-<span class="visually-hidden">Loading...</span>
-</div>
-</div> *@
-@* }
+		<div class="spinner-border text-primary" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+}
 else
 {
-@if (repReqdepoit != null)
-{ *@
-<div class="card body-page">
-	<div class="row" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-		<div class="row">
-			<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-				<label class="form-label" for="">สาขา</label>
-				<div class="form-group ">
-					<RadzenMask Mask="******" CharacterPattern="[0-9]" @bind-value="coop_id" Name="member_no"
-						class="form-control" />
+	
+	<div class="card body-page">
+		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
+			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
+				<Steps>
+					<RadzenStepsItem Disabled="@(currentStep == 2)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
+						<RadzenRow>
+							<RadzenText Text="ทำรายการ" />
+						</RadzenRow>
+							@if (datadetails == null)
+								{
+								
+									<div class="row"@onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+												<div class="row">
+													<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">เลขที่บัญชี</label>
+														<div class="form-group ">
+															<div class="input-group">
+																<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
+																	Name="deptaccount_no" class="form-control"
+																	@onkeydown="@(async (e) => { await HandleEnterKeyPress(e); await OnKeyDownAsync(e); })" />
+																<div class="input-group-addon">
+																	<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																		data-bs-target="#ModalSearch" />
+																</div>
+															</div>
+														</div>
+														<div class="modal" id="ModalSearch">
+															<div class="modal-dialog modal-xl">
+																<div class="modal-content">
+																	<!-- Modal Header -->
+																	<div class="modal-header">
+																		<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+																		<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+																	</div>
+																	<!-- Modal body -->
+																	<div class="modal-body">
+																		<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<label class="form-label" for="">ทะเบียนสมาชิก</label>
+																				<div class="form-group ">
+																					<div class="input-group">
+																						<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
+																							@bind-value="member_No_fild" Name="deptaccount_no"
+																							class="form-control" />
 
-				</div>
-			</div>
-			<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-				<label class="form-label" for="">เลขที่บัญชี</label>
-				<div class="form-group ">
-					<div class="input-group">
-						<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="member_no"
-							@onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" Name="member_no"
-							class="form-control" />
-						<div class="input-group-addon">
-							<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-								data-bs-target="#ModalSearch" />
-						</div>
-					</div>
-				</div>
-				<div class="modal" id="ModalSearch">
-					<div class="modal-dialog modal-xl">
-						<div class="modal-content">
-							<!-- Modal Header -->
-							<div class="modal-header">
-								<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-								<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-							</div>
-							<!-- Modal body -->
-							<div class="modal-body">
-								<div class="row" style="margin-left:-4px;margin-right:-4px;">
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">ทะเบียนสมาชิก</label>
-										<div class="form-group ">
-											<div class="input-group">
-												<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
-													@bind-value="member_No_fild" Name="deptaccount_no"
-													class="form-control" />
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<label class="form-label" for=""> รหัสพนักงาน</label>
+																				<div class="form-group ">
+																					<div class="input-group">
+																						<input class="form-control" type="text" name="emp_name"
+																							@bind-value="salary_id">
 
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for=""> รหัสพนักงาน</label>
-										<div class="form-group ">
-											<div class="input-group">
-												<input class="form-control" type="text" name="emp_name"
-													@bind-value="salary_id">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<label class="form-label" for="">สถานะบัญชี :</label>
+																				<select class="form-select" @bind="membcat_code">
+																					<option selected>--เลือก--</option>
+																					<option Value="10">สามัญ</option>
+																					<option Value="20">สมทบ</option>
+																					<option Value="30">สหกรณ์อื่นๆ</option>
+																				</select>
+																			</div>
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<label class="form-label" for="">ชื่อ</label>
+																				<div class="form-group ">
+																					<div class="input-group">
+																						<input class="form-control" type="text" name="member_name"
+																							@bind-value="member_name">
 
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">สถานะบัญชี :</label>
-										<select class="form-select" @bind="membcat_code"
-											>
-											<option selected>--เลือก--</option>
-											<option Value="10">สามัญ</option>
-											<option Value="20">สมทบ</option>
-											<option Value="30">สหกรณ์อื่นๆ</option>
-										</select>
-									</div>
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">ชื่อ</label>
-										<div class="form-group ">
-											<div class="input-group">
-												<input class="form-control" type="text" name="member_name"
-													@bind-value="member_name">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<label class="form-label" for="">นามสกุล</label>
+																				<div class="form-group ">
+																					<div class="input-group">
+																						<input class="form-control" type="text" name="member_surname"
+																							@bind-value="member_surname">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<label class="form-label" for="">สังกัด</label>
+																				<div class="form-group ">
+																					<div class="input-group">
+																						<input class="form-control" type="text" name="card_person"
+																							@bind-value="fullgroup">
+																					</div>
+																				</div>
+																			</div>
+																			<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
+																			</div>
+																			<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																				<button class="btn btn-outline-secondary"
+																					@onclick="SearchOfGetAcc">ค้นหา</button>
+																			</div>
+																		</div>
+																		@* <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
+																ColumnWidth="200px" *@
+																		<RadzenDataGrid TItem="Models.AccountDetails" ColumnWidth="200px" AllowFiltering="true"
+																			FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
+																			IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true" AllowSorting="true"
+																			PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+																			<Columns>
+																				<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+																					Title="ประเภทเงินฝาก" Property="member_no">
+																					<Template>
+																						@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																				data-bs-dismiss="modal">
+																				@context.member_no
+																				</div> *@
+																					</Template>
+																				</RadzenDataGridColumn>
 
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">นามสกุล</label>
-										<div class="form-group ">
-											<div class="input-group">
-												<input class="form-control" type="text" name="member_surname"
-													@bind-value="member_surname">
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">สังกัด</label>
-										<div class="form-group ">
-											<div class="input-group">
-												<input class="form-control" type="text" name="card_person"
-													@bind-value="fullgroup">
-											</div>
-										</div>
-									</div>
-									<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
-									</div>
-									<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<button class="btn btn-outline-secondary"
-											@onclick="SearchOfGetAcc">ค้นหา</button>
-									</div>
-								</div>
-								@* <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
-								ColumnWidth="200px" *@
-								<RadzenDataGrid TItem="Models.AccountDetails" ColumnWidth="200px" AllowFiltering="true"
-									FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
-									IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true" AllowSorting="true"
-									PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-									<Columns>
-										<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-											Title="ประเภทเงินฝาก" Property="member_no">
-											<Template>
-												@* <div @onclick="@(e => UpdateAccountDetails(context))"
-												data-bs-dismiss="modal">
-												@context.member_no
-												</div> *@
-											</Template>
-										</RadzenDataGridColumn>
+																				<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+																					Title="ชื่อ - นามสกุล" Property="deptaccount_name">
+																					<Template>
+																						@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																				data-bs-dismiss="modal">
+																				@context.member_name
+																				</div> *@
+																					</Template>
+																				</RadzenDataGridColumn>
+																				<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+																					Title="เลขที่บัญชี" Property="member_no">
+																					<Template>
+																						@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																				data-bs-dismiss="modal">
+																				@context.member_name
+																				</div> *@
+																					</Template>
+																				</RadzenDataGridColumn>
+																				<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+																					Title="ประเภทบุคคล" Property="full_name">
+																					<Template>
+																						@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																				data-bs-dismiss="modal">
+																				@context.member_surname
+																				</div> *@
+																					</Template>
+																				</RadzenDataGridColumn>
+																				<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails" Title="สังกัด"
+																					Property="fullgroup">
+																					<Template>
+																						@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																				data-bs-dismiss="modal">
+																				@context.fullgroup
+																				</div> *@
+																					</Template>
+																				</RadzenDataGridColumn>
+																			</Columns>
+																		</RadzenDataGrid>
 
-										<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-											Title="ชื่อ - นามสกุล" Property="deptaccount_name">
-											<Template>
-												@* <div @onclick="@(e => UpdateAccountDetails(context))"
-												data-bs-dismiss="modal">
-												@context.member_name
-												</div> *@
-											</Template>
-										</RadzenDataGridColumn>
-										<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-											Title="เลขที่บัญชี" Property="member_no">
-											<Template>
-												@* <div @onclick="@(e => UpdateAccountDetails(context))"
-												data-bs-dismiss="modal">
-												@context.member_name
-												</div> *@
-											</Template>
-										</RadzenDataGridColumn>
-										<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-											Title="ประเภทบุคคล" Property="full_name">
-											<Template>
-												@* <div @onclick="@(e => UpdateAccountDetails(context))"
-												data-bs-dismiss="modal">
-												@context.member_surname
-												</div> *@
-											</Template>
-										</RadzenDataGridColumn>
-										<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails" Title="สังกัด"
-											Property="fullgroup">
-											<Template>
-												@* <div @onclick="@(e => UpdateAccountDetails(context))"
-												data-bs-dismiss="modal">
-												@context.fullgroup
-												</div> *@
-											</Template>
-										</RadzenDataGridColumn>
-									</Columns>
-								</RadzenDataGrid>
+																	</div>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+														<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+													</div>
+												</div>
+									</div>
+							}
+							else
+							{
+								
+									<div class="from">
+										@foreach (var Item in datadetails)
+										  	{
+												<div class="row"@onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+														<div class="row">
+															<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">สาขา</label>
+																<div class="form-group ">
+																	<RadzenMask Mask="******" CharacterPattern="[0-9]" ReadOnly @bind-value="Item.coop_id" Name="member_no"
+																		class="form-control" />
+																</div>
+															</div>
+															<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">เลขที่บัญชี</label>
+																<div class="form-group ">
+																	<div class="input-group">
+																		<RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
+																			Name="deptaccount_no" class="form-control"
+																			@onkeydown="@(async (e) => { await HandleEnterKeyPress(e); await OnKeyDownAsync(e); })" />
+																		<div class="input-group-addon">
+																			<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																				data-bs-target="#ModalSearch" />
+																		</div>
+																	</div>
+																</div>
+																<div class="modal" id="ModalSearch">
+																	<div class="modal-dialog modal-xl">
+																		<div class="modal-content">
+																			<!-- Modal Header -->
+																			<div class="modal-header">
+																				<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+																				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+																			</div>
+																			<!-- Modal body -->
+																			<div class="modal-body">
+																				<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<label class="form-label" for="">ทะเบียนสมาชิก</label>
+																						<div class="form-group ">
+																							<div class="input-group">
+																								<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
+																									@bind-value="member_No_fild" Name="deptaccount_no"
+																									class="form-control" />
 
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-				<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
-			</div>
-		</div>
+																							</div>
+																						</div>
+																					</div>
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<label class="form-label" for=""> รหัสพนักงาน</label>
+																						<div class="form-group ">
+																							<div class="input-group">
+																								<input class="form-control" type="text" name="emp_name"
+																									@bind-value="salary_id">
+
+																							</div>
+																						</div>
+																					</div>
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<label class="form-label" for="">สถานะบัญชี :</label>
+																						<select class="form-select" @bind="membcat_code">
+																							<option selected>--เลือก--</option>
+																							<option Value="10">สามัญ</option>
+																							<option Value="20">สมทบ</option>
+																							<option Value="30">สหกรณ์อื่นๆ</option>
+																						</select>
+																					</div>
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<label class="form-label" for="">ชื่อ</label>
+																						<div class="form-group ">
+																							<div class="input-group">
+																								<input class="form-control" type="text" name="member_name"
+																									@bind-value="member_name">
+
+																							</div>
+																						</div>
+																					</div>
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<label class="form-label" for="">นามสกุล</label>
+																						<div class="form-group ">
+																							<div class="input-group">
+																								<input class="form-control" type="text" name="member_surname"
+																									@bind-value="member_surname">
+																							</div>
+																						</div>
+																					</div>
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<label class="form-label" for="">สังกัด</label>
+																						<div class="form-group ">
+																							<div class="input-group">
+																								<input class="form-control" type="text" name="card_person"
+																									@bind-value="fullgroup">
+																							</div>
+																						</div>
+																					</div>
+																					<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
+																					</div>
+																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																						<button class="btn btn-outline-secondary"
+																							@onclick="SearchOfGetAcc">ค้นหา</button>
+																					</div>
+																				</div>
+																				@* <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
+																		ColumnWidth="200px" *@
+																				<RadzenDataGrid TItem="Models.AccountDetails" ColumnWidth="200px"
+																					AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+																					FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+																					AllowPaging="true" AllowSorting="true"
+																					PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+																					<Columns>
+																						<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+																							Title="ประเภทเงินฝาก" Property="member_no">
+																							<Template>
+																								@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																						data-bs-dismiss="modal">
+																						@context.member_no
+																						</div> *@
+																							</Template>
+																						</RadzenDataGridColumn>
+
+																						<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+																							Title="ชื่อ - นามสกุล" Property="deptaccount_name">
+																							<Template>
+																								@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																						data-bs-dismiss="modal">
+																						@context.member_name
+																						</div> *@
+																							</Template>
+																						</RadzenDataGridColumn>
+																						<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
+																							Title="เลขที่บัญชี" Property="member_no">
+																							<Template>
+																								@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																						data-bs-dismiss="modal">
+																						@context.member_name
+																						</div> *@
+																							</Template>
+																						</RadzenDataGridColumn>
+																						<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+																							Title="ประเภทบุคคล" Property="full_name">
+																							<Template>
+																								@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																						data-bs-dismiss="modal">
+																						@context.member_surname
+																						</div> *@
+																							</Template>
+																						</RadzenDataGridColumn>
+																						<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
+																							Title="สังกัด" Property="fullgroup">
+																							<Template>
+																								@* <div @onclick="@(e => UpdateAccountDetails(context))"
+																						data-bs-dismiss="modal">
+																						@context.fullgroup
+																						</div> *@
+																							</Template>
+																						</RadzenDataGridColumn>
+																					</Columns>
+																				</RadzenDataGrid>
+
+																			</div>
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+																<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+															</div>
+															<div class="col-xl-5 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" style="color: transparent;" for="">top</label>
+																<RadzenTextBox class="form-control" type="text" ReadOnly 
+																	Name="deptpassbook_no" @bind-value="Item.deptaccount_name" />
+															</div>
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">เลขสมาชิก </label>
+																<RadzenMask Mask="**********" CharacterPattern="[0-9]" ReadOnly @bind-value="Item.member_no" Name="member_no"
+																	class="form-control" />
+															</div>
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">เลขสมุด</label>
+																<div class="form-group ">
+																	<div class="input-group">
+																		<RadzenTextBox class="form-control" type="text" ReadOnly  Name="deptpassbook_no"  @bind-value="Item.deptpassbook_no" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-1 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ประเภทบัญชี</label>
+																<div class="form-group ">
+																	<div class="input-group">
+																		<RadzenTextBox class="form-control" type="text" ReadOnly 
+																	Name="deptpassbook_no" @bind-value="Item.depttype_code" />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" style="color: transparent;" for="">top</label>
+																<RadzenTextBox class="form-control" type="text" ReadOnly 
+																	Name="deptpassbook_no" @bind-value="Item.depttype_desc" />
+															</div>
+															
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ยอดคงเหลือ</label>
+																<div class="form-group ">
+																	<div class="input-group">
+																		<input type="text" class="format-money form-control" Name="deptslip_netamt"
+																			value="@Item.prncbal" disabled />
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ยอดถอนได้</label>
+																@* <RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
+																	Name="deptaccount_name" @bind-value="Item.withdrawable_amt" /> *@
+																	<input type="text" class="format-money form-control" Name="deptslip_netamt"
+																			value="@Item.withdrawable_amt" disabled />
+															</div>
+														</div>
+													</div>
+											
+													<div class="row mt-5" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+														<h6>ตารางแสดงรายการเคลื่อนไหว</h6>
+														<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement" ColumnWidth="100%" AllowFiltering="true"
+															FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
+															IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true" AllowSorting="true"
+															PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+															<Columns>
+																<RadzenDataGridColumn Width="5%" TItem="Models.Statement" Title="ลำดับ" Property="number_no">
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="วันที่" Property="operate_date">
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="รายการ" Property="print_code">
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="ถอน" Property="withdraw_amt">
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="ฝาก" Property="deposit_amt">
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="ยอดคงเหลือ" Property="prncbal">
+																	@* <Template Context="data">
+															<p style="text-align: end;">@data.prncbal</p>
+															</Template> *@
+																</RadzenDataGridColumn>
+																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="พิมพ์ Book"
+																	Property="printbook_status">
+																	<Template Context="data">
+																		@if (data.printbook_status == 1)
+																		{
+																			<div style="text-align: center;">
+																				พิมพ์
+																			</div>
+																		}
+																		else
+																		{
+																			<div style="background-color: rgb(190, 5, 5); color: white; text-align: center;">
+																				ไม่พิมพ์
+																			</div>
+																		}
+																	</Template>
+																</RadzenDataGridColumn>
+
+															</Columns>
+														</RadzenDataGrid>
+													</div>
+											}
+									</div>
+								
+							}
+				</RadzenStepsItem>
+				<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
+					<RadzenRow>
+						<RadzenText Text="ตรวจสอบรายละเอียด" />
+					</RadzenRow>
+				</RadzenStepsItem>
+				<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
+					<RadzenRow>
+						<RadzenText Text="ประวัติทำรายการ" />
+							</RadzenRow>
+				</RadzenStepsItem>
+			</Steps>
+		</RadzenSteps>
 	</div>
 </div>
-@* }
-else
-{ *@
-<div class="card body-page">
-	<div class="from">
-		@* @foreach (var Item in repReqdepoit)
-		{ *@
-		<div class="row" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-			<div class="row">
-				<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">สาขา</label>
-					<div class="form-group ">
-						<RadzenMask Mask="******" CharacterPattern="[0-9]" @bind-value="coop_id" Name="member_no"
-							class="form-control" />
-					</div>
-				</div>
-				<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">เลขที่บัญชี</label>
-					<div class="form-group ">
-						<div class="input-group">
-							<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="deptaccount_no"
-								Name="member_no" class="form-control" />
-							<div class="input-group-addon">
-								<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-									data-bs-target="#ModalSearch" />
-							</div>
-						</div>
-					</div>
-					<div class="modal" id="ModalSearch">
-						<div class="modal-dialog modal-xl">
-							<div class="modal-content">
-								<!-- Modal Header -->
-								<div class="modal-header">
-									<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-									<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-								</div>
-								<!-- Modal body -->
-								<div class="modal-body">
-									<div class="row" style="margin-left:-4px;margin-right:-4px;">
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">ทะเบียนสมาชิก</label>
-											<div class="form-group ">
-												<div class="input-group">
-													<RadzenMask Mask="**-********" CharacterPattern="[0-9]"
-														@bind-value="member_No_fild" Name="deptaccount_no"
-														class="form-control" />
-
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for=""> รหัสพนักงาน</label>
-											<div class="form-group ">
-												<div class="input-group">
-													<input class="form-control" type="text" name="emp_name"
-														@bind-value="salary_id">
-
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">สถานะบัญชี :</label>
-											<select class="form-select" @bind="membcat_code"
-												>
-												<option selected>--เลือก--</option>
-												<option Value="10">สามัญ</option>
-												<option Value="20">สมทบ</option>
-												<option Value="30">สหกรณ์อื่นๆ</option>
-											</select>
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">ชื่อ</label>
-											<div class="form-group ">
-												<div class="input-group">
-													<input class="form-control" type="text" name="member_name"
-														@bind-value="member_name">
-
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">นามสกุล</label>
-											<div class="form-group ">
-												<div class="input-group">
-													<input class="form-control" type="text" name="member_surname"
-														@bind-value="member_surname">
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">สังกัด</label>
-											<div class="form-group ">
-												<div class="input-group">
-													<input class="form-control" type="text" name="card_person"
-														@bind-value="fullgroup">
-												</div>
-											</div>
-										</div>
-										<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<button class="btn btn-outline-secondary"
-												@onclick="SearchOfGetAcc">ค้นหา</button>
-										</div>
-									</div>
-									@* <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
-									ColumnWidth="200px" *@
-									<RadzenDataGrid TItem="Models.AccountDetails" ColumnWidth="200px"
-										AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
-										FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-										AllowPaging="true" AllowSorting="true"
-										PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-										<Columns>
-											<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-												Title="ประเภทเงินฝาก" Property="member_no">
-												<Template>
-													@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_no
-													</div> *@
-												</Template>
-											</RadzenDataGridColumn>
-
-											<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-												Title="ชื่อ - นามสกุล" Property="deptaccount_name">
-												<Template>
-													@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_name
-													</div> *@
-												</Template>
-											</RadzenDataGridColumn>
-											<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-												Title="เลขที่บัญชี" Property="member_no">
-												<Template>
-													@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_name
-													</div> *@
-												</Template>
-											</RadzenDataGridColumn>
-											<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-												Title="ประเภทบุคคล" Property="full_name">
-												<Template>
-													@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.member_surname
-													</div> *@
-												</Template>
-											</RadzenDataGridColumn>
-											<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-												Title="สังกัด" Property="fullgroup">
-												<Template>
-													@* <div @onclick="@(e => UpdateAccountDetails(context))"
-													data-bs-dismiss="modal">
-													@context.fullgroup
-													</div> *@
-												</Template>
-											</RadzenDataGridColumn>
-										</Columns>
-									</RadzenDataGrid>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-					<button type="button" class="btn btn-outline-secondary" @onclick="Search">ค้นหา</button>
-				</div>
-				<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
-					<label class="form-label" style="color: transparent;" for="">top</label>
-					<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color:#fff;"
-						Name="deptpassbook_no" @bind-value="deptpassbook_no" />
-				</div>
-				<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">เลขสมาชิก </label>
-					<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
-						class="form-control" />
-				</div>
-				<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">ประเภทบัญชี</label>
-					@* <select id="depttype" name="depttype_code" class="form-select" @onchange="DepttypeChanged">
-					@if (Item.depttype == null || !Item.depttype.Any())
-					{
-					<option selected disabled></option>
-					}
-					else
-					{
-					@foreach (var depttypeItem in Item.depttype)
-					{
-					if (depttypeItem.deptgroup_code == Item.depttype_code)
-					{
-					isCurrentOptionSelected = true;
-
-					}
-					else
-					{
-					isCurrentOptionSelected = false;
-					}
-					<option value="@($"{depttypeItem.deptmain_desc}|{depttypeItem.deptgroup_code}")"
-					selected="@isCurrentOptionSelected">
-					@depttypeItem.deptmain_desc
-					</option>
-					}
-					}
-					</select> *@
-				</div>
-				<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">เลขสมุด</label>
-					<div class="form-group ">
-						<div class="input-group">
-							<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color:
-							#fff;" Name="deptpassbook_no" disabled="@(!chk_deptpassbookno)" @bind-value="deptpassbook_no" />
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">ยอดคงเหลือ</label>
-					<div class="form-group ">
-						<div class="input-group">
-							<input type="text" class="format-money form-control" Name="deptslip_netamt"
-								value="@deptaccount_no" disabled />
-						</div>
-					</div>
-				</div>
-				<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-					<label class="form-label" for="">ยอดถอนได้</label>
-					<RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
-						Name="deptaccount_name" @bind-value="deptaccount_name" />
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="card mt-4">
-		<div class="row mt-2"
-			style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-			<h6>ตารางแสดงรายการเคลื่อนไหว</h6>
-			<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="180px"
-				AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
-				IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true" AllowSorting="true"
-				PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-				<Columns>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ต้นเงิน" Property="prnc_no">
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันที่" Property="prnc_bal">
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="รายการ" Property="prncslip_amt">
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ถอน" Property="prnc_date">
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ฝาก" Property="prncdue_date">
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ยอดคงเหลือ" Property="calint_from">
-					</RadzenDataGridColumn>
-					<RadzenDataGridColumn TItem="Models.AccountDetails" Title="พิมพ์ Book" Property="calint_to">
-					</RadzenDataGridColumn>
-				</Columns>
-			</RadzenDataGrid>
-		</div>
-	</div>
-	@* } *@
-</div>
-@* } *@
-@* } *@
+}
 <script>
 	$(document).ready(function () {
 		var previous_data;
@@ -555,7 +573,28 @@ else
 
 @code {
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+	@* protected override async Task OnInitializedAsync()
+	{
+		
+	} *@
+	private void OnChange(int newStep)
+	{
+		currentStep = newStep;
+		Console.WriteLine(newStep); // This will print the current step
+		StateHasChanged();
+		@if (currentStep == 2)
+		{
+			@* PrintPdf(); *@
+		}
 
+	}
+
+	// Event handler for RadzenSteps CanChange
+	private bool CanChange()
+	{
+		Console.WriteLine($"return true;{true}");
+		return true;
+	}
 	private async Task OnBankBranchChanged(ChangeEventArgs e)
 	{
 		BankBranchValues = e.Value.ToString();

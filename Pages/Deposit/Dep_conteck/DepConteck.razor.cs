@@ -6,15 +6,22 @@ using Microsoft.AspNetCore.Components;
 using System.Text;
 using Newtonsoft.Json.Linq;
 using Radzen;
+using FinanceApp.Services;
+
 using System.IO;
+using System.Runtime.Intrinsics.X86;
+using Microsoft.AspNetCore.Components.Web;
+using System.Net.Http.Headers;
+using System.Globalization;
 
 
 namespace FinanceApp.Pages.Deposit.Dep_conteck
 {
     public partial class DepConteck
     {
-
-        public string? coop_id = "065001";
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
+        public string? coop_id { get; set; }
         public int? reqappl_flag = 0;
         public string? deptcoop_id { get; set; }
         public string? deptslip_no { get; set; }
@@ -90,7 +97,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         private bool isLoadingModals;
 
         /// <summary> 
-        public string memcoop_id = "065001";
+        public string memcoop_id { get; set; }
         public string? member_No_fild { get; set; }
         public string? member_name { get; set; }
         public string? member_surname { get; set; }
@@ -111,14 +118,52 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         public List<BankBranch>? bankBranch { get; set; }
         private string BankBranchValues { get; set; }
         private string BankValues { get; set; }
+        private int currentStep = 0;
+        public string? SaveStatus { get; set; }
+        public string? coop_control { get; set; }
+        int sequence = 1;
         void ShowNotification(NotificationMessage message)
         {
             NotificationService.Notify(message);
         }
-        private List<DepReqdepoit> repReqdepoit;
+        private List<DataStatement> datadetails;
+        public List<Statement>? statement { get; set; }
+        public IEnumerable<Models.Statement> statementDetails { get; set; }
+
 
         private string DepttypeValue;
         private string Valueselecte;
+        public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
+        {
+            var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+            string accessToken = bearerToken;
+            string application = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "application");
+            string save_status = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "save_status");
+            string checkFlag = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "check_flag");
+
+
+            var (coopControl, coop_id, name, email, actort, apvlevelId, workDate) = TokenHelper.DecodeToken(accessToken);
+            Console.WriteLine($"coopControl: {coopControl}, userName: {name}, SaveStatus: {SaveStatus}, checkFlag: {checkFlag}");
+            SaveStatus = save_status;
+            coop_control = coopControl;
+            return (coopControl, coop_id, name, email, actort, apvlevelId, workDate, application, save_status, checkFlag);
+        }
+        private async Task HandleEnterKeyPress(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
+            {
+
+                // await PerformSearch();
+            }
+
+        }
+        private async Task OnKeyDownAsync(KeyboardEventArgs e)
+        {
+            if (e.Key == "F9")
+            {
+                currentStep = 1;
+            }
+        }
         private async Task GetBank()
         {
             try
@@ -181,102 +226,58 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             depttype_code = values[1];
             Console.WriteLine($"Recp Pay Type Code: {DepttypeValue},Depttype Code: {depttype_code}");
         }
-        private async Task Search()
+        private async Task PerformSearch()
         {
-            GetBank();
-            BankBranch();
-            if (member_no == null || member_no == "")
+            isLoading = true;
+            if (string.IsNullOrEmpty(deptno_format))
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
             }
-            // else
-            // {
-            //     try
-            //     {
-            //         isLoading = true;
-            //         var response = await
-            //         httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}?coop_control={coop_id}&member_no={member_no}&reqappl_flag={reqappl_flag}");
-            //         response.EnsureSuccessStatusCode();
-            //         var json = await response.Content.ReadAsStringAsync();
-            //         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
-            //         Console.WriteLine(apiResponse.status == true);
-            //         if (apiResponse.status == true)
-            //         {
-            //             repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
-            //             Console.WriteLine($"API request failed: {repReqdepoit}");
-            //         }
-            //         else
-            //         {
-            //             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
-            //             Console.WriteLine($"API request failed: {apiResponse.message}");
-            //         }
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
-            //         Console.WriteLine(ex.Message.ToString());
-            //     }
-            //     finally
-            //     {
-            //         isLoading = false;
-            //     }
-            // }
-            // string memberNo_fild = null;
-
-            // if (member_no != null)
-            // {
-            //     string[] memberNoDtails = member_no.ToString().Split('-');
-            //     string firstPart = memberNoDtails[0];
-            //     string secondPart = memberNoDtails[1];
-            //     member_no = firstPart + secondPart;
-            // }
             else
             {
+                await CallApi();
+            }
+
+            isLoading = false;
+        }
+        private async Task CallApi()
+        {
+            // GetBank();
+            // BankBranch();
+            // if (deptno_format == null || deptno_format == "")
+            // {
+            //     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
+            // }
+            // else
+            // {
                 try
                 {
+                    (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                     isLoading = true;
-                    var depOfGetAccount = new ReqAccDetails
-                    {
-                        coop_id = "065001",
-                        memcoop_id = "065001",
-                        deptaccount_no = deptaccount_no,
-                        member_no = member_no,
-                        depttype_code = depttype_code,
-                        salary_id = salary_id,
-                        deptclose_status = 0,
-                        memb_name = memb_name,
-                        memb_surname = memb_surname,
-                        card_person = card_person,
-                        mem_telmobile = mem_telmobile,
-                        full_name = full_name,
-                        membgroup_code = membgroup_code,
-                        membgroup_desc = membgroup_desc,
-                        entry_date = entry_date,
-                        deptitem_group = deptitem_group,
-                        reqappl_flag = reqappl_flag,
-                    };
-                    var json = JsonConvert.SerializeObject(depOfGetAccount);
-                    // Console.WriteLine(json);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}";
-                    var response = await httpClient.PostAsync(apiUrl, content);
-
-                    Console.WriteLine(response.IsSuccessStatusCode);
+                    deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
+                    var response = await SendApiRequestAsyncGet(apiUrl);
                     if (response.IsSuccessStatusCode)
                     {
                         // อ่าน response string
                         var jsonResponse = await response.Content.ReadAsStringAsync();
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
-                        // Console.WriteLine(apiResponse.status == true);
-                        if (apiResponse.status == true)
+                        Console.WriteLine(apiResponse.success);
+                        if (apiResponse.success)
                         {
-                            repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
-                            Console.WriteLine($"API request failed: {repReqdepoit}");
+                            var content = apiResponse.content;
+                            datadetails = new List<DataStatement> { apiResponse.content };
+                            var statements = content.statement;
+
+                            var dataStatementList = ProcessStatements(statements);
+                            statementDetails = dataStatementList;
+                        }
+                        else
+                        {
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
                         }
                     }
                 }
-                // var repReqdepoitDetails = new List<Models.DepReqdepoit>();
-
                 catch (Exception ex)
                 {
                     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
@@ -286,7 +287,50 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 {
                     isLoading = false;
                 }
+            // }
+        }
+        private List<Statement> ProcessStatements(List<Statement> statements)
+        {
+            var dataStatementList = new List<Statement>();
+            foreach (var item in statements)
+            {
+                DateTime operatedate = item.operate_date.GetValueOrDefault(DateTime.MinValue);
+                string operatedate_TH = operatedate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
+                DateTime? operate_date_TH = null;
+                if (DateTime.TryParseExact(operatedate_TH, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                {
+                    operate_date_TH = parsedDate;
+                }
+
+                var statementDetails = new Statement
+                {
+                    number_no = sequence++,
+                    coop_id = item.coop_id,
+                    deptaccount_no = deptaccount_no,
+                    seq_no = item.seq_no,
+                    deptitemtype_code = item.deptitemtype_code,
+                    operate_date = operate_date_TH,
+                    entry_date = item.entry_date,
+                    prncbal = item.prncbal,
+                    entry_id = item.entry_id,
+                    item_status = item.item_status,
+                    sign_flag = item.sign_flag,
+                    print_code = item.print_code,
+                    prnc_no = item.prnc_no,
+                    tax_amt = item.tax_amt,
+                    accuint_amt = item.accuint_amt,
+                    int_amt = item.int_amt,
+                    printbook_status = item.printbook_status,
+                    deptslip_no = item.deptslip_no,
+                    deptitem_amt = item.deptitem_amt,
+                    deptint_amt = item.deptint_amt,
+                    deposit_amt = item.deposit_amt,
+                    withdraw_amt = item.withdraw_amt,
+                };
+                // Console.WriteLine($"coop_id: {item.coop_id}, deptaccount_no: {item.deptaccount_no}");
+                dataStatementList.Add(statementDetails);
             }
+            return dataStatementList;
         }
         private async Task SearchOfGetAcc()
         {
@@ -338,22 +382,51 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             }
 
         }
-        // private async Task SaveData()
-        // {
-        //     try
-        //     {
-        //         // ทำการบันทึกข้อมูลลงในฐานข้อมูล
-        //         await SaveDataAsync();
+        private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
+        {
+            try
+            {
+                string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
 
-        //         // บันทึก log
-        //         Console.WriteLine("บันทึกข้อมูลลงในฐานข้อมูลสำเร็จ");
-        //     }
-        //     catch (Exception ex)
-        //     {
-        //         // กรณีเกิด error ในขณะที่บันทึกข้อมูล
-        //         Console.WriteLine($"เกิดข้อผิดพลาด: {ex.Message}");
-        //     }
-        // }
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                    var json = JsonConvert.SerializeObject(payload);
+                    Console.WriteLine($"response: {payload}");
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    // Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
+
+                    return await httpClient.PostAsync(apiUrl, content);
+                }
+            }
+            catch (Exception ex)
+            {
+                // จัดการ Exception ตามความเหมาะสม
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
+        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
+        {
+            try
+            {
+                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+                using (var httpClient = new HttpClient())
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                    return await httpClient.GetAsync(apiUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions here
+                Console.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
         public async Task SaveDataAsync()
         {
             try
@@ -362,77 +435,77 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 string hostName = Dns.GetHostName();
                 var hostEntry = Dns.GetHostEntry(hostName);
                 isLoading = true;
-                foreach (var item in repReqdepoit)
+                foreach (var item in datadetails)
                 {
                     // var ItemdeptSlip = item.deptSlip;
                     // var ItemdeptSlipdet = item.deptSlipdet;
                     // var ItemdeptSlipCheque = item.deptSlipCheque;
                     var DepReqdepoit = new DepReqdepoit
                     {
-                        coop_id = item.coop_id,
-                        deptcoop_id = item.deptcoop_id,
-                        deptslip_no = item.deptslip_no,
-                        member_no = item.member_no,
-                        deptno_format = item.deptno_format,
-                        deptaccount_no = item.deptaccount_no,
-                        membcat_code = item.membcat_code,
-                        depttype_code = item.depttype_code,
-                        deptgroup_code = item.deptgroup_code,
-                        recppaytype_code = item.recppaytype_code,
-                        moneytype_code = item.moneytype_code,
-                        bank_code = (BankValues == null) ? item.bank_code : BankValues,
-                        bankbranch_code = (BankBranchValues == null) ? item.bankbranch_code : BankBranchValues,
-                        entry_id = item.entry_id,
-                        machine_id = item.machine_id,
-                        tofrom_accid = item.tofrom_accid,
-                        operate_date = item.operate_date,
-                        entry_date = item.entry_date,
-                        calint_from = item.calint_from,
-                        sign_flag = item.sign_flag,
-                        laststmseq_no = item.laststmseq_no,
-                        nobook_flag = item.nobook_flag,
-                        prnc_no = item.prnc_no,
-                        deptslip_amt = item.deptslip_amt,
-                        deptslip_netamt = item.deptslip_netamt ?? 0,
-                        fee_amt = item.fee_amt ?? 0,
-                        oth_amt = item.oth_amt ?? 0,
-                        prncbal = item.prncbal ?? 0,
-                        withdrawable_amt = item.withdrawable_amt ?? 0,
-                        prncbal_bf = item.prncbal_bf,
-                        tax_amt = item.tax_amt ?? 0,
-                        int_amt = item.int_amt ?? 0,
-                        slipnetprncbal_amt = item.slipnetprncbal_amt ?? 0,
-                        posttovc_flag = item.posttovc_flag ?? 0,
-                        refer_slipno = item.refer_slipno,
-                        deptaccount_name = item.deptaccount_name,
-                        depttype_desc = item.depttype_desc,
-                        dept_objective = item.dept_objective,
-                        prncbal_retire = item.prncbal_retire ?? 0,
-                        remark = item.remark,
-                        bank = item.bank,
-                        branch = item.branch,
-                        due_date = item.due_date,
-                        deptpassbook_no = item.deptpassbook_no,
-                        condforwithdraw = item.condforwithdraw,
-                        passbook_flag = item.passbook_flag,
-                        upint_time = item.upint_time ?? 0,
-                        deptaccount_ename = item.deptaccount_ename,
-                        deptrequest_docno = item.deptrequest_docno,
-                        account_type = item.account_type,
-                        monthintpay_meth = item.monthintpay_meth ?? 0,
-                        traninttype_code = item.traninttype_code,
-                        tran_deptacc_no = item.tran_deptacc_no,
-                        dept_tranacc_name = item.dept_tranacc_name,
-                        deptmonth_status = item.deptmonth_status,
-                        deptmonth_amt = item.deptmonth_amt,
-                        dept_status = item.dept_status,
-                        monthint_status = item.monthint_status,
-                        f_tax_rate = item.f_tax_rate,
-                        adjdate_status = item.adjdate_status,
-                        membcat_desc = item.membcat_desc,
-                        reqappl_flag = item.reqappl_flag,
-                        spcint_rate_status = item.spcint_rate_status,
-                        spcint_rate = item.spcint_rate,
+                        //coop_id = item.coop_id,
+                        //deptcoop_id = item.deptcoop_id,
+                        //deptslip_no = item.deptslip_no,
+                        //member_no = item.member_no,
+                        //deptno_format = item.deptno_format,
+                        //deptaccount_no = item.deptaccount_no,
+                        //membcat_code = item.membcat_code,
+                        //depttype_code = item.depttype_code,
+                        //deptgroup_code = item.deptgroup_code,
+                        //recppaytype_code = item.recppaytype_code,
+                        //moneytype_code = item.moneytype_code,
+                        //bank_code = (BankValues == null) ? item.bank_code : BankValues,
+                        //bankbranch_code = (BankBranchValues == null) ? item.bankbranch_code : BankBranchValues,
+                        //entry_id = item.entry_id,
+                        //machine_id = item.machine_id,
+                        //tofrom_accid = item.tofrom_accid,
+                        //operate_date = item.operate_date,
+                        //entry_date = item.entry_date,
+                        //calint_from = item.calint_from,
+                        //sign_flag = item.sign_flag,
+                        //laststmseq_no = item.laststmseq_no,
+                        //nobook_flag = item.nobook_flag,
+                        //prnc_no = item.prnc_no,
+                        //deptslip_amt = item.deptslip_amt,
+                        //deptslip_netamt = item.deptslip_netamt ?? 0,
+                        //fee_amt = item.fee_amt ?? 0,
+                        //oth_amt = item.oth_amt ?? 0,
+                        //prncbal = item.prncbal ?? 0,
+                        //withdrawable_amt = item.withdrawable_amt ?? 0,
+                        //prncbal_bf = item.prncbal_bf,
+                        //tax_amt = item.tax_amt ?? 0,
+                        //int_amt = item.int_amt ?? 0,
+                        //slipnetprncbal_amt = item.slipnetprncbal_amt ?? 0,
+                        //posttovc_flag = item.posttovc_flag ?? 0,
+                        //refer_slipno = item.refer_slipno,
+                        //deptaccount_name = item.deptaccount_name,
+                        //depttype_desc = item.depttype_desc,
+                        //dept_objective = item.dept_objective,
+                        //prncbal_retire = item.prncbal_retire ?? 0,
+                        //remark = item.remark,
+                        //bank = item.bank,
+                        //branch = item.branch,
+                        //due_date = item.due_date,
+                        //deptpassbook_no = item.deptpassbook_no,
+                        //condforwithdraw = item.condforwithdraw,
+                        //passbook_flag = item.passbook_flag,
+                        //upint_time = item.upint_time ?? 0,
+                        //deptaccount_ename = item.deptaccount_ename,
+                        //deptrequest_docno = item.deptrequest_docno,
+                        //account_type = item.account_type,
+                        //monthintpay_meth = item.monthintpay_meth ?? 0,
+                        //traninttype_code = item.traninttype_code,
+                        //tran_deptacc_no = item.tran_deptacc_no,
+                        //dept_tranacc_name = item.dept_tranacc_name,
+                        //deptmonth_status = item.deptmonth_status,
+                        //deptmonth_amt = item.deptmonth_amt,
+                        //dept_status = item.dept_status,
+                        //monthint_status = item.monthint_status,
+                        //f_tax_rate = item.f_tax_rate,
+                        //adjdate_status = item.adjdate_status,
+                        //membcat_desc = item.membcat_desc,
+                        //reqappl_flag = item.reqappl_flag,
+                        //spcint_rate_status = item.spcint_rate_status,
+                        //spcint_rate = item.spcint_rate,
                     };
                     var json = JsonConvert.SerializeObject(DepReqdepoit);
                     // Console.WriteLine("JsonData:" + json);
@@ -473,8 +546,8 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
 
         public class ApiResponse
         {
-            public bool status { get; set; }
-            public Models.DepReqdepoit data { get; set; }
+            public bool success { get; set; }
+            public Models.DataStatement content { get; set; }
             public string message { get; set; }
         }
     }

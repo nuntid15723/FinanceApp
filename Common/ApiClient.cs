@@ -33,7 +33,9 @@ public static class ApiClient
         public const string DepOfGetBankBranch = "Deposit/DepOfGetBankBranch";
         public const string DepOfGetDeptMaintype = "Deposit/DepOfGetDeptMaintype";
         public const string DepOfInitDeptPassbook = "Deposit/DepOfInitDeptPassbook";
-        public const string DeptOfGetPrintSlip = "DeptOfGetPrintSlip?deptslip_no";
+        public const string DeptOfGetPrintSlip = "DeptOfGetPrintSlip?deptslip_no"; 
+        public const string DepOfDataStatement = "DepOfDataStatement?deptaccount_no"; 
+
 
 
     }

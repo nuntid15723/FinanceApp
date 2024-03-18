@@ -283,29 +283,45 @@ namespace FinanceApp.Models
         public int reqappl_flag { get; set; }
         public string? membcat_code { get; set; } = null;
     }
-    // =======
-    // 		public string coop_id { get; set; }
-    // 		public string? memcoop_id { get; set; }
-    // 		public string? deptno_format { get; set; }
-    // 		public string? deptaccount_no { get; set; }
-    // 		public string? deptaccount_name { get; set; }
-    // 		public string? member_no { get; set; }
-    // 		public string? depttype_code { get; set; }
-    // 		[DefaultValue(0)]
-    // 		public int deptclose_status { get; set; }
-    // 		public string? memb_name { get; set; }
-    // 		public string? memb_surname { get; set; }
-    // 		public string? card_person { get; set; }
-    // 		public string? mem_telmobile { get; set; }
-    // 		public string? full_name { get; set; }
-    // 		public string? salary_id { get; set; }
-    // 		public string? membgroup_code { get; set; }
-    // 		public string? membgroup_desc { get; set; }
-    // 		public DateTime? entry_date { get; set; }
-    // 		public string? deptitem_group { get; set; }
-    // 		[DefaultValue(0)]
-    // 		public int reqappl_flag { get; set; }
-    // 		public string? membcat_code { get; set; } = null;
-    // 	}
-    // >>>>>>> 6fd902fcb83b01581651c946f958da6d29276bbe
+    public class DataStatement
+    {
+        public string? coop_id { get; set; }
+        public string? deptaccount_no { get; set; }
+        public string? deptaccount_name { get; set; }
+        public string? member_no { get; set; }
+        public string? depttype_code { get; set; }
+        public string? depttype_desc { get; set; }
+        public string? deptpassbook_no { get; set; }
+        public decimal? prncbal { get; set; }
+        public decimal? withdrawable_amt { get; set; }
+        public List<Statement> statement { get; set; }
+
+
+    }
+    public class Statement
+    {
+        public int? number_no { get; set; }
+        public string? coop_id { get; set; }
+        public string? deptaccount_no { get; set; }
+        public int? seq_no { get; set; }
+        public string? deptitemtype_code { get; set; }
+        public DateTime? operate_date { get; set; }
+        public DateTime? entry_date { get; set; }
+        public decimal? prncbal { get; set; }
+        public string? entry_id { get; set; }
+        public int? item_status { get; set; }
+        public int? sign_flag { get; set; }
+        public string? print_code { get; set; }
+        public int? prnc_no { get; set; }
+        public int? tax_amt { get; set; }
+        public decimal? accuint_amt { get; set; }
+        public decimal? int_amt { get; set; }
+        public int? printbook_status { get; set; }
+        public string? deptslip_no { get; set; }
+        public int? deptitem_amt { get; set; }
+        public int? deptint_amt { get; set; }
+        public decimal deposit_amt { get; set; }
+        public decimal? withdraw_amt { get; set; }
+    }
+
 }

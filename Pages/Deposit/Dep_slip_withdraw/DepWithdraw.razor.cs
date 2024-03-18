@@ -1103,10 +1103,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                                             var deptaccountNo = statement.deptaccount_no.Replace(" ", "");
                                             DateTime operatedate = statement.operate_date.GetValueOrDefault(DateTime.MinValue);
                                             string operatedate_TH = operatedate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
-                                            DateTime? operate_datee_TH = null;
+                                            DateTime? operate_date_TH = null;
                                             if (DateTime.TryParseExact(operatedate_TH, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                                             {
-                                                operate_datee_TH = parsedDate;
+                                                operate_date_TH = parsedDate;
                                             }
                                             Console.WriteLine($"deptaccount_noo :{deptaccountNo}");
                                             var statementDetails = new Models.Statement_list
@@ -1115,7 +1115,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                                                 deptaccount_no = deptaccountNo,
                                                 seq_no = statement.seq_no,
                                                 deptitemtype_code = statement.deptitemtype_code,
-                                                operate_date = operate_datee_TH,
+                                                operate_date = operate_date_TH,
                                                 entry_date = statement.entry_date,
                                                 prncbal = statement.prncbal,
                                                 entry_id = statement.entry_id,
