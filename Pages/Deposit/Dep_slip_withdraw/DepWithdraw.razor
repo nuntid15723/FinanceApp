@@ -2046,6 +2046,14 @@ else
 													  Property="prncbal">
 								</RadzenDataGridColumn>
 								<RadzenDataGridColumn Width="12%" TItem="Models.Statement_list" Title="พิมพ์ Book" Property="item_status">
+								<Template Context="data">
+								    @if (data.item_status == 1)
+									{
+										<div style="text-align: center;">พิมพ์</div>
+									}else{
+									<div style="background-color: rgb(190, 5, 5); color: white; text-align: center;">ไม่พิมพ์</div>
+									}
+									</Template>
 								</RadzenDataGridColumn>
 							</Columns>
 						</RadzenDataGrid>
@@ -2136,7 +2144,7 @@ private async Task<string> GetPdfData()
 			foreach (var content  in statement_data)
 			{
 				foreach (var item in content.slip_data){
-				Console.WriteLine($"slipdata : {item.column_name},{item.column_value},{item.point_top},{item.point_left},{item.point_width},{item.point_height},{item.align},{item.valign},{item.font_name},{item.font_size},");
+				@* Console.WriteLine($"slipdata : {item.column_name},{item.column_value},{item.point_top},{item.point_left},{item.point_width},{item.point_height},{item.align},{item.valign},{item.font_name},{item.font_size},"); *@
 					InputHtml += $@"
 					<div style=' width: {item.point_width}%; margin-top: {item.point_top}px;'>
 							<lable style='text-align: {item.align}; margin-top: {item.point_top}px; margin-left: {item.point_left}%; width: {item.point_width}%; vertical-align: top; font-family: {item.font_name}; font-size: {item.font_size}px;'>{item.column_value}</lable>

@@ -1157,7 +1157,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     }
                     else
                     {
-                        HandleErrorResponse(responseData);
+                        // HandleErrorResponse(responseData);
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = responseData, Duration = 2500 });
                     }
                 }
             }
