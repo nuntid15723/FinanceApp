@@ -299,6 +299,8 @@
                     Console.WriteLine($"coop_id: {item.coop_id}, coop_control: {item.coop_control}, coop_name: {item.coop_name}");
                 }
 
+            }else{
+                NavigationManager.NavigateTo("/login", true);
             }
         }
         catch (Exception ex)

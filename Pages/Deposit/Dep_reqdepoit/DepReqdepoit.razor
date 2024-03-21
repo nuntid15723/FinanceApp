@@ -121,7 +121,7 @@
 			}
 			else if (currentStep == 2)
 			{
-				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@SaveDataAsync"
+				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf"
 					disabled="@(!success_status)" />
 			}
 		</div>
@@ -1713,7 +1713,9 @@ else
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@GetPdfData" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
@@ -1819,188 +1821,80 @@ else
     // สามารถใส่คำสั่ง Console.WriteLine เพื่อ debug หรือตรวจสอบค่า dept_status ได้
     Console.WriteLine("dept_status : " + dept_status);
     }
-
-	// Define your button click function here
-	@* private async Task PrintPdf()
-	{
-	// รับ HTML จาก GetPdfData()
-		string htmlData = await GetPdfData();
-
+	//เรียกใช้ฟังก์ชันส่งข้อมูลไปยัง javafile เพื่อเรีบกใช้ ฟังก์ชันสร้าง PDF
+	 private async Task PrintPdf()
+    {
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPdfData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
-		await jsRuntime.InvokeVoidAsync("printPdf", htmlData);
-		
-	} *@
-	private async Task<string> GetPdfData()
-	{
-		var InputHtml = $@"<!DOCTYPE html>
-		<html lang=""en"" dir=""ltr"">
-		<head>
-		<meta charset=""utf-8""/>
+        await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
+    }
+	//HTML แปลงเป็น PDF
+   private async Task<string> GetPdfData()
+    {
+        var InputHtml = $@"
 		<style>
-			.form-control {{
-				border: solid 1px #fff;
-			}}
-			.form-label{{
-				font-weight: normal;
-			}}
-			.form-select {{
-
-            font-size: 16px; /* ขนาดตัวอักษร */
-            background-color: #fff;
-        	}}
-			.row {{
-				--bs-gutter-x: 1.5rem; 
-				--bs-gutter-y: 0;
-				display: flex;
-				flex-wrap: wrap;
-				margin-top: calc(var(--bs-gutter-y)* -1);
-				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
-				margin-left: calc(var(--bs-gutter-x)* -0.5); */
-			}}
+			.label-with-border {{
+            padding: 5px;
+			width:100%
+            display: inline-block;
+        }}
 		</style>
-		<title>Test Page</title>
+		
 		</head>
-		<body><br/>";
-		@* foreach (var item in datadetail)
-		{
-			var Item = item.deptSlip;
-			var operateDate = Item.operate_date.GetValueOrDefault(DateTime.MinValue);
-			var operateDate_TH = operateDate.ToString("dd/MM/yyyy", new CultureInfo("th-TH")); *@
-			InputHtml += $@"
-			<img src='https://upload.wikimedia.org/wikipedia/en/thumb/e/e2/IMG_Academy_Logo.svg/1200px-IMG_Academy_Logo.svg.png'
-			alt = '' style = 'width: 150px;' >
-			<div class='row'>
-			<div class='col-xl-2 col-md-4 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ทะเบียนสมาชิก</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<div class='input-group-addon'>
-							<input class='form-control' value='{deptno_format}' />
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
-        <label class='form-label' for=''>รายการ</label>
-        <div class='form-group '>
-            <div class='input-group'>";
-			@* if (selectedRecppaytype == null)
+		<body><br/>
+			<div class='row' style='width: 100%;'>";
+			foreach (var content  in statement_data)
 			{
-				string firstValue = null;
-				{
-					foreach (var recppaytypeItem in Item.recppaytype)
-					{
-						if (firstValue == null)
-						{
-							firstValue = $"{recppaytypeItem.recppaytype_code} - {recppaytypeItem.recppaytype_desc}";
-						}
-					}
+				foreach (var item in content.slip_data){
+				@* Console.WriteLine($"slipdata : {item.column_name},{item.column_value},{item.point_top},{item.point_left},{item.point_width},{item.point_height},{item.align},{item.valign},{item.font_name},{item.font_size},"); *@
+					InputHtml += $@"
+					<div style=' width: {item.point_width}%; margin-top: {item.point_top}px;'>
+							<input class='input-with-border' style='text-align: {item.align}; margin-top: {item.point_top}px; margin-left: {item.point_left}%; width: {item.point_width}%; vertical-align: top; font-family: {item.font_name}; font-size: {item.font_size}px; border: 1px solid #000;' value='{item.column_value}'></input>
+					</div>";
 				}
-
-				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
 			}
-			else
-			{
-				InputHtml += $@"<input class='form-control' value='{selectedRecppaytype}' />";
-			} *@
-			InputHtml += $@"
-							</div>
-						</div>
-					</div>
-		<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-		<label class='form-label' for=''>วันที่</label>
-			<div class='form-group '>
-				<div class='label-group'>
-					<input class='form-control' value='operateDate_TH' />
-				</div>
+			InputHtml += @"
 			</div>
-		</div>
-		<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>เลขสมุด</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<input class='form-control' value='Item.deptpassbook_no' />
-					</div>
-				</div>
+		</body>";
+		return InputHtml;
+	}
+	  private async Task PrintBook_()
+    {
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPrintBookData();
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+        await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
+    }
+	 private async Task<string> GetPrintBookData()
+    {
+        var InputHtml = $@"
+		<style>
+			.label-with-border {{
+            padding: 5px;
+			width:100%
+            display: inline-block;
+        }}
+		</style>
+		
+		</head>
+		<body><br/>
+			<div class='row' style='width: 100%;'>";
+			   foreach (var content in printbook_data)
+    {
+        var printDetail = content.print_detail;
+        foreach (var rowDetail in printDetail.SelectMany(item => item.row_detail))
+        {
+            InputHtml += $@"
+            <div style='width: {rowDetail.point_width}%; margin-top: {rowDetail.point_top}px;'>
+                <input class='input-with-border' style='text-align: {rowDetail.align}; margin-top: {rowDetail.point_top}px; margin-left: {rowDetail.point_left}%; width: {rowDetail.point_width}%; vertical-align: top; font-family: {rowDetail.font_name}; font-size: {rowDetail.font_size}px; border: 1px solid #000;' value='{rowDetail.column_value}'></input>
+            </div>";
+        }
+    }
+			InputHtml += @"
 			</div>
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ชื่อบัญชี</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<input class='form-control' value='Item.deptaccount_name' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ประเภทบัญชี</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<input class='form-control' value='Item.depttype_desc' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ประเภทเงิน</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<RadzenText Text='@Item.moneytype_code' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-4 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>รหัสคู่บัญชี</label>
-				<div class='form-group '>
-					<div class='input-group'>";
-			@* if (selectedRecppaytype == null)
-			{
-				string firstValue = null;
-				{
-					foreach (var tofromaccItem in Item.tofromacc)
-					{
-						if (firstValue == null)
-						{
-							firstValue = $"{tofromaccItem.tofrom_accid} - {tofromaccItem.tofrom_accdesc}";
-						}
-					}
-				}
-
-				InputHtml += $@"<input class='form-control' value='{firstValue}' />";
-			}
-			else
-			{
-				InputHtml += $@"<input class='form-control' value='{selectedToFromAcc}' />";
-			} *@
-			InputHtml += $@"
-					</div>
-				</div>
-			</div>
-
-			<div class='col-xl-3 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>คงเหลือ</label>
-				<div class='form-group '>
-					<div class='label-group'>
-						<RadzenText Text='@Item.prncbal?.ToString()' />
-						<input class='form-control' value='Item.prncbal' />
-					</div>
-				</div>
-			</div>
-			<div class='col-xl-2 col-md-6 col-sm-6 d-flex flex-column'>
-				<label class='form-label' for=''>ทำรายการโดย</label>";
-			@* if (nobook_flag == 0)
-			{
-				InputHtml += $@"<input class='form-control' value='มีสมุด'/>";
-			}
-			else if (nobook_flag == 1)
-			{
-				InputHtml += $@"<input class='form-control' value='ไม่มีสมุด' />";
-			} *@
-			@* InputHtml += $@"</div>
-							</div>";
-				} *@
-				InputHtml += @"
-						</body>
-					</html>";
-				return InputHtml;
+		</body>";
+		return InputHtml;
 	}
 	// Event handler for RadzenSteps change
 	private void OnChange(int newStep)

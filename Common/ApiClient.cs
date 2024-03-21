@@ -42,7 +42,8 @@ public static class ApiClient
     public static class Print
     {
         public const string DepOfPrintSlip = "Print/DepOfPrintSlip";
-        public const string DeptOfGetPrintSlip = "Print/DeptOfGetPrintSlip";
+        public const string DeptOfGetPrintSlip = "Print/DeptOfGetPrintSlip"; 
+        public const string DepOfPostPrintBook = "Print/DepOfPostPrintBook"; 
     }
    
 }

@@ -1232,10 +1232,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 spcint_rate_status = item.deptSlip.spcint_rate_status,
                 spcint_rate = item.deptSlip.spcint_rate,
             };
-            // string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
+            string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
 
             // // Print JSON string to console
-            // Console.WriteLine(json);
+            Console.WriteLine(json);
 
             return deptSlip;
         }
