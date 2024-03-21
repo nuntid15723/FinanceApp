@@ -172,6 +172,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public List<Slip_data>? slip_data { get; set; }
          public List<Statement_list>? statement_list { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
+        public List<Print_book>? printbook_data { get; set; }
+        public List<Row_detail>? rowdatadetail { get; set; }
         public List<PrintResponse> connections = new List<PrintResponse>();
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
@@ -651,6 +653,68 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 Console.WriteLine($"Error: {ex.Message}");
                 throw;
             }
+        }
+
+        public async Task PrintBook()
+        {
+            try
+            {
+
+                foreach (var Item in statement_data)
+                {
+                    var item = JsonConvert.DeserializeObject<Book_data>(Item.book_data.ToString());
+
+                    var depOfGetAccount = new
+                    {
+                        deptaccount_no = item.deptaccount_no,
+                        lastrec_no = item.lastrec_no,
+                        laststmseq_no = item.laststmseq_no,
+                        lastpage_no = item.lastpage_no,
+                        lastline_no = item.lastline_no,
+                    };
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
+                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // อ่าน response string
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var responseData = JsonConvert.DeserializeObject<PrintBookResponse>(jsonResponse);
+                        if (responseData.success)
+                        {
+                            printbook_data = new List<Print_book> { responseData.content };
+                            var printbookdata = responseData.content;
+                            var printdetail = printbookdata.print_detail;
+                            foreach (var items in printdetail)
+                            {
+                                var rowdetail = items.row_detail;
+                                foreach (var itemsl in rowdetail)
+                                {
+                                    Console.WriteLine($"print_detail :{itemsl.column_name}");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            var error = JsonConvert.SerializeObject(responseData.message);
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = error, Duration = 5000 });
+
+                        }
+                    }
+                }
+                // โค้ดเกี่ยวกับการเรียก API ที่เหมือนเดิม
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+        }
+
+        public class PrintBookResponse
+        {
+            public bool success { get; set; }
+            public Print_book content { get; set; }
+            public string message { get; set; }
         }
         public class ApiResponse
         {
@@ -1136,7 +1200,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                                 }
                             }
                             this.currentStep = 2;
-                            // await PrintPdf(deptslip_no);
+                            await PrintPdf();
+                            await PrintBook();
                             await InvokeAsync(() => StateHasChanged());
                             Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = Response.message, Duration = 2500 });

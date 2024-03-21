@@ -2021,6 +2021,7 @@ else
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
+							<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
@@ -2156,6 +2157,58 @@ private async Task<string> GetPdfData()
 		</body>";
 		return InputHtml;
 	}
+	private async Task PrintBook_()
+    {
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPrintBookData();
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+        await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
+    }
+	 private async Task<string> GetPrintBookData()
+    {
+        var InputHtml = $@"
+		<style>
+			.label-with-border {{
+            padding: 5px;
+			width:100%
+            display: inline-block;
+        }}
+		.account-book {{
+            size: 21cm 29.7cm;  
+           /* border: 1px solid #000;*/
+        }}
+		</style>
+		
+		</head>
+		<body><br/>
+			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+				@foreach (var content in printbook_data)
+							{
+								var printDetail = content.print_detail;
+								foreach (var rowDetail in printDetail)
+								{
+									 InputHtml += $@"<table  style='width:100%;'>
+										 <thead>
+											<tr>";
+											InputHtml += @"</tr>
+										</thead>
+										<tbody>
+											<tr>";
+												@foreach (var columnDetail in rowDetail.row_detail)
+												{
+													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+												}
+												InputHtml += @"</tr>
+										</tbody>
+								</table>";
+								}
+							}
+			InputHtml += @"
+			</div>
+		</body>";
+		return InputHtml;
+	}
+	// Event handler for RadzenSteps change
 	// Event handler for RadzenSteps CanChange
 	private bool CanChange()
 	{

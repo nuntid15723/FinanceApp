@@ -941,7 +941,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                             if (Response.success)
                             {
                                 currentStep = 2;
-                                PrintPdf();
+                                await PrintPdf();
+                                await PrintBook();
                                 StateHasChanged();
                             }
                         }

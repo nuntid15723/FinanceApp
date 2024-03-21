@@ -162,7 +162,8 @@
         </div>
         <div class="header_center">
             <div id="header-content">
-                <img class="img-app" src="Images/coop_img/band_black.jpg" alt="Logo">
+                <a href="index">
+                    <img class="img-app" src="Images/coop_img/band_black.jpg" alt="Logo"></a>
                 @if (getCoopid == null)
                 {
                     <p>ERROR</p>
@@ -294,13 +295,14 @@
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
                 getCoopid = JsonConvert.DeserializeObject<List<Connection>>(jsonString);
-                foreach (var item in getCoopid)
+                @* foreach (var item in getCoopid)
                 {
                     Console.WriteLine($"coop_id: {item.coop_id}, coop_control: {item.coop_control}, coop_name: {item.coop_name}");
+                } *@
+                if (getCoopid == null){
+                    NavigationManager.NavigateTo("/login", true);
                 }
 
-            }else{
-                NavigationManager.NavigateTo("/login", true);
             }
         }
         catch (Exception ex)

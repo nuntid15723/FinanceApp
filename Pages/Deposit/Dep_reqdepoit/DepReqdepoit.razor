@@ -1716,6 +1716,32 @@ else
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook" />
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
+						@foreach (var content in printbook_data)
+							{
+								var printDetail = content.print_detail;
+								foreach (var rowDetail in printDetail)
+								{
+									<table style='margin-top: 20px;'>
+										 <thead>
+											@* <tr>
+												@foreach (var columnDetail in rowDetail.row_detail)
+												{
+													<th style='text-align: @(columnDetail.align); margin-top: @(columnDetail.point_top)px; margin-left: @(columnDetail.point_left)%; width: @(columnDetail.point_width)%; vertical-align: top; font-family: @(columnDetail.font_name); font-size: @(columnDetail.font_size)px;'>@columnDetail.column_name</th>
+												}
+											</tr> *@
+										</thead>
+										<tbody>
+											<tr style='margin-top:20px;'>
+												@foreach (var columnDetail in rowDetail.row_detail)
+												{
+													<td style='text-align: @(columnDetail.align); margin-top: @(columnDetail.point_top)px; margin-left: @(columnDetail.point_left)%; width: @(columnDetail.point_width)%; vertical-align: top; font-family: @(columnDetail.font_name); font-size: @(columnDetail.font_size)px;'>@columnDetail.column_value</td>
+												}
+											</tr>
+										</tbody>
+									</table>
+								}
+							}
+
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
@@ -1861,10 +1887,11 @@ else
 	}
 	  private async Task PrintBook_()
     {
+
         // รับ HTML จาก GetPdfData()
         string htmlData = await GetPrintBookData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
-        await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
+        await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
     }
 	 private async Task<string> GetPrintBookData()
     {
@@ -1875,22 +1902,40 @@ else
 			width:100%
             display: inline-block;
         }}
+		.account-book {{
+            size: 21cm 29.7cm;  
+           /* border: 1px solid #000;*/
+        }}
 		</style>
 		
 		</head>
 		<body><br/>
-			<div class='row' style='width: 100%;'>";
-			   foreach (var content in printbook_data)
-    {
-        var printDetail = content.print_detail;
-        foreach (var rowDetail in printDetail.SelectMany(item => item.row_detail))
-        {
-            InputHtml += $@"
-            <div style='width: {rowDetail.point_width}%; margin-top: {rowDetail.point_top}px;'>
-                <input class='input-with-border' style='text-align: {rowDetail.align}; margin-top: {rowDetail.point_top}px; margin-left: {rowDetail.point_left}%; width: {rowDetail.point_width}%; vertical-align: top; font-family: {rowDetail.font_name}; font-size: {rowDetail.font_size}px; border: 1px solid #000;' value='{rowDetail.column_value}'></input>
-            </div>";
-        }
-    }
+			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+				@foreach (var content in printbook_data)
+							{
+								var printDetail = content.print_detail;
+								foreach (var rowDetail in printDetail)
+								{
+									 InputHtml += $@"<table  style='width:100%;'>
+										 <thead>
+											<tr>";
+												@* @foreach (var columnDetail in rowDetail.row_detail)
+												{
+													InputHtml += $@"<th style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; color:transparent;'>{columnDetail.column_name}</th>";
+												} *@
+											InputHtml += @"</tr>
+										</thead>
+										<tbody>
+											<tr>";
+												@foreach (var columnDetail in rowDetail.row_detail)
+												{
+													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+												}
+												InputHtml += @"</tr>
+										</tbody>
+								</table>";
+								}
+							}
 			InputHtml += @"
 			</div>
 		</body>";
