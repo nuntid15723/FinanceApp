@@ -974,16 +974,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var item = JsonConvert.DeserializeObject<Book_data>(Item.book_data.ToString());
                     var depOfGetAccount = new
                     {
-                        // deptaccount_no = item.deptaccount_no,
-                        // lastrec_no = item.lastrec_no,
-                        // laststmseq_no = item.laststmseq_no,
-                        // lastpage_no = item.lastpage_no,
-                        // lastline_no = item.lastline_no,
-                        deptaccount_no = "1600022125",
-                        lastrec_no = 43,
-                        laststmseq_no = 50,
-                        lastpage_no = 2,
-                        lastline_no = 15,
+                        deptaccount_no = item.deptaccount_no,
+                        lastrec_no = item.lastrec_no,
+                        laststmseq_no = item.laststmseq_no,
+                        lastpage_no = item.lastpage_no,
+                        lastline_no = item.lastline_no,
                     };
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
                     var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);

@@ -2151,6 +2151,25 @@ else
 						</RadzenRow>
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
+							@* @foreach (var content in printbook_data)
+							{
+								var printDetail = content.print_detail;
+								foreach (var rowDetail in printDetail)
+								{
+									<table style='margin-top: 20px;'>
+										 <thead>
+										</thead>
+										<tbody>
+											<tr style='margin-top:20px;'>
+												@foreach (var columnDetail in rowDetail.row_detail)
+												 {
+												<input type='text' style='text-align: @(columnDetail.align); margin-top: @(columnDetail.point_top)px; margin-left: @(columnDetail.point_left)%; width: @(columnDetail.point_width)%; height:30%;vertical-align: top; font-family: @(columnDetail.font_name); font-size: @(columnDetail.font_size)px;' value='@columnDetail.column_value' />
+												}
+											</tr>
+										</tbody>
+									</table>
+								}
+							} *@
 								<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
@@ -2176,6 +2195,14 @@ else
 													  Property="prncbal">
 								</RadzenDataGridColumn>
 								<RadzenDataGridColumn Width="12%" TItem="Models.Statement_list" Title="พิมพ์ Book" Property="item_status">
+									<Template Context="data">
+								    @if (data.item_status == 1)
+									{
+									<div style="text-align: center;">พิมพ์</div>
+									}else{
+									<div style="background-color: rgb(190, 5, 5); color: white; text-align: center;">ไม่พิมพ์</div>
+									}
+									</Template>
 								</RadzenDataGridColumn>
 							</Columns>
 						</RadzenDataGrid>
@@ -2361,8 +2388,8 @@ else
             display: inline-block;
         }}
 		.account-book {{
-            size: 21cm 29.7cm;  
-           /* border: 1px solid #000;*/
+           /* size: 21cm 29.7cm;*/
+            border: 1px solid #000;
         }}
 		</style>
 		
@@ -2383,7 +2410,8 @@ else
 											<tr>";
 												@foreach (var columnDetail in rowDetail.row_detail)
 												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+													 InputHtml += $@" 
+													 <input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
 												}
 												InputHtml += @"</tr>
 										</tbody>

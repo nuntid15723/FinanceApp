@@ -305,6 +305,7 @@ namespace FinanceApp.Models
         public string? deptaccount_no { get; set; }
         public int? seq_no { get; set; }
         public string? deptitemtype_code { get; set; }
+        public string? deptitemtype_desc { get; set; }
         public DateTime? operate_date { get; set; }
         public DateTime? entry_date { get; set; }
         public decimal? prncbal { get; set; }

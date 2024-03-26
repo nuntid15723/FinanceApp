@@ -170,7 +170,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         public List<Content>? statement_data { get; set; }
         public List<Book_data>? book_data { get; set; }
         public List<Slip_data>? slip_data { get; set; }
-         public List<Statement_list>? statement_list { get; set; }
+        public List<Statement_list>? statement_list { get; set; }
         public List<Models.DepOfInitDataOffline> depOfInitDataOffline;
         public List<Print_book>? printbook_data { get; set; }
         public List<Row_detail>? rowdatadetail { get; set; }
@@ -666,11 +666,17 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
                     var depOfGetAccount = new
                     {
-                        deptaccount_no = item.deptaccount_no,
-                        lastrec_no = item.lastrec_no,
-                        laststmseq_no = item.laststmseq_no,
-                        lastpage_no = item.lastpage_no,
-                        lastline_no = item.lastline_no,
+                            deptaccount_no = item.deptaccount_no,
+                            lastrec_no = item.lastrec_no,
+                            laststmseq_no = item.laststmseq_no,
+                            lastpage_no = item.lastpage_no,
+                            lastline_no = item.lastline_no,
+                        // deptaccount_no = "1000051044",
+                        // deptpassbook_no = "0100051155",
+                        // lastrec_no = 8,
+                        // laststmseq_no = 144,
+                        // lastpage_no = 1,
+                        // lastline_no = 8
                     };
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
                     var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
@@ -684,14 +690,14 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                             printbook_data = new List<Print_book> { responseData.content };
                             var printbookdata = responseData.content;
                             var printdetail = printbookdata.print_detail;
-                            foreach (var items in printdetail)
-                            {
-                                var rowdetail = items.row_detail;
-                                foreach (var itemsl in rowdetail)
-                                {
-                                    Console.WriteLine($"print_detail :{itemsl.column_name}");
-                                }
-                            }
+                            // foreach (var items in printdetail)
+                            // {
+                            //     var rowdetail = items.row_detail;
+                            //     foreach (var itemsl in rowdetail)
+                            //     {
+                            //         Console.WriteLine($"print_detail :{itemsl.column_name}");
+                            //     }
+                            // }
                         }
                         else
                         {
@@ -1170,27 +1176,27 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                                             Console.WriteLine($"deptaccount_noo :{deptaccountNo}");
                                             var statementDetails = new Models.Statement_list
                                             {
-                                            coop_id = statement.coop_id,
-                                            deptaccount_no = deptaccountNo,
-                                            seq_no = statement.seq_no,
-                                            deptitemtype_code = statement.deptitemtype_code,
-                                            operate_date = statement.operate_date,
-                                            entry_date = statement.entry_date,
-                                            prncbal = statement.prncbal,
-                                            entry_id = statement.entry_id,
-                                            item_status = statement.item_status,
-                                            sign_flag = statement.sign_flag,
-                                            print_code = statement.print_code,
-                                            prnc_no = statement.prnc_no,
-                                            tax_amt = statement.tax_amt,
-                                            accuint_amt = statement.accuint_amt,
-                                            int_amt = statement.int_amt,
-                                            printbook_status = statement.printbook_status,
-                                            deptslip_no = statement.deptslip_no,
-                                            deptitem_amt = statement.deptitem_amt,
-                                            deptint_amt = statement.deptint_amt,
-                                            deposit_amt = statement.deposit_amt,
-                                            withdraw_amt = statement.withdraw_amt,
+                                                coop_id = statement.coop_id,
+                                                deptaccount_no = deptaccountNo,
+                                                seq_no = statement.seq_no,
+                                                deptitemtype_code = statement.deptitemtype_code,
+                                                operate_date = statement.operate_date,
+                                                entry_date = statement.entry_date,
+                                                prncbal = statement.prncbal,
+                                                entry_id = statement.entry_id,
+                                                item_status = statement.item_status,
+                                                sign_flag = statement.sign_flag,
+                                                print_code = statement.print_code,
+                                                prnc_no = statement.prnc_no,
+                                                tax_amt = statement.tax_amt,
+                                                accuint_amt = statement.accuint_amt,
+                                                int_amt = statement.int_amt,
+                                                printbook_status = statement.printbook_status,
+                                                deptslip_no = statement.deptslip_no,
+                                                deptitem_amt = statement.deptitem_amt,
+                                                deptint_amt = statement.deptint_amt,
+                                                deposit_amt = statement.deposit_amt,
+                                                withdraw_amt = statement.withdraw_amt,
                                             };
                                             Console.WriteLine($"coop_id: {statement.coop_id}, deptaccount_no: {statement.deptaccount_no}");
                                             statementDetailsList.Add(statementDetails);

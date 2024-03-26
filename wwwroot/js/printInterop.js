@@ -74,12 +74,6 @@ window.createBookPdf = function (pdfData) {
 		<html lang=""en"" dir=""ltr"">
 		<head>
 		<meta charset=""utf-8""/>
-		<style>
-		
-			@page {
-				size: 21cm 29.7cm;
-			}
-		</style>
 		${pdfData}</html>`
   );
   doc.close();

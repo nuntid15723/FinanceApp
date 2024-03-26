@@ -1876,7 +1876,7 @@ else
 				@* Console.WriteLine($"slipdata : {item.column_name},{item.column_value},{item.point_top},{item.point_left},{item.point_width},{item.point_height},{item.align},{item.valign},{item.font_name},{item.font_size},"); *@
 					InputHtml += $@"
 					<div style=' width: {item.point_width}%; margin-top: {item.point_top}px;'>
-							<input class='input-with-border' style='text-align: {item.align}; margin-top: {item.point_top}px; margin-left: {item.point_left}%; width: {item.point_width}%; vertical-align: top; font-family: {item.font_name}; font-size: {item.font_size}px; border: 1px solid #000;' value='{item.column_value}'></input>
+							<input class='input-with-border' style='text-align: {item.align}; margin-top: {item.point_top}px; margin-left: {item.point_left}%; width: {item.point_width}%; vertical-align: top; font-family: {item.font_name}; font-size: {item.font_size}px; border: 1px solid #000; border:0px' value='{item.column_value}'></input>
 					</div>";
 				}
 			}
@@ -1929,7 +1929,7 @@ else
 											<tr>";
 												@foreach (var columnDetail in rowDetail.row_detail)
 												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%;height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
 												}
 												InputHtml += @"</tr>
 										</tbody>
