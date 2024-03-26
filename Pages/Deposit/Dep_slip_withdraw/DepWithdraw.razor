@@ -2196,7 +2196,7 @@ private async Task<string> GetPdfData()
 											<tr>";
 												@foreach (var columnDetail in rowDetail.row_detail)
 												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
 												}
 												InputHtml += @"</tr>
 										</tbody>
