@@ -19,13 +19,12 @@ public partial class LoginBase : ComponentBase
     [Inject]
     protected NavigationManager NavigationManager { get; set; }
 
-
     protected string user_name;
     protected string password;
     protected string selectedDatabase;
     protected string errorMessage;
     protected LoginResult loginResponse;
-    private bool isLoading = true;
+    protected bool isLoading;
     public List<Connection> connections = new List<Connection>();
 
 
@@ -85,48 +84,63 @@ public partial class LoginBase : ComponentBase
     }
     protected async Task SubmitForm()
     {
-        string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-        var request = new HttpRequestMessage(HttpMethod.Get, bearerToken);
-        // Add the Authorization header
-        request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bearerToken);
-        Console.WriteLine($"request :{request.Headers.Authorization}");
-        if (selectedDatabase == null)
+        try
         {
-            if (connections.Count > 0)
+            isLoading = true;
+            string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+            var request = new HttpRequestMessage(HttpMethod.Get, bearerToken);
+            // Add the Authorization header
+            request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", bearerToken);
+            Console.WriteLine($"request :{request.Headers.Authorization}");
+            if (selectedDatabase == null)
             {
-                selectedDatabase = $"{connections[0].Id}";
-            }
+                if (connections.Count > 0)
+                {
+                    selectedDatabase = $"{connections[0].Id}";
+                }
 
+            }
+            loginResponse = await LoginService.Login(user_name, password, selectedDatabase);
+            if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(password))
+            {
+                errorMessage = "Username และ password ไม่สามารถเว้นว่างได้.";
+                return;
+            }
+            if (loginResponse.Success)
+            {
+
+                // string accessToken = loginResponse.Content.AccessToken;
+                // TokenHelper.DecodeToken(accessToken);
+                ApiClient.authToken = loginResponse.accessToken;
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", loginResponse.accessToken);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "refreshToken", loginResponse.refreshToken);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "pin", loginResponse.PIN);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "user_name", user_name);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "coopControl", loginResponse.coopControl);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "coopId", loginResponse.coopId);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "fullName", loginResponse.fullName);
+                var amsecUseappssJson = JsonConvert.SerializeObject(loginResponse.amsecUseappss);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", amsecUseappssJson);
+                await JSRuntime.InvokeVoidAsync("localStorage.setItem", "base_type", selectedDatabase);
+                // await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
+                NavigationManager.NavigateTo("index", true);
+                Console.WriteLine($"amsecUseappssJson :{amsecUseappssJson}");
+            }
+            else
+            {
+                errorMessage = loginResponse.RESPONSE_MESSAGE;
+                Console.WriteLine($"loginResponse: {JsonConvert.SerializeObject(loginResponse)}");
+            }
         }
-        loginResponse = await LoginService.Login(user_name, password, selectedDatabase);
-        if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(password))
+        catch (Exception ex)
         {
-            errorMessage = "Username และ password ไม่สามารถเว้นว่างได้.";
-            return;
+
+            Console.WriteLine(ex.Message);
+            isLoading = false;
         }
-        if (loginResponse.Success)
+        finally
         {
-            // string accessToken = loginResponse.Content.AccessToken;
-            // TokenHelper.DecodeToken(accessToken);
-            ApiClient.authToken = loginResponse.accessToken;
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "authToken", loginResponse.accessToken);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "refreshToken", loginResponse.refreshToken);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "pin", loginResponse.PIN);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "user_name", user_name);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "coopControl", loginResponse.coopControl);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "coopId", loginResponse.coopId);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "fullName", loginResponse.fullName);
-            var amsecUseappssJson = JsonConvert.SerializeObject(loginResponse.amsecUseappss);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", amsecUseappssJson);
-            await JSRuntime.InvokeVoidAsync("localStorage.setItem", "base_type", selectedDatabase);
-            // await JSRuntime.InvokeVoidAsync("localStorage.setItem", "amsecUseappss", loginResponse.amsecUseappss);
-            NavigationManager.NavigateTo("index", true);
-            Console.WriteLine($"amsecUseappssJson :{amsecUseappssJson}");
-        }
-        else
-        {
-            errorMessage = loginResponse.RESPONSE_MESSAGE;
-            Console.WriteLine($"loginResponse: {JsonConvert.SerializeObject(loginResponse)}");
+            isLoading = false;
         }
 
     }

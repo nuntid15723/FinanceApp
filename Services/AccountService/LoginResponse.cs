@@ -12,7 +12,7 @@ public class LoginResult
     public string apvLevelId { get; set; }
     public string userName { get; set; }
     public int PIN { get; set; }
-    // public bool RESULT { get; set; }
+    public bool isLoading { get; set; }
     public bool Success { get; set; }
     public string Message { get; set; }
     public string application_name { get; set; }

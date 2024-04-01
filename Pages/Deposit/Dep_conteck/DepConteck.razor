@@ -461,50 +461,62 @@ else
 											
 													<div class="row mt-5" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 														<h6>ตารางแสดงรายการเคลื่อนไหว</h6>
-														<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement" ColumnWidth="100%" AllowFiltering="true"
+														@* <RadzenDataGrid @ref="grid" Data="@statementDetails" @bind-SelectedIndex="totalPages" TItem="Models.Statement" ColumnWidth="100%" AllowFiltering="true"
 															FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
-															IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true" AllowSorting="true"
-															PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+															IsLoading="@isLoadingModals" PageSize="@PageSize" AllowPaging="true" AllowSorting="true"
+															PagerHorizontalAlign="HorizontalAlign.Right" ShowPagingSummary="true"
+															LastPageAriaLabel="Last page" FirstPageAriaLabel="First" > *@
+															<RadzenDataGrid PageSize="10" AllowPaging="true" AllowSorting="true"  Data="@statementDetails" TItem="Models.Statement" ColumnWidth="100%" IsLoading="@isLoadingModals" LastPageAriaLabel="Last page" FirstPageAriaLabel="First"  PagerHorizontalAlign="HorizontalAlign.Right" ShowPagingSummary="true" >
 															<Columns>
-																<RadzenDataGridColumn Width="5%" TItem="Models.Statement" Title="ลำดับ" Property="number_no">
+																<RadzenDataGridColumn Width="6%" TItem="Models.Statement" Title="ลำดับ" Property="seq_no">
 																</RadzenDataGridColumn>
-																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="วันที่" Property="operate_date">
+																<RadzenDataGridColumn Width="10%" TItem="Models.Statement" Title="วันที่" Property="operate_date">
+																	 <Template Context="data">
+																	@data.operate_date?.ToString("dd/MM/yyyy")
+																	</Template>
 																</RadzenDataGridColumn>
-																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="รายการ" Property="print_code">
+																<RadzenDataGridColumn Width="20%" TItem="Models.Statement" Title="รายการ" Property="deptitemtype_code">
 																</RadzenDataGridColumn>
 																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="ถอน" Property="withdraw_amt">
+																		<Template Context="data">
+																	<p style="text-align: end;">@data.withdraw_amt?.ToString("#,##0.00")</p>
+																	</Template>
 																</RadzenDataGridColumn>
 																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="ฝาก" Property="deposit_amt">
+																		<Template Context="data">
+																	<p style="text-align: end;">@data.deposit_amt.ToString("#,##0.00")</p>
+																	</Template>
 																</RadzenDataGridColumn>
 																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="ยอดคงเหลือ" Property="prncbal">
-																	@* <Template Context="data">
-															<p style="text-align: end;">@data.prncbal</p>
-															</Template> *@
+																	<Template Context="data">
+																	<p style="text-align: end;">@data.prncbal?.ToString("#,##0.00")</p>
+																	</Template>
 																</RadzenDataGridColumn>
-																<RadzenDataGridColumn Width="15%" TItem="Models.Statement" Title="พิมพ์ Book"
+																<RadzenDataGridColumn Width="11%" TItem="Models.Statement" Title="พิมพ์ Book"
 																	Property="printbook_status">
 																	<Template Context="data">
 																		@if (data.printbook_status == 1)
 																		{
-																			<div style="text-align: center;">
+																			
+																			<div style=" text-align: center;" ><a  class="btn btn-outline-success" style="width: 100%;border-radius: 0px;" @onclick="PerformSearch"> 
 																				พิมพ์
-																			</div>
+																		</a></div>
 																		}
 																		else
 																		{
-																			<div style="background-color: rgb(190, 5, 5); color: white; text-align: center;">
+																		<div style=" text-align: center;" ><a  class="btn btn-outline-danger" style="width: 100%;border-radius: 0px;" @onclick="PerformSearch"> 
 																				ไม่พิมพ์
-																			</div>
+																		</a></div>
 																		}
 																	</Template>
 																</RadzenDataGridColumn>
 
 															</Columns>
 														</RadzenDataGrid>
+														<RadzenButton class="save_top" Text="GoToLastPage" Click="@GoToLastPage" />
 													</div>
 											}
 									</div>
-								
 							}
 				</RadzenStepsItem>
 				<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
@@ -522,61 +534,14 @@ else
 	</div>
 </div>
 }
-<script>
-	$(document).ready(function () {
-		var previous_data;
-		$(".format-money").on('focus', function () {
-			previous_data = this.value;
-		}).change(function () {
-			var item_amt = this.value;
-			item_amt = formatNumber(Number(item_amt.replace(/[^0-9.-]+/g, "")));
-			this.value = item_amt; // ต้องกำหนดค่ากลับไปให้ฟิลด์
-		});
-	});
-
-	function formattNumber(input) {
-		let anotherInput = document.getElementById('showNumber');
-		let value = input.value.replace(/[^0-9.]/g, '');
-		let number = parseFloat(value);
-		if (!isNaN(number)) {
-			let formattedValue = number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			input.value = formattedValue;
-			anotherInput.value = formattedValue;
-		} else {
-			input.value = '';
-		}
-	}
-	function formattNumberr(input) {
-		let value = input.value.replace(/[^0-9.]/g, '');
-		let number = parseFloat(value);
-		if (!isNaN(number)) {
-			let formattedValue = number.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-			input.value = formattedValue;
-		} else {
-			input.value = '';
-		}
-	}
-</script>
-<script>
-	window.preventNonNumericInput = (element) => {
-		element.addEventListener('keypress', function (e) {
-			if (!/[\d.]/.test(e.key)) {
-				e.preventDefault();
-			}
-
-			if (e.key === '.' && element.value.includes('.')) {
-				e.preventDefault();
-			}
-		});
-	}
-</script>
-
 @code {
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
-	@* protected override async Task OnInitializedAsync()
+
+	protected override async Task OnInitializedAsync()
 	{
-		
-	} *@
+	
+	}
+
 	private void OnChange(int newStep)
 	{
 		currentStep = newStep;

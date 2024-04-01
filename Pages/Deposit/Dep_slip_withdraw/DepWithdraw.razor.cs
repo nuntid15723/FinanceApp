@@ -12,6 +12,7 @@ using System.Net;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.Net.Http.Headers;
+using Radzen.Blazor;
 
 
 namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
@@ -119,6 +120,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public decimal? other_amt { get; set; }
         public decimal? chequepend_amt { get; set; }
         public int? refer_prnc_no { get; set; }
+        public int? f_startprn_bfdue { get; set; }
         /// <deptSlipCheque>
         public string? cheque_no { get; set; }
         public DateTime? cheque_date { get; set; }
@@ -174,6 +176,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public IEnumerable<Models.Statement_list> statementDetails { get; set; }
         public List<Print_book>? printbook_data { get; set; }
         public List<Row_detail>? rowdatadetail { get; set; }
+        private bool allowRowSelectOnRowClick = false;
+        // public IEnumerable<DeptSlipdet> deptSlipdetDetails { get; set; }
+        public List<DeptSlipdet> deptSlipdetDetails { get; set; } = new List<DeptSlipdet>();
+        IList<DeptSlipdet> selectedEmployees;
+        private RadzenDataGrid<Models.DeptSlipdet> grid;
 
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
@@ -335,6 +342,210 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         {
             NotificationService.Notify(message);
         }
+        private async void SummaryTotle(DeptSlipdet data)
+        {
+            foreach (var item in deptSlipdetDetails)
+            {
+                if (data.select_flag == 1)
+                {
+                    data.prncslipAmt_String = data.prncslipAmt_String;
+                    CalculateTotal();
+                }
+                else
+                {
+                    CalculateTotal();
+                    DeptslipAmt = "0.00";
+                }
+                if (decimal.TryParse(data.prncslipAmt_String, out decimal result))
+                {
+                    if (item.select_flag == 1)
+                    {
+                        if (item.IsChecked == true)
+                        {
+                            data.prncslipAmt_String += item.prnc_bal ?? 0; // หรือใช้ค่าเริ่มต้นเมื่อ null
+                        }
+                        else
+                        {
+                            data.prncslipAmt_String += item.prnc_bal ?? 0;
+                        }
+                        DeptslipAmt = data.prncslipAmt_String;
+                    }
+                    data.prncslipAmt_String = result.ToString("N2");
+                    DeptslipAmt = totalSum.ToString("N2");
+                    // data.prncslipAmt_String= DeptslipAmt;
+
+                    // นำค่าที่ได้มา round และกำหนดให้กับตัวแปร result
+                    result = Math.Round(result, 2);
+                    data.prncslip_amt = result;
+
+                }
+                Console.WriteLine($"DeptslipAmt:{deptslip_amt}");
+                Console.WriteLine($"prncslip_amt:{data.prncslip_amt}");
+                Console.WriteLine($"prncslipAmt_String:{data.prncslipAmt_String}");
+                StateHasChanged();
+
+            }
+
+        }
+
+        decimal totalSum = 0;
+        // private void PostTotolFix(DeptSlipdet data)
+        // {
+        //     decimal itemAmt;
+        //     decimal slipAmt = deptslipAmt;
+        //     int RowCount = deptSlipdetDetails.Count;
+        //     for (int i = RowCount; i > 0; i--)
+        //     {
+        //         itemAmt = deptSlipdetDetails[i - 1].prnc_bal ?? 0;
+        //         if (slipAmt > itemAmt && itemAmt > 0)
+        //         {
+        //             data.select_flag = 1;
+        //             data.prncslip_amt = itemAmt;
+        //         }
+        //         else
+        //         {
+
+        //             if (slipAmt == 0 || itemAmt == 0)
+        //             {
+        //                 data.select_flag = 0;
+        //                 data.prncslip_amt = 0;
+        //                 data.taxpay_amt = 0;
+        //                 data.fee_amt = 0;
+        //                 data.other_amt = 0;
+        //                 data.int_return = 0;
+        //                 data.intcur_accyear = 0;
+        //                 data.intarr_amt = 0;
+        //             }
+        //             else
+        //             {
+        //                 data.select_flag = 1;
+        //                 data.prncslip_amt = slipAmt;
+        //                 Console.WriteLine("TotalssSum : " + slipAmt);
+
+        //             }
+        //         }
+        //         slipAmt -= itemAmt;
+        //         if (slipAmt <= 0) { slipAmt = 0; }
+        //         IsChecked = false;
+        //     }
+        //     // PostCheckAmount();
+        // }
+        private void CalculateTotal()
+        {
+            totalSum = 0;
+            // decimal deptslipAmtDecimal = decimal.Parse(DeptslipAmt);
+            foreach (var item in deptSlipdetDetails)
+            {
+                decimal prncslip_amt = decimal.Parse(item.prncslipAmt_String);
+
+                // เพิ่มค่าของแต่ละรายการลงในผลรวม
+                if (item.select_flag == 1)
+                {
+                    if (item.IsChecked == true)
+                    {
+                        totalSum += prncslip_amt; // หรือใช้ค่าเริ่มต้นเมื่อ null
+                    }
+                    else
+                    {
+                        totalSum += prncslip_amt;
+                    }
+                }
+                StateHasChanged();
+                // prncslip_amt = totalSum;
+            }
+            // totalSum += deptslipAmtDecimal;
+            DeptslipAmt = totalSum.ToString("N2");
+            // prncslip_amt = totalSum;
+            Console.WriteLine("totalSum : " + DeptslipAmt);
+        }
+        // private async void SummaryTotle(IEnumerable<DeptSlipdet> dataList)
+        // {
+        //     // วนลูปผ่านทุกๆ รายการในคอลเลคชัน
+        //     foreach (var data in dataList)
+        //     {
+        //         Console.WriteLine($"data.prnc_bal:{data.prnc_bal}");
+        //         Console.WriteLine($"prncslip_amt:{data.prncslip_amt}");
+        //         Console.WriteLine($"prncslipAmt_String:{data.prncslipAmt_String}");
+
+        //         // ตรวจสอบ select_flag และทำงานตามเงื่อนไข
+        //         if (data.select_flag == 1)
+        //         {
+        //             if (decimal.TryParse(data.prncslipAmt_String, out decimal prncslipAmt))
+        //             {
+        //                 data.prncslipAmt_String += prncslipAmt;
+        //             }
+        //         }
+        //     }
+        // }
+
+        private void FormatNumber()
+        {
+
+            if (decimal.TryParse(DeptslipAmt, out decimal result))
+            {
+                // CalculateTotal();
+                // DeptslipAmt = prncslip_amtt + DeptslipAmt;
+                DeptslipAmt = result.ToString("N2");
+                // data.prncslipAmt_String = DeptslipAmt;
+                Console.WriteLine("DeptslipAmt:" + DeptslipAmt);
+
+                // นำค่าที่ได้มา round และกำหนดให้กับตัวแปร result
+                result = Math.Round(result, 2);
+
+                // นำค่าที่ได้มากำหนดให้กับตัวแปร deptslipAmt (หาก deptslipAmt เป็นตัวแปรที่ถูกประกาศแล้ว)
+                deptslipAmt = result;
+
+                // แสดงค่าใน Console
+                Console.WriteLine(deptslipAmt);
+
+
+            }
+
+        }
+        private void UpdateIsChecked(DeptSlipdet item, ChangeEventArgs e)
+        {
+            item.IsChecked = (bool)e.Value;
+            //CalculateTotal();
+        }
+        private void OnBlurHandler()
+        {
+            FormatNumber();
+            // SplitMoney();
+            // MoneyDetail();
+        }
+        // private void FormatNumberr(string prncslipAmt_String)
+        // {
+        //     if (decimal.TryParse(prncslipAmt_String, out decimal result))
+        //     {
+        //         prncslipAmt_String = result.ToString("N2");
+
+        //         // นำค่าที่ได้มา round และกำหนดให้กับตัวแปร result
+        //         result = Math.Round(result, 2);
+
+        //         // นำค่าที่ได้มากำหนดให้กับตัวแปร deptslipAmt (หาก deptslipAmt เป็นตัวแปรที่ถูกประกาศแล้ว)
+        //         prncslip_amtt = result;
+
+        //         // แสดงค่าใน Console
+        //         Console.WriteLine("OnBlurHandler" + prncslip_amtt);
+        //     }
+        // }
+        private decimal? prncslip_amtt { get; set; }
+        private string prncslipAmt_String { get; set; }
+        private void UpdatePrncslipAmt(ChangeEventArgs e)
+        {
+            // ตรวจสอบว่าค่าที่ป้อนเข้ามาไม่ใช่ค่าว่าง
+            if (!string.IsNullOrEmpty(e.Value?.ToString()))
+            {
+                // กำหนดค่าใหม่ให้กับ prncslipAmt_String เพื่อให้มีค่าเท่ากับค่าที่ป้อนเข้ามาใน input
+                prncslipAmt_String = e.Value.ToString();
+            }
+            else
+            {
+                // ถ้าค่าว่าง กำหนดให้ prncslipAmt_String เป็นค่าว่างเพื่อให้ input แสดงผลเป็นค่าว่าง
+                prncslipAmt_String = "";
+            }
+        }
+
         //RetriveDataFromDeptNo
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
@@ -389,6 +600,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
         }
         //ค้นหา
+
         private async Task Search()
         {
             AnotherFunction();
@@ -475,10 +687,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         {
             (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
             Console.WriteLine($"GetDataList: {coopControl}, {coop_id}, {name},  {email}, {actort}, {apvlevelId}, {workDate}, {application}, {save_status}, {check_flag}");
+            // Console.WriteLine($"allowRowSelectOnRowClick :{allowRowSelectOnRowClick}");
+
             try
             {
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
-                var depOfGetAccount = new DepOfInitDataOffline
+                var depOfGetAccount = new
                 {
                     coop_id = coop_id,
                     memcoop_id = coop_id,
@@ -504,7 +718,60 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     if (apiResponse.status == true)
                     {
                         datadetail = new List<Models.Deposit> { apiResponse.data };
-                        Console.WriteLine($"API request failed: {datadetail}");
+                        foreach (var item in datadetail)
+                        {
+                            if (item.deptSlipdet != null)
+                            {
+                                List<DeptSlipdet> deptSlipdetList = item.deptSlipdet;
+                                foreach (var deptSlipdetItem in deptSlipdetList)
+                                {
+                                    var SlipdetItem = new DeptSlipdet
+                                    {
+                                        select_flag = deptSlipdetItem.select_flag,
+                                        coop_id = deptSlipdetItem.coop_id,
+                                        deptslip_no = deptSlipdetItem.deptslip_no,
+                                        deptaccount_no = deptSlipdetItem.deptaccount_no,
+                                        prnc_no = deptSlipdetItem.prnc_no,
+                                        prnc_bal = deptSlipdetItem.prnc_bal,
+                                        prnc_amt = deptSlipdetItem.prnc_amt,
+                                        prncslipAmt_String = deptSlipdetItem.prnc_bal?.ToString("#,##0.0"),
+                                        prnc_date = deptSlipdetItem.prnc_date,
+                                        calint_from = deptSlipdetItem.calint_from,
+                                        calint_to = deptSlipdetItem.calint_to,
+                                        prncdue_date = deptSlipdetItem.prncdue_date,
+                                        prncmindue_date = deptSlipdetItem.prncmindue_date,
+                                        prncdue_nmonth = deptSlipdetItem.prncdue_nmonth,
+                                        prncslip_amt = deptSlipdetItem.prncslip_amt,
+                                        intarr_amt = deptSlipdetItem.intarr_amt,
+                                        intpay_amt = deptSlipdetItem.intpay_amt,
+                                        taxpay_amt = deptSlipdetItem.taxpay_amt,
+                                        intbf_accyear = deptSlipdetItem.intbf_accyear,
+                                        intcur_accyear = deptSlipdetItem.intcur_accyear,
+                                        monthintdue_date = deptSlipdetItem.monthintdue_date,
+                                        prncdeptdue_date = deptSlipdetItem.prncdeptdue_date,
+                                        interest_rate = deptSlipdetItem.interest_rate,
+                                        preint_rate = deptSlipdetItem.preint_rate,
+                                        int_return = deptSlipdetItem.int_return,
+                                        int_return_default = deptSlipdetItem.int_return_default,
+                                        tax_return = deptSlipdetItem.tax_return,
+                                        fee_amt = deptSlipdetItem.fee_amt,
+                                        other_amt = deptSlipdetItem.other_amt,
+                                        chequepend_amt = deptSlipdetItem.chequepend_amt,
+                                        refer_prnc_no = deptSlipdetItem.refer_prnc_no,
+                                        upint_time = deptSlipdetItem.upint_time,
+                                        day_calint = deptSlipdetItem.day_calint,
+                                        f_startprn_bfdue = deptSlipdetItem.f_startprn_bfdue,
+                                        depttype_code = deptSlipdetItem.depttype_code,
+                                        interest_rate_desc = deptSlipdetItem.interest_rate_desc,
+                                        preinterest_rate_desc = deptSlipdetItem.preinterest_rate_desc
+                                    };
+                                    deptSlipdetDetails.Add(SlipdetItem);
+                                }
+                            }
+                            // Console.WriteLine($"API request deptSlipItem: {deptSlipItem}");
+
+
+                        }
                         await GetBank();
                         await BankBranch();
                         await GetDeptMaintype();
@@ -720,6 +987,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private string DeptslipAmt { get; set; }
         private decimal deptslipAmt { get; set; }
         private decimal book_balance { get; set; }
+        public bool IsChecked { get; set; }
+
         private async Task RecpPayTypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('_');
@@ -757,19 +1026,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             deptslipNetamt = "50";
             Console.WriteLine($"input: {deptslipNetamt}");
         }
-        private void FormatNumber()
-        {
 
-            if (decimal.TryParse(DeptslipAmt, out decimal result))
-            {
-                DeptslipAmt = result.ToString("0.00");
-                result = Math.Round(result, 2);
-                deptslipAmt = result;
-                Console.WriteLine(deptslipAmt);
-
-
-            }
-        }
         // private async Task SaveDataAsync()
         // {
         //     try
@@ -979,7 +1236,101 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //         isLoading = false;
         //     }
         // }
+        private async Task CalIntPrncfix()
+        {
+            try
+            {
+                // ดึงข้อมูลผู้ใช้
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                // หาที่อยู่ IP ของเครื่อง
+                string machine_address = GetMachineAddress();
 
+                isLoading = true;
+                var tempDeptSlipdetDetails = new List<DeptSlipdet>(); //
+                foreach (var item in datadetail)
+                {
+                    var DeptSlipdet = CreateDeptSlipdet(coop_id, name, machine_address, item);
+                    foreach (var deptSlipdetItem in deptSlipdetDetails)
+                    {
+                        var deptDeposit = new
+                        {
+                            deptaccount_no = item.deptSlip.deptaccount_no,
+                            depttype_code = "01",
+                            membcat_code = item.deptSlip.membcat_code,
+                            calint_to = item.deptSlipdet.FirstOrDefault()?.calint_to ?? DateTime.Now,
+                            deptSlipdet = DeptSlipdet,
+                        };
+                        var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfCalIntPrncfix}";
+                        Console.WriteLine("deptDeposit: " + Newtonsoft.Json.JsonConvert.SerializeObject(deptDeposit));
+                        var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+                        var responseData = await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var jsonResponse = await response.Content.ReadAsStringAsync();
+                            // Console.WriteLine($"jsonResponse {jsonResponse}");
+                            var Response = JsonConvert.DeserializeObject<PersonCollection>(responseData);
+                            Console.WriteLine($"PersonCollection:{Response}");
+                            foreach (var items in Response)
+                            {
+                                var SlipdetItem = new DeptSlipdet
+                                {
+                                    select_flag = items.select_flag,
+                                    coop_id = items.coop_id,
+                                    deptslip_no = items.deptslip_no,
+                                    deptaccount_no = items.deptaccount_no,
+                                    prnc_no = items.prnc_no,
+                                    prnc_bal = items.prnc_bal,
+                                    prnc_amt = items.prnc_amt,
+                                    prncslipAmt_String = items.prnc_bal?.ToString("#,##0.0"),
+                                    prnc_date = items.prnc_date,
+                                    calint_from = items.calint_from,
+                                    calint_to = items.calint_to,
+                                    prncdue_date = items.prncdue_date,
+                                    prncmindue_date = items.prncmindue_date,
+                                    prncdue_nmonth = items.prncdue_nmonth,
+                                    prncslip_amt = items.prncslip_amt,
+                                    intarr_amt = items.intarr_amt,
+                                    intpay_amt = items.intpay_amt,
+                                    taxpay_amt = items.taxpay_amt,
+                                    intbf_accyear = items.intbf_accyear,
+                                    intcur_accyear = items.intcur_accyear,
+                                    monthintdue_date = items.monthintdue_date,
+                                    prncdeptdue_date = items.prncdeptdue_date,
+                                    interest_rate = items.interest_rate,
+                                    preint_rate = items.preint_rate,
+                                    int_return = items.int_return,
+                                    int_return_default = items.int_return_default,
+                                    tax_return = items.tax_return,
+                                    fee_amt = items.fee_amt,
+                                    other_amt = items.other_amt,
+                                    chequepend_amt = items.chequepend_amt,
+                                    refer_prnc_no = items.refer_prnc_no,
+                                    upint_time = items.upint_time,
+                                    day_calint = items.day_calint,
+                                    f_startprn_bfdue = items.f_startprn_bfdue,
+                                    depttype_code = items.depttype_code,
+                                    interest_rate_desc = items.interest_rate_desc,
+                                    preinterest_rate_desc = items.preinterest_rate_desc
+                                };
+                                tempDeptSlipdetDetails.Add(SlipdetItem);
+                            }
+                            // var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                            // Console.WriteLine($"Response.message {Response.message}");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"error {ex.Message}");
+                isLoading = false;
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
         public async Task SaveDataAsync()
         {
             try
@@ -995,14 +1346,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 foreach (var item in datadetail)
                 {
                     var Deptslip = CreateDeptSlip(coop_id, name, machine_address, item);
-                    var DeptSlipdet = CreateDeptSlip(coop_id, name, machine_address, item);
+                    var DeptSlipdet = CreateDeptSlipdet(coop_id, name, machine_address, item);
                     var DeptSlipCheque = CreateDeptSlipCheque(coop_id, deptslip_no, deptaccount_no, item);
-
-
                     var deptDeposit = new Models.Deposit
                     {
                         deptSlip = Deptslip,
-                        deptSlipdet = null,
+                        deptSlipdet = DeptSlipdet,
                         deptSlipCheque = (recpPayTypeCode == "DEN") ? new DeptSlipCheque() : null,
                     };
 
@@ -1096,6 +1445,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             catch (Exception ex)
             {
                 HandleException(ex);
+                isLoading = false;
             }
             finally
             {
@@ -1173,42 +1523,94 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             // Console.WriteLine(json);
             return deptSlip;
         }
-        private DeptSlipdet CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
+        private List<DeptSlipdet> CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
         {
-            var deptSlipdet = new DeptSlipdet
-            {
-                coop_id = item.deptSlipdet.coop_id,
-                deptslip_no = item.deptSlipdet.deptslip_no,
-                deptaccount_no = item.deptSlipdet.deptaccount_no,
-                prnc_no = item.deptSlipdet.prnc_no,
-                prnc_bal = item.deptSlipdet.prnc_bal,
-                prnc_amt = item.deptSlipdet.prnc_amt,
-                prnc_date = item.deptSlipdet.prnc_date,
-                calint_from = item.deptSlipdet.calint_from,
-                calint_to = item.deptSlipdet.calint_to,
-                prncdue_date = item.deptSlipdet.prncdue_date,
-                prncmindue_date = item.deptSlipdet.prncmindue_date,
-                prncdue_nmonth = item.deptSlipdet.prncdue_nmonth,
-                prncslip_amt = item.deptSlipdet.prncslip_amt,
-                intarr_amt = item.deptSlipdet.intarr_amt,
-                intpay_amt = item.deptSlipdet.intpay_amt,
-                taxpay_amt = item.deptSlipdet.taxpay_amt,
-                intbf_accyear = item.deptSlipdet.intbf_accyear,
-                intcur_accyear = item.deptSlipdet.intcur_accyear,
-                monthintdue_date = item.deptSlipdet.monthintdue_date,
-                prncdeptdue_date = item.deptSlipdet.prncdeptdue_date,
-                interest_rate = item.deptSlipdet.interest_rate,
-                int_return = item.deptSlipdet.int_return,
-                tax_return = item.deptSlipdet.tax_return,
-                fee_amt = item.deptSlipdet.fee_amt,
-                other_amt = item.deptSlipdet.other_amt,
-                chequepend_amt = item.deptSlipdet.chequepend_amt,
-                refer_prnc_no = item.deptSlipdet.refer_prnc_no,
-                upint_time = item.deptSlipdet.upint_time
-            };
+            var deptSlipdet = new List<DeptSlipdet>();
 
+            foreach (var deptSlipdetItem in deptSlipdetDetails)
+            {
+                var deptSlipdetlist = new DeptSlipdet
+                {
+                    // select_flag = deptSlipdetItem.select_flag,
+                    // coop_id = deptSlipdetItem.coop_id,
+                    // deptslip_no = deptSlipdetItem.deptslip_no,
+                    // deptaccount_no = deptSlipdetItem.deptaccount_no,
+                    // prnc_no = deptSlipdetItem.prnc_no,
+                    // prnc_bal = deptSlipdetItem.prnc_bal,
+                    // prnc_amt = deptSlipdetItem.prnc_amt,
+                    // prnc_date = deptSlipdetItem.prnc_date,
+                    // calint_from = deptSlipdetItem.calint_from,
+                    // calint_to = deptSlipdetItem.calint_to,
+                    // prncdue_date = deptSlipdetItem.prncdue_date,
+                    // prncmindue_date = deptSlipdetItem.prncmindue_date,
+                    // prncdue_nmonth = deptSlipdetItem.prncdue_nmonth,
+                    // prncslip_amt = prncslip_amt,
+                    // intarr_amt = deptSlipdetItem.intarr_amt,
+                    // intpay_amt = deptSlipdetItem.intpay_amt,
+                    // taxpay_amt = deptSlipdetItem.taxpay_amt,
+                    // intbf_accyear = deptSlipdetItem.intbf_accyear,
+                    // intcur_accyear = deptSlipdetItem.intcur_accyear,
+                    // monthintdue_date = deptSlipdetItem.monthintdue_date,
+                    // prncdeptdue_date = deptSlipdetItem.prncdeptdue_date,
+                    // interest_rate = deptSlipdetItem.interest_rate,
+                    // int_return = deptSlipdetItem.int_return,
+                    // preint_rate = deptSlipdetItem.preint_rate,
+                    // int_return_default = deptSlipdetItem.int_return_default,
+                    // tax_return = deptSlipdetItem.tax_return,
+                    // fee_amt = deptSlipdetItem.fee_amt,
+                    // other_amt = deptSlipdetItem.other_amt,
+                    // chequepend_amt = deptSlipdetItem.chequepend_amt,
+                    // refer_prnc_no = deptSlipdetItem.refer_prnc_no,
+                    // upint_time = deptSlipdetItem.upint_time,
+                    // interest_rate_desc = deptSlipdetItem.interest_rate_desc,
+                    // day_calint = deptSlipdetItem.day_calint,
+                    // f_startprn_bfdue = deptSlipdetItem.f_startprn_bfdue
+                    select_flag = deptSlipdetItem.select_flag,
+                    coop_id = deptSlipdetItem.coop_id,
+                    deptslip_no = deptSlipdetItem.deptslip_no,
+                    deptaccount_no = deptSlipdetItem.deptaccount_no,
+                    prnc_no = deptSlipdetItem.prnc_no,
+                    prnc_bal = deptSlipdetItem.prnc_bal,
+                    prnc_amt = deptSlipdetItem.prnc_amt,
+                    prnc_date = deptSlipdetItem.prnc_date,
+                    calint_from = deptSlipdetItem.calint_from,
+                    calint_to = deptSlipdetItem.calint_to,
+                    prncdue_date = deptSlipdetItem.prncdue_date,
+                    prncmindue_date = deptSlipdetItem.prncmindue_date,
+                    prncdue_nmonth = deptSlipdetItem.prncdue_nmonth,
+                    prncslip_amt = deptSlipdetItem.prncslip_amt,
+                    intarr_amt = deptSlipdetItem.intarr_amt,
+                    intpay_amt = deptSlipdetItem.intpay_amt,
+                    taxpay_amt = deptSlipdetItem.taxpay_amt,
+                    intbf_accyear = deptSlipdetItem.intbf_accyear,
+                    intcur_accyear = deptSlipdetItem.intcur_accyear,
+                    monthintdue_date = deptSlipdetItem.monthintdue_date,
+                    prncdeptdue_date = deptSlipdetItem.prncdeptdue_date,
+                    interest_rate = deptSlipdetItem.interest_rate,
+                    preint_rate = deptSlipdetItem.preint_rate,
+                    int_return = deptSlipdetItem.int_return,
+                    int_return_default = deptSlipdetItem.int_return_default,
+                    tax_return = deptSlipdetItem.tax_return,
+                    fee_amt = deptSlipdetItem.fee_amt,
+                    other_amt = deptSlipdetItem.other_amt,
+                    chequepend_amt = deptSlipdetItem.chequepend_amt,
+                    refer_prnc_no = deptSlipdetItem.refer_prnc_no,
+                    upint_time = deptSlipdetItem.upint_time,
+                    day_calint = deptSlipdetItem.day_calint,
+                    f_startprn_bfdue = deptSlipdetItem.f_startprn_bfdue,
+                    depttype_code = deptSlipdetItem.depttype_code,
+                    interest_rate_desc = deptSlipdetItem.interest_rate_desc,
+                    preinterest_rate_desc = deptSlipdetItem.preinterest_rate_desc
+
+
+                };
+                deptSlipdet.Add(deptSlipdetlist);
+            }
+            string json = JsonConvert.SerializeObject(deptSlipdet);
+            Console.WriteLine(json);
             return deptSlipdet;
         }
+
         private DeptSlipCheque CreateDeptSlipCheque(string coop_id, string deptslip_no, string deptaccount_no, Models.Deposit item)
         {
             var deptSlipCheque = new DeptSlipCheque();

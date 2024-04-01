@@ -666,11 +666,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
                     var depOfGetAccount = new
                     {
-                            deptaccount_no = item.deptaccount_no,
-                            lastrec_no = item.lastrec_no,
-                            laststmseq_no = item.laststmseq_no,
-                            lastpage_no = item.lastpage_no,
-                            lastline_no = item.lastline_no,
+                        deptaccount_no = item.deptaccount_no,
+                        lastrec_no = item.lastrec_no,
+                        laststmseq_no = item.laststmseq_no,
+                        lastpage_no = item.lastpage_no,
+                        lastline_no = item.lastline_no,
                         // deptaccount_no = "1000051044",
                         // deptpassbook_no = "0100051155",
                         // lastrec_no = 8,
@@ -1118,6 +1118,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         //         isLoading = false;
         //     }
         // }
+        
         public async Task SaveDataAsync()
         {
             try
@@ -1310,41 +1311,47 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
             return deptSlip;
         }
-        private DeptSlipdet CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
+        private List<DeptSlipdet> CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
         {
-            var deptSlipdet = new DeptSlipdet
-            {
-                coop_id = item.deptSlipdet.coop_id,
-                deptslip_no = item.deptSlipdet.deptslip_no,
-                deptaccount_no = item.deptSlipdet.deptaccount_no,
-                prnc_no = item.deptSlipdet.prnc_no,
-                prnc_bal = item.deptSlipdet.prnc_bal,
-                prnc_amt = item.deptSlipdet.prnc_amt,
-                prnc_date = item.deptSlipdet.prnc_date,
-                calint_from = item.deptSlipdet.calint_from,
-                calint_to = item.deptSlipdet.calint_to,
-                prncdue_date = item.deptSlipdet.prncdue_date,
-                prncmindue_date = item.deptSlipdet.prncmindue_date,
-                prncdue_nmonth = item.deptSlipdet.prncdue_nmonth,
-                prncslip_amt = item.deptSlipdet.prncslip_amt,
-                intarr_amt = item.deptSlipdet.intarr_amt,
-                intpay_amt = item.deptSlipdet.intpay_amt,
-                taxpay_amt = item.deptSlipdet.taxpay_amt,
-                intbf_accyear = item.deptSlipdet.intbf_accyear,
-                intcur_accyear = item.deptSlipdet.intcur_accyear,
-                monthintdue_date = item.deptSlipdet.monthintdue_date,
-                prncdeptdue_date = item.deptSlipdet.prncdeptdue_date,
-                interest_rate = item.deptSlipdet.interest_rate,
-                int_return = item.deptSlipdet.int_return,
-                tax_return = item.deptSlipdet.tax_return,
-                fee_amt = item.deptSlipdet.fee_amt,
-                other_amt = item.deptSlipdet.other_amt,
-                chequepend_amt = item.deptSlipdet.chequepend_amt,
-                refer_prnc_no = item.deptSlipdet.refer_prnc_no,
-                upint_time = item.deptSlipdet.upint_time
-            };
+            var deptSlipdetList = new List<DeptSlipdet>();
 
-            return deptSlipdet;
+            foreach (var deptSlipdetItem in item.deptSlipdet)
+            {
+                var deptSlipdet = new DeptSlipdet
+                {
+                    coop_id = deptSlipdetItem.coop_id,
+                    deptslip_no = deptSlipdetItem.deptslip_no,
+                    deptaccount_no = deptSlipdetItem.deptaccount_no,
+                    prnc_no = deptSlipdetItem.prnc_no,
+                    prnc_bal = deptSlipdetItem.prnc_bal,
+                    prnc_amt = deptSlipdetItem.prnc_amt,
+                    prnc_date = deptSlipdetItem.prnc_date,
+                    calint_from = deptSlipdetItem.calint_from,
+                    calint_to = deptSlipdetItem.calint_to,
+                    prncdue_date = deptSlipdetItem.prncdue_date,
+                    prncmindue_date = deptSlipdetItem.prncmindue_date,
+                    prncdue_nmonth = deptSlipdetItem.prncdue_nmonth,
+                    prncslip_amt = deptSlipdetItem.prncslip_amt,
+                    intarr_amt = deptSlipdetItem.intarr_amt,
+                    intpay_amt = deptSlipdetItem.intpay_amt,
+                    taxpay_amt = deptSlipdetItem.taxpay_amt,
+                    intbf_accyear = deptSlipdetItem.intbf_accyear,
+                    intcur_accyear = deptSlipdetItem.intcur_accyear,
+                    monthintdue_date = deptSlipdetItem.monthintdue_date,
+                    prncdeptdue_date = deptSlipdetItem.prncdeptdue_date,
+                    interest_rate = deptSlipdetItem.interest_rate,
+                    int_return = deptSlipdetItem.int_return,
+                    tax_return = deptSlipdetItem.tax_return,
+                    fee_amt = deptSlipdetItem.fee_amt,
+                    other_amt = deptSlipdetItem.other_amt,
+                    chequepend_amt = deptSlipdetItem.chequepend_amt,
+                    refer_prnc_no = deptSlipdetItem.refer_prnc_no,
+                    upint_time = deptSlipdetItem.upint_time
+                };
+                deptSlipdetList.Add(deptSlipdet);
+            }
+
+            return deptSlipdetList;
         }
         private DeptSlipCheque CreateDeptSlipCheque(string coop_id, string deptslip_no, string deptaccount_no, Models.Deposit item)
         {

@@ -13,6 +13,7 @@ using System.Runtime.Intrinsics.X86;
 using Microsoft.AspNetCore.Components.Web;
 using System.Net.Http.Headers;
 using System.Globalization;
+using Radzen.Blazor;
 
 
 namespace FinanceApp.Pages.Deposit.Dep_conteck
@@ -127,10 +128,48 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             NotificationService.Notify(message);
         }
         private List<DataStatement> datadetails;
-        public List<Statement>? statement { get; set; }
+        public List<Statement>? dataStatementList { get; set; }
         public IEnumerable<Models.Statement> statementDetails { get; set; }
+        private RadzenDataGrid<Models.Statement> grid;
 
+        private int PageSize = 10;
 
+        int totalPages = 0;
+        // async Task GoToLastPage()
+        // {
+        //     int totalPages = (int)Math.Ceiling((double)statementDetails.Count() / PageSize); // Calculate the total pages
+        //     int startIndex = (totalPages - 1) * PageSize;
+        //     if (startIndex < statementDetails.Count())
+        //     {
+        //         statementDetails = statementDetails.Skip(startIndex).ToList();
+        //         grid.CurrentPage = totalPages - 1;  // Go to the last page
+        //         Console.WriteLine(totalPages);
+        //         grid.PagerHorizontalAlign = HorizontalAlign.Left;
+        //         grid.ShowPagingSummary = true;
+        //         StateHasChanged();
+        //     }
+        //     StateHasChanged();
+        // }
+
+        async Task GoToLastPage()
+        {
+            totalPages = (int)Math.Ceiling((double)statementDetails.Count() / PageSize); // Calculate the total pages
+            // int startIndex = (totalPages - 1) * PageSize;
+            int lastPageIndex = totalPages - 1;
+            Console.WriteLine($"totalPages :{totalPages}");
+            await grid.Reload();
+            if (lastPageIndex >= 0)
+            {
+                // Update the grid's CurrentPage property เพื่อแสดงหน้าสุดท้าย
+                grid.CurrentPage = lastPageIndex;
+
+                // statementDetails = LoadAllData();
+
+                // Notify Blazor that the state has changed and the UI needs to be updated
+                StateHasChanged();
+            }
+        }
+        
         private string DepttypeValue;
         private string Valueselecte;
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
@@ -226,6 +265,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             depttype_code = values[1];
             Console.WriteLine($"Recp Pay Type Code: {DepttypeValue},Depttype Code: {depttype_code}");
         }
+        private bool table;
         private async Task PerformSearch()
         {
             isLoading = true;
@@ -236,62 +276,62 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             else
             {
                 await CallApi();
+
+
             }
 
             isLoading = false;
         }
         private async Task CallApi()
         {
-            // GetBank();
-            // BankBranch();
-            // if (deptno_format == null || deptno_format == "")
-            // {
-            //     ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
-            // }
-            // else
-            // {
-                try
+            try
+            {
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                isLoading = true;
+                deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
+                var response = await SendApiRequestAsyncGet(apiUrl);
+                if (response.IsSuccessStatusCode)
                 {
-                    (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
-                    isLoading = true;
-                    deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
-                    var response = await SendApiRequestAsyncGet(apiUrl);
-                    if (response.IsSuccessStatusCode)
+                    // อ่าน response string
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
+                    Console.WriteLine(apiResponse.success);
+                    if (apiResponse.success)
                     {
-                        // อ่าน response string
-                        var jsonResponse = await response.Content.ReadAsStringAsync();
-                        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonResponse);
-                        Console.WriteLine(apiResponse.success);
-                        if (apiResponse.success)
-                        {
-                            var content = apiResponse.content;
-                            datadetails = new List<DataStatement> { apiResponse.content };
-                            var statements = content.statement;
+                        var content = apiResponse.content;
+                        datadetails = new List<DataStatement> { apiResponse.content };
+                        var statements = content.statement;
 
-                            var dataStatementList = ProcessStatements(statements);
-                            statementDetails = dataStatementList;
-                        }
-                        else
-                        {
-                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
-                        }
+                        var dataStatementList = ProcessStatements(statements);
+                        statementDetails = dataStatementList;
                     }
+                    else
+                    {
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+                    }
+                    // if (dataStatementList != null)
+                    // {
+                    //     await GoToLastPage();
+                    //     StateHasChanged();
+
+                    // }
                 }
-                catch (Exception ex)
-                {
-                    ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
-                    Console.WriteLine(ex.Message.ToString());
-                }
-                finally
-                {
-                    isLoading = false;
-                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                // Console.WriteLine(ex.Message.ToString());
+            }
+            finally
+            {
+                isLoading = false;
+            }
             // }
         }
         private List<Statement> ProcessStatements(List<Statement> statements)
         {
-            var dataStatementList = new List<Statement>();
+            dataStatementList = new List<Statement>();
             foreach (var item in statements)
             {
                 DateTime operatedate = item.operate_date.GetValueOrDefault(DateTime.MinValue);
@@ -308,7 +348,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                     coop_id = item.coop_id,
                     deptaccount_no = deptaccount_no,
                     seq_no = item.seq_no,
-                    deptitemtype_code = item.deptitemtype_code,
+                    deptitemtype_code = item.deptitemtype_code + " - " + item.deptitemtype_desc,
                     operate_date = operate_date_TH,
                     entry_date = item.entry_date,
                     prncbal = item.prncbal,

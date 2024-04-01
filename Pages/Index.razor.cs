@@ -84,7 +84,7 @@ namespace FinanceApp.Pages
             Console.WriteLine($"coop_control  :{coop_control},coop_id :{coop_id},name :{name},email :{email},apvlevelId :{apvlevelId},workDate :{workDate},application :{application},");
            if(application ==null){
                     application = "deposit";
-                }
+            }
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.UseOfAuthPagePermiss}?application={application}";
             try
             {

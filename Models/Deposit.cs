@@ -1,82 +1,18 @@
 using System.ComponentModel;
+using Newtonsoft.Json;
 
 namespace FinanceApp.Models
 {
     public class Deposit
     {
         public Deptslip deptSlip { get; set; }
-        public DeptSlipdet deptSlipdet { get; set; }
+        // public DeptSlipdet deptSlipdet { get; set; }
+        public List<DeptSlipdet> deptSlipdet { get; set; }
         public DeptSlipCheque deptSlipCheque { get; set; }
         public DepOfInitDataOffline depOfInitDataOffline { get; set; }
-
     }
     public class Deptslip
     {
-        // public string? coop_id { get; set; }
-        // public string? deptcoop_id { get; set; }
-        // public string? deptslip_no { get; set; }
-        // public string? member_no { get; set; }
-        // public string? membcat_code { get; set; }
-        // public string? deptno_format { get; set; }
-        // public string? deptaccount_no { get; set; }
-        // public string? depttype_code { get; set; }
-        // public string? deptgroup_code { get; set; }
-        // public string? recppaytype_code { get; set; }
-        // public string? moneytype_code { get; set; }
-        // public string? bank_code { get; set; }
-        // public string? bankbranch_code { get; set; }
-        // public string? entry_id { get; set; }
-        // public string? machine_id { get; set; }
-        // public string? tofrom_accid { get; set; }
-        // public DateTime? operate_date { get; set; }
-        // public DateTime? entry_date { get; set; }
-        // public DateTime? calint_from { get; set; }
-        // public int? operate_code { get; set; }
-        // public int? sign_flag { get; set; }
-        // public int? laststmseq_no { get; set; }
-        // public int? nobook_flag { get; set; }
-        // public int? prnc_no { get; set; }
-        // public decimal? deptslip_amt { get; set; }
-        // public decimal? deptslip_netamt { get; set; }
-        // public decimal? fee_amt { get; set; }
-        // public decimal? oth_amt { get; set; }
-        // public decimal? prncbal { get; set; }
-        // public decimal? withdrawable_amt { get; set; }
-        // public decimal? prncbal_bf { get; set; }
-        // public decimal? tax_amt { get; set; }
-        // public decimal? int_amt { get; set; }
-        // public decimal? slipnetprncbal_amt { get; set; }
-        // public int? posttovc_flag { get; set; }
-        // public string? refer_slipno { get; set; }
-        // public string? deptaccount_name { get; set; }
-        // public string? depttype_desc { get; set; }
-        // public string? dept_objective { get; set; }
-        // public int? prncbal_retire { get; set; }
-        // public string? remark { get; set; }
-        // public List<Recppaytype> recppaytype { get; set; }
-        // public List<Tofromacc> tofromacc { get; set; }
-        // public DateTime? due_date { get; set; }
-        // public string? deptpassbook_no { get; set; }
-        // public string? condforwithdraw { get; set; }
-        // public string? passbook_flag { get; set; }
-        // public int? upint_time { get; set; }
-        // public string? deptaccount_ename { get; set; }
-        // public string? deptrequest_docno { get; set; }
-        // public string? account_type { get; set; }
-        // public int? monthintpay_meth { get; set; }
-        // public string? traninttype_code { get; set; }
-        // public string? tran_deptacc_no { get; set; }
-        // public string? dept_tranacc_name { get; set; }
-        // public int? deptmonth_status { get; set; }
-        // public decimal? deptmonth_amt { get; set; }
-        // public int? dept_status { get; set; }
-        // public int? monthint_status { get; set; }
-        // public int? f_tax_rate { get; set; }
-        // public int? adjdate_status { get; set; }
-        // public string? membcat_desc { get; set; }
-        // public string? reqappl_flag { get; set; }
-        // public string? spcint_rate_status { get; set; }
-        // public string? spcint_rate { get; set; }
         public string? coop_id { get; set; }
         public string? deptcoop_id { get; set; }
         public string? deptslip_no { get; set; }
@@ -148,6 +84,7 @@ namespace FinanceApp.Models
     }
     public class DeptSlipdet
     {
+        public int? select_flag { get; set; }
         public string? coop_id { get; set; }
         public string? deptslip_no { get; set; }
         public string? deptaccount_no { get; set; }
@@ -165,17 +102,30 @@ namespace FinanceApp.Models
         public decimal? intpay_amt { get; set; }
         public decimal? taxpay_amt { get; set; }
         public decimal? intbf_accyear { get; set; }
-        public int? intcur_accyear { get; set; }
+        public decimal? intcur_accyear { get; set; }
         public DateTime? monthintdue_date { get; set; }
         public DateTime? prncdeptdue_date { get; set; }
         public decimal? interest_rate { get; set; }
+        public decimal? preint_rate { get; set; }
         public decimal? int_return { get; set; }
+        public decimal? int_return_default { get; set; }
         public decimal? tax_return { get; set; }
         public decimal? fee_amt { get; set; }
         public decimal? other_amt { get; set; }
         public decimal? chequepend_amt { get; set; }
         public int? refer_prnc_no { get; set; }
         public int? upint_time { get; set; }
+        public int? day_calint { get; set; }
+        public int f_startprn_bfdue { get; set; }
+        public string? depttype_code { get; set; }
+        public string? interest_rate_desc { get; set; }
+        public string? preinterest_rate_desc { get; set; }
+        /////
+        public string? prncslipAmt_String { get; set; }
+        public bool IsChecked { get; set; }
+        public bool IsInitialChecked { get; set; }
+
+
     }
     public class DeptSlipCheque
     {
@@ -324,5 +274,46 @@ namespace FinanceApp.Models
         public decimal deposit_amt { get; set; }
         public decimal? withdraw_amt { get; set; }
     }
+    [JsonArray]
+    public class PersonCollection : List<CalIntPrncfix> { }
 
+    public class CalIntPrncfix
+    {
+        public int? select_flag { get; set; }
+        public string? coop_id { get; set; }
+        public string? deptslip_no { get; set; }
+        public string? deptaccount_no { get; set; }
+        public int? prnc_no { get; set; }
+        public decimal? prnc_bal { get; set; }
+        public decimal? prnc_amt { get; set; }
+        public DateTime? prnc_date { get; set; }
+        public DateTime? calint_from { get; set; }
+        public DateTime? calint_to { get; set; }
+        public DateTime? prncdue_date { get; set; }
+        public DateTime? prncmindue_date { get; set; }
+        public int? prncdue_nmonth { get; set; }
+        public decimal? prncslip_amt { get; set; }
+        public decimal? intarr_amt { get; set; }
+        public decimal? intpay_amt { get; set; }
+        public decimal? taxpay_amt { get; set; }
+        public decimal? intbf_accyear { get; set; }
+        public decimal? intcur_accyear { get; set; }
+        public DateTime? monthintdue_date { get; set; }
+        public DateTime? prncdeptdue_date { get; set; }
+        public decimal? interest_rate { get; set; }
+        public decimal? preint_rate { get; set; }
+        public decimal? int_return { get; set; }
+        public decimal? int_return_default { get; set; }
+        public decimal? tax_return { get; set; }
+        public decimal? fee_amt { get; set; }
+        public decimal? other_amt { get; set; }
+        public decimal? chequepend_amt { get; set; }
+        public int? refer_prnc_no { get; set; }
+        public int? upint_time { get; set; }
+        public int? day_calint { get; set; }
+        public int f_startprn_bfdue { get; set; }
+        public string? depttype_code { get; set; }
+        public string? interest_rate_desc { get; set; }
+        public string? preinterest_rate_desc { get; set; }
+    }
 }

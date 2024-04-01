@@ -35,6 +35,7 @@ public static class ApiClient
         public const string DepOfInitDeptPassbook = "Deposit/DepOfInitDeptPassbook";
         public const string DeptOfGetPrintSlip = "DeptOfGetPrintSlip?deptslip_no"; 
         public const string DepOfDataStatement = "DepOfDataStatement?deptaccount_no"; 
+        public const string DepOfCalIntPrncfix = "DepOfCalIntPrncfix"; 
 
 
 

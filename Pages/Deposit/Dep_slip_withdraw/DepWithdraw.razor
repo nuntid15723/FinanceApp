@@ -53,6 +53,12 @@
 	.label-group {
 		margin-left: 10px;
 	}
+	.rz-grid-table{
+		width: 170pc;
+	}
+	.rz-selectable tbody tr.rz-data-row.rz-state-highlight > td {
+     background-color: transparent !important; 
+}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -73,6 +79,7 @@
 				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf"
 							  Disabled="@(!success_status)" />
 			}
+			<RadzenButton class="save_top" Icon="CalIntPrncfix" Text="พิมพ์" Click="@CalIntPrncfix" />
 		</div>
 	</div>
 </div>
@@ -297,6 +304,8 @@ else
 								@foreach (var item in datadetail)
 								{
 									var Item = item.deptSlip;
+									var withdrawable_amt = Item.withdrawable_amt?.ToString("N2");
+									var prncbal = Item.prncbal?.ToString("N2");
 									<div class="row"  @onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
 										<div class="row">
 											<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
@@ -479,7 +488,6 @@ else
 																		</RadzenDataGridColumn>
 																	</Columns>
 																</RadzenDataGrid>
-
 															</div>
 														</div>
 													</div>
@@ -814,12 +822,14 @@ else
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">คงเหลือ</label>
 												<input class="form-control" style="text-align: end;" readonly type="text" Name="prncbal"
-												@bind-value="Item.prncbal" />
+												@bind-value="prncbal" />
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ถอนได้</label>
-												<input class="form-control" style="text-align: end;" readonly type="text"
-													   Name="withdrawable_amt" @bind-value="Item.withdrawable_amt" />
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt" @bind-value="withdrawable_amt" />
+													   @* @{var Item.withdrawable_amt =  Item.withdrawable_amt?.ToString("N2");} *@
+													  @* <RadzenTextBox  Name="withdrawable_amt" @bind-Value="@(Item.withdrawable_amt.ToString("N2"))" class="form-control" style="text-align: end;"></RadzenTextBox> *@
+
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">อายัดรวม</label>
@@ -834,20 +844,20 @@ else
 										</div>
 										<div class="row">
 											@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">อายัดรวม</label>
-								<input class="form-control" style="text-align: end;" readonly type="text" Name="sequest_amont"
-								@bind-value="sequest_amont" />
-								</div>
-								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">เช็คเรียกเก็บ</label>
-								<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
-								@bind-value="checkpend_amt" />
-								</div>
-								<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-								<label class="form-label" for="">ยอดฝากได้</label>
-								<input class="form-control" style="text-align: end;" type="text" Name="deptslip_amt"
-								@bind-value="Item.deptslip_amt" />
-								</div> *@
+										<label class="form-label" for="">อายัดรวม</label>
+										<input class="form-control" style="text-align: end;" readonly type="text" Name="sequest_amont"
+										@bind-value="sequest_amont" />
+										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">เช็คเรียกเก็บ</label>
+										<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
+										@bind-value="checkpend_amt" />
+										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<label class="form-label" for="">ยอดฝากได้</label>
+										<input class="form-control" style="text-align: end;" type="text" Name="deptslip_amt"
+										@bind-value="Item.deptslip_amt" />
+										</div> *@
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
@@ -891,12 +901,8 @@ else
 												<label class="form-label" for="">ยอดทำรายการ</label>
 												<div class="form-group ">
 													<div class="input-group">
-														@* <input type="text" class="format-money form-control" style="text-align: end;"
-											Name="deptslip_netamt"
-											value="@(deptslipNetamt!= null ? Item.deptslip_amt:deptslipNetamt)"
-											placeholder="0.00" onblur="formattNumber(this)" /> *@
 														<input type="text" class="format-money form-control" style="text-align: end;"
-														@bind="DeptslipAmt" placeholder="0.00" @onblur="FormatNumber" />
+														@bind="DeptslipAmt" placeholder="0.00"   @onblur="() => FormatNumber()" />
 														<div class="input-group-addon">
 															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																		data-bs-target="#myModal1" />
@@ -1100,59 +1106,148 @@ else
 									}
 								}
 							@* </form> *@
-							<div class="card mt-4" hidden>
-								<div class="row mt-2"
-									 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+							<div class="card mt-4" >
+								<div class="row mt-2">
 									<RadzenTabs @bind-SelectedIndex=@selectedIndex>
 										<Tabs>
 											<RadzenTabsItem Text="รายละเอียดต้นเงิน">
-												<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
-																AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
-																FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
-																AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-													<Columns>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ต้นเงิน" Property="prnc_no">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ต้นเงินคงเหลือ"
-																			  Property="prnc_bal">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ยอดเงินทำรายการ"
-																			  Property="prncslip_amt">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันที่ต้นเงิน"
-																			  Property="prnc_date">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันครบกำหนด"
-																			  Property="prncdue_date">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="วันเริ่มคิดด/บถึง"
-																			  Property="calint_from">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บ จ่าย" Property="calint_to">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ภาษี" Property="intpay_amt">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บ.หลังหักภาษี"
-																			  Property="taxpay_amt">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บค้าง" Property="intslip_net">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ค่าปรับ"
-																			  Property="intbf_accyear">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ด/บ เรียกคืน"
-																			  Property="int_return">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="ภาษี เรียกคืน"
-																			  Property="tax_return">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="อัตราดอกเบี้ย"
-																			  Property="interest_rate">
-														</RadzenDataGridColumn>
-														<RadzenDataGridColumn TItem="Models.AccountDetails" Title="จำนวนวัน" Property="day_cal">
-														</RadzenDataGridColumn>
-													</Columns>
-												</RadzenDataGrid>
+												<RadzenDataGrid @ref="grid" Data="@(deptSlipdetDetails)" AllowRowSelectOnRowClick="@allowRowSelectOnRowClick" AllowPaging="true" PageSize="10"AllowSorting="true"  TItem="Models.DeptSlipdet" SelectionMode="DataGridSelectionMode.Multiple" @bind-Value=@selectedEmployees  PagerHorizontalAlign="HorizontalAlign.Right" ShowPagingSummary="true" ColumnWidth="200px">
+												 <Columns>
+													@* <HeaderTemplate>
+														  <RadzenCheckBox TabIndex="-1" TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})"
+														Value="@(selectedEmployees == null || selectedEmployees?.Any() != true ? false : !deptSlipdetDetails.All(i => selectedEmployees.Contains(i)) ? null : deptSlipdetDetails.Any(i => selectedEmployees.Contains(i)))"
+														Change="@(args => 
+														{
+															var isChecked = args == true;
+															foreach (var item in deptSlipdetDetails)
+															{
+																item.select_flag = isChecked ? 1 : 0;
+																if (isChecked)
+																{
+																	grid.SelectRow(item);
+																}
+															}
+														})" />
+													</HeaderTemplate>	 *@
+													<RadzenDataGridColumn TItem="Models.DeptSlipdet" Width="4%" Property="select_flag" Sortable="false" Filterable="false">
+												
+														<Template Context="data">
+																<RadzenCheckBox TabIndex="-1" @onclick="@(e => SummaryTotle(data))" TriState="false" Value="@(data.select_flag == 1)" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
+																	TValue="bool" 
+																	Change=@(args => { 
+																		data.select_flag = data.select_flag == 1 ? 0 : 1; // สลับค่าของ select_flag ระหว่าง 0 และ 1
+																		if(data.select_flag == 1) { 
+																			grid.SelectRow(data); // เลือกแถวเมื่อ select_flag เป็น 1
+																			data.IsChecked = true;
+																		};
+																	CalculateTotal();})
+																	>
+																	</RadzenCheckBox>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="5%" TItem="Models.DeptSlipdet" Property="prnc_no" Title="ต้นเงิน">
+														<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;"> @data.prnc_no</RadzenText>
+														</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="prnc_bal" Title="ต้นเงินคงเหลือ	">
+														<Template Context="data">
+																@* <div><p @onclick="@(e => SummaryTotle(data))" style="text-align: end;">@data.prnc_bal?.ToString("#,##0.00")</p></div> *@
+																<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;"> @data.prnc_bal?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>	
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="prncslip_amt" Title="ยอดเงินทำรายการ">
+														<Template Context="data">
+															<div @onchange="@(e => SummaryTotle(data))">
+																@if(data.select_flag == 1)
+																 {
+																		<RadzenTextBox Change=@(e => SummaryTotle(data))
+																			class="format-money form-control"
+																			Style="text-align: end;"
+																			@bind-Value="data.prncslipAmt_String"
+																			Placeholder="0.00" ToolTip="#,##0.00"
+																			Width="100%" 
+																			@onblur="() => CalculateTotal()"/>
+
+																}else{
+																<input  class="form-control" disabled placeholder="0.00" value="@prncslip_amt" type="text" Style="text-align: end; width: 100%; background-color: transparent; border: 0px;" />
+																}
+															</div>
+														</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="prnc_date" Title="วันที่ต้นเงิน">
+															<Template Context="data">
+																<RadzenText> @data.prnc_date?.ToString("dd/MM/yyyy")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>	
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="prncdue_date" Title="วันครบกำหนด">
+															<Template Context="data">
+																<RadzenText  @onclick="@(e => SummaryTotle(data))"> @data.prncdue_date?.ToString("dd/MM/yyyy")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>	
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="calint_from" Title="วันเริ่มคิดด/บถึง">
+														<Template Context="data">
+																<RadzenText  @onclick="@(e => SummaryTotle(data))"> @data.calint_from?.ToString("dd/MM/yyyy")</RadzenText>
+														</Template>
+													</RadzenDataGridColumn>	
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="calint_to" Title="วันคิดด/บถึง">
+														<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))">@data.calint_to?.ToString("dd/MM/yyyy")</RadzenText>
+														</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="intpay_amt" Title="ด/บ จ่าย">
+														<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.intpay_amt?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="taxpay_amt" Title="ภาษี">
+															<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.taxpay_amt?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="intslip_net" Title="ด/บ.หลังหักภาษี">
+														@* <Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))">@intslip_net</RadzenText>
+														</Template> *@
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="intbf_accyear" Title="ด/บค้าง">
+														<Template Context="data">
+																<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.intbf_accyear?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="fee_amt" Title="ค่าปรับ">
+															<Template Context="data">
+																<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.fee_amt?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="int_return" Title="ด/บ เรียกคืน">
+														<Template Context="data">
+																<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.int_return?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="tax_return" Title="ภาษี เรียกคืน" >
+														<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.tax_return?.ToString("#,##0.00")</RadzenText>
+														</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="interest_rate" Title="อัตราดอกเบี้ย">
+													<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;">@data.interest_rate?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="preint_rate" Title="อัตราดอกเบี้ยก่อนกำหนด">
+														<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))"Style="text-align: end;">@data.preint_rate?.ToString("#,##0.00")</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="day_calint" Title="จำนวนวัน">
+														<Template Context="data">
+															<RadzenText  @onclick="@(e => SummaryTotle(data))">@data.day_calint</RadzenText>
+															</Template>
+													</RadzenDataGridColumn>
+													@* <RadzenDataGridColumn TItem="Models.DeptSlipdet" Property="day_calint" Title="จำนวนวัน" FormatString="{0:d}"/> *@
+												</Columns> 
+											</RadzenDataGrid>
 											</RadzenTabsItem>
 											<RadzenTabsItem Text="ลายเซ็น">
 												ลายเซ็น
@@ -1909,7 +2004,7 @@ else
 									@* } *@
 								}
 							</form>
-							<div class="card mt-4" hidden>
+							<div class="card mt-4" >
 								<div class="row mt-2"
 									 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 									<RadzenTabs @bind-SelectedIndex=@selectedIndex>
@@ -2119,9 +2214,15 @@ else
 	private string searchText;
 	int selectedIndex = 0;
 	private bool IsSaveEnabled => SaveStatus == "1";
+	private Task AllowRowSelect(){
+		allowRowSelectOnRowClick = true;
+		return Task.CompletedTask;
+	}
+
 	private void OnChange(int newStep)
 	{
 		currentStep = newStep;
+		Console.WriteLine("allowRowSelectOnRowClick"+allowRowSelectOnRowClick);
 		StateHasChanged();
 		@* @if (currentStep == 2)
 		{
@@ -2231,8 +2332,7 @@ private async Task<string> GetPdfData()
 	IList<IDictionary<string, object>> accDetails; // Assuming this is your original data
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
 	private List<TableRow> rows = new List<TableRow>();
-	private List<string> bankValuesList = new List<string>();
-
+	private List<string> bankValuesList = new List<string>();	
 	public class TableRow
 	{
 		public string? cheque_no { get; set; }
