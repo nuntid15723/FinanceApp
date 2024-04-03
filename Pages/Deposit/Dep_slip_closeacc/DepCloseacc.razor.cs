@@ -568,6 +568,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                     deptno_format = data.deptaccount_no,
                     entry_date = null,
                     deptitem_group = deptitem_group ?? "CLS",
+                
                 };
                 var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(jsonReq);
