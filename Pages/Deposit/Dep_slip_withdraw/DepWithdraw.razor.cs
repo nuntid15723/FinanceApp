@@ -156,6 +156,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
         /// </summary>        
         private bool isLoading;
+        private bool saveLoading;
+        private bool slipLoading;
+        private bool printLoading;
         private bool isLoadingModals;
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
@@ -549,13 +552,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //RetriveDataFromDeptNo
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
-            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
-
+          
             try
             {
-
+                isLoading = true;
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 deptno_format = data.deptaccount_no?.Trim();
-
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
                 await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
@@ -590,6 +592,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }finally{
+                isLoading = false;
             }
         }
         private void AnotherFunction()
@@ -680,7 +684,6 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             {
                 await CallApi();
             }
-
             isLoading = false;
         }
         private async Task CallApi()
@@ -792,7 +795,38 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 Console.WriteLine(ex.Message.ToString());
             }
         }
+        private async Task TypeChanged(ChangeEventArgs e)
+        {
 
+            deptitem_group = e.Value.ToString();
+            if (string.IsNullOrEmpty(deptno_format))
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
+            }
+            else
+            {
+                try
+                {
+                    isLoading = true;
+                    await CallApi();
+                }
+                catch (Exception ex)
+                {
+
+                    Console.WriteLine(ex.Message);
+
+                }
+                finally
+                {
+                    isLoading = false;
+
+                }
+            }
+            await InvokeAsync(() => StateHasChanged());
+            Console.WriteLine($"TypeChanged: {deptitem_group}");
+
+
+        }
         private async Task SearchOfGetAcc()
         {
             isLoadingModals = true;
@@ -1335,13 +1369,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         {
             try
             {
+                saveLoading = true;
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
 
                 // หาที่อยู่ IP ของเครื่อง
                 string machine_address = GetMachineAddress();
-
-                isLoading = true;
 
                 foreach (var item in datadetail)
                 {
@@ -1351,7 +1384,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     var deptDeposit = new Models.Deposit
                     {
                         deptSlip = Deptslip,
-                        deptSlipdet = DeptSlipdet,
+                        // deptSlipdet = DeptSlipdet,
+                        deptSlipdet = null,
                         deptSlipCheque = (recpPayTypeCode == "DEN") ? new DeptSlipCheque() : null,
                     };
 
@@ -1437,7 +1471,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     }
                     else
                     {
-                        // HandleErrorResponse(responseData);
+                        HandleErrorResponse(responseData);
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = responseData, Duration = 2500 });
                     }
                 }
@@ -1445,11 +1479,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             catch (Exception ex)
             {
                 HandleException(ex);
-                isLoading = false;
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
+                saveLoading = false;
             }
             finally
             {
-                isLoading = false;
+                saveLoading = false;
             }
         }
 
@@ -1485,6 +1520,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 deptslip_netamt = deptslipAmt,
                 fee_amt = item.deptSlip.fee_amt,
                 oth_amt = item.deptSlip.oth_amt,
+                intbonus_amt = item.deptSlip.intbonus_amt,
+                int_return = item.deptSlip.int_return,
+                tax_return = item.deptSlip.tax_return,
+                int_netamt = item.deptSlip.int_netamt,
                 prncbal = item.deptSlip.prncbal,
                 withdrawable_amt = item.deptSlip.withdrawable_amt,
                 prncbal_bf = item.deptSlip.prncbal_bf,

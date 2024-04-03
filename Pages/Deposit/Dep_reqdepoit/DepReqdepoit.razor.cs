@@ -94,6 +94,9 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public List<TranDeptno> tranDeptno { get; set; }
 
         private bool isLoading;
+        private bool saveLoading;
+        private bool slipLoading;
+        private bool printLoading;
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
         private bool isLoadingModals;
@@ -362,18 +365,19 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             }
         }
         //ดึงข้อมูลจากที่เลือกใน Models หรือ dlg
-        private async void UpdateAccountDetails(Models.ReqAccDetails data)
+        public async Task UpdateAccountDetails(Models.ReqAccDetails data)
         {
-            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
 
-            AnotherFunction();
+
             try
             {
+                isLoading = true;
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                AnotherFunction();
                 member_no = data.member_no;
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on member_no: {data.member_no}");
                 await jsRuntime.InvokeVoidAsync("alert", $"เลือก {data.member_no}, {data.memb_name}  {data.memb_surname}");
-
                 var depOfGetAccount = new ReqAccDetails
                 {
                     coop_id = coop_id,
@@ -414,6 +418,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                isLoading = false;
+
             }
         }
 
@@ -770,6 +779,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             try
             {
+                saveLoading = true;
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 // หาที่อยู่ IP ของเครื่อง

@@ -47,6 +47,10 @@ namespace FinanceApp.Models
         public decimal? tax_amt { get; set; }
         public decimal? int_amt { get; set; }
         public decimal? slipnetprncbal_amt { get; set; }
+        public decimal? intbonus_amt { get; set; } = 0;
+        public int? int_return { get; set; } = 0;
+        public int? tax_return { get; set; } = 0;
+        public decimal? int_netamt { get; set; } = 0;
         public int? posttovc_flag { get; set; }
         public string? refer_slipno { get; set; }
         public string? deptaccount_name { get; set; }

@@ -157,6 +157,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
 
         /// </summary>        
         private bool isLoading;
+        private bool saveLoading;
+        private bool slipLoading;
+        private bool printLoading;
         private bool isLoadingModals;
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
@@ -271,6 +274,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         {
             try
             {
+                isLoading = true;
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
 
                 deptno_format = data.deptaccount_no?.Trim();
@@ -299,13 +303,15 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                     datadetail = new List<Models.Deposit> { apiResponse.data };
                     StateHasChanged();
                     Console.WriteLine($"API request failed: {datadetail}");
-
-
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                isLoading = false;
             }
         }
 
@@ -403,7 +409,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         }
         private async Task PerformSearch()
         {
-            // isLoading = true;
+            isLoading = true;
             if (string.IsNullOrEmpty(deptno_format ?? deptaccount_no))
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
@@ -413,15 +419,16 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 await CallApi();
             }
 
-            // isLoading = false;
+            isLoading = false;
         }
 
         private async Task CallApi()
         {
-            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
-            Console.WriteLine($"GetDataList: {coopControl}, {coop_id}, {name},  {email}, {actort}, {apvlevelId}, {workDate}, {application}, {save_status}, {check_flag}");
+
             try
             {
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                Console.WriteLine($"GetDataList: {coopControl}, {coop_id}, {name},  {email}, {actort}, {apvlevelId}, {workDate}, {application}, {save_status}, {check_flag}");
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
@@ -1118,18 +1125,16 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         //         isLoading = false;
         //     }
         // }
-        
+
         public async Task SaveDataAsync()
         {
             try
             {
+                saveLoading = true;
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 // หาที่อยู่ IP ของเครื่อง
                 string machine_address = GetMachineAddress();
-
-                isLoading = true;
-
                 foreach (var item in datadetail)
                 {
                     var Deptslip = CreateDeptSlip(coop_id, name, machine_address, item);

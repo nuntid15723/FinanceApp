@@ -93,6 +93,9 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         public List<Acctype> acctype { get; set; }
 
         private bool isLoading;
+        private bool saveLoading;
+        private bool slipLoading;
+        private bool printLoading;
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
         private bool isLoadingModals;
@@ -286,8 +289,8 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         {
             try
             {
-                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 isLoading = true;
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
                 var response = await SendApiRequestAsyncGet(apiUrl);

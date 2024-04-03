@@ -53,8 +53,14 @@
 	.label-group {
 		margin-left: 10px;
 	}
-	.rz-grid-table{
+	@* .rz-grid-table{
 		width: 170pc;
+	} *@
+	.grid-table {
+    position: relative;
+    border-collapse: separate;
+    border-spacing: 0;
+	width:2000px !important;
 	}
 	.rz-selectable tbody tr.rz-data-row.rz-state-highlight > td {
      background-color: transparent !important; 
@@ -71,29 +77,34 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-				<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync"
+				<RadzenButton class="save_top" Icon="save" Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
 							  Disabled="@(!IsSaveEnabled)" />
 			}
 			else if (currentStep == 2)
 			{
-				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf"
+				<RadzenButton class="save_top" Icon="print" Text="@((saveLoading ? "พิมพ์..." : "พิมพ์"))" Click="@PrintPdf"
 							  Disabled="@(!success_status)" />
 			}
 			<RadzenButton class="save_top" Icon="CalIntPrncfix" Text="พิมพ์" Click="@CalIntPrncfix" />
 		</div>
 	</div>
 </div>
-@if (isLoading)
-{
-	<div
+@* @if (isLoading)
+{ *@
+	@* <div
 		style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%; justify-content: center; align-items: center; z-index: 90;">
 		<div class="spinner-border text-primary" role="status">
 			<span class="visually-hidden">Loading...</span>
 		</div>
-	</div>
-}
+	</div> *@
+	@* <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 25%; justify-content: center; align-items: center; z-index: 90;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div> *@
+@* }
 else
-{
+{ *@
 	<div class="card body-page">
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
@@ -291,9 +302,26 @@ else
 											</div>
 										</div>
 										<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-											<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+											<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">
+											  @if (isLoading)
+													{
+														<span>...</span>
+														<i class="fa fa-spinner fa-spin"></i>
+													}
+													else
+													{
+														<span>ค้นหา</span>
+													}
+													</button>
 											@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
 										</div>
+										@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ทำรายการ</label>
+											<select id="recppaytypeSelect"  @onchange="TypeChanged" name="itemtype" class="form-select">
+												<option value="WID" >(-) ถอน</option>
+												<option value="CLS ">(/) ปิดบัญชี</option>
+											</select>
+										</div> *@
 									</div>
 								@* </form> *@
 							</div>
@@ -494,16 +522,26 @@ else
 												</div>
 											</div>
 											<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-												@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
-												<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button>
+												<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">
+											  @if (isLoading)
+													{
+														<span>...</span>
+														<i class="fa fa-spinner fa-spin"></i>
+													}
+													else
+													{
+														<span>ค้นหา</span>
+													}
+													</button>
+												@* <button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">ค้นหา</button> *@
 											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ทำรายการ</label>
-												<select id="recppaytypeSelect" @bind="group_itemtype" name="itemtype" class="form-select">
-													<option selected value="WID">(-) ถอน</option>
-													<option value="CLS">(/) ปิดบัญชี</option>
+												<select id="recppaytypeSelect"  @onchange="TypeChanged" name="itemtype" class="form-select">
+													<option value="WID" selected="@(deptitem_group == "WID")">(-) ถอน</option>
+													<option value="CLS" selected="@(deptitem_group == "CLS")">(/) ปิดบัญชี</option>
 												</select>
-											</div>
+											</div> *@
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รายการ</label>
 												<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
@@ -539,6 +577,41 @@ else
 
 												</select>
 											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">รหัสคู่บัญชี</label>
+														<select id="tofromaccSelect" class="form-select" value="@bookCode"
+														@onchange="OnToFromAccChanged">
+															@if (Item.tofromacc == null || !Item.tofromacc.Any())
+															{
+																<option selected disabled></option>
+															}
+															else
+															{
+																<option selected disabled>--กรุณาเลือก--</option>
+																@foreach (var tofromaccItem in Item.tofromacc)
+																{
+																	@if (tofromaccItem.cash_type == cashTypeValue)
+																	{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																				selected="@isCurrentOptionSelected">
+																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																		</option>
+																	}
+																	else if(tofromaccItem.cash_type == "TRN")
+																	{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																				selected="@(tofromaccItem ==  Item.tofromacc.First(item => item.cash_type == "TRN"))">
+																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																		</option>
+																	}else{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")">
+																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																		</option>
+																	}
+																}
+															}
+														</select>
+													</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขสมุด</label>
 												<RadzenMask Mask="**********" CharacterPattern="[0-9]" readonly
@@ -583,7 +656,7 @@ else
 												</div>
 												 @if (cashTypeValue == "CSH")
 											{
-												@if (recpPayTypeCode == "WTD")
+												@* @if (recpPayTypeCode == "WTD")
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
@@ -636,11 +709,11 @@ else
 															}
 														</select>
 													</div>
-												}
+												} *@
 											}
 											else if (cashTypeValue == "TRN" || Item.moneytype_code == "TRN")
 											{
-												@if (recpPayTypeCode == "WIB")
+												@* @if (recpPayTypeCode == "WIB")
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
@@ -695,7 +768,7 @@ else
 															}
 														</select>
 													</div>
-												}
+												} *@
 											}
 											else if (cashTypeValue == "CBT" || Item.moneytype_code == "CBT" || cashTypeValue == "CHQ" ||
 											Item.moneytype_code == "CHQ")
@@ -752,7 +825,7 @@ else
 													<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
 													@bind-value="bankaccount_name" />
 												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">รหัสคู่บัญชี</label>
 													 <select id="tofromaccSelect" class="form-select" value="@bookCode"
 													@onchange="OnToFromAccChanged">
@@ -765,15 +838,6 @@ else
 															<option selected disabled>--กรุณาเลือก--</option>
 															@foreach (var tofromaccItem in Item.tofromacc)
 															{ 
-																@* if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-																	{
-																	isCurrentOptionSelected = true;
-
-																	}
-																	else
-																	{
-																	isCurrentOptionSelected = false;
-																	} *@
 																@if (tofromaccItem.cash_type == cashTypeValue)
 																{
 																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
@@ -784,10 +848,9 @@ else
 															 }
 														}
 													</select>
-												</div>
+												</div> *@
 											}
-
-											else
+											@* else
 											{
 												@if (Item.moneytype_code == "CSH")
 												{
@@ -817,7 +880,7 @@ else
 														</select>
 													</div>
 												}
-											}
+											} *@
 
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">คงเหลือ</label>
@@ -882,19 +945,19 @@ else
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ คืน</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_return" value="@int_return" placeholder="0.00"/>
+													   Name="int_return" value="@Item.int_return" placeholder="0.00"/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ภาษี คืน</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="tax_return" value="@tax_return" placeholder="0.00" />
+													   Name="tax_return" value="@Item.tax_return" placeholder="0.00" />
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ สุทธิ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_netamt" value="@int_netamt" placeholder="0.00"  />
+													   Name="int_netamt" value="@Item.int_netamt" placeholder="0.00"  />
 
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -1111,7 +1174,7 @@ else
 									<RadzenTabs @bind-SelectedIndex=@selectedIndex>
 										<Tabs>
 											<RadzenTabsItem Text="รายละเอียดต้นเงิน">
-												<RadzenDataGrid @ref="grid" Data="@(deptSlipdetDetails)" AllowRowSelectOnRowClick="@allowRowSelectOnRowClick" AllowPaging="true" PageSize="10"AllowSorting="true"  TItem="Models.DeptSlipdet" SelectionMode="DataGridSelectionMode.Multiple" @bind-Value=@selectedEmployees  PagerHorizontalAlign="HorizontalAlign.Right" ShowPagingSummary="true" ColumnWidth="200px">
+												<RadzenDataGrid @ref="grid" Data="@(deptSlipdetDetails)" AllowRowSelectOnRowClick="@allowRowSelectOnRowClick" AllowPaging="true" PageSize="10"AllowSorting="true"   TItem="Models.DeptSlipdet" SelectionMode="DataGridSelectionMode.Multiple" @bind-Value=@selectedEmployees  PagerHorizontalAlign="HorizontalAlign.Right" ShowPagingSummary="true"  Style="width: 2500px;">
 												 <Columns>
 													@* <HeaderTemplate>
 														  <RadzenCheckBox TabIndex="-1" TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})"
@@ -1129,7 +1192,7 @@ else
 															}
 														})" />
 													</HeaderTemplate>	 *@
-													<RadzenDataGridColumn TItem="Models.DeptSlipdet" Width="4%" Property="select_flag" Sortable="false" Filterable="false">
+													<RadzenDataGridColumn TItem="Models.DeptSlipdet" Width="5%" Property="select_flag" Sortable="false" Filterable="false">
 												
 														<Template Context="data">
 																<RadzenCheckBox TabIndex="-1" @onclick="@(e => SummaryTotle(data))" TriState="false" Value="@(data.select_flag == 1)" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
@@ -1145,9 +1208,9 @@ else
 																	</RadzenCheckBox>
 															</Template>
 													</RadzenDataGridColumn>
-													<RadzenDataGridColumn Width="5%" TItem="Models.DeptSlipdet" Property="prnc_no" Title="ต้นเงิน">
+													<RadzenDataGridColumn Width="7%" TItem="Models.DeptSlipdet" Property="prnc_no" Title="ต้นเงิน">
 														<Template Context="data">
-															<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;"> @data.prnc_no</RadzenText>
+															<RadzenText  @onclick="@(e => SummaryTotle(data))"> @data.prnc_no</RadzenText>
 														</Template>
 													</RadzenDataGridColumn>
 													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="prnc_bal" Title="ต้นเงินคงเหลือ	">
@@ -1156,7 +1219,7 @@ else
 																<RadzenText  @onclick="@(e => SummaryTotle(data))" Style="text-align: end;"> @data.prnc_bal?.ToString("#,##0.00")</RadzenText>
 															</Template>
 													</RadzenDataGridColumn>	
-													<RadzenDataGridColumn Width="10%" TItem="Models.DeptSlipdet" Property="prncslip_amt" Title="ยอดเงินทำรายการ">
+													<RadzenDataGridColumn Width="12%" TItem="Models.DeptSlipdet" Property="prncslip_amt" Title="ยอดเงินทำรายการ">
 														<Template Context="data">
 															<div @onchange="@(e => SummaryTotle(data))">
 																@if(data.select_flag == 1)
@@ -1325,13 +1388,13 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ทำรายการ</label>
 												<select id="recppaytypeSelect" @bind="group_itemtype" name="group_itemtype" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled class="form-select">
 													<option selected value="WID">(-) ถอน</option>
 													<option value="CLS">(/) ปิดบัญชี</option>
 												</select>
-											</div>
+											</div> *@
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รายการ</label>
 												<div class="form-group ">
@@ -1367,7 +1430,29 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">รหัสคู่บัญชี</label>
+												<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+													@if (Item.tofromacc == null || !Item.tofromacc.Any())
+													{
+														<option selected disabled></option>
+													}
+													else
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+														@foreach (var tofromaccItem in Item.tofromacc)
+														{
+															@if (tofromaccItem.cash_type == cashTypeValue)
+															{
+																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"selected="@isCurrentOptionSelected">
+																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																</option>
+															}
+														}
+													}
+												</select>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">วันที่</label>
 												<div class="form-group ">
 													<div class="label-group">
@@ -1452,7 +1537,7 @@ else
 											</div>
 											@if (cashTypeValue == "CSH")
 											{
-												@if (recpPayTypeCode == "WTD")
+												@* @if (recpPayTypeCode == "WTD")
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
@@ -1513,11 +1598,11 @@ else
 															</div>
 														</div>
 													</div>
-												}
+												} *@
 											}
 											else if (cashTypeValue == "TRN" || Item.moneytype_code == "TRN")
 											{
-												@if (recpPayTypeCode == "WIB")
+												@* @if (recpPayTypeCode == "WIB")
 												{
 													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 														<label class="form-label" for="">รหัสคู่บัญชี</label>
@@ -1580,7 +1665,7 @@ else
 															</div>
 														</div>
 													</div>
-												}
+												} *@
 											}
 											else if (cashTypeValue == "CBT" || Item.moneytype_code == "CBT" || cashTypeValue == "CHQ" ||
 											Item.moneytype_code == "CHQ")
@@ -1639,7 +1724,7 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">รหัสคู่บัญชี</label>
 													<div class="form-group ">
 														<div class="input-group">
@@ -1666,10 +1751,10 @@ else
 															</select>
 														</div>
 													</div>
-												</div>
+												</div> *@
 											}
 
-											else
+											@* else
 											{
 												@if (Item.moneytype_code == "CSH")
 												{
@@ -1697,13 +1782,13 @@ else
 																				</option>
 																			}
 																		}
-																	}
+																	} 
 																</select>
 															</div>
 														</div>
 													</div>
 												}
-											}
+											}*@
 
 											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">คงเหลือ</label>
@@ -2128,6 +2213,9 @@ else
 								</RadzenDataGridColumn>
 								<RadzenDataGridColumn  Width="13%" TItem="Models.Statement_list" Title="วันที่"
 													  Property="operate_date">
+													  <Template Context="data">
+														<div style="text-align: center;">@data.operate_date?.ToString("dd/MM/yyyy")</div>
+													  </Template>
 								</RadzenDataGridColumn>
 								<RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="รายการ"
 													  Property="deptitemtype_code">
@@ -2159,7 +2247,7 @@ else
 			</RadzenSteps>
 		</div>
 	</div>
-}
+@* } *@
 
 <script>
 	$(document).ready(function () {
@@ -2231,11 +2319,22 @@ else
 	}
 	  private async Task PrintPdf()
     {
-        // รับ HTML จาก GetPdfData()
+		try{ // รับ HTML จาก GetPdfData()
+		slipLoading = true;
         string htmlData = await GetPdfData();
 		@* Console.WriteLine(htmlData); *@
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printPdf", htmlData); 
+		}catch(Exception ex)
+		{
+		Console.WriteLine(ex.Message);
+			slipLoading=false;
+
+		}finally{
+			slipLoading=false;
+			StateHasChanged();
+		}
+       
 
     }
 private async Task<string> GetPdfData()
@@ -2260,10 +2359,21 @@ private async Task<string> GetPdfData()
 	}
 	private async Task PrintBook_()
     {
+			try{ // รับ HTML จาก GetPdfData()
+		printLoading = true;
         // รับ HTML จาก GetPdfData()
         string htmlData = await GetPrintBookData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
+		}catch(Exception ex)
+		{
+		Console.WriteLine(ex.Message);
+			printLoading=false;
+
+		}finally{
+			printLoading=false;
+			StateHasChanged();
+		}
     }
 	 private async Task<string> GetPrintBookData()
     {
