@@ -14,6 +14,8 @@
 @using System.Text.Json
 @using System.ComponentModel
 @using System.ComponentModel.DataAnnotations
+@inject Services.Api_Provider ApiProvider
+
 
 <style>
 	.icon-search {
@@ -130,7 +132,7 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="modal" id="ModalSearch">
+											<div class="modal" tabindex="-1" id="ModalSearch">
 												<div class="modal-dialog modal-xl">
 													<div class="modal-content">
 														<!-- Modal Header -->
@@ -180,7 +182,7 @@ else
 																</div>
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">สถานะบัญชี</label>
-																	<select class="form-select" @bind="deptclose_status" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	<select class="form-select" @bind="deptclose_status">
 																		<option Value="0">เปิดบัญชี</option>
 																		<option Value="1">ปิดบัญชี</option>
 																	</select>
@@ -250,7 +252,7 @@ else
 																</div>
 															</div>
 															<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
-																			ColumnWidth="200px" AllowFiltering="true"
+																			ColumnWidth="100%" AllowFiltering="true"
 																			FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																			FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																			AllowPaging="true" AllowSorting="true"
@@ -350,7 +352,7 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="modal" id="anotherModal">
+												<div class="modal" tabindex="-1" id="anotherModal">
 													<div class="modal-dialog modal-xl">
 														<div class="modal-content">
 															<!-- Modal Header -->
@@ -471,7 +473,7 @@ else
 																	</div>
 																</div>
 																<RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
-																				ColumnWidth="200px" AllowFiltering="true"
+																				ColumnWidth="100%" AllowFiltering="true"
 																				FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																				FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																				AllowPaging="true" AllowSorting="true"
@@ -590,6 +592,15 @@ else
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var tofromaccItem in Item.tofromacc)
 																{
+																	if (tofromaccItem.cash_type == Item.moneytype_code)
+																	{
+																		isOptionSelected = true;
+
+																	}
+																	else
+																	{
+																		isOptionSelected = false;
+																	}
 																	@if (tofromaccItem.cash_type == cashTypeValue)
 																	{
 																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
@@ -597,17 +608,18 @@ else
 																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 																		</option>
 																	}
-																	else if(tofromaccItem.cash_type == "TRN")
+																	else if(tofromaccItem.cash_type == Item.moneytype_code)
 																	{
 																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@(tofromaccItem ==  Item.tofromacc.First(item => item.cash_type == "TRN"))">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
-																	}else{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")">
+																			>
 																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 																		</option>
 																	}
+																	else{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")" selected="@isOptionSelected">
+																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																		</option>
+																	} 
 																}
 															}
 														</select>
@@ -799,10 +811,14 @@ else
 													<div class="form-group ">
 														<div class="input-group">
 															<input class="format-money form-control" type="text"
-																   style="text-align: center; width: 30%;" name="bank_code" value="@bankbranch_code"
-															@oninput="OnBankBranchChanged" />
-															<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
-																	style="width: 70%;">
+																   style="text-align: center; width: 30%;" disabled="@(bankBranch == null)" name="bank_code" value="@bankbranch_code"
+															@oninput="OnBankBranchChanged" />	
+															@if(bankBranch ==null){
+																<select id="getBankSelect" disabled class="form-select" style="width: 70%;">
+																	<option value=""></option>
+																</select>
+																}else{
+																<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged" style="width: 70%;">
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var bankBranchItem in bankBranch)
 																{
@@ -811,7 +827,9 @@ else
 																		@bankBranchItem.branch_id - @bankBranchItem.branch_name
 																	</option>
 																}
-															</select>
+																</select>
+																}
+															
 														</div>
 													</div>
 												</div>
@@ -904,6 +922,23 @@ else
 												<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
 												@bind-value="checkpend_amt" />
 											</div>
+											@if(recpPayTypeCode == "WTE"||recpPayTypeCode == "WBK"||Item.recppaytype_code == "WTE"||Item.recppaytype_code == "WBK"){
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">การหักค่าธรรมเนียม</label>
+												<select class="form-select" @bind="Item.payfee_meth" >
+													<option Value="0">เลือก</option>
+													<option Value="1">ชำระเป็นเงินสด</option>
+													<option Value="2">ชำระหักจากยอดถอน</option>
+													<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
+													<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
+												</select>
+											</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ค่าธรรมเนียม</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
+												@bind-value="Item.fee_amt" />
+											</div>
+											}
 										</div>
 										<div class="row">
 											@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -1129,6 +1164,9 @@ else
 																			</td>
 																			<td>
 																				<select class="form-select">
+																						@if(bankBranch ==null){
+																<option selected disabled>--กรุณาเลือก--</option>
+																}else{
 																					<option selected disabled>--กรุณาเลือก--</option>
 																					@foreach (var bankBranchItem in bankBranch)
 																					{
@@ -1138,6 +1176,7 @@ else
 																								selected="@isCurrentOptionSelected">
 																							@bankBranchItem.branch_id - @bankBranchItem.branch_name
 																						</option>
+																					}
 																					}
 																				</select>
 																			</td>
@@ -1702,13 +1741,16 @@ else
 													<div class="form-group ">
 														<div class="input-group">
 															<select id="getBankSelect" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url() " disabled>
+																@if(bankBranch ==null){
 																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var bankBranchItem in bankBranch)
-																{
-																	bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
-																	<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
-																		@bankBranchItem.branch_id - @bankBranchItem.branch_name
-																	</option>
+																}else{
+																	@foreach (var bankBranchItem in bankBranch)
+																	{
+																		bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
+																		<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
+																			@bankBranchItem.branch_id - @bankBranchItem.branch_name
+																		</option>
+																	}
 																}
 															</select>
 														</div>
@@ -2201,7 +2243,7 @@ else
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
-							<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
+							<RadzenButton class="save_top" Icon="print" Text="@((printLoading ? "พิมพ์..." : "พิมพ์ Book"))" Click="@PrintBook_" />
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
@@ -2487,23 +2529,28 @@ private async Task<string> GetPdfData()
 	{
 		BankBranchValues = e.Value.ToString();
 	}
-	private void OnBankBranchSelectChanged(ChangeEventArgs e)
+	private async Task OnBankBranchSelectChanged(ChangeEventArgs e)
 	{
 		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
 		bankbranch_code = e.Value.ToString();
 		BankBranchValues = bankbranch_code;
+		Console.WriteLine(bankbranch_code);
 	}
 	private async Task OnGetBankChanged(ChangeEventArgs e)
 	{
 		BankValues = e.Value.ToString();
 		Console.WriteLine($"BankValues: {BankValues}");
+		await BankBranch();
+        await InvokeAsync(() => StateHasChanged());
 	}
-	private void OnGetBankSelectChanged(ChangeEventArgs e)
+	private async Task OnGetBankSelectChanged(ChangeEventArgs e)
 	{
 		// กำหนดค่าที่ถูกเลือกใน <select> ให้กับ row.bank_code
 		bank_code = e.Value.ToString();
 		Console.WriteLine($"BankValues: {bank_code}");
 		BankValues = bank_code;
+		await BankBranch();
+        await InvokeAsync(() => StateHasChanged());
 
 	}
 @* } *@

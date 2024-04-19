@@ -45,8 +45,10 @@ builder.Services.AddScoped<NotificationService>();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<StateContainer>();
 
+
 // Register API provider service
 builder.Services.AddHttpClient<IApiProvider, ApiProvider>();
+builder.Services.AddScoped<Api_Provider>();
 
 //SessionStorage
 builder.Services.AddBlazoredSessionStorage();

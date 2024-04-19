@@ -83,6 +83,7 @@ namespace FinanceApp.Models
         public int? spcint_rate_status { get; set; }
         public decimal? spcint_rate { get; set; }
         public decimal? deptslipAmt { get; set; }
+        public int? payfee_meth { get; set; }
 
 
     }
@@ -269,8 +270,8 @@ namespace FinanceApp.Models
         public string? print_code { get; set; }
         public int? prnc_no { get; set; }
         public int? tax_amt { get; set; }
-        public decimal? accuint_amt { get; set; }
-        public decimal? int_amt { get; set; }
+        public decimal accuint_amt { get; set; }
+        public decimal int_amt { get; set; }
         public int? printbook_status { get; set; }
         public string? deptslip_no { get; set; }
         public int? deptitem_amt { get; set; }

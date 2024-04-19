@@ -19,7 +19,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
 {
     public partial class DepCloseacc
     {
-        private readonly IApiProvider _apiProvider;
+        [Inject]
+        public Api_Provider ApiProvider { get; set; }
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
         public List<Models.Deposit> datadetail;
@@ -152,8 +153,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
         public string? membgroup_desc { get; set; }
         public string? deptitem_group { get; set; }
         public int? reqappl_flag { get; set; }
-
-
+        public decimal? sumpb_intnat { get; set; }
         /// </summary>        
         private bool isLoading;
         private bool saveLoading;
@@ -224,7 +224,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
         //             Console.WriteLine($"depOfGetAccount{json}");
         //             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPrintSlip}";
         //             Console.WriteLine($"apiUrl {apiUrl}");
-        //             var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+        //             var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
 
         //             Console.WriteLine(response.IsSuccessStatusCode);
         //             if (response.IsSuccessStatusCode)
@@ -267,7 +267,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
                 Console.WriteLine("IsSuccessStatusCode : " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
@@ -295,7 +295,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
                 // var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}");
                 // response.EnsureSuccessStatusCode();
@@ -323,7 +323,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -568,13 +568,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                     deptno_format = data.deptaccount_no,
                     entry_date = null,
                     deptitem_group = deptitem_group ?? "CLS",
-                
+
                 };
                 var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(jsonReq);
                 var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                 // var response = await httpClient.PostAsync(apiUrl, content);
 
                 response.EnsureSuccessStatusCode();
@@ -633,7 +633,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -709,9 +709,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 // var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
                 // var response = await httpClient.PostAsync(apiUrl, content);
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
@@ -853,7 +853,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetAccountSaving}";
             try
             {
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -909,7 +909,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                         lastline_no = item.lastline_no,
                     };
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
-                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                     Console.WriteLine($"response.IsSuccessStatusCode:{response.IsSuccessStatusCode}");
                     if (response.IsSuccessStatusCode)
                     {
@@ -939,49 +939,6 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
             }
         }
 
-        private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
-        {
-            try
-            {
-                string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-
-                    var json = JsonConvert.SerializeObject(payload);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
-                    return await httpClient.PostAsync(apiUrl, content);
-                }
-            }
-            catch (Exception ex)
-            {
-                // จัดการ Exception ตามความเหมาะสม
-                Console.WriteLine($"Error: {ex.Message}");
-                throw;
-            }
-        }
-        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
-        {
-            try
-            {
-                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-
-                    return await httpClient.GetAsync(apiUrl);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions here
-                Console.WriteLine($"Error: {ex.Message}");
-                throw;
-            }
-        }
         public class PrintBookResponse
         {
             public bool success { get; set; }
@@ -1240,7 +1197,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
         //             // var responseData = await response.Content.ReadAsStringAsync();
         //             // Console.WriteLine("JsonData:" + responseData);
         //             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostWithSaving}";
-        //             var response = await SendApiRequestAsync(apiUrl, Deposit);
+        //             var response = await ApiProvider.SendApiRequestAsync(apiUrl, Deposit);
         //             var responseData = await response.Content.ReadAsStringAsync();
 
         //             if (response.IsSuccessStatusCode)
@@ -1296,9 +1253,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                             calint_to = item.deptSlipdet.FirstOrDefault()?.calint_to ?? DateTime.Now,
                             deptSlipdet = DeptSlipdet,
                         };
+                        Console.WriteLine("deptDeposit: " + Newtonsoft.Json.JsonConvert.SerializeObject(deptDeposit));
                         var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfCalIntPrncfix}";
                         Console.WriteLine("deptDeposit: " + Newtonsoft.Json.JsonConvert.SerializeObject(deptDeposit));
-                        var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+                        var response = await ApiProvider.SendApiRequestAsync(apiUrl, deptDeposit);
                         var responseData = await response.Content.ReadAsStringAsync();
 
                         if (response.IsSuccessStatusCode)
@@ -1392,7 +1350,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                     };
 
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostWithSaving}";
-                    var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, deptDeposit);
                     var responseData = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
@@ -1518,8 +1476,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                 laststmseq_no = item.deptSlip.laststmseq_no,
                 nobook_flag = nobook_flag ?? 0,
                 prnc_no = item.deptSlip.prnc_no,
-                deptslip_amt = deptslipAmt,
-                deptslip_netamt = deptslipAmt,
+                deptslip_amt = (deptslipAmt == null || deptslipAmt == 0) ? sumpb_intnat : deptslipAmt,
+                deptslip_netamt = (deptslipAmt == null || deptslipAmt == 0) ? sumpb_intnat : deptslipAmt,
                 fee_amt = item.deptSlip.fee_amt,
                 oth_amt = item.deptSlip.oth_amt,
                 intbonus_amt = item.deptSlip.intbonus_amt,

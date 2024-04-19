@@ -22,6 +22,9 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
     {
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
+        // [Inject]
+        // public Api_Provider ApiProvider { get; set; }
+
         public string? coop_id { get; set; }
         public int? reqappl_flag = 0;
         public string? deptcoop_id { get; set; }
@@ -125,6 +128,13 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         private int currentStep = 0;
         public string? SaveStatus { get; set; }
         public string? coop_control { get; set; }
+        public string deptMaintype { get; set; }
+
+        public string? deptaccount_No_fild { get; set; }
+        public string? deptaccountNo_fild { get; set; }
+        public string? deptaccount_name_fild { get; set; }
+        public int deptclose_status { get; set; }
+
         int sequence = 1;
         void ShowNotification(NotificationMessage message)
         {
@@ -134,6 +144,9 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         public List<Statement>? dataStatementList { get; set; }
         public IEnumerable<Models.Statement> statementDetails { get; set; }
         private RadzenDataGrid<Models.Statement> grid;
+
+        public List<GetDeptMaintype>? getDeptMaintype { get; set; }
+        private List<AccountDetails> depOfGetAccDetails;
 
         private int PageSize = 10;
 
@@ -260,7 +273,15 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 isLoading = false;
             }
         }
-
+        private async Task DeptMaintype(ChangeEventArgs e)
+        {
+            deptMaintype = e.Value.ToString();
+            if (deptMaintype == "null")
+            {
+                deptMaintype = null;
+            }
+            Console.WriteLine($"Depttype Code: {deptMaintype}");
+        }
         private async Task DepttypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
@@ -268,6 +289,118 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             depttype_code = values[1];
             Console.WriteLine($"Recp Pay Type Code: {DepttypeValue},Depttype Code: {depttype_code}");
         }
+
+        private async Task GetDeptMaintype()
+        {
+            try
+            {
+                // ดึงข้อมูลผู้ใช้
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
+                response.EnsureSuccessStatusCode();
+                Console.WriteLine("IsSuccessStatusCode : " + response.IsSuccessStatusCode);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var GetDeptMaintype = JsonConvert.DeserializeObject<List<GetDeptMaintype>>(json);
+                    getDeptMaintype = new List<GetDeptMaintype>();
+                    getDeptMaintype.AddRange(GetDeptMaintype);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine(ex.Message.ToString());
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
+        // private async void UpdateAccountDetails(Models.AccountDetails data)
+        // {
+        //     try
+        //     {
+        //         isLoading = true;
+        //         deptno_format = data.deptaccount_no?.Trim();
+        //         Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
+        //         await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+        //         var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
+        //         var response = await SendApiRequestAsyncGet(apiUrl);
+        //         response.EnsureSuccessStatusCode();
+        //         var jsonRes = await response.Content.ReadAsStringAsync();
+        //         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonRes);
+        //         if (response.IsSuccessStatusCode)
+        //         {
+        //             if (apiResponse.success)
+        //             {
+        //                 var content = apiResponse.content;
+        //                 datadetails = new List<DataStatement> { apiResponse.content };
+        //                 var statements = content.statement;
+
+        //                 var dataStatementList = ProcessStatements(statements);
+        //                 statementDetails = dataStatementList;
+        //             }
+        //             else
+        //             {
+        //                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+        //             }
+        //         }
+        //     }
+        //     catch (Exception ex)
+        //     {
+        //         Console.WriteLine($"An error occurred: {ex.Message}");
+        //     }
+        //     finally
+        //     {
+        //         isLoading = false;
+        //     }
+        // }
+        private async Task UpdateAccountDetails(Models.AccountDetails data)
+        {
+            try
+            {
+                isLoading = true;
+                deptno_format = data.deptaccount_no?.Trim();
+                Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
+
+                // Show notification instead of using JavaScript alert
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Success", Detail = $"เลือก {data.deptaccount_no}, {data.deptaccount_name}", Duration = 2000 });
+                await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
+                response.EnsureSuccessStatusCode();
+                var jsonRes = await response.Content.ReadAsStringAsync();
+                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(jsonRes);
+                if (response.IsSuccessStatusCode)
+                {
+                    if (apiResponse.success)
+                    {
+                        var content = apiResponse.content;
+                        datadetails = new List<DataStatement> { apiResponse.content };
+                        var statements = content.statement;
+
+                        var dataStatementList = ProcessStatements(statements);
+                        statementDetails = dataStatementList;
+                    }
+                    else
+                    {
+                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
+
         private bool table;
         private async Task PerformSearch()
         {
@@ -293,8 +426,8 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
-                var response = await SendApiRequestAsyncGet(apiUrl);
-                if (response.IsSuccessStatusCode)
+                // var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 {
                     // อ่าน response string
                     var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -308,6 +441,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
 
                         var dataStatementList = ProcessStatements(statements);
                         statementDetails = dataStatementList;
+                        await GetDeptMaintype();
                     }
                     else
                     {
@@ -377,97 +511,64 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         }
         private async Task SearchOfGetAcc()
         {
-            string memberNo_fild = null;
-
-            if (member_No_fild != null)
+            isLoadingModals = true;
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+            var depOfGetAccount = new AccountDetails
             {
-                string[] memberNoDtails = member_No_fild.ToString().Split('-');
-                string firstPart = memberNoDtails[0];
-                string secondPart = memberNoDtails[1];
-                memberNo_fild = firstPart + secondPart;
-            }
-
+                coop_id = coop_id,
+                memcoop_id = coop_id,
+                deptaccount_no = deptaccount_No_fild,
+                deptaccount_name = deptaccount_name_fild,
+                member_no = member_no,
+                depttype_code = deptMaintype,
+                deptclose_status = deptclose_status,
+                memb_name = memb_name,
+                memb_surname = memb_surname,
+                card_person = card_person,
+                mem_telmobile = mem_telmobile,
+                full_name = full_name,
+                salary_id = salary_id,
+                entry_date = entry_date ?? null
+            };
+            var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetAccountSaving}";
             try
             {
-                isLoadingModals = true;
-                var depOfGetAccount = new AccountDetails
-                {
-                    coop_id = "065001",
-                    memcoop_id = "065001",
-                    deptaccount_no = memberNo_fild,
-                    member_no = member_no,
-                    depttype_code = depttype_code,
-                    salary_id = salary_id,
-                };
-                var json = JsonConvert.SerializeObject(depOfGetAccount);
-                // Console.WriteLine(json);
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{Paths.DepOfGetAccountSaving}";
-                var response = await httpClient.PostAsync(apiUrl, content);
+                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
 
-                Console.WriteLine(response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
                 {
-                    // อ่าน response string
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var jsonResponse1 = JObject.Parse(jsonResponse);
+                    depOfGetAccDetails = jsonResponse1["content"].ToObject<List<AccountDetails>>();
                 }
                 var accountDetailsList = new List<Models.AccountDetails>();
+                if (depOfGetAccDetails != null)
+                {
+                    foreach (var accDetails in depOfGetAccDetails)
+                    {
+                        var accountDetails = new Models.AccountDetails
+                        {
+                            deptaccount_no = accDetails.deptaccount_no,
+                            deptaccount_name = accDetails.deptaccount_name,
+                            member_no = accDetails.member_no,
+                            full_name = accDetails.full_name
+                        };
+                        accountDetailsList.Add(accountDetails);
+                    }
+                }
+                // Assign the list to dataaccDetails
+                dataaccDetails = accountDetailsList;
+
+                // รายละเอียดอื่น ๆ ที่คุณต้องการทำ
             }
             catch (Exception ex)
             {
-                // ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
                 Console.WriteLine(ex.Message.ToString());
             }
             finally
             {
                 isLoadingModals = false;
-            }
-
-        }
-        private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
-        {
-            try
-            {
-                string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-
-                    var json = JsonConvert.SerializeObject(payload);
-                    Console.WriteLine($"response: {payload}");
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    // Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
-
-                    return await httpClient.PostAsync(apiUrl, content);
-                }
-            }
-            catch (Exception ex)
-            {
-                // จัดการ Exception ตามความเหมาะสม
-                Console.WriteLine($"Error: {ex.Message}");
-                throw;
-            }
-        }
-        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
-        {
-            try
-            {
-                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-
-                    return await httpClient.GetAsync(apiUrl);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions here
-                Console.WriteLine($"Error: {ex.Message}");
-                throw;
             }
         }
         public async Task SaveDataAsync()

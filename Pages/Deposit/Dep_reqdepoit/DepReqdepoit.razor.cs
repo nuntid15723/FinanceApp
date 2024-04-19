@@ -21,6 +21,9 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
+        [Inject]
+        public Api_Provider ApiProvider { get; set; }
+
         public string? coop_id { get; set; }
         public int? reqappl_flag = 0;
         public string? deptcoop_id { get; set; }
@@ -185,7 +188,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         //             Console.WriteLine($"depOfGetAccount{json}");
         //             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPrintSlip}";
         //             Console.WriteLine($"apiUrl {apiUrl}");
-        //             var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+        //             var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
 
         //             Console.WriteLine(response.IsSuccessStatusCode);
         //             if (response.IsSuccessStatusCode)
@@ -235,7 +238,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             try
             {
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -262,7 +265,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             try
             {
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -402,7 +405,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 Console.WriteLine(json);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitOpenAccount}";
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                 response.EnsureSuccessStatusCode();
                 Console.WriteLine(response.IsSuccessStatusCode);
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -532,7 +535,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetMemberOpenAccount}";
             try
             {
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -685,7 +688,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     membcat_code = "10"
                 };
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitOpenAccount}";
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                 Console.WriteLine($"IsSuccessStatusCode {response.IsSuccessStatusCode}");
                 if (response.IsSuccessStatusCode)
                 {
@@ -734,7 +737,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 // var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDeptPassbook}";
                 // var response = await httpClient.PostAsync(apiUrl, content);
-                var response = await SendApiRequestAsync(apiUrl, depOfGetBookNo);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetBookNo);
 
                 response.EnsureSuccessStatusCode();
                 Console.WriteLine(response.IsSuccessStatusCode);
@@ -886,7 +889,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     // var responseData = await response.Content.ReadAsStringAsync();
                     // Console.WriteLine("JsonData:" + responseData);
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostOpenAccount}";
-                    var response = await SendApiRequestAsync(apiUrl, Reqdepoit);
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, Reqdepoit);
                     var responseData = await response.Content.ReadAsStringAsync();
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     var Response = JsonConvert.DeserializeObject<SaveResponse>(responseData);
@@ -991,7 +994,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         lastline_no = item.lastline_no,
                     };
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
-                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                     Console.WriteLine($"response.IsSuccessStatusCode:{response.IsSuccessStatusCode}");
                     if (response.IsSuccessStatusCode)
                     {

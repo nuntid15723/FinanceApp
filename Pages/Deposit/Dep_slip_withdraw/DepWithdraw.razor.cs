@@ -19,9 +19,11 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 {
     public partial class DepWithdraw
     {
-        private readonly IApiProvider _apiProvider;
         [Inject]
         public IJSRuntime JSRuntime { get; set; }
+        // [Inject]
+        // public Api_Provider ApiProvider { get; set; }
+
         public List<Models.Deposit> datadetail;
         private List<Recppaytype> recppaytype;
         private List<Tofromacc> tofromacc;
@@ -58,7 +60,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public int? prnc_no { get; set; }
         public decimal? deptslip_amt { get; set; }
         public decimal? deptslip_netamt { get; set; }
-        public decimal? fee_amt { get; set; }
+        public decimal? fee_amt { get; set; } = 5.00m;
         public decimal? oth_amt { get; set; }
         public decimal? prncbal { get; set; }
         public decimal? withdrawable_amt { get; set; }
@@ -97,6 +99,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         // public int? int_return { get; set; }
         // public int? tax_return { get; set; }
         public decimal? int_netamt { get; set; }
+        public int? payfee_meth { get; set; }
+
 
         /// < deptSlipdet>  
         public decimal? prnc_bal { get; set; }
@@ -180,6 +184,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public List<Print_book>? printbook_data { get; set; }
         public List<Row_detail>? rowdatadetail { get; set; }
         private bool allowRowSelectOnRowClick = false;
+        public bool isOptionSelected;
         // public IEnumerable<DeptSlipdet> deptSlipdetDetails { get; set; }
         public List<DeptSlipdet> deptSlipdetDetails { get; set; } = new List<DeptSlipdet>();
         IList<DeptSlipdet> selectedEmployees;
@@ -267,7 +272,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
                 Console.WriteLine("IsSuccessStatusCode : " + response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
@@ -295,15 +300,17 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
                 // var response = await httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBank}?coop_control={coop_id}");
                 // response.EnsureSuccessStatusCode();
-
-                var json = await response.Content.ReadAsStringAsync();
-                var GetBank = JsonConvert.DeserializeObject<List<GetBank>>(json);
-                getBank = new List<GetBank>();
-                getBank.AddRange(GetBank);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var GetBank = JsonConvert.DeserializeObject<List<GetBank>>(json);
+                    getBank = new List<GetBank>();
+                    getBank.AddRange(GetBank);
+                }
             }
             catch (Exception ex)
             {
@@ -315,15 +322,15 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 isLoading = false;
             }
         }
-        private string bank_code_fild;
         private async Task BankBranch()
         {
             try
             {
+                Console.WriteLine($"BankValues: {BankValues}");
                 // ดึงข้อมูลผู้ใช้
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code=006";
-                var response = await SendApiRequestAsyncGet(apiUrl);
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetBankBranch}?coop_control={coop_id}&bank_code={BankValues}";
+                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
 
                 var json = await response.Content.ReadAsStringAsync();
@@ -552,7 +559,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         //RetriveDataFromDeptNo
         private async void UpdateAccountDetails(Models.AccountDetails data)
         {
-          
+
             try
             {
                 isLoading = true;
@@ -560,7 +567,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 deptno_format = data.deptaccount_no?.Trim();
                 Console.WriteLine($"Clicked on coop_id: {coop_id}");
                 Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
-                await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+                // await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Success", Detail = $"เลือก {data.deptaccount_no}, {data.deptaccount_name}", Duration = 2000 });
+
                 var depOfGetAccount = new DepOfInitDataOffline
                 {
                     coop_id = coop_id,
@@ -572,8 +581,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 var jsonReq = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(jsonReq);
                 var content = new StringContent(jsonReq, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                 // var response = await httpClient.PostAsync(apiUrl, content);
 
                 response.EnsureSuccessStatusCode();
@@ -583,23 +592,24 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 {
                     datadetail = new List<Models.Deposit> { apiResponse.data };
                     await GetBank();
-                    await BankBranch();
                     await GetDeptMaintype();
-                    StateHasChanged();
+                    await InvokeAsync(() => StateHasChanged());
                     Console.WriteLine($"API request failed: {datadetail}");
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
-            }finally{
+            }
+            finally
+            {
                 isLoading = false;
             }
         }
         private void AnotherFunction()
         {
             GetBank();
-            BankBranch();
+            // BankBranch();
             GetDeptMaintype();
 
         }
@@ -631,7 +641,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     var json = JsonConvert.SerializeObject(depOfGetAccount);
                     Console.WriteLine(json);
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
                     var response = await httpClient.PostAsync(apiUrl, content);
 
                     Console.WriteLine(response.IsSuccessStatusCode);
@@ -707,9 +717,10 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 var json = JsonConvert.SerializeObject(depOfGetAccount);
                 Console.WriteLine(json);
                 // var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDataOffline}";
+                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
                 // var response = await httpClient.PostAsync(apiUrl, content);
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
+                // var response = await ApiProvider.ApiProvider.SendApiRequestAsyncGet(apiUrl);
 
                 Console.WriteLine(response.IsSuccessStatusCode);
                 if (response.IsSuccessStatusCode)
@@ -776,7 +787,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
 
                         }
                         await GetBank();
-                        await BankBranch();
+                        // await BankBranch();
                         await GetDeptMaintype();
                     }
                     else
@@ -851,7 +862,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetAccountSaving}";
             try
             {
-                var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -907,7 +918,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         lastline_no = item.lastline_no,
                     };
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
-                    var response = await SendApiRequestAsync(apiUrl, depOfGetAccount);
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                     Console.WriteLine($"response.IsSuccessStatusCode:{response.IsSuccessStatusCode}");
                     if (response.IsSuccessStatusCode)
                     {
@@ -935,52 +946,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
                 Console.WriteLine(ex.Message.ToString());
             }
-        }
-
-        private async Task<HttpResponseMessage> SendApiRequestAsync<T>(string apiUrl, T payload)
-        {
-            try
-            {
-                string bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-
-                    var json = JsonConvert.SerializeObject(payload);
-                    var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
-                    return await httpClient.PostAsync(apiUrl, content);
-                }
-            }
-            catch (Exception ex)
-            {
-                // จัดการ Exception ตามความเหมาะสม
-                Console.WriteLine($"Error: {ex.Message}");
-                throw;
-            }
-        }
-        private async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
-        {
-            try
-            {
-                var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
-
-                using (var httpClient = new HttpClient())
-                {
-                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
-
-                    return await httpClient.GetAsync(apiUrl);
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions here
-                Console.WriteLine($"Error: {ex.Message}");
-                throw;
-            }
-        }
-        public class PrintBookResponse
+        }        public class PrintBookResponse
         {
             public bool success { get; set; }
             public Print_book content { get; set; }
@@ -1296,7 +1262,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         };
                         var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfCalIntPrncfix}";
                         Console.WriteLine("deptDeposit: " + Newtonsoft.Json.JsonConvert.SerializeObject(deptDeposit));
-                        var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+                        var response = await ApiProvider.SendApiRequestAsync(apiUrl, deptDeposit);
                         var responseData = await response.Content.ReadAsStringAsync();
 
                         if (response.IsSuccessStatusCode)
@@ -1390,7 +1356,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     };
 
                     var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostWithSaving}";
-                    var response = await SendApiRequestAsync(apiUrl, deptDeposit);
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, deptDeposit);
                     var responseData = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
@@ -1414,21 +1380,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                                         foreach (var statement in printbookData.statement_list)
                                         {
                                             var deptaccountNo = statement.deptaccount_no.Replace(" ", "");
-                                            DateTime operatedate = statement.operate_date.GetValueOrDefault(DateTime.MinValue);
-                                            string operatedate_TH = operatedate.ToString("dd/MM/yyyy", new CultureInfo("th-TH"));
-                                            DateTime? operate_date_TH = null;
-                                            if (DateTime.TryParseExact(operatedate_TH, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-                                            {
-                                                operate_date_TH = parsedDate;
-                                            }
-                                            Console.WriteLine($"deptaccount_noo :{deptaccountNo}");
                                             var statementDetails = new Models.Statement_list
                                             {
                                                 coop_id = statement.coop_id,
                                                 deptaccount_no = deptaccountNo,
                                                 seq_no = statement.seq_no,
                                                 deptitemtype_code = statement.deptitemtype_code,
-                                                operate_date = operate_date_TH,
+                                                operate_date = statement.operate_date,
                                                 entry_date = statement.entry_date,
                                                 prncbal = statement.prncbal,
                                                 entry_id = statement.entry_id,
@@ -1557,6 +1515,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 reqappl_flag = item.deptSlip.reqappl_flag,
                 spcint_rate_status = item.deptSlip.spcint_rate_status,
                 spcint_rate = item.deptSlip.spcint_rate,
+                payfee_meth = item.deptSlip.payfee_meth,
             };
             // string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
             // Console.WriteLine(json);

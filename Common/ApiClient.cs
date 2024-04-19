@@ -22,7 +22,7 @@ public static class ApiClient
         public const string OfGetCoopid = "Login/OfGetCoopid";
 
         //deposit
-        public const string DepOfInitDataOffline = "Deposit/DepOfInitDataOffline";
+        public const string DepOfInitDataOffline = "DepOfInitDataOffline";
         public const string DepOfGetAccountSaving = "Deposit/DepOfGetAccountSaving";
         public const string DepOfPostDeptSaving = "Deposit/DepOfPostDeptSaving";
         public const string DepOfPostWithSaving = "Deposit/DepOfPostWithSaving";

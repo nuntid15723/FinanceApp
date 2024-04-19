@@ -165,7 +165,7 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="modal" id="ModalSearch">
+												<div class="modal" tabindex="-1" id="ModalSearch">
 													<div class="modal-dialog modal-xl">
 														<div class="modal-content">
 															<!-- Modal Header -->
@@ -241,13 +241,13 @@ else
 																		<button class="btn btn-outline-secondary" @onclick="SearchOfGetAcc">ค้นหา</button>
 																	</div>
 																</div>
-																<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails" ColumnWidth="200px"
+																<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails" ColumnWidth="100%"
 																	AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																	FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																	AllowPaging="true" AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left"
 																	ShowPagingSummary="true">
 																	<Columns>
-																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="ทะเบียน"
+																		<RadzenDataGridColumn Width="10%" TItem="Models.ReqAccDetails" Title="ทะเบียน"
 																			Property="member_no">
 																			<Template>
 																				<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -257,7 +257,7 @@ else
 																			</Template>
 																		</RadzenDataGridColumn>
 
-																		<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails"
+																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
 																			Title="ชื่อ - นามสกุล" Property="memb_name">
 																			<Template>
 																				<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -275,7 +275,7 @@ else
 																				</div>
 																			</Template>
 																		</RadzenDataGridColumn>
-																		<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails" Title="ประเภทบุคคล"
+																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="ประเภทบุคคล"
 																			Property="membcat_desc">
 																			<Template>
 																				<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -284,7 +284,7 @@ else
 																				</div>
 																			</Template>
 																		</RadzenDataGridColumn>
-																		<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails" Title="สังกัด"
+																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="สังกัด"
 																			Property="membgroup_desc">
 																			<Template>
 																				<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -336,7 +336,7 @@ else
 																		</div>
 																	</div>
 																</div>
-																<div class="modal" id="ModalSearch">
+																<div class="modal" tabindex="-1" id="ModalSearch">
 																	<div class="modal-dialog modal-xl">
 																		<div class="modal-content">
 																			<!-- Modal Header -->
@@ -414,13 +414,13 @@ else
 																					</div>
 																				</div>
 																				<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
-																					ColumnWidth="200px" AllowFiltering="true"
+																					ColumnWidth="100%" AllowFiltering="true"
 																					FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																					FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																					AllowPaging="true" AllowSorting="true"
 																					PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
 																					<Columns>
-																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																						<RadzenDataGridColumn Width="10%" TItem="Models.ReqAccDetails"
 																							Title="ทะเบียน" Property="member_no">
 																							<Template>
 																								<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -430,7 +430,7 @@ else
 																							</Template>
 																						</RadzenDataGridColumn>
 
-																						<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails"
+																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
 																							Title="ชื่อ - นามสกุล" Property="memb_name">
 																							<Template>
 																								<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -448,7 +448,7 @@ else
 																								</div>
 																							</Template>
 																						</RadzenDataGridColumn>
-																						<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails"
+																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
 																							Title="ประเภทบุคคล" Property="membcat_desc">
 																							<Template>
 																								<div @onclick="@(e => UpdateAccountDetails(context))"
@@ -457,7 +457,7 @@ else
 																								</div>
 																							</Template>
 																						</RadzenDataGridColumn>
-																						<RadzenDataGridColumn Width="30%" TItem="Models.ReqAccDetails"
+																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
 																							Title="สังกัด" Property="membgroup_desc">
 																							<Template>
 																								<div @onclick="@(e => UpdateAccountDetails(context))"

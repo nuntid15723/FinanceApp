@@ -124,7 +124,7 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="modal" id="ModalSearch">
+											<div class="modal" tabindex="-1" id="ModalSearch">
 												<div class="modal-dialog modal-xl">
 													<div class="modal-content">
 														<!-- Modal Header -->
@@ -174,7 +174,7 @@ else
 																</div>
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">สถานะบัญชี</label>
-																	<select class="form-select" @bind="deptclose_status" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+																	<select class="form-select" @bind="deptclose_status">
 																		<option Value="0">เปิดบัญชี</option>
 																		<option Value="1">ปิดบัญชี</option>
 																	</select>
@@ -321,6 +321,14 @@ else
 									var Item = item.deptSlip;
 									var withdrawable_amt = Item.withdrawable_amt?.ToString("N2");
 									var prncbal = Item.prncbal?.ToString("N2");
+									var int_amt = Item.int_amt?.ToString("N2");
+									var intbonus_amt = Item.intbonus_amt?.ToString("N2");
+									var int_return = Item.int_return?.ToString("N2");
+									var tax_return = Item.tax_return?.ToString("N2");
+									var int_netamt = Item.int_netamt?.ToString("N2");
+									sumpb_intnat =  Item.prncbal + Item.int_netamt;
+									var Sumtotal =  sumpb_intnat?.ToString("N2");
+									Console.WriteLine($"sumtotal :{Sumtotal}");
 									<div class="row"  @onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
 										<div class="row">
 											<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
@@ -337,7 +345,7 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="modal" id="anotherModal">
+												<div class="modal" tabindex="-1" id="anotherModal">
 													<div class="modal-dialog modal-xl">
 														<div class="modal-content">
 															<!-- Modal Header -->
@@ -565,7 +573,6 @@ else
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รหัสคู่บัญชี</label>
-												
 												@if (Item.moneytype_code == "CSH" )
 												{
 														<select id="tofromaccSelect" class="form-select" value="@bookCode"
@@ -747,8 +754,11 @@ else
 										</div> *@
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
+												@* <input type="text" class="format-money form-control" readonly style="text-align: end;"
 													   Name="int_amt" value="@(int_amt!= null ? Item.int_amt:int_amt)" placeholder="0.00"
+													/> *@
+													<input type="text" class="format-money form-control" readonly style="text-align: end;"
+													   Name="int_amt" value="@int_amt" placeholder="0.00"
 													/>
 
 											</div>
@@ -762,26 +772,26 @@ else
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ภาษี ด/บ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="tax_amt" value="@(tax_amt!= null ? Item.tax_amt:tax_amt)" placeholder="0.00"
+													   Name="tax_amt" value="@tax_amt" placeholder="0.00"
 													/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ คืน</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_return" value="@Item.int_return" placeholder="0.00"/>
+													   Name="int_return" value="@int_return" placeholder="0.00"/>
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ภาษี คืน</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="tax_return" value="@Item.tax_return" placeholder="0.00" />
+													   Name="tax_return" value="@tax_return" placeholder="0.00" />
 
 											</div>
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ สุทธิ</label>
 												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_netamt" value="@Item.int_netamt" placeholder="0.00"  />
+													   Name="int_netamt" value="@int_netamt" placeholder="0.00"  />
 
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
@@ -789,7 +799,7 @@ else
 												<div class="form-group ">
 													<div class="input-group">
 														<input type="text" class="format-money form-control" style="text-align: end;"
-														@bind="DeptslipAmt" placeholder="0.00"   @onblur="() => FormatNumber()" />
+														@bind="prncbal" placeholder="0.00" readonly @onblur="() => FormatNumber()" />
 														<div class="input-group-addon">
 															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																		data-bs-target="#myModal1" />
@@ -841,8 +851,8 @@ else
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดสุทธิ</label>
 												<input class="format-money form-control" placeholder="0.00" type="text"
-													   style="text-align: end; font-size: 32px;" readonly name="deptslip_netamt"
-												@bind="DeptslipAmt" id="showNumber" />
+													   style="text-align: end; font-size: 32px;" readonly name="sumtotal"
+												@bind="Sumtotal" id="showNumber" />
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เงื่อนไขการถอน</label>

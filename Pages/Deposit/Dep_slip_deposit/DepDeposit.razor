@@ -135,7 +135,7 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-				<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync"
+				<RadzenButton class="save_top" Icon="save"  Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
 							  Disabled="@(!IsSaveEnabled)" />
 			}
 		</div>
@@ -180,7 +180,7 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="modal" id="ModalSearch">
+											<div class="modal" tabindex="-1" id="ModalSearch">
 												<div class="modal-dialog modal-xl">
 													<div class="modal-content">
 														<!-- Modal Header -->
@@ -1068,7 +1068,7 @@ else
 													</div>
 												</div>
 											</div>
-											<div class="modal" id="anotherModal">
+											<div class="modal" tabindex="-1" id="anotherModal">
 												<div class="modal-dialog modal-xl">
 													<div class="modal-content">
 														<!-- Modal Header -->
