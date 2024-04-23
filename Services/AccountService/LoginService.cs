@@ -145,8 +145,8 @@ public class LoginService : IApiService
             var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
             var payload = new
             {
-                coop_control = selectedDatabase == "4654564654" ? "065001" : "082001",
-                coop_id = selectedDatabase == "4654564654" ? "065001" : "082001",
+                coop_control = selectedDatabase == "1000000001" ? "065001" : "082001",
+                coop_id = selectedDatabase == "1000000001" ? "065001" : "082001",
                 user_name = user_name,
                 password = password,
                 base_id = selectedDatabase,

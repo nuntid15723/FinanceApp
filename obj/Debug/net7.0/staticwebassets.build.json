@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "QkSpj+0Wd/7M4wpE16IOEitQbq2ZefIWPQiMopTWPME=",
+  "Hash": "2WADvpVKYApGMyOZYKPD6nZOr3ey7Fs9863vu8fytm0=",
   "Source": "FinanceApp",
   "BasePath": "_content/FinanceApp",
   "Mode": "Default",
@@ -16,23 +16,6 @@
     }
   ],
   "Assets": [
-    {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css",
-      "SourceId": "Radzen.Blazor",
-      "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
-      "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/dark-base.css",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css"
-    },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark.css",
       "SourceId": "Radzen.Blazor",
@@ -51,12 +34,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark.css"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/default-base.css",
+      "RelativePath": "css/dark-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -65,7 +48,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css",
@@ -85,12 +68,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/humanistic-base.css",
+      "RelativePath": "css/default-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -99,7 +82,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css",
@@ -119,12 +102,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/material-base.css",
+      "RelativePath": "css/humanistic-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -133,7 +116,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css",
@@ -153,12 +136,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/software-base.css",
+      "RelativePath": "css/material-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -167,7 +150,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css",
@@ -187,12 +170,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/standard-base.css",
+      "RelativePath": "css/software-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -201,7 +184,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard.css",
@@ -219,6 +202,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard.css"
+    },
+    {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "css/standard-base.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
@@ -357,23 +357,6 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff",
-      "SourceId": "Radzen.Blazor",
-      "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
-      "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-BlackIt.woff",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff"
-    },
-    {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Black.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
@@ -391,12 +374,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Black.woff"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-BoldIt.woff",
+      "RelativePath": "fonts/SourceSansPro-BlackIt.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -405,7 +388,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff",
@@ -425,12 +408,12 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-ExtraLightIt.woff",
+      "RelativePath": "fonts/SourceSansPro-BoldIt.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -439,7 +422,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff",
@@ -459,6 +442,23 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff"
     },
     {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "fonts/SourceSansPro-ExtraLightIt.woff",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff"
+    },
+    {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
@@ -474,23 +474,6 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff"
-    },
-    {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff",
-      "SourceId": "Radzen.Blazor",
-      "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
-      "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-LightIt.woff",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Light.woff",
@@ -510,6 +493,23 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Light.woff"
     },
     {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "fonts/SourceSansPro-LightIt.woff",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff"
+    },
+    {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
@@ -527,23 +527,6 @@
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Regular.woff"
     },
     {
-      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff",
-      "SourceId": "Radzen.Blazor",
-      "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
-      "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-SemiboldIt.woff",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff"
-    },
-    {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
@@ -559,6 +542,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff"
+    },
+    {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "fonts/SourceSansPro-SemiboldIt.woff",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff"
     },
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\Radzen.Blazor.js",
@@ -1275,23 +1275,6 @@
       "OriginalItemSpec": "wwwroot\\js\\preview.js"
     },
     {
-      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\printInterop.js",
-      "SourceId": "FinanceApp",
-      "SourceType": "Discovered",
-      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
-      "BasePath": "_content/FinanceApp",
-      "RelativePath": "js/printInterop.js",
-      "AssetKind": "All",
-      "AssetMode": "All",
-      "AssetRole": "Primary",
-      "RelatedAsset": "",
-      "AssetTraitName": "",
-      "AssetTraitValue": "",
-      "CopyToOutputDirectory": "Never",
-      "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\printInterop.js"
-    },
-    {
       "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\print.min.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
@@ -1307,6 +1290,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\print.min.js"
+    },
+    {
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\printInterop.js",
+      "SourceId": "FinanceApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
+      "BasePath": "_content/FinanceApp",
+      "RelativePath": "js/printInterop.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\printInterop.js"
     },
     {
       "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\resize.js",

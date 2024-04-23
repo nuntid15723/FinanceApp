@@ -15,7 +15,7 @@ namespace FinanceApp.Services
 			// Get values from Payload
 			var CoopControl = payload["CoopControl"].ToString();
 			var CoopId = payload["CoopId"].ToString();
-			var Name = payload["name"].ToString();
+			var Name = payload["unique_name"].ToString();
 			var Email = payload["email"].ToString();
 			var Actort = payload["actort"].ToString();
 			var ApvlevelId = payload["ApvlevelId"].ToString();
