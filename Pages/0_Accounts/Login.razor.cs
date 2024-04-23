@@ -22,6 +22,7 @@ public partial class LoginBase : ComponentBase
     protected string user_name;
     protected string password;
     protected string selectedDatabase;
+    protected string coopcontrol;
     protected string errorMessage;
     protected LoginResult loginResponse;
     protected bool isLoading;
@@ -35,9 +36,10 @@ public partial class LoginBase : ComponentBase
         string[] values = value.Split('_');
         string id = values[0];
         string name = values[1];
+        string coop_control = values[2];
         selectedDatabase = id;
-        Console.WriteLine($"selectedDatabase :{selectedDatabase}");
-
+        coopcontrol = coop_control;
+        Console.WriteLine($"coopcontrol :{coopcontrol}");
         StateHasChanged();
 
 
@@ -61,10 +63,10 @@ public partial class LoginBase : ComponentBase
                 JsonSerializer serializer = new JsonSerializer();
                 connections = serializer.Deserialize<List<Connection>>(jsonReader);
             }
-            // Console.WriteLine($"connections :{jsonString}");
+            Console.WriteLine($"connections :{jsonString}");
             foreach (var connection in connections)
             {
-                Console.WriteLine($"id: {connection.Id}, connectionName: {connection.ConnectionName}");
+                Console.WriteLine($"id: {connection.Id},coopcontrol: {connection.coopcontrol}, connectionName: {connection.ConnectionName}");
             }
 
         }
@@ -78,6 +80,8 @@ public partial class LoginBase : ComponentBase
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }
+        [JsonPropertyName("coopcontrol")]
+        public string coopcontrol { get; set; }
 
         [JsonPropertyName("connectionName")]
         public string ConnectionName { get; set; }
@@ -100,7 +104,7 @@ public partial class LoginBase : ComponentBase
                 }
 
             }
-            loginResponse = await LoginService.Login(user_name, password, selectedDatabase);
+            loginResponse = await LoginService.Login(user_name, password, selectedDatabase, coopcontrol);
             if (string.IsNullOrEmpty(user_name) || string.IsNullOrEmpty(password))
             {
                 errorMessage = "Username และ password ไม่สามารถเว้นว่างได้.";

@@ -137,16 +137,17 @@ public class LoginService : IApiService
     //     }
 
     // }
-    public async Task<LoginResult> Login(string user_name, string password, string selectedDatabase )
+    public async Task<LoginResult> Login(string user_name, string password, string selectedDatabase, string coopcontrol)
     {
         try
         {
+            coopcontrol = string.IsNullOrWhiteSpace(coopcontrol) ? "065001" : coopcontrol;
             var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
             var userAgent = _accessor.HttpContext.Request.Headers["User-Agent"];
             var payload = new
             {
-                coop_control = selectedDatabase == "1000000001" ? "065001" : "082001",
-                coop_id = selectedDatabase == "1000000001" ? "065001" : "082001",
+                coop_control = coopcontrol,
+                coop_id =  coopcontrol,
                 user_name = user_name,
                 password = password,
                 base_id = selectedDatabase,

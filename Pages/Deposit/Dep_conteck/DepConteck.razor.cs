@@ -302,7 +302,9 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                         Console.WriteLine(apiResponse.success);
                         if (apiResponse.success)
                         {
-                           
+                            // printbook_data = new List<Book_data> { apiResponse.content };
+                            // var printbookdata = apiResponse.content;
+                            // var printdetail = printbookdata.print_detail;
                         }
                         else
                         {
