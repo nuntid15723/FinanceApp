@@ -1,0 +1,361 @@
+@page "/ws_mem_memberdetail";
+
+<style>
+    .icon-search {
+        display: inline-flex !important;
+        justify-content: space-evenly !important;
+        align-items: center !important;
+        position: relative !important;
+        top: 3px !important;
+        padding: 15px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .table> :not(caption)>*>* {
+        padding: 0.2rem 0.2rem;
+    }
+
+    .save_top {
+        border: #adacac solid 1px;
+    }
+
+    .header-right {
+        text-align: start;
+    }
+
+    .header-left {
+        text-align: end;
+    }
+
+    .rz-calendar .rz-inputtext {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    .rz-fileupload-row {
+        display: flex;
+        color: transparent;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column-reverse;
+    }
+
+    .rz-fileupload-row img {
+        width: 250px;
+        max-width: 250px;
+        margin-top: -4rem;
+        max-height: 200px;
+    }
+
+    .rz-fileupload-row button {
+        margin-left: 20rem;
+        margin-top: 8px;
+    }
+
+    .rz-fileupload-files {
+        background-color: var(--rz-upload-files-background-color);
+        padding: var(--rz-upload-files-padding);
+        margin-top: -1.5rem;
+    }
+
+    .rz-fileupload-buttonbar {
+        position: relative;
+        background-color: transparent;
+        padding: var(--rz-upload-button-bar-padding);
+        border-radius: var(--rz-upload-button-bar-border-radius);
+    }
+
+    .rz-card.rz-variant-filled {
+        box-shadow: var(--rz-base-background-color);
+        margin-top: -5px;
+    }
+
+    .rz-card {
+        padding: 0;
+        box-sizing: var(--rz-base-background-color);
+    }
+
+    .card {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover td {
+        background-color: transparent;
+    }
+
+    td {
+        text-align: left;
+        padding: 2px;
+    }
+
+    .cashiput {
+        color: #00CC00;
+        background-color: black;
+        text-align: right;
+        font-size: 16px;
+        font-weight: bold;
+        width: 100%;
+    }
+
+    .cashiput::placeholder {
+        color: #00CC00;
+        /* สีที่คุณต้องการ */
+    }
+
+    .cashred::placeholder {
+        color: red;
+        /* สีที่คุณต้องการ */
+    }
+
+    .label-group {
+        margin-left: 10px;
+    }
+
+    .my-element {
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    p.test1 {
+    white-space: nowrap;
+    width: 100px;
+    border: 1px solid #000000;
+    overflow: hidden;
+    text-overflow: clip;
+    }
+
+</style>
+
+<div class="header-page">
+    <div class="row-header d-flex justify-content-between ">
+        <div class="header-left">
+            <h4>รายละเอียดสมาชิก</h4>
+        </div>
+    </div>
+</div>
+
+<div class="card body-page">
+    <div class="row mt-2"
+        style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px; padding: 0px;">
+
+               @if (datalists == null)
+ {
+            <div class="row">
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">เลขที่ใบขอกู้</label>
+                    <div class="input-group">
+                        <input type="text" @bind="@deptno_format" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column" style="margin-top: 45px;">
+                    <button class="btn btn-outline-secondary" @onclick="SearchOfGet">
+                        ค้นหา
+                    </button>
+                </div>
+            </div>
+        }
+
+        else
+        {
+            @foreach (var item in datalists)
+            {
+                var ItemdeptSlip = item.deptSlip;
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">เลขสมาชิก</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="ItemdeptSlip.coop_id" />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ชื่อ-สกุล</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="ItemdeptSlip.deptaccount_name" />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">เลขพนักงาน</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="ItemdeptSlip.deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">สังกัด </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">กลุ่มสมาชิก</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ประเภทสมาชิก</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-12 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">หมายเหตุ</label>
+                    <div class="input-group">
+                        <textarea id="w3review" name="w3review" rows="2" cols="20" class="form-control"></textarea>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">กรุ๊ปเลือด </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">สัญชาติ </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">เชื้อชาติ </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ศาสนา </label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<div class="card mt-4" hidden="@(currentStep == 1 ||currentStep == 2)">
+    <div class="row mt-2"
+        style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px; padding: 0px;">
+        <RadzenTabs @bind-SelectedIndex=@selectedIndex>
+            <Tabs>
+                <RadzenTabsItem Text="ข้อมูลส่วนตัว">
+                <div class="row">
+                    <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">วันเข้าทำงาน</label>
+                            <RadzenDatePicker @bind-Value=@working_date Name="working_date" DateFormat="dd/MM/yyyy" />
+                    </div> 
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">สถานะสมรส</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">สัญชาติ</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">เชื้อชาติ</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ศาสนา</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                        <label class="form-label my-element">กรุ๊ปเลือด</label>
+                        <select class="form-select" name="" id="" style="text-align:left;">
+                            <option value="1">กรุณาเลือก</option>
+                            <option value="2">AB</option>
+                            <option value="3">A</option>
+                            <option value="4">B</option>
+                            <option value="5">O</option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">บัตรประชาชน</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">วันที่ออกบัตร</label>
+                            <RadzenDatePicker @bind-Value=@working_date Name="working_date" DateFormat="dd/MM/yyyy" />
+                    </div> 
+
+                    <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">บัตรหมดอายุ</label>
+                            <RadzenDatePicker @bind-Value=@working_date Name="working_date" DateFormat="dd/MM/yyyy" />
+                    </div> 
+
+                    <div class="col-xl-12 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ที่อยู่</label>
+                        <div class="input-group">
+                        <textarea id="w3review" name="w3review" rows="2" cols="20" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-12 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ที่อยู่อื่นๆ</label>
+                        <div class="input-group">
+                        <textarea id="w3review" name="w3review" rows="2" cols="20" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-6 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">E-mail</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">โทรศัพท์</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">โทรสาร</label>
+                            <input class="form-control" />
+                    </div>
+                    
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">โทรศัพท์มือถือ</label>
+                            <input class="form-control" />
+                    </div>
+
+                    <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">Line id</label>
+                            <input class="form-control" />
+                    </div>
+
+
+                </div>
+
+                </RadzenTabsItem>
+
+                <RadzenTabsItem Text="หุ้น-เงินกู้">
+                    
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+    </div>
+</div>
+
+@code{
+    int selectedIndex = 0;
+    public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+    private bool isLoadingModals;
+    private DateTime working_date;
+
+}
+
