@@ -72,6 +72,7 @@ namespace FinanceApp.Models
    public class Print_detail
    {
       public List<Row_detail> row_detail { get; set; }
+      public List<Row_detail> result_data { get; set; }
 
    }
    public class Row_detail
@@ -87,4 +88,5 @@ namespace FinanceApp.Models
       public string? font_name { get; set; }
       public int? font_size { get; set; }
    }
+  
 }

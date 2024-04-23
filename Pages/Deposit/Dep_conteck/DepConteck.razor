@@ -47,6 +47,25 @@
 	.card {
 		background-color: #f9f9f9;
 	}
+	.tbbook{
+	border-top: 1px solid #dddddd;
+	border-bottom: 1px solid #dddddd;
+	border-right: 0px solid #dddddd;
+	text-align: left;
+	padding: 3px;
+	font-size: 0.875rem;
+	}
+	.thbook{
+	font-size: 0.875rem;
+	background-color: #ffffff;
+	padding: 8px;
+	border-top: 1px solid #dddddd;
+	text-align: center;
+	font-weight: 500;
+	}
+	tr td:first-child, tr td:last-child {
+    border-right: 0px solid #dddddd; 
+}
 </style>
 <div class="header-page">
 	<div class="row-header d-flex justify-content-between ">
@@ -289,6 +308,8 @@ else
 						<div class="from">
 							@foreach (var Item in datadetails)
 							{
+								var format_with_amt = Item.withdrawable_amt?.ToString("N2");
+								var format_prncbal = Item.prncbal?.ToString("N2");
 								<div class="row" @onkeydown="OnKeyDownAsync" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
 									<div class="row">
 										<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
@@ -527,27 +548,247 @@ else
 												<RadzenTextBox class="form-control" type="text" ReadOnly
 															   Name="deptpassbook_no" @bind-value="Item.depttype_desc" />
 											</div>
-
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดคงเหลือ</label>
 												<div class="form-group ">
 													<div class="input-group">
 														<input type="text" class="format-money form-control" Name="deptslip_netamt"
-															   value="@Item.prncbal" disabled />
+															   value="@format_prncbal" disabled />
 													</div>
 												</div>
 											</div>
 											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดถอนได้</label>
-												@* <RadzenTextBox class="form-control" type="text" ReadOnly style="background-color: #fff;"
-									Name="deptaccount_name" @bind-value="Item.withdrawable_amt" /> *@
 												<input type="text" class="format-money form-control" Name="deptslip_netamt"
-													   value="@Item.withdrawable_amt" disabled />
+													   value="@format_with_amt" disabled />
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<button class="btn btn-outline-secondary" @onclick="PrintFrontbook">พิมพ์ปกสมุด</button>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<button class="btn btn-outline-secondary" @onclick="InitPrintBook" data-bs-toggle="modal" data-bs-target="#ModalBookDetails">พิมพ์ BOOK</button>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalBookNew"
+														style="@(msg_seqno != null && msg_seqno != 0 ? "" : "display:none;")">
+													ออกสมุดใหม่ [เริ่มพิมพ์จากลำดับ @msg_seqno]
+												</button>
+											</div>
+											<!-- Modal BookDetails -->
+											<div class="modal" tabindex="-1" id="ModalBookDetails">
+												<div class="modal-dialog modal-xl">
+													<div class="modal-content">
+														<!-- Modal Header -->
+														<div class="modal-header">
+															<h4 class="modal-title">พิมพ์ BOOK</h4>
+															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+														</div>
+														<!-- Modal body -->
+														<div class="modal-body" style="margin-top: -37px;">
+															<table style="font-family: arial, sans-serif;border-collapse: collapse;width: 100%;">
+																<thead>
+																	<tr >
+																	<th class="thbook" style="width: 6%;">ลำดับ</th>
+																	<th class="thbook" style="width: 10%;">วันที่</th>
+																	<th class="thbook" style="width: 20%;">รายการ</th>
+																	<th class="thbook" style="width: 15%;">ถอน</th>
+																	<th class="thbook" style="width: 15%;">ฝาก</th>
+																	<th class="thbook" style="width: 15%;">ยอดคงเหลือ</th>
+																	<th class="thbook" style="width: 11%;">พิมพ์ Book</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	 @foreach (var item in dataStatementList)
+																	{
+																		@* var  row = item.statement; *@
+																	<tr>
+																		<td class="tbbook" style="text-align: center;">@item.seq_no</td>
+																		<td class="tbbook" style="text-align: center;">@item.operate_date?.ToString("dd/MM/yyyy")</td>
+																		<td class="tbbook" style="text-align: start;">@item.deptitemtype_code</td>
+																		<td class="tbbook" style="text-align: end;">@item.withdraw_amt?.ToString("#,##0.00")</td>
+																		<td class="tbbook" style="text-align: end;">@item.deposit_amt.ToString("#,##0.00")</td>
+																		<td class="tbbook" style="text-align: end;">@item.prncbal?.ToString("#,##0.00")</td>
+																		<td class="tbbook" style="text-align: center;">
+																			@if (item.printbook_status == 1)
+																			{
+																				<p>พิมพ์</p> 
+																			}
+																			else
+																			{
+																				<p>ไม่พิมพ์</p>
+																			}
+																		</td>
+																	</tr>
+																	}
+																</tbody>
+															</table>
+															<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for=""> เลขที่บัญชี</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="deptaccount_no"
+																			@bind-value="Item.deptaccount_no">
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">เลขที่สมุด</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="deptpassbook_no"
+																			@bind-value="Item.deptpassbook_no">
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for=""> ตั้งแต่รายการ</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="LASTREC_NO_PB"
+																			@bind-value="LASTREC_NO_PB">
+																		</div>
+																	</div>
+																</div>
+																@* <div class="col-xl-1 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label " for="" style="color: transparent;">/</label>
+																	<input class="form-control" type="text" style="border: 0px solid; text-align: center; font-size: 20px;" value="/">
+																</div> *@
+																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">ถึงรายการ</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="prnpbkto"
+																			@bind-value="prnpbkto">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column align-items-center">
+																	<div class="form-check" style="margin-top: 35px;">
+																		<input class="form-check-input" type="checkbox" name="select_printsum" value="1" id="select_printsum" @onchange="ToggleCheckboxValue" checked="@isChecked">
+																		<label class="form-check-label" for="select_printsum">พิมพ์ยอดรวม</label>
+																	</div>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for=""> วันที่พิมพ์</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			@if(isChecked){
+																			<input class="form-control" type="text" name="sumbalance_date" @bind-value="Item.deptpassbook_no">
+																			}else{
+																				<input class="form-control" type="text" name="sumbalance_date" readonly value="00/00/0000">
+																			}
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">หน้าที่</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="LASTPAGE_NO_PB"
+																			@bind-value="LASTPAGE_NO_PB">
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">บรรทัดที่</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="LASTLINE_NO_PB"
+																			@bind-value="LASTLINE_NO_PB">
+																		</div>
+																	</div>
+																</div>
+															
+															</div>
+															<div class="row" style="margin-left:-4px;margin-right:-4px; ">
+																<div class="col-xl-6 col-md-6 col-sm-6 d-flex justify-content-end">
+																	<button class="btn btn-outline-secondary" @onclick="PrintBook_">
+																		พิมพ์
+																	</button>
+																</div>
+																<div class="col-xl-6 col-md-6 col-sm-6 d-flex justify-content-start">
+																	<button class="btn btn-outline-secondary" @onclick="Clar" data-bs-dismiss="modal">
+																		ปิด
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+											<!-- Modal NewBook -->
+											<div class="modal" tabindex="-1" id="ModalBookNew">
+												<div class="modal-dialog modal-md">
+													<div class="modal-content">
+														<!-- Modal Header -->
+														<div class="modal-header">
+															<h4 class="modal-title">ออกสมุดใหม่</h4>
+															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+														</div>
+														<!-- Modal body -->
+														<div class="modal-body">
+															<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">ใบ Cert.</label>
+																	@if (getDeptMaintype != null)
+																{
+																	<select id="DeptMaintype" name="DeptMaintype" class="form-select"
+																	@onchange="DeptMaintype">
+																		<option value="null" selected>--กรุณาเลือก--</option>
+																		@foreach (var MaintypeItem in getDeptMaintype)
+																		{
+																			<option value="@MaintypeItem.deptmain_type">
+																				@MaintypeItem.deptmain_type - @MaintypeItem.deptmain_desc
+																			</option>
+																		}
+																	</select>
+																}
+																</div>
+																<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">เลขที่สมุด</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="memb_name"
+																			@bind-value="Item.deptpassbook_no">
+																		</div>
+																	</div>
+																</div>
+															</div>
+															<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																<div class="col-xl-12 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">เหตุผลในการออก</label>
+																	<select id="DeptMaintype" name="DeptMaintype" class="form-select">
+																		<option value="01">สมุดหมด</option>
+																		<option value="02">เปิดบัญชีออนไลน์</option>
+																		<option value="03">สูญหาย</option>
+																		<option value="04">ชำรุด</option>
+																	</select>
+																</div>
+															</div>
+															<div class="row" style="margin-left:-4px;margin-right:-4px; ">
+																<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+																	<button class="btn btn-outline-secondary" @onclick="SearchOfGetAcc">
+																		ตกลง
+																	</button>
+																</div>
+																<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+																	<button class="btn btn-outline-secondary" @onclick="Clar" data-bs-dismiss="modal">
+																		ยกเลิก
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
-
-								<div class="row mt-5" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+								<div class="row mt-3" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 									<h6>ตารางแสดงรายการเคลื่อนไหว</h6>
 									@* <RadzenDataGrid @ref="grid" Data="@statementDetails" @bind-SelectedIndex="totalPages" TItem="Models.Statement" ColumnWidth="100%" AllowFiltering="true"
 							FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterMode="FilterMode.Advanced"
@@ -587,7 +828,7 @@ else
 													{
 
 														<div style=" text-align: center;">
-															<a class="btn btn-outline-success" style="width: 100%;border-radius: 0px;" @onclick="PerformSearch">
+															<a class="btn btn-outline-success" style="width: 100%;border-radius: 0px;" @onclick="@(e => UpdatePrintBook(data))">
 																พิมพ์
 															</a>
 														</div>
@@ -628,7 +869,6 @@ else
 @* } *@
 @code {
 	public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
-
 	protected override async Task OnInitializedAsync()
 	{
 	
@@ -675,7 +915,123 @@ else
 		BankValues = bank_code;
 
 	}
-	private bool chk_tranacc;
+	private async Task PrintBook_()
+    {
+		try{ // รับ HTML จาก GetPdfData()
+		printLoading = true;
+		await PrintBook();
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPrintBookData();
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+        await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
+		}catch(Exception ex)
+		{
+		Console.WriteLine(ex.Message);
+			printLoading=false;
+
+		}finally{
+			printLoading=false;
+			StateHasChanged();
+		}
+    }
+	 private async Task<string> GetPrintBookData()
+    {
+        var InputHtml = $@"
+		<style>
+			.label-with-border {{
+            padding: 5px;
+			width:100%
+            display: inline-block;
+        }}
+		.account-book {{
+            size: 21cm 29.7cm;  
+           /* border: 1px solid #000;*/
+        }}
+		</style>
+		
+		</head>
+		<body><br/>
+			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+				@foreach (var content in printbook_data)
+							{
+								var printDetail = content.print_detail;
+								foreach (var rowDetail in printDetail)
+								{
+									 InputHtml += $@"<table  style='width:100%;'>
+										 <thead>
+											<tr>";
+											InputHtml += @"</tr>
+										</thead>
+										<tbody>
+											<tr>";
+												@foreach (var columnDetail in rowDetail.row_detail)
+												{
+													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+												}
+												InputHtml += @"</tr>
+										</tbody>
+								</table>";
+								}
+							}
+			InputHtml += @"
+			</div>
+		</body>";
+		return InputHtml;
+	}
+	
+	private async Task PrintFrontbook()
+    {
+		try{ // รับ HTML จาก GetPdfData()
+		printLoading = true;
+		await Print_Frontbook();
+        // รับ HTML จาก GetPdfData()
+        string htmlData = await GetPrintFrontbook();
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+        await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
+		}catch(Exception ex)
+		{
+		Console.WriteLine(ex.Message);
+			printLoading=false;
+
+		}finally{
+			printLoading=false;
+			StateHasChanged();
+		}
+    }
+	 private async Task<string> GetPrintFrontbook()
+    {
+         var InputHtml = $@"
+                <style>
+        	        .label-with-border {{
+                          padding: 5px;
+        	        width:100%
+                          display: inline-block;
+                      }}
+                .account-book {{
+                          size: 21cm 29.7cm;  
+                         /* border: 1px solid #000;*/
+                      }}
+                </style>
+
+                </head>
+                <body><br/>
+            <div class='row' style='width: 100%;'>";
+                foreach (var item in printFrontbook_data){
+					var row_detaill = item.result_data;
+					foreach (var columnDetail in row_detaill)
+					{
+                     InputHtml += $@"
+				 	<div style=' width: {columnDetail.point_width}%; margin-top: {columnDetail.point_top}px;'>
+				 			<lable style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</lable>
+				 	</div>";
+                 }
+				 }
+                InputHtml += @"
+			</div>
+		</body>";
+		return InputHtml;
+	}
+private bool chk_tranacc;
 	private bool chk_deptacc;
 	private bool chk_deptpassbookno;
 }

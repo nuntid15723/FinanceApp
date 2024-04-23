@@ -44,7 +44,9 @@ public static class ApiClient
     {
         public const string DepOfPrintSlip = "Print/DepOfPrintSlip";
         public const string DeptOfGetPrintSlip = "Print/DeptOfGetPrintSlip"; 
-        public const string DepOfPostPrintBook = "Print/DepOfPostPrintBook"; 
+        public const string DepOfPostPrintBook = "Print/DepOfPostPrintBook";
+        public const string DepOfPostFrontbook = "Print/DepOfPostFrontbook"; 
+        public const string DepOfGetInitPrintBook = "Print/DepOfGetInitPrintBook"; 
     }
    
 }
