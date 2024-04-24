@@ -600,30 +600,34 @@ else
 																	</tr>
 																</thead>
 																<tbody>
-																	 @foreach (var item in dataStatementList)
+																	 @foreach (var item in intibookdata)
 																	{
-																		@* var  row = item.statement; *@
-																	<tr>
-																		<td class="tbbook" style="text-align: center;">@item.seq_no</td>
-																		<td class="tbbook" style="text-align: center;">@item.operate_date?.ToString("dd/MM/yyyy")</td>
-																		<td class="tbbook" style="text-align: start;">@item.deptitemtype_code</td>
-																		<td class="tbbook" style="text-align: end;">@item.withdraw_amt?.ToString("#,##0.00")</td>
-																		<td class="tbbook" style="text-align: end;">@item.deposit_amt.ToString("#,##0.00")</td>
-																		<td class="tbbook" style="text-align: end;">@item.prncbal?.ToString("#,##0.00")</td>
-																		<td class="tbbook" style="text-align: center;">
-																			@if (item.printbook_status == 1)
-																			{
-																				<p>พิมพ์</p> 
-																			}
-																			else
-																			{
-																				<p>ไม่พิมพ์</p>
-																			}
-																		</td>
-																	</tr>
+																		var inti_list = item.statement_list;
+																		foreach (var subItem in inti_list){
+																		<tr>
+																			<td class="tbbook" style="text-align: center;">@subItem.seq_no</td>
+																			<td class="tbbook" style="text-align: center;">@subItem.operate_date?.ToString("dd/MM/yyyy")</td>
+																			<td class="tbbook" style="text-align: start;">@subItem.deptitemtype_code</td>
+																			<td class="tbbook" style="text-align: end;">@subItem.withdraw_amt?.ToString("#,##0.00")</td>
+																			<td class="tbbook" style="text-align: end;">@subItem.deposit_amt.ToString("#,##0.00")</td>
+																			<td class="tbbook" style="text-align: end;">@subItem.prncbal?.ToString("#,##0.00")</td>
+																			<td class="tbbook" style="text-align: center;">
+																				@if (subItem.printbook_status == 1)
+																				{
+																					<p>พิมพ์</p> 
+																				}
+																				else
+																				{
+																					<p>ไม่พิมพ์</p>
+																				}
+																			</td>
+																		</tr>
+																		}
 																	}
 																</tbody>
 															</table>
+															  @foreach (var item in intibookdata)
+															  {
 															<div class="row" style="margin-left:-4px;margin-right:-4px;">
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for=""> เลขที่บัญชี</label>
@@ -647,8 +651,8 @@ else
 																	<label class="form-label" for=""> ตั้งแต่รายการ</label>
 																	<div class="form-group ">
 																		<div class="input-group">
-																			<input class="form-control" type="text" name="LASTREC_NO_PB"
-																			@bind-value="LASTREC_NO_PB">
+																			<input class="form-control" type="text" name="laststmseq_no"
+																			@bind-value="item.laststmseq_no">
 																		</div>
 																	</div>
 																</div>
@@ -660,8 +664,8 @@ else
 																	<label class="form-label" for="">ถึงรายการ</label>
 																	<div class="form-group ">
 																		<div class="input-group">
-																			<input class="form-control" type="text" name="prnpbkto"
-																			@bind-value="prnpbkto">
+																			<input class="form-control" type="text" name="lastrec_no"
+																			@bind-value="item.lastrec_no">
 																		</div>
 																	</div>
 																</div>
@@ -689,8 +693,8 @@ else
 																	<label class="form-label" for="">หน้าที่</label>
 																	<div class="form-group ">
 																		<div class="input-group">
-																			<input class="form-control" type="text" name="LASTPAGE_NO_PB"
-																			@bind-value="LASTPAGE_NO_PB">
+																			<input class="form-control" type="text" name="lastpage_no"
+																			@bind-value="item.lastpage_no">
 																		</div>
 																	</div>
 																</div>
@@ -698,13 +702,13 @@ else
 																	<label class="form-label" for="">บรรทัดที่</label>
 																	<div class="form-group ">
 																		<div class="input-group">
-																			<input class="form-control" type="text" name="LASTLINE_NO_PB"
-																			@bind-value="LASTLINE_NO_PB">
+																			<input class="form-control" type="text" name="lastline_no"
+																			@bind-value="item.lastline_no">
 																		</div>
 																	</div>
 																</div>
-															
 															</div>
+															}
 															<div class="row" style="margin-left:-4px;margin-right:-4px; ">
 																<div class="col-xl-6 col-md-6 col-sm-6 d-flex justify-content-end">
 																	<button class="btn btn-outline-secondary" @onclick="PrintBook_">
@@ -938,30 +942,38 @@ else
     {
         var InputHtml = $@"
 		<style>
-			.label-with-border {{
-            padding: 5px;
-			width:100%
-            display: inline-block;
+		.body {{
+            font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
         }}
-		.account-book {{
-            size: 21cm 29.7cm;  
-           /* border: 1px solid #000;*/
-        }}
+		.left-align-no-border {{
+			text-align: left;
+			padding: 0px;
+		}}
+		.tablept{{
+			width:100%;
+			/* border:1px solid; */
+			margin-left:-5px;
+		}}
+		@page {{
+			size: A4;
+			margin: 0px;
+		}}
+		 @page :first {{
+        	margin-top: -10;
+    	}}
+       
 		</style>
-		
 		</head>
-		<body><br/>
-			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+		<body>
+			<div class='row' style='width:100%;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table  style='width:100%;'>
-										 <thead>
-											<tr>";
-											InputHtml += @"</tr>
-										</thead>
+									 InputHtml += $@"<table class='tablept'>
 										<tbody>
 											<tr>";
 												@foreach (var columnDetail in rowDetail.row_detail)
@@ -1002,20 +1014,24 @@ else
     {
          var InputHtml = $@"
                 <style>
-        	        .label-with-border {{
-                          padding: 5px;
-        	        width:100%
-                          display: inline-block;
-                      }}
-                .account-book {{
-                          size: 21cm 29.7cm;  
-                         /* border: 1px solid #000;*/
-                      }}
+        	       body {{
+						font-family: Arial, sans-serif;
+						margin: 0;
+						padding: 0;
+					}}
+					.left-align-no-border {{
+						text-align: left;
+						padding: 1px;
+					}}
+					@page {{
+						size: A4;
+						margin: 5px;
+					}}
                 </style>
 
                 </head>
-                <body><br/>
-            <div class='row' style='width: 100%;'>";
+                <body style='margin-top:-10px'>
+            <div class='row left-align-no-border' style='width: 100%;'>";
                 foreach (var item in printFrontbook_data){
 					var row_detaill = item.result_data;
 					foreach (var columnDetail in row_detaill)

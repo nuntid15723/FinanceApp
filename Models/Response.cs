@@ -63,6 +63,7 @@ namespace FinanceApp.Models
       public int? deptint_amt { get; set; }
       public decimal deposit_amt { get; set; }
       public decimal? withdraw_amt { get; set; }
+      public string deptitemtype_desc { get; set; }
    }
    public class Print_book
    {
@@ -88,5 +89,5 @@ namespace FinanceApp.Models
       public string? font_name { get; set; }
       public int? font_size { get; set; }
    }
-  
+
 }

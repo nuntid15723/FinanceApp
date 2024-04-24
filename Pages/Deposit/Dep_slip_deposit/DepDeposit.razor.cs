@@ -1207,7 +1207,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             var deptSlip = new Deptslip
             {
                 coop_id = coop_id,
-                deptcoop_id = item.deptSlip.deptcoop_id,
+                deptcoop_id = item.deptSlip.deptcoop_id ?? coop_id,
                 deptslip_no = item.deptSlip.deptslip_no,
                 member_no = item.deptSlip.member_no,
                 membcat_code = item.deptSlip.membcat_code,

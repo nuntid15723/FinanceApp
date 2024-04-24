@@ -208,33 +208,38 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
 
                 foreach (var Item in datadetails)
                 {
-                    var depOfGetAccount = new
+                    foreach (var item in intibookdata)
                     {
-                        deptaccount_no = Item.deptaccount_no,
-                        lastrec_no = LASTREC_NO_PB,
-                        laststmseq_no = prnpbkto,
-                        lastpage_no = LASTPAGE_NO_PB,
-                        lastline_no = LASTLINE_NO_PB,
-                    };
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
-                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
-                    Console.WriteLine($"response.IsSuccessStatusCode:{response.IsSuccessStatusCode}");
-                    if (response.IsSuccessStatusCode)
-                    {
-                        // อ่าน response string
-                        var jsonResponse = await response.Content.ReadAsStringAsync();
-                        var responseData = JsonConvert.DeserializeObject<PrintBookResponse>(jsonResponse);
-                        if (responseData.success)
-                        {
-                            printbook_data = new List<Print_book> { responseData.content };
-                            var printbookdata = responseData.content;
-                            var printdetail = printbookdata.print_detail;
-                        }
-                        else
-                        {
-                            var error = JsonConvert.SerializeObject(responseData.message);
-                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = error, Duration = 5000 });
 
+
+                        var depOfGetAccount = new
+                        {
+                            deptaccount_no = Item.deptaccount_no,
+                            lastrec_no = item.laststmseq_no,
+                            laststmseq_no = item.lastrec_no,
+                            lastpage_no = item.lastpage_no,
+                            lastline_no = item.lastline_no,
+                        };
+                        var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
+                        var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
+                        Console.WriteLine($"response.IsSuccessStatusCode:{response.IsSuccessStatusCode}");
+                        if (response.IsSuccessStatusCode)
+                        {
+                            // อ่าน response string
+                            var jsonResponse = await response.Content.ReadAsStringAsync();
+                            var responseData = JsonConvert.DeserializeObject<PrintBookResponse>(jsonResponse);
+                            if (responseData.success)
+                            {
+                                printbook_data = new List<Print_book> { responseData.content };
+                                var printbookdata = responseData.content;
+                                var printdetail = printbookdata.print_detail;
+                            }
+                            else
+                            {
+                                var error = JsonConvert.SerializeObject(responseData.message);
+                                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = error, Duration = 5000 });
+
+                            }
                         }
                     }
                 }
@@ -286,7 +291,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 throw;
             }
         }
-        private List<Content> statement_data = new List<Content>();
+        private List<Book_data> intibookdata = new List<Book_data>();
         private async Task InitPrintBook()
         {
             try
@@ -302,9 +307,17 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                         Console.WriteLine(apiResponse.success);
                         if (apiResponse.success)
                         {
-                            // printbook_data = new List<Book_data> { apiResponse.content };
-                            // var printbookdata = apiResponse.content;
-                            // var printdetail = printbookdata.print_detail;
+                            intibookdata = new List<Book_data> { apiResponse.content };
+                            foreach (var item in intibookdata)
+                            {
+                                var inti_list = item.statement_list;
+                                foreach (var subItem in inti_list)
+                                {
+                                    Console.WriteLine(subItem.seq_no);
+                                }
+                            }
+                            Console.WriteLine($"{apiResponse.message})");
+
                         }
                         else
                         {
@@ -855,6 +868,6 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             public Models.DataStatement content { get; set; }
             public string message { get; set; }
         }
-        
+
     }
 }

@@ -2382,7 +2382,7 @@ else
 private async Task<string> GetPdfData()
     {
         var InputHtml = $@"</head>
-		<body><br/>
+		<body>
 			<div class='row' style='width: 100%;'>";
 			foreach (var content  in statement_data)
 			{
@@ -2421,26 +2421,38 @@ private async Task<string> GetPdfData()
     {
         var InputHtml = $@"
 		<style>
-			.label-with-border {{
-            padding: 5px;
-			width:100%
-            display: inline-block;
+		.body {{
+            font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
         }}
-		.account-book {{
-            size: 21cm 29.7cm;  
-           /* border: 1px solid #000;*/
-        }}
+		.left-align-no-border {{
+			text-align: left;
+			padding: 0px;
+		}}
+		.tablept{{
+			width:100%;
+			/* border:1px solid; */
+			margin-left:-5px;
+		}}
+		@page {{
+			size: A4;
+			margin: 0px;
+		}}
+		 @page :first {{
+        	margin-top: -10;
+    	}}
 		</style>
 		
 		</head>
-		<body><br/>
-			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+		<body>
+			<div class='row' style='width:100%;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table  style='width:100%;'>
+									 InputHtml += $@"<table class='tablept'>
 										 <thead>
 											<tr>";
 											InputHtml += @"</tr>
