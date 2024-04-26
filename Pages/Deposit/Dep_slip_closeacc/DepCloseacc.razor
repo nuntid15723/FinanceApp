@@ -1987,7 +1987,34 @@ else
 private async Task<string> GetPdfData()
     {
         var InputHtml = $@"</head>
-		<body><br/>
+		 <style>
+			.form-control {{
+                border: solid 1px #fff;
+			}}
+			.form-label{{
+                font - weight: normal;
+			}}
+			.form-select {{
+
+            font - size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}}
+			.row {{
+                --bs - gutter - x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}}
+			 @page {{   /* size: landscape;*/
+                size: A4; 
+				width: 297mm; 
+				height: 210mm; 
+				margin: 0;  }}
+		</style>
+		<body>
 			<div class='row' style='width: 100%;'>";
 			foreach (var content  in statement_data)
 			{
@@ -2006,9 +2033,8 @@ private async Task<string> GetPdfData()
 	}
 	private async Task PrintBook_()
     {
-			try{ // รับ HTML จาก GetPdfData()
+			try{
 		printLoading = true;
-        // รับ HTML จาก GetPdfData()
         string htmlData = await GetPrintBookData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 

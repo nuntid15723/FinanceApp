@@ -307,6 +307,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             // DepttypeValue = e.Value.ToString();
             depttype_code = DepttypeValue.Trim();
             Console.WriteLine($"selectedValue : {selectedValue},DepttypeValue:'{depttype_code}'");
+            await GetBookNo();
+            await InvokeAsync(() => StateHasChanged());
         }
         private async Task AcctypeChanged(ChangeEventArgs e)
         {
@@ -333,7 +335,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             GetBank();
             BankBranch();
-            GetBookNo();
+            // GetBookNo();
             // FormatDate(operate_date);
             // FormatDate(due_date);
             FormatDate();
@@ -414,9 +416,9 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 {
                     repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.content };
 
-                    StateHasChanged();
-                    Console.WriteLine($"API request failed: {repReqdepoit}");
-                }
+                    await InvokeAsync(() => StateHasChanged());
+                    await GetBookNo();
+				}
             }
             catch (Exception ex)
             {
@@ -443,8 +445,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     isLoading = true;
                     var depOfGetAccount = new ReqAccDetails
                     {
-                        coop_id = "065001",
-                        memcoop_id = "065001",
+                        coop_id = coop_id,
+                        memcoop_id = coop_id,
                         deptaccount_no = deptaccount_no,
                         member_no = member_no,
                         depttype_code = depttype_code,
@@ -656,6 +658,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             else
             {
                 await CallApi();
+                await GetBookNo();
             }
 
             isLoading = false;
@@ -726,34 +729,46 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             {
                 (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
                 string book_no;
-                var depOfGetBookNo = new GetBookNo
+                // if (repReqdepoit != null)
+                // {
+                foreach (var item in repReqdepoit)
                 {
-                    coop_id = coop_id,
-                    depttype_code = "10",
-                    membcat_code = "10",
-                };
-                // var json = JsonConvert.SerializeObject(depOfGetBookNo);
-                // Console.WriteLine(json);
-                // var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDeptPassbook}";
-                // var response = await httpClient.PostAsync(apiUrl, content);
-                var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetBookNo);
+                    if (depttype_code == null)
+                    {
+                        depttype_code = item.depttype_code;
+                    }
+                    var depOfGetBookNo = new
+                    {
+                        coop_id = coop_id,
+                        depttype_code = depttype_code,
+                        membcat_code = item.membcat_code,
+                    };
+                    Console.WriteLine(depOfGetBookNo);
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfInitDeptPassbook}";
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetBookNo);
+                    response.EnsureSuccessStatusCode();
+                    Console.WriteLine(response.IsSuccessStatusCode);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // อ่าน response string
+                        var OfBookNoJson = await response.Content.ReadAsStringAsync();
+                        var OfBookNoList = JsonConvert.DeserializeObject<List<GetOfBookNo>>(OfBookNoJson);
+                        getOfBookNo = new List<GetOfBookNo>();
+                        getOfBookNo.AddRange(OfBookNoList);
+                        await InvokeAsync(() => StateHasChanged());
 
-                response.EnsureSuccessStatusCode();
-                Console.WriteLine(response.IsSuccessStatusCode);
-                if (response.IsSuccessStatusCode)
-                {
-                    // อ่าน response string
-                    var OfBookNoJson = await response.Content.ReadAsStringAsync();
-                    var OfBookNoList = JsonConvert.DeserializeObject<List<GetOfBookNo>>(OfBookNoJson);
-                    getOfBookNo = new List<GetOfBookNo>();
-                    getOfBookNo.AddRange(OfBookNoList);
+                    }
+                    else
+                    {
+                        getOfBookNo = new List<GetOfBookNo>();
+                    }
                 }
             }
             catch (Exception ex)
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
                 Console.WriteLine(ex.Message.ToString());
+                getOfBookNo = new List<GetOfBookNo>();
             }
             finally
             {
@@ -882,8 +897,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         deptSlipCheque = null,
 
                     };
-                    // var json = JsonConvert.SerializeObject(Reqdepoit);
-                    // Console.WriteLine("JsonData:" + json);
+                    var json = JsonConvert.SerializeObject(Reqdepoit);
+                    Console.WriteLine("JsonData:" + json);
                     // var content = new StringContent(json, Encoding.UTF8, "application/json");
                     // var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfPostOpenAccount}", content);
                     // var responseData = await response.Content.ReadAsStringAsync();

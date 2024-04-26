@@ -244,11 +244,13 @@ namespace FinanceApp.Models
         public string? deptaccount_no { get; set; }
         public string? deptaccount_name { get; set; }
         public string? member_no { get; set; }
+        public string? membcat_code { get; set; }
         public string? depttype_code { get; set; }
         public string? depttype_desc { get; set; }
         public string? deptpassbook_no { get; set; }
         public decimal? prncbal { get; set; }
         public decimal? withdrawable_amt { get; set; }
+        public string? account_type{ get; set; } 
         public List<Statement> statement { get; set; }
 
 
@@ -269,7 +271,7 @@ namespace FinanceApp.Models
         public int? sign_flag { get; set; }
         public string? print_code { get; set; }
         public int? prnc_no { get; set; }
-        public int? tax_amt { get; set; }
+        public decimal? tax_amt { get; set; }
         public decimal accuint_amt { get; set; }
         public decimal int_amt { get; set; }
         public int? printbook_status { get; set; }

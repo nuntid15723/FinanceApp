@@ -54,7 +54,7 @@ namespace FinanceApp.Models
       public int? sign_flag { get; set; }
       public string? print_code { get; set; }
       public int? prnc_no { get; set; }
-      public int? tax_amt { get; set; }
+      public decimal? tax_amt { get; set; }
       public decimal accuint_amt { get; set; }
       public decimal int_amt { get; set; }
       public int? printbook_status { get; set; }
@@ -63,6 +63,7 @@ namespace FinanceApp.Models
       public int? deptint_amt { get; set; }
       public decimal deposit_amt { get; set; }
       public decimal? withdraw_amt { get; set; }
+      public string deptitemtype_desc { get; set; }
    }
    public class Print_book
    {
@@ -88,5 +89,21 @@ namespace FinanceApp.Models
       public string? font_name { get; set; }
       public int? font_size { get; set; }
    }
-  
+   public class GetBookNew
+   {
+      public string? deptpassbook_no { get; set; }
+      public List<N_reson> n_reson { get; set; }
+      public List<GetOfBookNo> newpassbook_no { get; set; }
+
+   }
+   public class N_reson
+   {
+      public string? reson_id { get; set; }
+      public string? reson_desc { get; set; }
+   }
+   public class GetOfBookNo
+   {
+      public string book_no { get; set; }
+   }
+
 }

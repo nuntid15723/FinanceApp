@@ -122,7 +122,7 @@ namespace FinanceApp.Pages
                     await JSRuntime.InvokeVoidAsync("alert", "เกิดข้อผิดพลาด. โปรด login อีกครั้ง.");
                     await JSRuntime.InvokeVoidAsync("localStorage.removeItem", "authToken");
                     // ถ้าไม่มี token ให้เด้งไปยังหน้า login
-                    // NavigationManager.NavigateTo("/login", true);
+                    NavigationManager.NavigateTo("/login", true);
                     var errorResponse = await response.Content.ReadAsStringAsync();
                     Console.WriteLine($"Error response: {errorResponse}");
                 }
@@ -208,7 +208,7 @@ namespace FinanceApp.Pages
             else
             {
                 // ทำการ redirect ไปที่ "/login"
-                // NavigationManager.NavigateTo("/login", true);
+                NavigationManager.NavigateTo("/login", true);
             }
         }
         public class AmsecUseapp

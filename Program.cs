@@ -49,6 +49,7 @@ builder.Services.AddSingleton<StateContainer>();
 // Register API provider service
 builder.Services.AddHttpClient<IApiProvider, ApiProvider>();
 builder.Services.AddScoped<Api_Provider>();
+builder.Services.AddScoped<GetUserDataList>();
 
 //SessionStorage
 builder.Services.AddBlazoredSessionStorage();

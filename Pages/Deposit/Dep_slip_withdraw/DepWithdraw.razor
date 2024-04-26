@@ -2382,12 +2382,44 @@ else
 private async Task<string> GetPdfData()
     {
         var InputHtml = $@"</head>
-		<body><br/>
+		<style>
+			.form-control {{
+				border: solid 1px #fff;
+			}}
+			.form-label {{
+				font-weight: normal;
+			}}
+			.form-select {{
+				font-size: 16px; /* ขนาดตัวอักษร */
+				background-color: #fff;
+			}}
+			.row {{
+				--bs-gutter-x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				/*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}}
+			@page {{   /* size: landscape;*/
+				size: A4; 
+				width: 297mm; 
+				height: 210mm; 
+				margin: 0;  
+			}}
+			@page :first {{
+				margin-top: 0; /* ไม่มีขอบบน */
+			}}
+			.bodypt{{
+				margin-top:-45px
+			}}
+		</style>
+		<body class='bodypt'>
 			<div class='row' style='width: 100%;'>";
 			foreach (var content  in statement_data)
 			{
 				foreach (var item in content.slip_data){
-				@* Console.WriteLine($"slipdata : {item.column_name},{item.column_value},{item.point_top},{item.point_left},{item.point_width},{item.point_height},{item.align},{item.valign},{item.font_name},{item.font_size},"); *@
 					InputHtml += $@"
 					<div style=' width: {item.point_width}%; margin-top: {item.point_top}px;'>
 							<lable style='text-align: {item.align}; margin-top: {item.point_top}px; margin-left: {item.point_left}%; width: {item.point_width}%; vertical-align: top; font-family: {item.font_name}; font-size: {item.font_size}px;'>{item.column_value}</lable>
@@ -2401,9 +2433,8 @@ private async Task<string> GetPdfData()
 	}
 	private async Task PrintBook_()
     {
-			try{ // รับ HTML จาก GetPdfData()
+			try{ 
 		printLoading = true;
-        // รับ HTML จาก GetPdfData()
         string htmlData = await GetPrintBookData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
@@ -2421,26 +2452,37 @@ private async Task<string> GetPdfData()
     {
         var InputHtml = $@"
 		<style>
-			.label-with-border {{
-            padding: 5px;
-			width:100%
-            display: inline-block;
+		.body {{
+            font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
         }}
-		.account-book {{
-            size: 21cm 29.7cm;  
-           /* border: 1px solid #000;*/
-        }}
+		.left-align-no-border {{
+			text-align: left;
+			padding: 0px;
+		}}
+		.tablept{{
+			width:100%;
+			/* border:1px solid; */
+			margin-left:-5px;
+		}}
+		@page {{
+			size: A4;
+			margin: 0px;
+		}}
+		 @page :first {{
+        	margin-top: -10;
+    	}}
 		</style>
-		
 		</head>
-		<body><br/>
-			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+		<body>
+			<div class='row' style='width:100%;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table  style='width:100%;'>
+									 InputHtml += $@"<table class='tablept'>
 										 <thead>
 											<tr>";
 											InputHtml += @"</tr>
@@ -2449,7 +2491,8 @@ private async Task<string> GetPdfData()
 											<tr>";
 												@foreach (var columnDetail in rowDetail.row_detail)
 												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+													  InputHtml += $@" 
+													 <input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
 												}
 												InputHtml += @"</tr>
 										</tbody>

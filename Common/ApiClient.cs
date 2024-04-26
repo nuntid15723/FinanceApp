@@ -38,6 +38,8 @@ public static class ApiClient
         public const string DeptOfGetPrintSlip = "DeptOfGetPrintSlip?deptslip_no"; 
         public const string DepOfDataStatement = "DepOfDataStatement?deptaccount_no"; 
         public const string DepOfCalIntPrncfix = "DepOfCalIntPrncfix"; 
+        public const string DepOfGetBookNew = "DepOfGetBookNew"; 
+        public const string DepOfPutBookNew = "DepOfPutBookNew"; 
 
         //Loan
         public const string PostMemeber = "PostMemeber";
@@ -49,7 +51,7 @@ public static class ApiClient
         public const string DepOfPrintSlip = "Print/DepOfPrintSlip";
         public const string DeptOfGetPrintSlip = "Print/DeptOfGetPrintSlip"; 
         public const string DepOfPostPrintBook = "Print/DepOfPostPrintBook";
-        public const string DepOfPostFrontbook = "Print/DepOfPostFrontbook"; 
+        public const string DepOfGetFrontbook = "Print/DepOfGetFrontbook"; 
         public const string DepOfGetInitPrintBook = "Print/DepOfGetInitPrintBook"; 
     }
    

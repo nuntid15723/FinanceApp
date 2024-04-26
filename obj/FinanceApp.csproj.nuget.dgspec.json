@@ -1,20 +1,29 @@
 {
   "format": 1,
   "restore": {
-    "D:\\FinanceApp\\FinanceApp.csproj": {}
+    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj": {}
   },
   "projects": {
-    "D:\\FinanceApp\\FinanceApp.csproj": {
+    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\FinanceApp\\FinanceApp.csproj",
+        "projectUniqueName": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj",
         "projectName": "FinanceApp",
+<<<<<<< HEAD
         "projectPath": "D:\\FinanceApp\\FinanceApp.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
         "outputPath": "D:\\FinanceApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+=======
+        "projectPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj",
+        "packagesPath": "C:\\Users\\nunti\\.nuget\\packages\\",
+        "outputPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\nunti\\AppData\\Roaming\\NuGet\\NuGet.Config",
+>>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,11 +43,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -81,7 +85,11 @@
               "privateAssets": "all"
             }
           },
+<<<<<<< HEAD
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
+=======
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+>>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
         }
       }
     }

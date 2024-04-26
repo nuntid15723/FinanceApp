@@ -2373,7 +2373,37 @@ else
    private async Task<string> GetPdfData()
     {
         var InputHtml = $@"</head>
-		<body><br/>
+		 <style>
+			.form-control {{
+                border: solid 1px #fff;
+			}}
+			.form-label{{
+                font - weight: normal;
+			}}
+			.form-select {{
+
+            font - size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}}
+			.row {{
+                --bs - gutter - x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}}
+			.left-align-no-border {{
+						text-align: left;
+						padding: 1px;
+			}}
+			@page {{
+						size: A4;
+						margin: 5px;
+			}}
+		</style>
+		<body style='margin-top:-30px'>
 			<div class='row' style='width: 100%;'>";
 			foreach (var content  in statement_data)
 			{
@@ -2402,26 +2432,38 @@ else
     {
         var InputHtml = $@"
 		<style>
-			.label-with-border {{
-            padding: 5px;
-			width:100%
-            display: inline-block;
+			.body {{
+            font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
         }}
-		.account-book {{
-           /* size: 21cm 29.7cm;*/
-            border: 1px solid #000;
-        }}
+		.left-align-no-border {{
+			text-align: left;
+			padding: 0px;
+		}}
+		.tablept{{
+			width:100%;
+			/* border:1px solid; */
+			margin-left:-5px;
+		}}
+		@page {{
+			size: A4;
+			margin: 0px;
+		}}
+		 @page :first {{
+        	margin-top: -10;
+    	}}
 		</style>
 		
 		</head>
-		<body><br/>
-			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+		<body>
+			<div class='row account-book' style='width:100%;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table  style='width:100%;'>
+									 InputHtml += $@"<table table class='tablept'>
 										 <thead>
 											<tr>";
 											InputHtml += @"</tr>
