@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\FinanceApp.csproj": {}
+    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj": {}
   },
   "projects": {
-    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\FinanceApp.csproj": {
+    "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\FinanceApp.csproj",
+        "projectUniqueName": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj",
         "projectName": "FinanceApp",
-        "projectPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\FinanceApp.csproj",
+        "projectPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp.csproj",
         "packagesPath": "C:\\Users\\nunti\\.nuget\\packages\\",
-        "outputPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\obj\\",
+        "outputPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\nunti\\AppData\\Roaming\\NuGet\\NuGet.Config",

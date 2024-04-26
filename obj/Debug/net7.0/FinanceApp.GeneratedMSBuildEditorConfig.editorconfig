@@ -9,129 +9,129 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FinanceApp
 build_property.RootNamespace = FinanceApp
-build_property.ProjectDir = D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\
+build_property.ProjectDir = D:\work\Icoop\DonNet\New folder\FinanceApp\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp
+build_property.MSBuildProjectDirectory = D:\work\Icoop\DonNet\New folder\FinanceApp
 build_property._RazorSourceGeneratorDebug = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/App.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Counter.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Counter.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ291bnRlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/FetchData.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/FetchData.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRmV0Y2hEYXRhLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Mbshr/Memberdetail.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Mbshr/Memberdetail.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTWJzaHJcTWVtYmVyZGV0YWlsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/SaveButton.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/SaveButton.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2F2ZUJ1dHRvbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Testprint.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Testprint.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGVzdHByaW50LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Shared/LoginLayout.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/LoginLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXExvZ2luTGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Shared/Sidebar.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/Sidebar.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFNpZGViYXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Shared/SurveyPrompt.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/_Imports.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/0_Accounts/Login.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/0_Accounts/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcMF9BY2NvdW50c1xMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-vqh5auax0z
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_acceptchq/DepAcceptchq.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_acceptchq/DepAcceptchq.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfYWNjZXB0Y2hxXERlcEFjY2VwdGNocS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-4xv9h1h2qf
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_apvchq/DepApvchq.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_apvchq/DepApvchq.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfYXB2Y2hxXERlcEFwdmNocS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-9aelt725ff
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_conteck/DepConteck.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_conteck/DepConteck.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfY29udGVja1xEZXBDb250ZWNrLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-fxyna2yoyt
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_deptdetail/DepDeptdetail.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_deptdetail/DepDeptdetail.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfZGVwdGRldGFpbFxEZXBEZXB0ZGV0YWlsLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-887kgmytr6
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_impexcel/DepImpexcel.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_impexcel/DepImpexcel.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfaW1wZXhjZWxcRGVwSW1wZXhjZWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-mn04jopnig
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_procdeptuptran/DepProcdeptuptran.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_procdeptuptran/DepProcdeptuptran.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfcHJvY2RlcHR1cHRyYW5cRGVwUHJvY2RlcHR1cHRyYW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-kyd3k094o5
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_reprintslip/DepReprintslip.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_reprintslip/DepReprintslip.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfcmVwcmludHNsaXBcRGVwUmVwcmludHNsaXAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-11odqa86xp
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_reqdepoit/DepReqdepoit.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_reqdepoit/DepReqdepoit.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfcmVxZGVwb2l0XERlcFJlcWRlcG9pdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-9ywdyua9z3
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_slip_closeacc/DepCloseacc.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_slip_closeacc/DepCloseacc.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfc2xpcF9jbG9zZWFjY1xEZXBDbG9zZWFjYy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-onpe7ivpnh
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_slip_deposit/DepDeposit.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_slip_deposit/DepDeposit.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfc2xpcF9kZXBvc2l0XERlcERlcG9zaXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-jevbfxu0ld
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_slip_withdraw/DepWithdraw.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_slip_withdraw/DepWithdraw.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfc2xpcF93aXRoZHJhd1xEZXBXaXRoZHJhdy5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-38i8sy31j1
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_trndeptpx/DepTrndeptpx.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_trndeptpx/DepTrndeptpx.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfdHJuZGVwdHB4XERlcFRybmRlcHRweC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-hx88lo8j4u
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Deposit/Dep_truncate/DepTruncate.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Deposit/Dep_truncate/DepTruncate.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRGVwb3NpdFxEZXBfdHJ1bmNhdGVcRGVwVHJ1bmNhdGUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-hcjoanjbgu
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Index.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-dk77r542c3
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Shared/EmptyLayout.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/EmptyLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEVtcHR5TGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-gcrgsn8xyi
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Shared/MainLayout.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-mwq1nbykck
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Shared/NavMenu.razor]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Shared/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-d0y5yr2d5v
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/Error.cshtml]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/work/Icoop/DonNet/New folder/FinanceApp/FinanceApp/Pages/_Host.cshtml]
+[D:/work/Icoop/DonNet/New folder/FinanceApp/Pages/_Host.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX0hvc3QuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
