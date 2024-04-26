@@ -1,10 +1,14 @@
 {
   "Version": 1,
 <<<<<<< HEAD
+<<<<<<< HEAD
   "Hash": "hHmQe8aaQ5AfwswH0aAiBciGrJFGY9GHWTSJkLJlRYE=",
 =======
   "Hash": "QkSpj+0Wd/7M4wpE16IOEitQbq2ZefIWPQiMopTWPME=",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+  "Hash": "2WADvpVKYApGMyOZYKPD6nZOr3ey7Fs9863vu8fytm0=",
+>>>>>>> parent of cdcc0c7 (loan)
   "Source": "FinanceApp",
   "BasePath": "_content/FinanceApp",
   "Mode": "Default",
@@ -14,13 +18,14 @@
     {
       "Name": "FinanceApp\\wwwroot",
       "Source": "FinanceApp",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css",
       "SourceId": "Radzen.Blazor",
@@ -55,228 +60,251 @@
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark.css",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+>>>>>>> parent of cdcc0c7 (loan)
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/dark.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
+<<<<<<< HEAD
 <<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark.css"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark.css"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark.css"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/default-base.css",
+      "RelativePath": "css/dark-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\dark-base.css"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css",
 =======
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/default.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
+<<<<<<< HEAD
 <<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default.css"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/humanistic-base.css",
+      "RelativePath": "css/default-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\default-base.css"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css",
 =======
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/humanistic.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
+<<<<<<< HEAD
 <<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic.css"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/material-base.css",
+      "RelativePath": "css/humanistic-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\humanistic-base.css"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css",
 =======
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/material.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
+<<<<<<< HEAD
 <<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material.css"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/software-base.css",
+      "RelativePath": "css/material-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\material-base.css"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css",
 =======
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/software.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
 <<<<<<< HEAD
+<<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software.css"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "css/standard-base.css",
+      "RelativePath": "css/software-base.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\software-base.css"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard.css",
 =======
@@ -299,176 +327,179 @@
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard.css",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "css/standard.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard.css"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard.css"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "css/standard-base.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\css\\standard-base.css"
+    },
+    {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\MaterialIcons-Regular.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/MaterialIcons-Regular.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\MaterialIcons-Regular.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\MaterialIcons-Regular.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-300.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-300.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v15-latin-300.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-300.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-300.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-700.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-700.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v15-latin-700.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-700.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-700.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v15-latin-regular.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v15-latin-regular.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-300.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-300.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-300.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-300.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-300.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-500.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-500.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-500.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-500.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-500.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-700.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-700.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-700.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-700.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-700.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/roboto-v30-latin-regular.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\roboto-v30-latin-regular.woff"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff",
       "SourceId": "Radzen.Blazor",
@@ -503,90 +534,101 @@
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Black.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+>>>>>>> parent of cdcc0c7 (loan)
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Black.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
+<<<<<<< HEAD
 <<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Black.woff"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Black.woff"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Black.woff"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-BoldIt.woff",
+      "RelativePath": "fonts/SourceSansPro-BlackIt.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BlackIt.woff"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff",
 =======
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Bold.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
 <<<<<<< HEAD
+<<<<<<< HEAD
       "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff"
 =======
       "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff"
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Bold.woff"
+>>>>>>> parent of cdcc0c7 (loan)
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
-      "RelativePath": "fonts/SourceSansPro-ExtraLightIt.woff",
+      "RelativePath": "fonts/SourceSansPro-BoldIt.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-BoldIt.woff"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff",
 =======
@@ -609,43 +651,60 @@
     {
       "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff",
 >>>>>>> f90bd0c09e7f840eb147cbe88c795d036a0a4da3
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff",
+>>>>>>> parent of cdcc0c7 (loan)
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-ExtraLight.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLight.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "fonts/SourceSansPro-ExtraLightIt.woff",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-ExtraLightIt.woff"
+    },
+    {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-It.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-It.woff"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff",
       "SourceId": "Radzen.Blazor",
@@ -697,40 +756,60 @@
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Light.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+>>>>>>> parent of cdcc0c7 (loan)
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Light.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Light.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Light.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Regular.woff",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "fonts/SourceSansPro-LightIt.woff",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-LightIt.woff"
+    },
+    {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Regular.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Regular.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Regular.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Regular.woff"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff",
       "SourceId": "Radzen.Blazor",
@@ -782,89 +861,102 @@
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
       "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+=======
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+>>>>>>> parent of cdcc0c7 (loan)
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "fonts/SourceSansPro-Semibold.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-Semibold.woff"
     },
     {
-      "Identity": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\Radzen.Blazor.js",
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff",
       "SourceId": "Radzen.Blazor",
       "SourceType": "Package",
-      "ContentRoot": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
+      "BasePath": "_content/Radzen.Blazor",
+      "RelativePath": "fonts/SourceSansPro-SemiboldIt.woff",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\fonts\\SourceSansPro-SemiboldIt.woff"
+    },
+    {
+      "Identity": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\Radzen.Blazor.js",
+      "SourceId": "Radzen.Blazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\",
       "BasePath": "_content/Radzen.Blazor",
       "RelativePath": "Radzen.Blazor.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Users\\Admin\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\Radzen.Blazor.js"
+      "OriginalItemSpec": "C:\\Users\\nunti\\.nuget\\packages\\radzen.blazor\\4.20.1\\staticwebassets\\Radzen.Blazor.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\FinanceApp.styles.css",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\FinanceApp.styles.css",
       "SourceId": "FinanceApp",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "FinanceApp.styles.css",
       "AssetKind": "All",
       "AssetMode": "CurrentProject",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\FinanceApp.styles.css"
+      "OriginalItemSpec": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\bundle\\FinanceApp.styles.css"
     },
     {
-      "Identity": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\FinanceApp.bundle.scp.css",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\FinanceApp.bundle.scp.css",
       "SourceId": "FinanceApp",
       "SourceType": "Computed",
-      "ContentRoot": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "FinanceApp.bundle.scp.css",
       "AssetKind": "All",
       "AssetMode": "Reference",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\FinanceApp.bundle.scp.css"
+      "OriginalItemSpec": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\FinanceApp.bundle.scp.css"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/bootstrap/bootstrap.min.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -873,17 +965,15 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/bootstrap/bootstrap.min.css.map",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -892,17 +982,15 @@
       "OriginalItemSpec": "wwwroot\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/font/css/open-iconic-bootstrap.min.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -911,17 +999,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.eot",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -930,17 +1016,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.otf",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -949,17 +1033,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.svg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -968,17 +1050,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.ttf",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -987,17 +1067,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/font/fonts/open-iconic.woff",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1006,17 +1084,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/FONT-LICENSE",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1025,17 +1101,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\FONT-LICENSE"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/ICON-LICENSE",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1044,17 +1118,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\ICON-LICENSE"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\README.md",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\open-iconic\\README.md",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/open-iconic/README.md",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1063,17 +1135,15 @@
       "OriginalItemSpec": "wwwroot\\css\\open-iconic\\README.md"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\css\\site.css",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\site.css",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "css/site.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1082,17 +1152,15 @@
       "OriginalItemSpec": "wwwroot\\css\\site.css"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\favicon.png",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\favicon.png",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "favicon.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1101,17 +1169,15 @@
       "OriginalItemSpec": "wwwroot\\favicon.png"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\account.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\account.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/account.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1120,17 +1186,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\account.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\admin.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\admin.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/admin.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1139,17 +1203,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\admin.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\assist.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\assist.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/assist.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1158,17 +1220,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\assist.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\borrow.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\borrow.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/borrow.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1177,17 +1237,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\borrow.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\coop_img\\band_black.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\coop_img\\band_black.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/coop_img/band_black.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1196,17 +1254,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\coop_img\\band_black.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\deposit.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\deposit.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/deposit.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1215,17 +1271,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\deposit.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\divavg.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\divavg.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/divavg.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1234,17 +1288,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\divavg.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\dur.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\dur.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/dur.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1253,17 +1305,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\dur.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\finance.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\finance.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/finance.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1272,17 +1322,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\finance.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\fom.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\fom.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/fom.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1291,17 +1339,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\fom.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\hr.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\hr.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/hr.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1310,17 +1356,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\hr.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\insurance.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\insurance.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/insurance.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1329,17 +1373,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\insurance.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\ixp.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\ixp.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/ixp.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1348,17 +1390,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\ixp.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\keeping.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\keeping.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/keeping.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1367,17 +1407,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\keeping.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\loan.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\loan.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/loan.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1386,17 +1424,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\loan.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\mbshr.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\mbshr.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/mbshr.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1405,17 +1441,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\mbshr.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\mis.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\mis.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/mis.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1424,17 +1458,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\mis.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\rdc.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\rdc.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/rdc.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1443,17 +1475,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\rdc.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\Images\\walfare.jpg",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Images\\walfare.jpg",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "Images/walfare.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1462,17 +1492,15 @@
       "OriginalItemSpec": "wwwroot\\Images\\walfare.jpg"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\blazorInterop.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\blazorInterop.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/blazorInterop.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1481,17 +1509,15 @@
       "OriginalItemSpec": "wwwroot\\js\\blazorInterop.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\formatNumber.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\formatNumber.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/formatNumber.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1500,17 +1526,15 @@
       "OriginalItemSpec": "wwwroot\\js\\formatNumber.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\imageUpload.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\imageUpload.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/imageUpload.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1519,17 +1543,15 @@
       "OriginalItemSpec": "wwwroot\\js\\imageUpload.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\interop.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\interop.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/interop.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1538,17 +1560,15 @@
       "OriginalItemSpec": "wwwroot\\js\\interop.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\modal.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\modal.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/modal.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1557,17 +1577,15 @@
       "OriginalItemSpec": "wwwroot\\js\\modal.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\navbar.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\navbar.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/navbar.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1576,17 +1594,15 @@
       "OriginalItemSpec": "wwwroot\\js\\navbar.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\preview.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\preview.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/preview.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1595,6 +1611,7 @@
       "OriginalItemSpec": "wwwroot\\js\\preview.js"
     },
     {
+<<<<<<< HEAD
 <<<<<<< HEAD
       "Identity": "D:\\FinanceApp\\wwwroot\\js\\printInterop.js",
       "SourceId": "FinanceApp",
@@ -1646,13 +1663,17 @@
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
       "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+=======
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\print.min.js",
+      "SourceId": "FinanceApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
+>>>>>>> parent of cdcc0c7 (loan)
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/print.min.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1661,17 +1682,32 @@
       "OriginalItemSpec": "wwwroot\\js\\print.min.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\resize.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\printInterop.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
+      "BasePath": "_content/FinanceApp",
+      "RelativePath": "js/printInterop.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\printInterop.js"
+    },
+    {
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\resize.js",
+      "SourceId": "FinanceApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/resize.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1680,17 +1716,15 @@
       "OriginalItemSpec": "wwwroot\\js\\resize.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\select2Interop.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\select2Interop.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/select2Interop.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1699,17 +1733,15 @@
       "OriginalItemSpec": "wwwroot\\js\\select2Interop.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\selected.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\selected.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/selected.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1718,17 +1750,15 @@
       "OriginalItemSpec": "wwwroot\\js\\selected.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\sessionInterop.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\sessionInterop.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/sessionInterop.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
@@ -1737,17 +1767,15 @@
       "OriginalItemSpec": "wwwroot\\js\\sessionInterop.js"
     },
     {
-      "Identity": "D:\\FinanceApp\\wwwroot\\js\\site.js",
+      "Identity": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\site.js",
       "SourceId": "FinanceApp",
       "SourceType": "Discovered",
-      "ContentRoot": "D:\\FinanceApp\\wwwroot\\",
+      "ContentRoot": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\",
       "BasePath": "_content/FinanceApp",
       "RelativePath": "js/site.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
-      "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",

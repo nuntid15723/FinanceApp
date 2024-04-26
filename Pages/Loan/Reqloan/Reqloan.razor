@@ -15,21 +15,6 @@
 @using System.ComponentModel.DataAnnotations *@
 @using System.Text;
 
-@* @using FinanceApp.Models;
-@using Newtonsoft.Json.Linq;
-@using Radzen.Blazor
-@using Microsoft.JSInterop
-@inject IJSRuntime jsRuntime
-@inject HttpClient httpClient
-@using System.Linq.Dynamic.Core
-@inject NotificationService NotificationService
-@using System.Globalization
-@using System.Text.Json
-@using System.ComponentModel
-@using Microsoft.AspNetCore.Components
-@using System.Net;
-@inherits LayoutComponentBase *@
-
 <style>
     .icon-search {
         display: inline-flex !important;
@@ -150,1443 +135,408 @@
 <div class="header-page">
     <div class="row-header d-flex justify-content-between ">
         <div class="header-left">
-            <h4> ระบบ สินเชื่อ - ขอกู้เงิน </h4>
+            <h4>ขอกู้เงินสามัญ</h4>
         </div>
     </div>
 </div>
 
-@* 1 *@
-@if (datalists == null){
-    <div class="card body-page">
-            <div class="from" @onsubmit="SearchOfGet">
-                <div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-                    <div class="row mt-2">
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เลขสมาชิก</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <!-- <input class="form-control text-center" type="text" name="" placeholder="AUTO" readonly> -->
-                                    <RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="@searchTerm" Name="searchTerm"	
-                                    class="form-control" @onkeydown="@HandleEnterKeyPress" />
-                                    @* <input type="text" @bind="@searchTerm" class="form-control" Name="member_no" /> *@
-                                    @*
-                                    <RadzenMask Mask="********" CharacterPattern="[0-9]" Name="" class="form-control" /> *@
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#ModalSearch">
-                                        ... 
-                                    </button>
-                                    &nbsp;
-                                    <button class="btn btn-outline-secondary"  @onclick="SearchOfGet">  
-                                    @if (isLoading) {
-                                        <span>...</span>
-                                        <i class="fa fa-spinner fa-spin"></i>
-                                    }
-                                    else {
-                                        <span>ค้นหา</span>
-                                    }
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- STAR ModalSearch -->
-                            <div class="modal" tabindex="-1" id="ModalSearch">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">ข้อมูลสมาชิก</h4>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            <div class="row" style="margin-left:-4px;margin-right:-4px;">
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เลขสมาชิก</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <RadzenMask Mask="********" CharacterPattern="[0-9]"
-                                                                Name="deptaccount_no" class="form-control" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">ชื่อ:</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">นามสกุล</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เลขบัตรรประชาชน</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">สังกัด</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <div class="col-2">
-                                                                <input class="form-control text-center" type="text" name="">
-                                                            </div>
-                                                            &nbsp;
-                                                            <div class="col">
-                                                                <select class="form-select">
-                                                                    <option selected>เลือกสังกัด</option>
-                                                                    <option Value="1">01 - (01) เงินกู้สามัญ - ปกติ</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เบอร์โทรศัพท์</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" MaxLength="10"
-                                                                Placeholder="(000) 000-0000" Name="phone" @bind-Value="phone"
-                                                                class="form-control" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">กลุ่มสมาชิก</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <select class="form-select">
-                                                                <option selected>เลือกกลุ่มสมาชิก</option>
-                                                                <option Value="10">สามัญ</option>
-                                                                <option Value="20">สมทบ</option>
-                                                                <option Value="30">สหกรณ์อื่นๆ</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">สถานะสมาชิก</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <select class="form-select">
-                                                                <option selected>ท้ังหมด</option>
-                                                                <option Value="1">ปกติ</option>
-                                                                <option Value="2">ลาออก</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เลขพนักงาน</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">สาขา</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <select class="form-select">
-                                                                <option selected>เลือกสาขา</option>
-                                                                <option Value="1">077001 - สหกรณ์ออมทรัพบ์บริษัท...</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex justify-content-end mb-2"
-                                                style="margin-left:-4px;margin-right:-4px;">
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column  ">
-                                                    <label class="form-label" for="">&nbsp;</label>
-                                                    <button class="btn btn-outline-secondary">ค้นหา</button>
-                                                </div>
-                                            </div>
-                                            <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
-                                                ColumnWidth="100%" AllowFiltering="true"
-                                                FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                                                FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-                                                AllowPaging="true" AllowSorting="true"
-                                                PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-                                                <Columns>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="เลขบัตรประชาชน" Property="">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="เลขสมาชิก" Property="">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="ชื่อ - นามสกุล" Property="prncslip_amt">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="สังกัด" Property="">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="เบอร์มือถือ" Property="">
-                                                    </RadzenDataGridColumn>
-                                                </Columns>
-                                            </RadzenDataGrid>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <!-- END ModalSearch -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-    </div>
-}else{
-    @foreach (var item in datalists)
-    {
-        <div class="card body-page">
-            <div class="from">
-                <div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-                    <div class="row mb-2">
-                        <div class="col-xl-4 col-md-4 col-sm-12 d-flex flex-column mt-2">
-                            <button type="button" class="btn btn-outline-secondary">พิมพ์ใบตรวจสอบสิทธิ</button>
-                        </div>
-                        <div class="col-xl-4 col-md-4 col-sm-12 d-flex flex-column mt-2">
-                            <button type="button" class="btn btn-outline-secondary">พิมพ์ใบตรวจสอบเอกสาร</button>
-                        </div>
-                        <div class="col-xl-4 col-md-4 col-sm-12 d-flex flex-column mt-2">
-                            <button type="button" class="btn btn-outline-secondary">พิมพ์ใบcredistscoll</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for=""> เลขที่ใบขอกู้</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="text" name="" placeholder="AUTO" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">วันที่ขอกู้</label>
-                            <div class="input-group">
-                                <input type="date" class="form-control text-center" readonly />
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for=""> ประเภทใบขอกู้</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <div class="col-2">
-                                        <input class="form-control " type="text" name="">
-                                    </div>
-
-                                    &nbsp;
-                                    <div class="col">
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option value="1">กรุณาเลือก</option>
-                                            <option value="1"> 01 - (01) เงินกู้สามัญ - ปกติ</option>
-                                            <option value="2"> 03 - (03) เงินกู้สามัญ - ปกติ(ทุนเรือนหุ้นค้ำชำระรายเดือน)
-                                            </option>
-                                            <option value="3"> 04 - (04) เงินกู้สามัญ - ปกติ(เงินฝากค้ำชำระรายเดือน) </option>
-                                            <option value="4"> 05 - (05) เงินกู้สามัญ - ปกติ(เงินฝากค้ำหักดอกเบี้ย) </option>
-                                            <option value="5"> 06 - (06) เงินกู้สามัญ - ปกติ(คำนวณโบนัส) </option>
-                                            <option value="6"> 07 - (07) เงินกู้สามัญ - ปกติ(คำนวณโบนัส คำนวณโอที) </option>
-                                            <option value="7"> 08 - (08) เงินกู้สามัญ - ปรับปรุงโครงสร้างหนี้ </option>
-                                            <option value="8"> 09 - (09) เงินกู้สามัญ - เพื่อชำระหนี้แทน </option>
-                                            <option value="9"> 21 - (21) เงินกู้ฉุกเฉิน </option>
-                                            <option value="10"> 22 - (22) เงินกู้ฉุกเฉินผ่าน ATM </option>
-                                            <option value="11"> 2A - (2A) เงินกู้ฉุกเฉิน(คำนวณโอที) </option>
-                                            <option value="12"> 2B - (2B) เงินกู้ฉุกเฉินผ่าน ATM (คำนวณโอที) </option>
-                                            <option value="13"> 2C - (2C) เงินกู้ฉุกเฉินโครงการสวัสดิการกู้เพือเหตุฉุกเฉิน
-                                            </option>
-                                            <option value="14"> 31 - (31) เงินกู้พิเศษ - ซื้อบ้าน </option>
-                                            <option value="15"> 32 - (32) เงินกู้พิเศษ - ซื้อรถยนต์ </option>
-                                            <option value="16"> 36 - (36) เงินกู้พิเศษ - ซื้อบ้านสวัสดิการเจ้าหน้าที่ </option>
-                                            <option value="17"> 39 - (39) เงินกู้พิเศษ - หุ้นค้ำ(ชำระรายปี) </option>
-                                            <option value="18"> 3A - (3A) เงินกู้พิเศษ - (หุ้น เงินฝากค้ำ 240 งวด) </option>
-                                            <option value="19"> 3B - (3B) เงินกู้พิเศษ - บ้าน(อายุ 65) </option>
-                                            <option value="20"> 3C - (3C) เงินกู้พิเศษ - ซื้อบ้าน(คำนวณโอที) </option>
-                                            <option value="21"> 3D - (3D) เงินกู้พิเศษ - บ้าน(อายุ 65)(คำนวณโอที) </option>
-                                            <option value="22"> 3E - (3E) เงินกู้พิเศษ - ซื้อรถยนต์(คำนวณโอที) </option>
-                                            <option value="23"> 3M - (3M) โครงการเงินกู้พิเศษ - เคหะ(25 ปี)(34/62) </option>
-                                            <option value="24"> 45 - (45) เงินกู้สวัสดิการเจ้าหน้าที่ </option>
-                                            <option value="25"> 6L - (6L) เงินกู้สามัญ - ปกติ(คำนวณโอที) </option>
-                                            <option value="26"> 71 - (71) เงินกู้สามัญ-เงินรางวัลพิเศษปี 67 (4เท่า) (48/66)
-                                            </option>
-                                            <option value="27"> 7G - (7G) เงินกู้สามัญ - หุ้นค้ำ(ชำระรายปี สมาชิกสมทบ) </option>
-                                            <option value="28"> 81 - (สค) เงินกู้สามัญโครงการ 7 ล้าน </option>
-                                            <option value="29"> 82 - (82) เงินกู้สามัญ - เจ็ดล้าน(คำนวณโอที)(40/65) </option>
-                                            <option value="30"> 83 - (83) เงินกู้สามัญ - 3 เท่าของเงินเดือน (39/65) </option>
-                                            <option value="31"> 84 - (84) เงินกู้สามัญ - เงินสงเคราะห์ถึงแก่กรรม(41/65)
-                                            </option>
-                                            <option value="32"> 85 - (สค) เงินกู้สามัญปันผล </option>
-                                            <option value="33"> 86 - (86) เงินกู้สามัญเพือการศีกษาบุตร </option>
-                                            <option value="34"> 89 - (89) เงินกู้สามัญ - เงินรางวัลพิเศษปี2567(44/66) </option>
-                                            <option value="35"> 99 - (99) เงินกู้เพื่อใช้ในทดสอบการสร้างผลิตภัณฑ์ใหม่ </option>
-                                            <option value="36"> 9V - (9V) เงินกู้สามัญ - ทดสอบ </option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เลขสมาชิก</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <!-- <input class="form-control text-center" type="text" name="" placeholder="AUTO" readonly> -->
-                                    <input type="text" @bind="@searchTerm" class="form-control" Name="searchTerm" />
-                                    @*
-                                    <RadzenMask Mask="********" CharacterPattern="[0-9]" Name="" class="form-control" /> *@
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal"
-                                        data-bs-target="#ModalSearch">
-                                        ...
-                                    </button>
-                                    &nbsp;
-                                    <button class="btn btn-outline-secondary" @onclick="SearchOfGet">
-                                        ค้นหา
-                                    </button>
-                                </div>
-                            </div>
-                            <!-- STAR ModalSearch -->
-                            <div class="modal" tabindex="-1" id="ModalSearch">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <!-- Modal Header -->
-                                        <div class="modal-header">
-                                            <h4 class="modal-title">ข้อมูลสมาชิก</h4>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <!-- Modal body -->
-                                        <div class="modal-body">
-                                            <div class="row" style="margin-left:-4px;margin-right:-4px;">
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เลขสมาชิก</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <RadzenMask Mask="********" CharacterPattern="[0-9]"
-                                                                Name="deptaccount_no" class="form-control" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">ชื่อ:</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">นามสกุล</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เลขบัตรรประชาชน</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">สังกัด</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <div class="col-2">
-                                                                <input class="form-control text-center" type="text" name="">
-                                                            </div>
-                                                            &nbsp;
-                                                            <div class="col">
-                                                                <select class="form-select">
-                                                                    <option selected>เลือกสังกัด</option>
-                                                                    <option Value="1">01 - (01) เงินกู้สามัญ - ปกติ</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เบอร์โทรศัพท์</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <RadzenMask Mask="(***) ***-****" Pattern="[^0-9]" MaxLength="10"
-                                                                Placeholder="(000) 000-0000" Name="phone" @bind-Value="phone"
-                                                                class="form-control" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">กลุ่มสมาชิก</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <select class="form-select">
-                                                                <option selected>เลือกกลุ่มสมาชิก</option>
-                                                                <option Value="10">สามัญ</option>
-                                                                <option Value="20">สมทบ</option>
-                                                                <option Value="30">สหกรณ์อื่นๆ</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">สถานะสมาชิก</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <select class="form-select">
-                                                                <option selected>ท้ังหมด</option>
-                                                                <option Value="1">ปกติ</option>
-                                                                <option Value="2">ลาออก</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">เลขพนักงาน</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <input class="form-control" type="text" name="">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                                                    <label class="form-label" for="">สาขา</label>
-                                                    <div class="form-group ">
-                                                        <div class="input-group">
-                                                            <select class="form-select">
-                                                                <option selected>เลือกสาขา</option>
-                                                                <option Value="1">077001 - สหกรณ์ออมทรัพบ์บริษัท...</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row d-flex justify-content-end mb-2"
-                                                style="margin-left:-4px;margin-right:-4px;">
-                                                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column  ">
-                                                    <label class="form-label" for="">&nbsp;</label>
-                                                    <button class="btn btn-outline-secondary">ค้นหา</button>
-                                                </div>
-                                            </div>
-                                            <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails"
-                                                ColumnWidth="100%" AllowFiltering="true"
-                                                FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                                                FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-                                                AllowPaging="true" AllowSorting="true"
-                                                PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-                                                <Columns>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="เลขบัตรประชาชน" Property="">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="เลขสมาชิก" Property="">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="ชื่อ - นามสกุล" Property="prncslip_amt">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="สังกัด" Property="">
-                                                    </RadzenDataGridColumn>
-                                                    <RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-                                                        Title="เบอร์มือถือ" Property="">
-                                                    </RadzenDataGridColumn>
-                                                </Columns>
-                                            </RadzenDataGrid>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <!-- END ModalSearch -->
-                        </div>
-                        @* <div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-                            <button type="button" class="btn btn-outline-secondary">...</button>
-                        </div> *@
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control" type="text" ame="" placeholder="เลขพนักงาน" />
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-xl-2 col-md-3 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control" readonly type="text" Name="" />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-3 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <select class="form-select" aria-label="Default select example" disabled>
-                                        <option value="1"> </option>
-                                        <option value="2"> --- </option>
-                                    </select>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">สังกัด</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <select class="form-select" aria-label="Default select example" disabled>
-                                        <option value="1"> </option>
-                                        <option value="2"> --- </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">อนุมัติทันที</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">รออนุมัติ</option>
-                                        <option value="2">อนุมัติออกเลขสัญญา</option>
-                                        <option value="2">อนุมัติและจ่าย</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2 d-flex justify-content-end">
-                        <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp; </label>
-                            <div class="form-group ">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                    <label class="form-check-label text-end" for="flexCheckDefault">
-                                        ระบุวันที่จ่ายเงินกู้
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">วันที่จ่าย</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" readonly type="date" Name="" />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row mt-4">
-                        <hr class="w-80">
-                    </div>
-
-                    <div class="row">
-                        <label class="form-label" for=""> <u>ข้อมูลประกอบการขอกู้</u></label>
-                        <div class="col-xl-3 col-md-8 col-sm-9 d-flex flex-column">
-                            <label class="form-label" for=""> วันเกิด</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="date" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-1 col-md-4 col-sm-3 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-8 col-sm-9 d-flex flex-column">
-                            <label class="form-label" for=""> วันเกษียณ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="date" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-1 col-md-4 col-sm-3 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-8 col-sm-9 d-flex flex-column">
-                            <label class="form-label" for=""> เป็นสมาชิก</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="date" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-1 col-md-4 col-sm-3 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-3 col-md-8 col-sm-9 d-flex flex-column">
-                            <label class="form-label" for=""> วันที่เข้าทำงาน</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control" type="date" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-1 col-md-4 col-sm-3 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-md-8 col-sm-9 d-flex flex-column">
-                            <label class="form-label" for=""> เงินฝาก S3</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control" type="text" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-1 col-md-4 col-sm-3 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0.00" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for=""> ทุนเรือนหุ้น</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" placeholder="0.00" name="" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <hr class="w-80">
-                    </div>
-
-                    <div class="row mt-2">
-                        <label class="form-label" for=""> <u>วัตถุประสงค์ สิทธิการกู้: </u></label>
-                        <div class="col-xl-4 col-md-8 col-sm-9 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <div class="col-2">
-                                        <input class="form-control" type="number" placeholder="0" name="" readonly>
-                                    </div>
-                                    &nbsp;
-                                    <div class="col">
-                                        <select class="form-select" aria-label="Default select example">
-                                            <option value="1">กรุณาเลือก</option>
-                                            <option value="2"> --- </option>
-                                        </select>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">สิทธิการกู้: </label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label text-end" for="flexCheckDefault">
-                                            ระบุวันที่จ่ายเงินกู้
-                                        </label>
-                                    </div>
-                                    &nbsp;&nbsp;
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label text-end" for="flexCheckDefault">
-                                            ระบุวันที่จ่ายเงินกู้
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">สิทธิ์กู้ที่ได้ </label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" name="" placeholder="0.00" readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">สิทธิกู้สุทธิ </label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" name="" placeholder="0.00" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">ให้กู้ </label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" name="" placeholder="0.00" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">ดอกเบี้ยประมาณ </label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <div class="col-2">
-                                        <input class="form-control text-center" type="number" name="" placeholder="0" readonly>
-                                    </div>
-                                    &nbsp;
-                                    <div class="col">
-                                        <input class="form-control text-end" type="number" name="" placeholder="0.00" readonly>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-12 col-md-12 col-sm-12 d-flex flex-column">
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" name="" placeholder="0.00" readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <hr class="w-80">
-                    </div>
-
-                    <div class="row mt-2">
-                        <label class="form-label" for=""> <u>เงื่อนไขอัตราดอกเบี้ย </u></label>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">&nbsp;</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <div class="col-2">
-                                        <input class="form-control text-center" type="number" placeholder="0" value="0" name="">
-                                    </div>
-                                    &nbsp;
-                                    <div class="col">
-                                        <select class="form-select" aria-label="Default select example" disabled>
-                                            <option value="1">ไม่ได้คิดดอกเบี้ย</option>
-                                            <option value="2"> --- </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">การชำระ: </label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label text-end" for="flexCheckDefault">
-                                            กำหนดงวดเอง
-                                        </label>
-                                    </div>
-                                    &nbsp;
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                        <label class="form-check-label text-end" for="flexCheckDefault">
-                                            <b>ขอส่งเกินงวดเกษียณ</b>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">ชำระงวด</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" placeholder="0.00" name="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">จำนวนงวด</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-center" type="number" placeholder="0" name="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">งวดสุดท้าย</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">ประเภทการส่ง</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">ไม่มีการเรียกเก็บ</option>
-                                        <option value="2"> ต้นเท่ากัน </option>
-                                        <option value="3"> ต้น + ดอกเท่ากัน </option>
-                                        <option value="4"> ส่งแต่ดอกเบี้ย </option>
-                                        <option value="5"> อัตราก้าวหน้า </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">การชำระแบบ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">หักจากเงินเดือน</option>
-                                        <option value="2"> หักจากบัญชีเงินฝาก </option>
-                                        <option value="3"> บัญชีภายนอก </option>
-                                        <option value="4"> ชำระเอง </option>
-                                        <option value="5"> เงินปันผล </option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <hr class="w-80">
-                    </div>
-
-                    <div class="row mt-2">
-                        <label class="form-label" for=""> <u>เงินเดือนคงเหลือ </u></label>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เงินเดือน</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name="">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">ยอดหักจาก สก</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                    &nbsp;
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">ยอดหักอื่นๆ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                    &nbsp;
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เงินได้อื่นๆ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                    &nbsp;
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เงินได้คงเหลือ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00%" placeholder="0.00" name=""
-                                        readonly>
-                                    &nbsp;
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-8 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เงินได้เหลือขั้นต่ำ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="number" value="0.00%" placeholder="0.00" name=""
-                                        readonly>
-                                    &nbsp;
-                                    <input class="form-control text-end" type="number" value="0.00" placeholder="0.00" name=""
-                                        readonly>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2 d-flex justify-content-end">
-                        <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                            <div class="form-group ">
-                                <button class="btn btn-outline-secondary w-100">
-                                    รายการรับ
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                            <div class="form-group ">
-                                <button class="btn btn-outline-secondary w-100">
-                                    รายการจ่าย
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="row mt-4">
-                        <hr class="w-80">
-                    </div>
-
-                    <div class="row mt-2">
-                        <label class="form-label" for=""> <u>การจ่ายเงินกู้ </u></label>
-                        <div class="col-xl-12 col-md-12 col-sm-12 d-flex flex-column">
-                            <label class="form-label" for="">จ่ายเงินกู้เป็น</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">เงินสด</option>
-                                        <option value="2"> เช็คธนาคาร </option>
-                                        <option value="3"> โอนธนาคาร </option>
-                                        <option value="4"> โอนภายนอก </option>
-                                        <option value="5"> โอนภายในสหกรณ์ </option>
-                                        <option value="6"> เงินเดือน </option>
-                                        <option value="7"> เงินรอจ่ายคืน </option>
-                                        <option value="8"> เงินกู้แบ่งจ่าย </option>
-                                    </select>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-4 col-md-10 col-sm-10 d-flex flex-column">
-                            <label class="form-label" for="">ธนาคาร</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="text" placeholder="" name="">
-                                    &nbsp;
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">กรุณาเลือกธนาคาร</option>
-                                        <option value="2"> 002-ธนาคารกรุงเทพ </option>
-                                    </select>
-                                    <button type="button" class="btn btn-outline-secondary">...</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-4 col-md-10 col-sm-10 d-flex flex-column">
-                            <label class="form-label" for="">สาขา</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="text" placeholder="" name="">
-                                    &nbsp;
-                                    <select class="form-select" aria-label="Default select example">
-                                        <option value="1">กรุณาเลือกสาขาธนาคาร</option>
-                                        <option value="2"> 001- สีลม </option>
-                                    </select>
-                                    <button type="button" class="btn btn-outline-secondary">...</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                            <label class="form-label" for="">เลขที่บัญชี</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <input class="form-control text-end" type="text" placeholder="" name="">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-2">
-                        <div class="col-xl-12 col-md-12 col-sm-12 d-flex flex-column">
-                            <label class="form-label" for="">หมายเหตุ</label>
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <textarea class="form-control" id="Textarea1" rows="3"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-}
-
-
-
 <div class="card body-page">
-    <div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px; padding: 0px;">
+    <div class="row mt-2"
+        style="margin-left: calc(var(--bs-gutter-x) * .0);margin-right: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px; padding: 0px;">
+
         @if (datalists == null)
         {
-        <div class="row">
-            <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
-                <label class="form-label my-element" for="">เลขที่ใบขอกู้</label>
-                <div class="input-group">
-                    @* <input type="text" @bind="@searchTerm" class="form-control" Name="deptaccount_no" /> *@
+            <div class="row">
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">เลขที่ใบขอกู้</label>
+                    <div class="input-group">
+                        <input type="text" @bind="@searchTerm" class="form-control" Name="deptaccount_no" />
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column" style="margin-top: 45px;">
+                    <button class="btn btn-outline-secondary" @onclick="SearchOfGet">
+                        ค้นหา
+                    </button>
                 </div>
             </div>
-            <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column" style="margin-top: 45px;">
-                <button class="btn btn-outline-secondary" @onclick="SearchOfGet">
-                    ค้นหา
-                </button>
-            </div>
-        </div>
         }
 
         else
         {
-        @foreach (var item in datalists)
-        {
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">เลขสมาชิก</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.coop_id" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">เลขพนักงาน</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.member_no" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">ชื่อ-นามสกุล</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.fullname" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">ตำแหน่ง</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.membtype_desc" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">ตำแหน่ง</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.membgroup_desc" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">วันที่ขอสินเชื่อ</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.loanrequest_date" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">วันเกิด</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.birth_date" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">วันที่เป็นสมาชิก</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.member_date" />
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-            <label class="form-label my-element" for="">รายการอายุสมาชิก</label>
-            <div class="input-group">
-                <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.member_ageshow" />
-            </div>
-        </div>
-
-        <div class="row" hidden>
-            <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                <label class="form-label my-element" for="">วันที่ผ่านรายการ</label>
-                <RadzenDatePicker @bind-Value=@posted_date Name="posted_date" DateFormat="dd/MM/yyyy" />
-            </div>
-
-            <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                <label class="form-label my-element" for="">ประเภทเงินกู้</label>
-                <select class="form-select" name="" id="" style="text-align:left;">
-                    <option value="1">กรุณาเลือก</option>
-                    <option value="1"> 01 - (01) เงินกู้สามัญ - ปกติ</option>
-                    <option value="2"> 03 - (03) เงินกู้สามัญ - ปกติ(ทุนเรือนหุ้นค้ำชำระรายเดือน) </option>
-                    <option value="3"> 04 - (04) เงินกู้สามัญ - ปกติ(เงินฝากค้ำชำระรายเดือน) </option>
-                    <option value="4"> 05 - (05) เงินกู้สามัญ - ปกติ(เงินฝากค้ำหักดอกเบี้ย) </option>
-                    <option value="5"> 06 - (06) เงินกู้สามัญ - ปกติ(คำนวณโบนัส) </option>
-                    <option value="6"> 07 - (07) เงินกู้สามัญ - ปกติ(คำนวณโบนัส คำนวณโอที) </option>
-                    <option value="7"> 08 - (08) เงินกู้สามัญ - ปรับปรุงโครงสร้างหนี้ </option>
-                    <option value="8"> 09 - (09) เงินกู้สามัญ - เพื่อชำระหนี้แทน </option>
-                    <option value="9"> 21 - (21) เงินกู้ฉุกเฉิน </option>
-                    <option value="10"> 22 - (22) เงินกู้ฉุกเฉินผ่าน ATM </option>
-                    <option value="11"> 2A - (2A) เงินกู้ฉุกเฉิน(คำนวณโอที) </option>
-                    <option value="12"> 2B - (2B) เงินกู้ฉุกเฉินผ่าน ATM (คำนวณโอที) </option>
-                    <option value="13"> 2C - (2C) เงินกู้ฉุกเฉินโครงการสวัสดิการกู้เพือเหตุฉุกเฉิน </option>
-                    <option value="14"> 31 - (31) เงินกู้พิเศษ - ซื้อบ้าน </option>
-                    <option value="15"> 32 - (32) เงินกู้พิเศษ - ซื้อรถยนต์ </option>
-                    <option value="16"> 36 - (36) เงินกู้พิเศษ - ซื้อบ้านสวัสดิการเจ้าหน้าที่ </option>
-                    <option value="17"> 39 - (39) เงินกู้พิเศษ - หุ้นค้ำ(ชำระรายปี) </option>
-                    <option value="18"> 3A - (3A) เงินกู้พิเศษ - (หุ้น เงินฝากค้ำ 240 งวด) </option>
-                    <option value="19"> 3B - (3B) เงินกู้พิเศษ - บ้าน(อายุ 65) </option>
-                    <option value="20"> 3C - (3C) เงินกู้พิเศษ - ซื้อบ้าน(คำนวณโอที) </option>
-                    <option value="21"> 3D - (3D) เงินกู้พิเศษ - บ้าน(อายุ 65)(คำนวณโอที) </option>
-                    <option value="22"> 3E - (3E) เงินกู้พิเศษ - ซื้อรถยนต์(คำนวณโอที) </option>
-                    <option value="23"> 3M - (3M) โครงการเงินกู้พิเศษ - เคหะ(25 ปี)(34/62) </option>
-                    <option value="24"> 45 - (45) เงินกู้สวัสดิการเจ้าหน้าที่ </option>
-                    <option value="25"> 6L - (6L) เงินกู้สามัญ - ปกติ(คำนวณโอที) </option>
-                    <option value="26"> 71 - (71) เงินกู้สามัญ-เงินรางวัลพิเศษปี 67 (4เท่า) (48/66) </option>
-                    <option value="27"> 7G - (7G) เงินกู้สามัญ - หุ้นค้ำ(ชำระรายปี สมาชิกสมทบ) </option>
-                    <option value="28"> 81 - (สค) เงินกู้สามัญโครงการ 7 ล้าน </option>
-                    <option value="29"> 82 - (82) เงินกู้สามัญ - เจ็ดล้าน(คำนวณโอที)(40/65) </option>
-                    <option value="30"> 83 - (83) เงินกู้สามัญ - 3 เท่าของเงินเดือน (39/65) </option>
-                    <option value="31"> 84 - (84) เงินกู้สามัญ - เงินสงเคราะห์ถึงแก่กรรม(41/65) </option>
-                    <option value="32"> 85 - (สค) เงินกู้สามัญปันผล </option>
-                    <option value="33"> 86 - (86) เงินกู้สามัญเพือการศีกษาบุตร </option>
-                    <option value="34"> 89 - (89) เงินกู้สามัญ - เงินรางวัลพิเศษปี2567(44/66) </option>
-                    <option value="35"> 99 - (99) เงินกู้เพื่อใช้ในทดสอบการสร้างผลิตภัณฑ์ใหม่ </option>
-                    <option value="36"> 9V - (9V) เงินกู้สามัญ - ทดสอบ </option>
-                </select>
-            </div>
-
-            <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                <label class="form-label my-element" for="">สังกัด</label>
-                <select class="form-select" name="" id="" style="text-align:left;">
-                    <option value="1">กรุณาเลือก</option>
-                    <option value="2">1</option>
-                    <option value="3">2</option>
-                    <option value="4">3</option>
-                </select>
-            </div>
-
-            <div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-                <label class="form-label my-element" style="margin-top: 25px;"></label>
-                <select class="form-select" name="" id="" style="text-align:left;">
-                    <option value="1">รออนุมัติ</option>
-                    <option value="2">อนุมัติออกเลขสัญญา</option>
-                    <option value="3">อนุมัติและจ่าย</option>
-                </select>
-            </div>
-
-            <div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-                <div class="form-check" style="margin-top: 35px;">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="item.coop_id">
-                    <label class="form-check-label" for="flexCheckDefault">ระบุวันที่จ่ายเงินกู้</label>
-                </div>
-            </div>
-
-            <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                <label class="form-label my-element">วันที่จ่าย</label>
-                <RadzenDatePicker @bind-Value=@payment_date Name="payment_date" DateFormat="dd/MM/yyyy" />
-            </div>
-
-            <h5>ข้อมูลประกอบการขอกู้</h5>
-            <div class="row">
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element">วันเกิด</label>
-                    <RadzenDatePicker @bind-Value=@birthday Name="birthday" DateFormat="dd/MM/yyyy" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element">วันเกษียณ</label>
-                    <RadzenDatePicker @bind-Value=@retirement_date Name="retirement_date" DateFormat="dd/MM/yyyy" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element">เป็นสมาชิก</label>
-                    <RadzenDatePicker @bind-Value=@member_date Name="member_date" DateFormat="dd/MM/yyyy" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element">วันเข้าทำงาน</label>
-                    <RadzenDatePicker @bind-Value=@working_date Name="working_date" DateFormat="dd/MM/yyyy" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">ทุนเรือนหุ้น</label>
-                    <input class="form-control" style="text-align: end; font-size: 16px;" placeholder="0.00"
-                        Name="chq_amt" />
-                </div>
-            </div>
-
-            <div class="row">
+            @foreach (var item in datalists)
+            {
                 <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;">วัตถุประสงค์สิทธิการกู้</label>
-                    <select class="form-select" name="" id="" style="text-align:left;">
-                        <option value="1">กรุณาเลือก</option>
-                        <option value="2">A</option>
-                        <option value="3">B</option>
-                        <option value="4">C</option>
-                    </select>
-                </div>
-
-                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;">เงื่อนไขอัตราดอกเบี้ย</label>
-                    <select class="form-select" name="" id="" style="text-align:left;">
-                        <option value="1">กรุณาเลือก</option>
-                        <option value="2">A</option>
-                        <option value="3">B</option>
-                        <option value="4">C</option>
-                    </select>
-                </div>
-
-                <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
-                    <div class="form-check" style="margin-top: 65px;">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">วงเงิน OD</label>
+                    <label class="form-label my-element" for="">เลขสมาชิก</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.coop_id" />
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
-                    <div class="form-check" style="margin-top: 65px;">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">หุ้นรอเก็บ</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">สิทธิ์กู้ที่ได้</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">สิทธิกู้สุทธิ</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">ให้กู้</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">ดอกเบี้ยประมาณ</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
-                    <div class="form-check" style="margin-top: 45px;">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">กำหนดงวดเอง</label>
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">เลขพนักงาน</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.member_no" />
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
-                    <div class="form-check" style="margin-top: 45px;">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                        <label class="form-check-label" for="flexCheckDefault">ขอส่งเกินงวดเกษียณ</label>
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ชื่อ-นามสกุล</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.fullname" />
                     </div>
                 </div>
 
-                <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">ชำระงวด</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">จำนวนงวด</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">งวดสุดท้าย</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label my-element" for="">ตำแหน่ง</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.membtype_desc" />
+                    </div>
                 </div>
 
                 <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;">ประเภทการส่ง</label>
-                    <select class="form-select" name="" id="" style="text-align:left;">
-                        <option value="1">ไม่มีการเรียกเก็บ</option>
-                        <option value="2">ต้นเท่ากัน</option>
-                        <option value="3">ต้น+ดอกเท่ากัน</option>
-                        <option value="4">ส่งแต่ดอกเบี้ย</option>
-                        <option value="5">อัตราก้าวหน้า</option>
-                    </select>
+                    <label class="form-label my-element" for="">ตำแหน่ง</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.membgroup_desc" />
+                    </div>
                 </div>
 
                 <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;">การชำระแบบ</label>
-                    <select class="form-select" name="" id="" style="text-align:left;">
-                        <option value="1">หักจากเงินเดือน</option>
-                        <option value="2">หักจากบัญชีเงินฝาก</option>
-                        <option value="3">บัญชีภายนอก</option>
-                        <option value="4">ชำระเอง</option>
-                        <option value="4">เงินปันผล</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">เงินเดือน</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">ยอดหักจาก สก</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">ยอดหักอื่นๆ</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">เงินได้อื่นๆ</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">เงินได้คงเหลือ</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-
-                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">เงินได้เหลือขั้นต่ำ</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;">จ่ายเงินกู้เป็น</label>
-                    <select class="form-select" name="" id="" style="text-align:left;">
-                        <option value="1">เงินสด</option>
-                        <option value="2">เช็คธนาคาร</option>
-                        <option value="3">โอนธนาคาร</option>
-                        <option value="4">โอนภายนอกสหกรณ์</option>
-                        <option value="5">โอนภายในสหกรณ์</option>
-                        <option value="6">เงินเดือน</option>
-                        <option value="7">เงินรอจ่ายคืน</option>
-                        <option value="8">เงินกู้แบ่งจ่าย</option>
-                    </select>
+                    <label class="form-label my-element" for="">วันที่ขอสินเชื่อ</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.loanrequest_date" />
+                    </div>
                 </div>
 
                 <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;">กรุณาเลือกธนาคาร</label>
-                    <select class="form-select" name="" id="" style="text-align:left;">
-                        <option value="1">กรุณาเลือกธนาคาร</option>
-                        <option value="2">002-ธนาคารกรุงเทพ จำกัด (มหาชน)</option>
-                        <option value="3">004-ธนาคารกสิกรไทย จำกัด (มหาชน)</option>
-                        <option value="4">006-ธนาคารกรุงไทย จำกัด (มหาชน)</option>
-                        <option value="5">011-ธนาคารทหารไทย จำกัด (มหาชน)</option>
-                        <option value="6">014-ธนาคารไทยพานิชย์ จำกัด (มหาชน)</option>
-                        <option value="7">025-ธนาคารกรุงศรีอยุธยา จำกัด (มหาชน)</option>
-                        <option value="8">030-ธนาคารออมสิน</option>
-                        <option value="9">033-ธนาคารอาคารสงเคราะห์</option>
-                        <option value="10">034-ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</option>
-                        <option value="11">065-ธนาคารธนชาต</option>
-                    </select>
+                    <label class="form-label my-element" for="">วันเกิด</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.birth_date" />
+                    </div>
                 </div>
 
                 <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" style="margin-top: 25px;" for="">สาขา</label>
-                    <input class="form-control" />
+                    <label class="form-label my-element" for="">วันที่เป็นสมาชิก</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.member_date" />
+                    </div>
                 </div>
 
                 <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">เลขที่บัญชี</label>
-                    <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                    <label class="form-label my-element" for="">รายการอายุสมาชิก</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" Name="deptaccount_no" @bind="@item.member_ageshow" />
+                    </div>
                 </div>
 
-                <div class="col-xl-8 col-md-4 col-sm-6 d-flex flex-column">
-                    <label class="form-label my-element" for="">หมายเหตุ</label>
-                    <input class="form-control" />
+
+                <div class="row" hidden>
+                    <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                        <label class="form-label my-element" for="">วันที่ผ่านรายการ</label>
+                        <RadzenDatePicker @bind-Value=@posted_date Name="posted_date" DateFormat="dd/MM/yyyy" />
+                    </div>
+
+                    <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                        <label class="form-label my-element" for="">ประเภทเงินกู้</label>
+                        <select class="form-select" name="" id="" style="text-align:left;">
+                            <option value="1">กรุณาเลือก</option>
+                            <option value="1"> 01 - (01) เงินกู้สามัญ - ปกติ</option>
+                            <option value="2"> 03 - (03) เงินกู้สามัญ - ปกติ(ทุนเรือนหุ้นค้ำชำระรายเดือน) </option>
+                            <option value="3"> 04 - (04) เงินกู้สามัญ - ปกติ(เงินฝากค้ำชำระรายเดือน) </option>
+                            <option value="4"> 05 - (05) เงินกู้สามัญ - ปกติ(เงินฝากค้ำหักดอกเบี้ย) </option>
+                            <option value="5"> 06 - (06) เงินกู้สามัญ - ปกติ(คำนวณโบนัส) </option>
+                            <option value="6"> 07 - (07) เงินกู้สามัญ - ปกติ(คำนวณโบนัส คำนวณโอที) </option>
+                            <option value="7"> 08 - (08) เงินกู้สามัญ - ปรับปรุงโครงสร้างหนี้ </option>
+                            <option value="8"> 09 - (09) เงินกู้สามัญ - เพื่อชำระหนี้แทน </option>
+                            <option value="9"> 21 - (21) เงินกู้ฉุกเฉิน </option>
+                            <option value="10"> 22 - (22) เงินกู้ฉุกเฉินผ่าน ATM </option>
+                            <option value="11"> 2A - (2A) เงินกู้ฉุกเฉิน(คำนวณโอที) </option>
+                            <option value="12"> 2B - (2B) เงินกู้ฉุกเฉินผ่าน ATM (คำนวณโอที) </option>
+                            <option value="13"> 2C - (2C) เงินกู้ฉุกเฉินโครงการสวัสดิการกู้เพือเหตุฉุกเฉิน </option>
+                            <option value="14"> 31 - (31) เงินกู้พิเศษ - ซื้อบ้าน </option>
+                            <option value="15"> 32 - (32) เงินกู้พิเศษ - ซื้อรถยนต์ </option>
+                            <option value="16"> 36 - (36) เงินกู้พิเศษ - ซื้อบ้านสวัสดิการเจ้าหน้าที่ </option>
+                            <option value="17"> 39 - (39) เงินกู้พิเศษ - หุ้นค้ำ(ชำระรายปี) </option>
+                            <option value="18"> 3A - (3A) เงินกู้พิเศษ - (หุ้น เงินฝากค้ำ 240 งวด) </option>
+                            <option value="19"> 3B - (3B) เงินกู้พิเศษ - บ้าน(อายุ 65) </option>
+                            <option value="20"> 3C - (3C) เงินกู้พิเศษ - ซื้อบ้าน(คำนวณโอที) </option>
+                            <option value="21"> 3D - (3D) เงินกู้พิเศษ - บ้าน(อายุ 65)(คำนวณโอที) </option>
+                            <option value="22"> 3E - (3E) เงินกู้พิเศษ - ซื้อรถยนต์(คำนวณโอที) </option>
+                            <option value="23"> 3M - (3M) โครงการเงินกู้พิเศษ - เคหะ(25 ปี)(34/62) </option>
+                            <option value="24"> 45 - (45) เงินกู้สวัสดิการเจ้าหน้าที่ </option>
+                            <option value="25"> 6L - (6L) เงินกู้สามัญ - ปกติ(คำนวณโอที) </option>
+                            <option value="26"> 71 - (71) เงินกู้สามัญ-เงินรางวัลพิเศษปี 67 (4เท่า) (48/66) </option>
+                            <option value="27"> 7G - (7G) เงินกู้สามัญ - หุ้นค้ำ(ชำระรายปี สมาชิกสมทบ) </option>
+                            <option value="28"> 81 - (สค) เงินกู้สามัญโครงการ 7 ล้าน </option>
+                            <option value="29"> 82 - (82) เงินกู้สามัญ - เจ็ดล้าน(คำนวณโอที)(40/65) </option>
+                            <option value="30"> 83 - (83) เงินกู้สามัญ - 3 เท่าของเงินเดือน (39/65) </option>
+                            <option value="31"> 84 - (84) เงินกู้สามัญ - เงินสงเคราะห์ถึงแก่กรรม(41/65) </option>
+                            <option value="32"> 85 - (สค) เงินกู้สามัญปันผล </option>
+                            <option value="33"> 86 - (86) เงินกู้สามัญเพือการศีกษาบุตร </option>
+                            <option value="34"> 89 - (89) เงินกู้สามัญ - เงินรางวัลพิเศษปี2567(44/66) </option>
+                            <option value="35"> 99 - (99) เงินกู้เพื่อใช้ในทดสอบการสร้างผลิตภัณฑ์ใหม่ </option>
+                            <option value="36"> 9V - (9V) เงินกู้สามัญ - ทดสอบ </option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                        <label class="form-label my-element" for="">สังกัด</label>
+                        <select class="form-select" name="" id="" style="text-align:left;">
+                            <option value="1">กรุณาเลือก</option>
+                            <option value="2">1</option>
+                            <option value="3">2</option>
+                            <option value="4">3</option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+                        <label class="form-label my-element" style="margin-top: 25px;"></label>
+                        <select class="form-select" name="" id="" style="text-align:left;">
+                            <option value="1">รออนุมัติ</option>
+                            <option value="2">อนุมัติออกเลขสัญญา</option>
+                            <option value="3">อนุมัติและจ่าย</option>
+                        </select>
+                    </div>
+
+                    <div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+                        <div class="form-check" style="margin-top: 35px;">
+                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" @bind="item.coop_id">
+                            <label class="form-check-label" for="flexCheckDefault">ระบุวันที่จ่ายเงินกู้</label>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+                        <label class="form-label my-element">วันที่จ่าย</label>
+                        <RadzenDatePicker @bind-Value=@payment_date Name="payment_date" DateFormat="dd/MM/yyyy" />
+                    </div>
+
+                    <h5>ข้อมูลประกอบการขอกู้</h5>
+                    <div class="row">
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">วันเกิด</label>
+                            <RadzenDatePicker @bind-Value=@birthday Name="birthday" DateFormat="dd/MM/yyyy" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">วันเกษียณ</label>
+                            <RadzenDatePicker @bind-Value=@retirement_date Name="retirement_date" DateFormat="dd/MM/yyyy" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">เป็นสมาชิก</label>
+                            <RadzenDatePicker @bind-Value=@member_date Name="member_date" DateFormat="dd/MM/yyyy" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element">วันเข้าทำงาน</label>
+                            <RadzenDatePicker @bind-Value=@working_date Name="working_date" DateFormat="dd/MM/yyyy" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ทุนเรือนหุ้น</label>
+                            <input class="form-control" style="text-align: end; font-size: 16px;" placeholder="0.00"
+                                Name="chq_amt" />
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;">วัตถุประสงค์
+                                สิทธิการกู้</label>
+                            <select class="form-select" name="" id="" style="text-align:left;">
+                                <option value="1">กรุณาเลือก</option>
+                                <option value="2">A</option>
+                                <option value="3">B</option>
+                                <option value="4">C</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;">เงื่อนไขอัตราดอกเบี้ย</label>
+                            <select class="form-select" name="" id="" style="text-align:left;">
+                                <option value="1">กรุณาเลือก</option>
+                                <option value="2">A</option>
+                                <option value="3">B</option>
+                                <option value="4">C</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
+                            <div class="form-check" style="margin-top: 65px;">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">วงเงิน OD</label>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
+                            <div class="form-check" style="margin-top: 65px;">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">หุ้นรอเก็บ</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">สิทธิ์กู้ที่ได้</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">สิทธิกู้สุทธิ</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ให้กู้</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ดอกเบี้ยประมาณ</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
+                            <div class="form-check" style="margin-top: 45px;">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">กำหนดงวดเอง</label>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-4 col-sm-4 d-flex flex-column">
+                            <div class="form-check" style="margin-top: 45px;">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">ขอส่งเกินงวดเกษียณ</label>
+                            </div>
+                        </div>
+
+                        <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ชำระงวด</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">จำนวนงวด</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">งวดสุดท้าย</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;">ประเภทการส่ง</label>
+                            <select class="form-select" name="" id="" style="text-align:left;">
+                                <option value="1">ไม่มีการเรียกเก็บ</option>
+                                <option value="2">ต้นเท่ากัน</option>
+                                <option value="3">ต้น+ดอกเท่ากัน</option>
+                                <option value="4">ส่งแต่ดอกเบี้ย</option>
+                                <option value="5">อัตราก้าวหน้า</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;">การชำระแบบ</label>
+                            <select class="form-select" name="" id="" style="text-align:left;">
+                                <option value="1">หักจากเงินเดือน</option>
+                                <option value="2">หักจากบัญชีเงินฝาก</option>
+                                <option value="3">บัญชีภายนอก</option>
+                                <option value="4">ชำระเอง</option>
+                                <option value="4">เงินปันผล</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">เงินเดือน</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ยอดหักจาก สก</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">ยอดหักอื่นๆ</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">เงินได้อื่นๆ</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">เงินได้คงเหลือ</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">เงินได้เหลือขั้นต่ำ</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;">จ่ายเงินกู้เป็น</label>
+                            <select class="form-select" name="" id="" style="text-align:left;">
+                                <option value="1">เงินสด</option>
+                                <option value="2">เช็คธนาคาร</option>
+                                <option value="3">โอนธนาคาร</option>
+                                <option value="4">โอนภายนอกสหกรณ์</option>
+                                <option value="5">โอนภายในสหกรณ์</option>
+                                <option value="6">เงินเดือน</option>
+                                <option value="7">เงินรอจ่ายคืน</option>
+                                <option value="8">เงินกู้แบ่งจ่าย</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;">กรุณาเลือกธนาคาร</label>
+                            <select class="form-select" name="" id="" style="text-align:left;">
+                                <option value="1">กรุณาเลือกธนาคาร</option>
+                                <option value="2">002-ธนาคารกรุงเทพ จำกัด (มหาชน)</option>
+                                <option value="3">004-ธนาคารกสิกรไทย จำกัด (มหาชน)</option>
+                                <option value="4">006-ธนาคารกรุงไทย จำกัด (มหาชน)</option>
+                                <option value="5">011-ธนาคารทหารไทย จำกัด (มหาชน)</option>
+                                <option value="6">014-ธนาคารไทยพานิชย์ จำกัด (มหาชน)</option>
+                                <option value="7">025-ธนาคารกรุงศรีอยุธยา จำกัด (มหาชน)</option>
+                                <option value="8">030-ธนาคารออมสิน</option>
+                                <option value="9">033-ธนาคารอาคารสงเคราะห์</option>
+                                <option value="10">034-ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร</option>
+                                <option value="11">065-ธนาคารธนชาต</option>
+                            </select>
+                        </div>
+
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" style="margin-top: 25px;" for="">สาขา</label>
+                            <input class="form-control" />
+                        </div>
+
+                        <div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">เลขที่บัญชี</label>
+                            <input class="form-control" style="text-align: end;" placeholder="0.00" Name="chq_amt" />
+                        </div>
+
+                        <div class="col-xl-8 col-md-4 col-sm-6 d-flex flex-column">
+                            <label class="form-label my-element" for="">หมายเหตุ</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        }
+            }
         }
     </div>
 </div>
 
-
-
-
-<div class="card mt-4">
+<div class="card mt-4" hidden="@(currentStep == 1 ||currentStep == 2)">
     <div class="row mt-2"
         style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 10px;">
         <RadzenTabs @bind-SelectedIndex=@selectedIndex>
@@ -1622,46 +572,10 @@
     </div>
 </div>
 
-<div class="card mt-4">
+<div class="card mt-4" hidden="@(currentStep == 1 ||currentStep == 2)">
     <div class="row mt-2"
         style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 10px;">
         <RadzenTabs @bind-SelectedIndex=@selectedIndex>
-            <Tabs>
-                <RadzenTabsItem Text="หลักประกัน">
-                    <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
-                        AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
-                        FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
-                        AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-                        <Columns>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="ลำดับ" Property="prnc_no">
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="หลักประกัน" Property="prnc_bal">
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="เลขที่สมาชิก"
-                                Property="prncslip_amt">
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="รายละเอียด" Property="prnc_date">
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="สิทธิค้ำคงเหลือ"
-                                Property="prncdue_date">
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="ค้ำประกัน"
-                                Property="calint_from">
-                            </RadzenDataGridColumn>
-                            <RadzenDataGridColumn TItem="Models.AccountDetails" Title="%	" Property="calint_to">
-                            </RadzenDataGridColumn>
-                        </Columns>
-                    </RadzenDataGrid>
-                </RadzenTabsItem>
-            </Tabs>
-        </RadzenTabs>
-    </div>
-</div>
-
-<div class="card mt-4">
-    <div class="row mt-2"
-        style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 10px;">
-        <RadzenTabs @bind-SelectedIndex=@selectedIndex1>
             <Tabs>
                 <RadzenTabsItem Text="หักชำระเงินกู้">
                     <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
@@ -1698,10 +612,10 @@
     </div>
 </div>
 
-<div class="card mt-4">
+<div class="card mt-4" hidden="@(currentStep == 1 ||currentStep == 2 )">
     <div class="row mt-2"
         style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 10px;">
-        <RadzenTabs @bind-SelectedIndex=@selectedIndex2>
+        <RadzenTabs @bind-SelectedIndex=@selectedIndex>
             <Tabs>
                 <RadzenTabsItem Text="หักอื่นๆ">
                     <RadzenDataGrid Data="@dataaccDetails" TItem="Models.AccountDetails" ColumnWidth="200px"
@@ -1770,11 +684,11 @@
     </div>
 </div>
 
+
 @code {
-    int selectedIndex;
-    int selectedIndex1;
-    int selectedIndex2;
+    int selectedIndex = 0;
     public IEnumerable<Models.AccountDetails> dataaccDetails { get; set; }
+    private bool isLoadingModals;
     RadzenUpload upload;
     bool cancelUpload = false;
 
