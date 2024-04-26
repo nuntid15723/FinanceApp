@@ -401,3 +401,19 @@ D:\FinanceApp\obj\Debug\net7.0\refint\FinanceApp.dll
 D:\FinanceApp\obj\Debug\net7.0\FinanceApp.pdb
 D:\FinanceApp\obj\Debug\net7.0\FinanceApp.genruntimeconfig.cache
 D:\FinanceApp\obj\Debug\net7.0\ref\FinanceApp.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.csproj.AssemblyReference.cache
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.AssemblyInfoInputs.cache
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.AssemblyInfo.cs
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.csproj.CoreCompileInputs.cache
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.MvcApplicationPartsAssemblyInfo.cache
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.RazorAssemblyInfo.cache
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.RazorAssemblyInfo.cs
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\staticwebassets\msbuild.FinanceApp.Microsoft.AspNetCore.StaticWebAssets.props
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\staticwebassets\msbuild.build.FinanceApp.props
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\staticwebassets\msbuild.buildMultiTargeting.FinanceApp.props
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\staticwebassets\msbuild.buildTransitive.FinanceApp.props
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\staticwebassets.pack.json
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\refint\FinanceApp.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\FinanceApp\obj\Debug\net7.0\FinanceApp.pdb

@@ -1,191 +1,191 @@
 {
   "Files": [
     {
-      "Id": "D:\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\FinanceApp.bundle.scp.css",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\obj\\Debug\\net7.0\\scopedcss\\projectbundle\\FinanceApp.bundle.scp.css",
       "PackagePath": "staticwebassets\\FinanceApp.bundle.scp.css"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\account.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\account.jpg",
       "PackagePath": "staticwebassets\\Images\\account.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\admin.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\admin.jpg",
       "PackagePath": "staticwebassets\\Images\\admin.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\assist.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\assist.jpg",
       "PackagePath": "staticwebassets\\Images\\assist.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\borrow.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\borrow.jpg",
       "PackagePath": "staticwebassets\\Images\\borrow.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\coop_img\\band_black.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\coop_img\\band_black.jpg",
       "PackagePath": "staticwebassets\\Images\\coop_img\\band_black.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\deposit.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\deposit.jpg",
       "PackagePath": "staticwebassets\\Images\\deposit.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\divavg.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\divavg.jpg",
       "PackagePath": "staticwebassets\\Images\\divavg.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\dur.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\dur.jpg",
       "PackagePath": "staticwebassets\\Images\\dur.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\finance.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\finance.jpg",
       "PackagePath": "staticwebassets\\Images\\finance.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\fom.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\fom.jpg",
       "PackagePath": "staticwebassets\\Images\\fom.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\hr.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\hr.jpg",
       "PackagePath": "staticwebassets\\Images\\hr.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\insurance.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\insurance.jpg",
       "PackagePath": "staticwebassets\\Images\\insurance.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\ixp.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\ixp.jpg",
       "PackagePath": "staticwebassets\\Images\\ixp.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\keeping.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\keeping.jpg",
       "PackagePath": "staticwebassets\\Images\\keeping.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\loan.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\loan.jpg",
       "PackagePath": "staticwebassets\\Images\\loan.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\mbshr.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\mbshr.jpg",
       "PackagePath": "staticwebassets\\Images\\mbshr.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\mis.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\mis.jpg",
       "PackagePath": "staticwebassets\\Images\\mis.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\rdc.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\rdc.jpg",
       "PackagePath": "staticwebassets\\Images\\rdc.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\Images\\walfare.jpg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\Images\\walfare.jpg",
       "PackagePath": "staticwebassets\\Images\\walfare.jpg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css.map"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\FONT-LICENSE",
       "PackagePath": "staticwebassets\\css\\open-iconic"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\ICON-LICENSE",
       "PackagePath": "staticwebassets\\css\\open-iconic"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\README.md",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\README.md",
       "PackagePath": "staticwebassets\\css\\open-iconic\\README.md"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\css\\open-iconic-bootstrap.min.css"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.eot",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.eot"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.otf",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.otf"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.svg",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.svg"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.ttf",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.ttf"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\open-iconic\\font\\fonts\\open-iconic.woff",
       "PackagePath": "staticwebassets\\css\\open-iconic\\font\\fonts\\open-iconic.woff"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\css\\site.css",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\favicon.png",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\blazorInterop.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\blazorInterop.js",
       "PackagePath": "staticwebassets\\js\\blazorInterop.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\formatNumber.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\formatNumber.js",
       "PackagePath": "staticwebassets\\js\\formatNumber.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\imageUpload.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\imageUpload.js",
       "PackagePath": "staticwebassets\\js\\imageUpload.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\interop.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\interop.js",
       "PackagePath": "staticwebassets\\js\\interop.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\modal.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\modal.js",
       "PackagePath": "staticwebassets\\js\\modal.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\navbar.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\navbar.js",
       "PackagePath": "staticwebassets\\js\\navbar.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\preview.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\preview.js",
       "PackagePath": "staticwebassets\\js\\preview.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\print.min.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\print.min.js",
       "PackagePath": "staticwebassets\\js\\print.min.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\printInterop.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\printInterop.js",
       "PackagePath": "staticwebassets\\js\\printInterop.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\resize.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\resize.js",
       "PackagePath": "staticwebassets\\js\\resize.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\select2Interop.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\select2Interop.js",
       "PackagePath": "staticwebassets\\js\\select2Interop.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\selected.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\selected.js",
       "PackagePath": "staticwebassets\\js\\selected.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\sessionInterop.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\sessionInterop.js",
       "PackagePath": "staticwebassets\\js\\sessionInterop.js"
     },
     {
-      "Id": "D:\\FinanceApp\\wwwroot\\js\\site.js",
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
