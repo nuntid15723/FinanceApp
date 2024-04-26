@@ -1005,32 +1005,19 @@
     ]
   },
   "packageFolders": {
-<<<<<<< HEAD
     "C:\\Users\\nunti\\.nuget\\packages\\": {}
-=======
-    "C:\\Users\\faluk\\.nuget\\packages\\": {}
->>>>>>> parent of cdcc0c7 (loan)
   },
   "project": {
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\FinanceApp.csproj",
       "projectName": "FinanceApp",
-<<<<<<< HEAD
       "projectPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\FinanceApp.csproj",
       "packagesPath": "C:\\Users\\nunti\\.nuget\\packages\\",
       "outputPath": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\FinanceApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\nunti\\AppData\\Roaming\\NuGet\\NuGet.Config",
-=======
-      "projectPath": "D:\\FinanceApp\\FinanceApp.csproj",
-      "packagesPath": "C:\\Users\\faluk\\.nuget\\packages\\",
-      "outputPath": "D:\\FinanceApp\\obj\\",
-      "projectStyle": "PackageReference",
-      "configFilePaths": [
-        "C:\\Users\\faluk\\AppData\\Roaming\\NuGet\\NuGet.Config",
->>>>>>> parent of cdcc0c7 (loan)
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1092,11 +1079,7 @@
             "privateAssets": "all"
           }
         },
-<<<<<<< HEAD
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
-=======
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203\\RuntimeIdentifierGraph.json"
->>>>>>> parent of cdcc0c7 (loan)
       }
     }
   },
