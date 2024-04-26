@@ -10,11 +10,11 @@
         "projectUniqueName": "D:\\FinanceApp\\FinanceApp.csproj",
         "projectName": "FinanceApp",
         "projectPath": "D:\\FinanceApp\\FinanceApp.csproj",
-        "packagesPath": "C:\\Users\\faluk\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
         "outputPath": "D:\\FinanceApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\faluk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -81,7 +81,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204\\RuntimeIdentifierGraph.json"
         }
       }
     }
