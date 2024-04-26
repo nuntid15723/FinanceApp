@@ -528,8 +528,8 @@ else
 															/> *@
 																		@* <input class="format-money form-control" type="text" Name="deptpassbook_no"
 																			disabled="@(chk_deptpassbookno)" @bind-value="Item.deptpassbook_no" /> *@
-																			<RadzenDropDown Disabled="@(chk_deptpassbookno)" AllowClear="true" @bind-Value="@deptpassbook_no" LoadData="@LoadData"
-																			AllowFiltering="true" Data="@getOfBook_No" Class="form-control" TextProperty="book_no"
+																			<RadzenDropDown Disabled="@(chk_deptpassbookno)" AllowClear="true" @bind-Value="@deptpassbook_no" 
+																			AllowFiltering="true" Data="@getOfBookNo" Class="form-control" TextProperty="book_no"
 																			ValueProperty="book_no" Name="DropDownFilteringLoadData" />
 																		<div class="input-group-addon">
 																			<RadzenCheckBox style="margin-left: 5px;margin-top: 7px;"
@@ -645,8 +645,8 @@ else
 																<div class="row">
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
-																		<RadzenDropDown AllowClear="true" @bind-Value="@tran_deptacc_no" LoadData="@LoadData"
-																			AllowFiltering="true" Data="@getOfBook_No" Class="form-control" TextProperty="book_no"
+																			<RadzenDropDown AllowClear="true" @bind-Value="@tran_deptacc_no" 
+																			AllowFiltering="true" Data="@getOfBookNo" Class="form-control" TextProperty="book_no"
 																			ValueProperty="book_no" Name="DropDownFilteringLoadData" />
 																	</div>
 																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
@@ -1850,7 +1850,7 @@ else
 	private NavigationManager NavigationManager { get; set; }
 	private bool IsSaveEnabled => SaveStatus == "1";
 	IEnumerable<GetOfBookNo> getOfBook_No;
-		 private bool dept_status1 = false;
+	 private bool dept_status1 = false;
 
     // เมื่อ checkbox ถูกติกเลือก
     @* private void CheckboxChanged()
@@ -1877,12 +1877,32 @@ else
    private async Task<string> GetPdfData()
     {
         var InputHtml = $@"
-		<style>
-			.label-with-border {{
-            padding: 5px;
-			width:100%
-            display: inline-block;
-        }}
+		   <style>
+			.form-control {{
+                border: solid 1px #fff;
+			}}
+			.form-label{{
+                font - weight: normal;
+			}}
+			.form-select {{
+
+            font - size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}}
+			.row {{
+                --bs - gutter - x: 1.5rem; 
+				--bs-gutter-y: 0;
+				display: flex;
+				flex-wrap: wrap;
+				margin-top: calc(var(--bs-gutter-y)* -1);
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				margin-left: calc(var(--bs-gutter-x)* -0.5); */
+			}}
+			 @page {{   /* size: landscape;*/
+                size: A4; 
+				width: 297mm; 
+				height: 210mm; 
+				margin: 0;  }}
 		</style>
 		
 		</head>
@@ -1927,8 +1947,8 @@ else
 		</style>
 		
 		</head>
-		<body><br/>
-			<div class='row account-book' style='width:100%; margin-top: 40px;'>";
+		<body>
+			<div class='row account-book' style='width:100%;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
@@ -1978,30 +1998,30 @@ else
 		Console.WriteLine($"return true;{true}");
 		return true;
 	}
-
-	private async Task LoadData(LoadDataArgs args)
+	@* private async Task LoadData(LoadDataArgs args)
 	{
-		var query = GetYourData();
-
+		var query = BookData();
 		if (!string.IsNullOrEmpty(args.Filter))
 		{
 			query = query.Where(item => item.book_no.ToLower().Contains(args.Filter.ToLower()));
 		}
 
 		getOfBook_No = query.ToList(); // Materialize the query result
-
 		await InvokeAsync(StateHasChanged);
-	}
+	} *@
 
 	// Simulate fetching data from a service
-	IEnumerable<GetOfBookNo> GetYourData()
+	@* IEnumerable<GetOfBookNo> BookData()
 	{
-		return getOfBookNo.Select(item => new GetOfBookNo
-			{
-				book_no = item.book_no,
-				// Map other properties accordingly
-			});
-	}
+		if (getOfBookNo == null)
+		{
+			return Enumerable.Empty<GetOfBookNo>(); // Return an empty enumerable if getOfBookNo is null
+		}
+		else
+		{
+			return getOfBookNo.Select(item => new GetOfBookNo { book_no = item.book_no });
+		}
+	} *@
 
 
 	/////////

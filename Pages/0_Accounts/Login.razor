@@ -125,7 +125,7 @@
                                 <select class="form-control" id="database" name="database" @onchange="selectedBase">
                                     @foreach (var item in connections)
                                     {
-                                        <option value="@($"{item.Id}_{item.ConnectionName}_{item.coopcontrol}")">@item.ConnectionName</option>
+                                        <option value="@($"{item.Id}*{item.ConnectionName}*{item.coopcontrol}")">@item.ConnectionName</option>
                                     }
                                 </select>
                             </div>

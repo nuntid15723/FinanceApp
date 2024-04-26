@@ -33,7 +33,7 @@ public partial class LoginBase : ComponentBase
     {
         string value = e.Value.ToString();
 
-        string[] values = value.Split('_');
+        string[] values = value.Split('*');
         string id = values[0];
         string name = values[1];
         string coop_control = values[2];

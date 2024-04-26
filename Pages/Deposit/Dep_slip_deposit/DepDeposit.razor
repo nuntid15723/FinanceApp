@@ -2373,40 +2373,37 @@ else
    private async Task<string> GetPdfData()
     {
         var InputHtml = $@"</head>
-		<style>
+		 <style>
 			.form-control {{
-				border: solid 1px #fff;
+                border: solid 1px #fff;
 			}}
-			.form-label {{
-				font-weight: normal;
+			.form-label{{
+                font - weight: normal;
 			}}
 			.form-select {{
-				font-size: 16px; /* ขนาดตัวอักษร */
-				background-color: #fff;
-			}}
+
+            font - size: 16px; /* ขนาดตัวอักษร */
+            background-color: #fff;
+        	}}
 			.row {{
-				--bs-gutter-x: 1.5rem; 
+                --bs - gutter - x: 1.5rem; 
 				--bs-gutter-y: 0;
 				display: flex;
 				flex-wrap: wrap;
 				margin-top: calc(var(--bs-gutter-y)* -1);
-				/*margin-right: calc(var(--bs-gutter-x)* -0.5); 
+				 /*margin-right: calc(var(--bs-gutter-x)* -0.5); 
 				margin-left: calc(var(--bs-gutter-x)* -0.5); */
 			}}
-			@page {{   /* size: landscape;*/
-				size: A4; 
-				width: 297mm; 
-				height: 210mm; 
-				margin: 0;  
+			.left-align-no-border {{
+						text-align: left;
+						padding: 1px;
 			}}
-			@page :first {{
-				margin-top: 0; /* ไม่มีขอบบน */
-			}}
-			.bodypt{{
-				margin-top:-45px
+			@page {{
+						size: A4;
+						margin: 5px;
 			}}
 		</style>
-		<body class='bodypt'>
+		<body style='margin-top:-30px'>
 			<div class='row' style='width: 100%;'>";
 			foreach (var content  in statement_data)
 			{
@@ -2435,7 +2432,7 @@ else
     {
         var InputHtml = $@"
 		<style>
-		.body {{
+			.body {{
             font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
@@ -2457,15 +2454,16 @@ else
         	margin-top: -10;
     	}}
 		</style>
+		
 		</head>
 		<body>
-			<div class='row' style='width:100%;'>";
+			<div class='row account-book' style='width:100%;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table class='tablept'>
+									 InputHtml += $@"<table table class='tablept'>
 										 <thead>
 											<tr>";
 											InputHtml += @"</tr>
@@ -2474,7 +2472,8 @@ else
 											<tr>";
 												@foreach (var columnDetail in rowDetail.row_detail)
 												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+													 InputHtml += $@" 
+													 <input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
 												}
 												InputHtml += @"</tr>
 										</tbody>

@@ -38,6 +38,31 @@ public class Api_Provider
             throw;
         }
     }
+    public async Task<HttpResponseMessage> SendApiRequestAsyncPut<T>(string apiUrl, T payload)
+    {
+        try
+        {
+            string bearerToken = await _jsRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+
+                var json = JsonConvert.SerializeObject(payload);
+                Console.WriteLine($"response: {payload}");
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                // Console.WriteLine($"bearerToken :{httpClient.DefaultRequestHeaders.Authorization}");
+
+                return await httpClient.PutAsync(apiUrl, content);
+            }
+        }
+        catch (Exception ex)
+        {
+            // จัดการ Exception ตามความเหมาะสม
+            Console.WriteLine($"Error: {ex.Message}");
+            throw;
+        }
+    }
     public async Task<HttpResponseMessage> SendApiRequestAsyncGet(string apiUrl)
     {
         try

@@ -16,7 +16,7 @@
 @using System.ComponentModel
 @using Microsoft.AspNetCore.Components
 @inject Services.Api_Provider ApiProvider
-
+@inject Services.GetUserDataList GetuUerData
 <style>
 	.icon-search {
 		display: inline-flex !important;
@@ -571,7 +571,7 @@ else
 												<button class="btn btn-outline-secondary" @onclick="InitPrintBook" data-bs-toggle="modal" data-bs-target="#ModalBookDetails">พิมพ์ BOOK</button>
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#ModalBookNew"
+												<button class="btn btn-outline-secondary" @onclick="InitBookNew" data-bs-toggle="modal" data-bs-target="#ModalBookNew"
 														style="@(msg_seqno != null && msg_seqno != 0 ? "" : "display:none;")">
 													ออกสมุดใหม่ [เริ่มพิมพ์จากลำดับ @msg_seqno]
 												</button>
@@ -652,7 +652,7 @@ else
 																	<div class="form-group ">
 																		<div class="input-group">
 																			<input class="form-control" type="text" name="laststmseq_no"
-																			@bind-value="item.laststmseq_no">
+																			@bind-value="item.lastrec_no">
 																		</div>
 																	</div>
 																</div>
@@ -665,7 +665,7 @@ else
 																	<div class="form-group ">
 																		<div class="input-group">
 																			<input class="form-control" type="text" name="lastrec_no"
-																			@bind-value="item.lastrec_no">
+																			@bind-value="item.laststmseq_no">
 																		</div>
 																	</div>
 																</div>
@@ -673,7 +673,7 @@ else
 															<div class="row" style="margin-left:-4px;margin-right:-4px;">
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column align-items-center">
 																	<div class="form-check" style="margin-top: 35px;">
-																		<input class="form-check-input" type="checkbox" name="select_printsum" value="1" id="select_printsum" @onchange="ToggleCheckboxValue" checked="@isChecked">
+																		<input class="form-check-input" type="checkbox" name="select_printsum" value="1" id="select_printsum" @onchange="Checkboxsumbalance_date" checked="@isChecked">
 																		<label class="form-check-label" for="select_printsum">พิมพ์ยอดรวม</label>
 																	</div>
 																</div>
@@ -682,7 +682,8 @@ else
 																	<div class="form-group ">
 																		<div class="input-group">
 																			@if(isChecked){
-																			<input class="form-control" type="text" name="sumbalance_date" @bind-value="Item.deptpassbook_no">
+																			<input class="form-control" type="text" name="sumbalance_date" @bind-value="sumbalance_date1">
+																			@* <RadzenText Text="@String.Format("{0:dd/MM/yyyy}",sumbalance_date)" /> *@
 																			}else{
 																				<input class="form-control" type="text" name="sumbalance_date" readonly value="00/00/0000">
 																			}
@@ -736,18 +737,21 @@ else
 														</div>
 														<!-- Modal body -->
 														<div class="modal-body">
+															@foreach(var newBook in intibooknew){
+																var  newpassbook_no = newBook.newpassbook_no;
+																var  n_reson = newBook.n_reson;
 															<div class="row" style="margin-left:-4px;margin-right:-4px;">
 																<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">ใบ Cert.</label>
-																	@if (getDeptMaintype != null)
+																	@if (newpassbook_no != null)
 																{
 																	<select id="DeptMaintype" name="DeptMaintype" class="form-select"
-																	@onchange="DeptMaintype">
-																		<option value="null" selected>--กรุณาเลือก--</option>
-																		@foreach (var MaintypeItem in getDeptMaintype)
+																	@onchange="ChangNewpassbook">
+																		@* <option value="null" selected>--กรุณาเลือก--</option> *@
+																		@foreach (var npbook in newpassbook_no)
 																		{
-																			<option value="@MaintypeItem.deptmain_type">
-																				@MaintypeItem.deptmain_type - @MaintypeItem.deptmain_desc
+																			<option value="@npbook.book_no">
+																				@npbook.book_no
 																			</option>
 																		}
 																	</select>
@@ -758,7 +762,7 @@ else
 																	<div class="form-group ">
 																		<div class="input-group">
 																			<input class="form-control" type="text" name="memb_name"
-																			@bind-value="Item.deptpassbook_no">
+																			@bind-value="newBook.deptpassbook_no">
 																		</div>
 																	</div>
 																</div>
@@ -766,17 +770,23 @@ else
 															<div class="row" style="margin-left:-4px;margin-right:-4px;">
 																<div class="col-xl-12 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">เหตุผลในการออก</label>
-																	<select id="DeptMaintype" name="DeptMaintype" class="form-select">
-																		<option value="01">สมุดหมด</option>
+																	<select id="DeptMaintype" name="DeptMaintype" class="form-select"
+																	@onchange="ChangNeson">
+																		@foreach(var nreson in n_reson){
+																			<option value="@nreson.reson_id">
+																				@nreson.reson_desc
+																			</option>
+																		}
+																		@* <option value="01">สมุดหมด</option>
 																		<option value="02">เปิดบัญชีออนไลน์</option>
 																		<option value="03">สูญหาย</option>
-																		<option value="04">ชำรุด</option>
+																		<option value="04">ชำรุด</option> *@
 																	</select>
 																</div>
 															</div>
 															<div class="row" style="margin-left:-4px;margin-right:-4px; ">
 																<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
-																	<button class="btn btn-outline-secondary" @onclick="SearchOfGetAcc">
+																	<button class="btn btn-outline-secondary" @onclick="UpdateBookNew">
 																		ตกลง
 																	</button>
 																</div>
@@ -786,6 +796,7 @@ else
 																	</button>
 																</div>
 															</div>
+															}
 														</div>
 													</div>
 												</div>
@@ -921,10 +932,9 @@ else
 	}
 	private async Task PrintBook_()
     {
-		try{ // รับ HTML จาก GetPdfData()
+		try{ 
 		printLoading = true;
 		await PrintBook();
-        // รับ HTML จาก GetPdfData()
         string htmlData = await GetPrintBookData();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
@@ -947,27 +957,30 @@ else
 			margin: 0;
 			padding: 0;
         }}
-		.left-align-no-border {{
+		/* .left-align-no-border {{
 			text-align: left;
-			padding: 0px;
-		}}
+			padding: 0;
+			margin: 0;
+		}} */
 		.tablept{{
 			width:100%;
-			/* border:1px solid; */
+			height:100%;
+			border:1px solid ; 
 			margin-left:-5px;
 		}}
 		@page {{
 			size: A4;
 			margin: 0px;
+			padding: 0px
 		}}
 		 @page :first {{
-        	margin-top: -10;
+        	/*margin-top: -10;*/
     	}}
        
 		</style>
 		</head>
 		<body>
-			<div class='row' style='width:100%;'>";
+			<div class='row' style='width:100%; border:1px solid;'>";
 				@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
@@ -975,12 +988,14 @@ else
 								{
 									 InputHtml += $@"<table class='tablept'>
 										<tbody>
-											<tr>";
+											<tr style='padding:0px;margin:0px;'>";
 												@foreach (var columnDetail in rowDetail.row_detail)
 												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
+													  InputHtml += $@"
+													 <input type='text' style='text-align: {columnDetail.align};margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
 												}
-												InputHtml += @"</tr>
+												InputHtml += @"
+												</tr>
 										</tbody>
 								</table>";
 								}
@@ -993,10 +1008,9 @@ else
 	
 	private async Task PrintFrontbook()
     {
-		try{ // รับ HTML จาก GetPdfData()
+		try{ 
 		printLoading = true;
 		await Print_Frontbook();
-        // รับ HTML จาก GetPdfData()
         string htmlData = await GetPrintFrontbook();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 

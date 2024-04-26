@@ -134,6 +134,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         public string? deptaccountNo_fild { get; set; }
         public string? deptaccount_name_fild { get; set; }
         public int deptclose_status { get; set; }
+        public string? seq_no { get; set; }
 
         int sequence = 1;
         void ShowNotification(NotificationMessage message)
@@ -159,13 +160,26 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         int select_printsum = 0;
         int totalPages = 0;
         private bool isChecked = false;
+        private string booknew { get; set; }
+        private string bookreson { get; set; }
+        private List<Book_data> intibookdata = new List<Book_data>();
+        private List<GetBookNew> intibooknew = new List<GetBookNew>();
+        private List<N_reson> n_reson = new List<N_reson>();
+        private List<GetOfBookNo> newpassbook_no = new List<GetOfBookNo>();
+        public DateTime sumbalance_date { get; set; }
+        public string sumbalance_date1 { get; set; }
+        private string DepttypeValue;
+        private string Valueselecte;
 
-        private void ToggleCheckboxValue(ChangeEventArgs e)
+        private void Checkboxsumbalance_date(ChangeEventArgs e)
         {
             isChecked = (bool)e.Value;
             select_printsum = isChecked ? 1 : 0;
             Console.WriteLine($"isChecked: {isChecked}");
             Console.WriteLine($"select_printsum: {select_printsum}");
+            Console.WriteLine($"sumbalance_date: {sumbalance_date}");
+            Console.WriteLine($"sumbalance_date1: {sumbalance_date1}");
+
         }
         // async Task GoToLastPage()
         // {
@@ -215,8 +229,8 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                         var depOfGetAccount = new
                         {
                             deptaccount_no = Item.deptaccount_no,
-                            lastrec_no = item.laststmseq_no,
-                            laststmseq_no = item.lastrec_no,
+                            lastrec_no = item.lastrec_no,
+                            laststmseq_no = item.laststmseq_no,
                             lastpage_no = item.lastpage_no,
                             lastline_no = item.lastline_no,
                         };
@@ -257,7 +271,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             {
                 foreach (var Item in datadetails)
                 {
-                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostFrontbook}?deptaccount_no={Item.deptaccount_no}";
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfGetFrontbook}?deptaccount_no={Item.deptaccount_no}";
                     var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                     {
                         // อ่าน response string
@@ -285,13 +299,12 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 }
 
             }
-            catch (System.Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
             }
         }
-        private List<Book_data> intibookdata = new List<Book_data>();
         private async Task InitPrintBook()
         {
             try
@@ -333,26 +346,59 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 throw;
             }
         }
-        public class InitPrintBookResponse
+        private async Task InitBookNew()
         {
-            public bool success { get; set; }
-            public Book_data content { get; set; }
-            public string message { get; set; }
+            try
+            {
+                foreach (var Item in datadetails)
+                {
+                    (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetuUerData.GetDataList();
+                    var depOfGetAccount = new
+                    {
+                        coop_id = coop_id,
+                        seq_no = seq_no,
+                        depttype_code = Item.depttype_code,
+                        membcat_code = Item.membcat_code,
+                        deptpassbook_no = Item.deptpassbook_no
+                    };
+                    // var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfInitDataOffline}";
+                    // var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
+
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfGetBookNew}";
+                    var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
+                    {
+                        // อ่าน response string
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        var apiResponse = JsonConvert.DeserializeObject<InitBookNewResponse>(jsonResponse);
+                        Console.WriteLine(apiResponse.success);
+                        if (apiResponse.success)
+                        {
+                            intibooknew = new List<GetBookNew> { apiResponse.content };
+                            foreach (var item in intibooknew)
+                            {
+                                // var inti_list = item.statement_list;
+                                // foreach (var subItem in intibooknew)
+                                // {
+                                Console.WriteLine(item.deptpassbook_no);
+                                // }
+                            }
+                            Console.WriteLine($"{apiResponse.message})");
+
+                        }
+                        else
+                        {
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+                        }
+                    }
+                }
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
         }
-        public class PrintBookResponse
-        {
-            public bool success { get; set; }
-            public Print_book content { get; set; }
-            public string message { get; set; }
-        }
-        public class PrintFrontBookResponse
-        {
-            public bool success { get; set; }
-            public Print_detail content { get; set; }
-            public string message { get; set; }
-        }
-        private string DepttypeValue;
-        private string Valueselecte;
         public async Task<(string coopControl, string coop_id, string user_name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag)> GetDataList()
         {
             var bearerToken = await JSRuntime.InvokeAsync<string>("localStorage.getItem", "authToken");
@@ -447,6 +493,14 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             }
             Console.WriteLine($"Depttype Code: {deptMaintype}");
         }
+        private async Task ChangNeson(ChangeEventArgs e)
+        {
+            bookreson = e.Value.ToString();
+        }
+        private async Task ChangNewpassbook(ChangeEventArgs e)
+        {
+            booknew = e.Value.ToString();
+        }
         private async Task DepttypeChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
@@ -460,7 +514,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             try
             {
                 // ดึงข้อมูลผู้ใช้
-                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetuUerData.GetDataList();
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.Paths.DepOfGetDeptMaintype}?coop_control={coop_id}";
                 var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
                 response.EnsureSuccessStatusCode();
@@ -527,9 +581,11 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             try
             {
                 isLoading = true;
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetuUerData.GetDataList();
+                sumbalance_date = DateTime.ParseExact(workDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                sumbalance_date1 = workDate;
                 deptno_format = data.deptaccount_no?.Trim();
                 Console.WriteLine($"Clicked on deptaccount_no: {data.deptaccount_no}");
-
                 // Show notification instead of using JavaScript alert
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Info, Summary = "Success", Detail = $"เลือก {data.deptaccount_no}, {data.deptaccount_name}", Duration = 2000 });
                 await JSRuntime.InvokeVoidAsync("alert", $"เลือก {data.deptaccount_no}, {data.deptaccount_name}");
@@ -588,7 +644,9 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             try
             {
                 isLoading = true;
-                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetuUerData.GetDataList();
+                sumbalance_date = DateTime.ParseExact(workDate, "MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                sumbalance_date1 = workDate;
                 deptno_format = (deptno_format ?? deptaccount_no)?.Trim().Replace("-", "");
                 var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfDataStatement}={deptno_format}";
                 // var response = await SendApiRequestAsyncGet(apiUrl);
@@ -677,7 +735,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         private async Task SearchOfGetAcc()
         {
             isLoadingModals = true;
-            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetDataList();
+            (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetuUerData.GetDataList();
             var depOfGetAccount = new AccountDetails
             {
                 coop_id = coop_id,
@@ -740,6 +798,8 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
         {
             Console.WriteLine($"SEQ_NO :{data.seq_no}");
             msg_seqno = data.seq_no;
+            seq_no = data.seq_no.ToString();
+            // await InitBookNew();
         }
         private async Task Clar()
         {
@@ -861,6 +921,60 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                 isLoading = false;
             }
         }
+        public async Task UpdateBookNew()
+        {
+            try
+            {
+
+                string hostName = Dns.GetHostName();
+                var hostEntry = Dns.GetHostEntry(hostName);
+                isLoading = true;
+                (string coop_control, string coop_id, string name, string email, string actort, string apvlevelId, string workDate, string application, string save_status, string check_flag) = await GetuUerData.GetDataList();
+                foreach (var item in datadetails)
+                {
+                  
+                    var depOfGetAccount = new
+                    {
+                        coop_id = coop_id,
+                        seq_no = seq_no,
+                        deptaccount_no = item.deptaccount_no,
+                        depttype_code = item.depttype_code,
+                        newpassbook_no = booknew,
+                        reson_new = bookreson
+                    };
+                    var json = JsonConvert.SerializeObject(depOfGetAccount);
+                    Console.WriteLine("JsonData:" + json);
+                    var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Paths.DepOfPutBookNew}";
+                    var response = await ApiProvider.SendApiRequestAsyncPut(apiUrl, depOfGetAccount);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+						Console.WriteLine(jsonResponse);
+						var apiResponse = JsonConvert.DeserializeObject<ApiResponses>(jsonResponse);
+                        Console.WriteLine(apiResponse.content);
+                        Console.WriteLine(apiResponse.success);
+                        Console.WriteLine(apiResponse.message);
+					}
+                    else
+                    {
+                        // Console.WriteLine(responseData);
+                        // var jsonResponse = JObject.Parse(response);
+                        // var errorsProperty = jsonResponse["errors"];
+                        // Console.WriteLine(errorsProperty);
+                        // ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = errorsProperty + "ตรวจสอบข้อมูลให้ครบถ้วน", Duration = 2500 });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 2500 });
+                Console.WriteLine(ex.ToString());
+            }
+            finally
+            {
+                isLoading = false;
+            }
+        }
 
         public class ApiResponse
         {
@@ -868,6 +982,37 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
             public Models.DataStatement content { get; set; }
             public string message { get; set; }
         }
+		public class ApiResponses
+		{
+			public bool success { get; set; }
+			public Models.DataStatement content { get; set; }
+			public string message { get; set; }
+		}
+		public class InitPrintBookResponse
+        {
+            public bool success { get; set; }
+            public Book_data content { get; set; }
+            public string message { get; set; }
+        }
+        public class InitBookNewResponse
+        {
+            public bool success { get; set; }
+            public GetBookNew content { get; set; }
+            public string message { get; set; }
+        }
+        public class PrintBookResponse
+        {
+            public bool success { get; set; }
+            public Print_book content { get; set; }
+            public string message { get; set; }
+        }
+        public class PrintFrontBookResponse
+        {
+            public bool success { get; set; }
+            public Print_detail content { get; set; }
+            public string message { get; set; }
+        }
+
 
     }
 }
