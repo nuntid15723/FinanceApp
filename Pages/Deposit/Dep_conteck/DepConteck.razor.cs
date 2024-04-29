@@ -234,6 +234,7 @@ namespace FinanceApp.Pages.Deposit.Dep_conteck
                             lastpage_no = item.lastpage_no,
                             lastline_no = item.lastline_no,
                         };
+                        Console.WriteLine($"depOfGetAccount :{depOfGetAccount}");
                         var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfPostPrintBook}";
                         var response = await ApiProvider.SendApiRequestAsync(apiUrl, depOfGetAccount);
                         Console.WriteLine($"response.IsSuccessStatusCode:{response.IsSuccessStatusCode}");

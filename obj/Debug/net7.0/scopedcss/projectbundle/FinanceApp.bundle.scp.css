@@ -274,6 +274,115 @@ body[b-vqh5auax0z] {
     text-align: center;
   }
 }
+/* _content/FinanceApp/Pages/Deposit/Dashboard/Dashboard.razor.rz.scp.css */
+.form-check[b-3zwl8paj7k] {
+  display: block;
+  min-height: 1.5rem;
+  padding-left: 1.5em;
+  margin-bottom: 0.125rem;
+  margin-top: 0.8rem;
+}
+
+.flex-column[b-3zwl8paj7k] {
+  flex-direction: column !important;
+  padding: 5px !important;
+}
+
+.lable-heard[b-3zwl8paj7k] {
+  display: inline-block;
+  margin-top: 5px;
+  color: red;
+  margin-left: calc(var(--bs-gutter-x) * -0.5);
+}
+
+.form-label[b-3zwl8paj7k] {
+  margin-bottom: 0.1rem;
+  margin-top: 5px;
+}
+
+.profile-pic[b-3zwl8paj7k] {
+  padding: 10px;
+}
+
+.profile-pic img[b-3zwl8paj7k] {
+  border-radius: 8%;
+  box-shadow: 0px 0px 5px 0px #c1c1c1;
+  cursor: pointer;
+  width: 250px;
+  height: 250px;
+}
+
+.btn.btn-outline-secondary[b-3zwl8paj7k] {
+  margin-top: 5px;
+}
+
+.separator[b-3zwl8paj7k] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.separator .line[b-3zwl8paj7k] {
+  height: 1px;
+  flex: 1;
+  background-color: #000;
+  margin: 0 0 0 0;
+}
+
+.separator .liner[b-3zwl8paj7k] {
+  height: 1px;
+  flex: 0.09;
+  background-color: #000;
+  left: 1px;
+}
+
+.separator span[b-3zwl8paj7k] {
+  position: relative;
+  top: 3px;
+  padding: 0 0.5rem;
+  color: #ff0000;
+}
+
+.hr-icon[b-3zwl8paj7k] {
+  position: relative;
+  top: 3px;
+  color: #ff0000;
+}
+
+@media (min-width: 1200px) {
+  .profile-pic[b-3zwl8paj7k] {
+    position: absolute;
+    top: 0px;
+    z-index: 50;
+    margin-top: 55px;
+  }
+
+  .btn.btn-outline-secondary[b-3zwl8paj7k] {
+    margin-top: 30px;
+  }
+   .row .mt-button[b-3zwl8paj7k] {
+    margin-top: -35px;
+  }
+}
+
+/* .row .mt-button {
+  margin-top: -35px;
+} */
+@media (min-width: 575px) {
+  .btn.btn-outline-secondary[b-3zwl8paj7k] {
+    margin-top: 30px;
+  }
+
+  /* .row .mt-button {
+    margin-top: -35px;
+  } */
+}
+@media (max-width: 575px) {
+  .row .mt-button[b-3zwl8paj7k] {
+    margin-top: -35px;
+  }
+}
+
 /* _content/FinanceApp/Pages/Deposit/Dep_acceptchq/DepAcceptchq.razor.rz.scp.css */
 .form-check[b-4xv9h1h2qf] {
   display: block;

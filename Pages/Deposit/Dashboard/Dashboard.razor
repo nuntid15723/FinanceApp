@@ -1,0 +1,133 @@
+﻿@page "/ws_lon_payment"
+@using System.Net.Http
+@using System.Threading.Tasks
+@using FinanceApp.Data
+@using Microsoft.Identity.Client
+@using Microsoft.PowerBI.Api
+@using Microsoft.PowerBI.Api.Models
+@using Microsoft.Rest
+@using Newtonsoft.Json.Linq
+@using Microsoft.Extensions.Configuration
+@inject IJSRuntime JSRuntime
+@inject IConfiguration _configuration
+@* @layout EmptyLayout; *@
+<style>
+	.icon-search {
+		display: inline-flex !important;
+		justify-content: space-evenly !important;
+		align-items: center !important;
+		position: relative !important;
+		top: 3px !important;
+		padding: 15px !important;
+		flex-wrap: nowrap !important;
+	}
+
+	.table> :not(caption)>*>* {
+		padding: 0.2rem 0.2rem;
+	}
+
+	.save_top {
+		border: #adacac solid 1px;
+	}
+
+	.header-right {
+		text-align: start;
+	}
+
+	.header-left {
+		text-align: end;
+	}
+
+	.card {
+		background-color: #f9f9f9;
+	}
+
+	.tbbook {
+		border-top: 1px solid #dddddd;
+		border-bottom: 1px solid #dddddd;
+		border-right: 0px solid #dddddd;
+		text-align: left;
+		padding: 3px;
+		font-size: 0.875rem;
+	}
+
+	.thbook {
+		font-size: 0.875rem;
+		background-color: #ffffff;
+		padding: 8px;
+		border-top: 1px solid #dddddd;
+		text-align: center;
+		font-weight: 500;
+	}
+
+	tr td:first-child,
+	tr td:last-child {
+		border-right: 0px solid #dddddd;
+	}
+
+	.logoBar {
+		height: 36px;
+		bottom: 0;
+		position: absolute;
+		width: 100%;
+		z-index: 200;
+		display
+	}
+</style>
+<div class="header-page">
+	@* <div class="row-header d-flex justify-content-between ">
+	<div class="header-left">
+	<h4>ระบบ เงินฝาก - ตรวจสอบรายการเคลื่อนไหว</h4>
+	</div>
+	<div class="header-right">
+	<RadzenButton class="save_top" Icon="save" Text="Save" />
+	</div>
+	</div> *@
+</div>
+<div class="card body-page ">
+	<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
+		<iframe title="Test_blazor" style="width:100%;height:600px;max-width: 2000px"
+			src="https://app.powerbi.com/view?r=eyJrIjoiMjZiYTQ4MWUtYjA1YS00YjcxLThlNjAtNTIxMjI4MzZiOTk0IiwidCI6IjhlYzc0YTM5LWRkZjYtNDFlMS1iMGEyLWZmMDQ1OWVhOGViOCIsImMiOjEwfQ%3D%3D"
+			frameborder="0" allowFullScreen="false"></iframe>
+		<button type="button" @onclick="LoadCrystalReport">Load Crystal Report</button>
+		<div id="crystalReportViewerContainer"></div>
+	
+	</div>
+</div>
+<script>
+	window.loadCrystalReport = function (reportUrl) {
+		// Example of fetching the Crystal Report file from the server
+		fetch(reportUrl)
+			.then(response => response.blob())
+			.then(blob => {
+				const fileUrl = URL.createObjectURL(blob);
+
+				// Display the Crystal Report using a viewer (e.g., CrystalReports.Viewer)
+				var container = document.getElementById("crystalReportViewerContainer");
+				var viewer = new CrystalReports.Viewer();
+				viewer.reportSource = fileUrl;
+				viewer.container = container;
+				viewer.init();
+			})
+			.catch(error => console.error('Error loading Crystal Report:', error));
+	}
+</script>
+
+@code {
+
+	private async Task LoadCrystalReport()
+	{
+		try
+		{
+			// Load Crystal Reports library script dynamically
+			await JSRuntime.InvokeVoidAsync("eval", await File.ReadAllTextAsync("wwwroot/js/CrystalReports.js"));
+
+			// Call JavaScript function to load Crystal Report
+			await JSRuntime.InvokeVoidAsync("loadCrystalReport", "/api/reports/activity"); 
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"Error loading Crystal Report: {ex.Message}");
+		}
+	}
+}

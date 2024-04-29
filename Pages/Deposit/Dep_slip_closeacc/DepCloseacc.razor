@@ -101,7 +101,7 @@ else
 { *@
 	<div class="card body-page">
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
-			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange" CanChange="@CanChange">
+			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange">
 				<Steps>
 					<RadzenStepsItem Disabled="@(currentStep == 2)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
 						<RadzenRow>
