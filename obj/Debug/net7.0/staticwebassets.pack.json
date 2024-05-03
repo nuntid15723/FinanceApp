@@ -81,6 +81,14 @@
       "PackagePath": "staticwebassets\\Images\\walfare.jpg"
     },
     {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Report\\Activity.rpt",
+      "PackagePath": "staticwebassets\\Report\\Activity.rpt"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\Report\\SimpleList.mrt",
+      "PackagePath": "staticwebassets\\Report\\SimpleList.mrt"
+    },
+    {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\css\\bootstrap\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\css\\bootstrap\\bootstrap.min.css"
     },
@@ -155,6 +163,10 @@
     {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\navbar.js",
       "PackagePath": "staticwebassets\\js\\navbar.js"
+    },
+    {
+      "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\powerbi.min.js",
+      "PackagePath": "staticwebassets\\js\\powerbi.min.js"
     },
     {
       "Id": "D:\\work\\Icoop\\DonNet\\New folder\\FinanceApp\\wwwroot\\js\\preview.js",

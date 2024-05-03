@@ -400,3 +400,10 @@ D:\Downloads\FinanceApp\obj\Debug\net7.0\refint\FinanceApp.dll
 D:\Downloads\FinanceApp\obj\Debug\net7.0\FinanceApp.pdb
 D:\Downloads\FinanceApp\obj\Debug\net7.0\FinanceApp.genruntimeconfig.cache
 D:\Downloads\FinanceApp\obj\Debug\net7.0\ref\FinanceApp.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.Identity.Client.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.PowerBI.Api.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\Microsoft.Rest.ClientRuntime.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\bin\Debug\net7.0\PowerBI.Api.dll
+D:\work\Icoop\DonNet\New folder\FinanceApp\obj\Debug\net7.0\scopedcss\Pages\Deposit\Dashboard\Dashboard.razor.rz.scp.css

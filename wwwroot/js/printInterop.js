@@ -11,13 +11,7 @@ window.createPdf = function (pdfData) {
   var doc = iframe.contentWindow.document;
   doc.open();
   // doc.write(pdfData);
-  doc.write(
-    `<!DOCTYPE html>
-		<html lang=""en"" dir=""ltr"">
-		<head>
-		<meta charset=""utf-8""/>
-		${pdfData}</html>`
-  );
+  doc.write(pdfData);
   doc.close();
 console.log(doc);
   return iframe;

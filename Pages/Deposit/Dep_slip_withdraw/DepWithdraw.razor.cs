@@ -955,7 +955,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         public class SaveResponse
         {
             public bool success { get; set; }
-            public Models.Content content { get; set; }
+            public Content content { get; set; }
             public string message { get; set; }
         }
         public class ApiResponse
@@ -1362,8 +1362,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonResponse = await response.Content.ReadAsStringAsync();
-                        var Response = JsonConvert.DeserializeObject<SaveResponse>(jsonResponse);
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        var Response = JsonConvert.DeserializeObject<SaveResponse>(jsonResponse);
                         success_status = true;
                         if (response.IsSuccessStatusCode)
                         {
@@ -1417,12 +1417,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                             await InvokeAsync(() => StateHasChanged());
 
                             Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
-                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = Response.message, Duration = 2500 });
                         }
                         else
                         {
                             this.currentStep = 0;
-                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 2500 });
+                            ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = Response.message, Duration = 2500 });
                         }
                         // Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                         // ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = apiResponse.message, Duration = 2500 });
@@ -1518,8 +1518,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 spcint_rate = item.deptSlip.spcint_rate,
                 payfee_meth = item.deptSlip.payfee_meth,
             };
-            // string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
-            // Console.WriteLine(json);
+            string json = JsonConvert.SerializeObject(deptSlip, Formatting.Indented);
+            Console.WriteLine(json);
             return deptSlip;
         }
         private List<DeptSlipdet> CreateDeptSlipdet(string coop_id, string name, string machine_address, Models.Deposit item)
