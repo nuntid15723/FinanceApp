@@ -1403,7 +1403,7 @@ else
 													@foreach (var tofromaccItem in Item.tofromacc)
 													{
 														bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
-														bool isItemAccIdSelected = (tofromaccItem.tofrom_accid == Item.tofrom_accid);
+														bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
 														bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
 														if (isCashTypeSelected)
 														{
@@ -1430,14 +1430,7 @@ else
 															{
 																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
 																		selected="@isItemAccIdSelected">
-																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>3</p>
-																</option>
-															}
-															else
-															{
-																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																		selected="@isItemAccIdSelected">
-																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>4</p>
+																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
 																</option>
 															}
 														}
