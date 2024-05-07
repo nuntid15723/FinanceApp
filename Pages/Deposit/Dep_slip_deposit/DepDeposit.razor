@@ -2463,21 +2463,18 @@ else
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table table class='tablept'>
-										 <thead>
-											<tr>";
-											InputHtml += @"</tr>
-										</thead>
-										<tbody>
-											<tr>";
-												@foreach (var columnDetail in rowDetail.row_detail)
-												{
-													 InputHtml += $@" 
-													 <input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height:{columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
-												}
-												InputHtml += @"</tr>
-										</tbody>
-								</table>";
+									InputHtml += @"
+										<div class='tablept'>
+										<div class='row-detail' style='padding:0px;margin:0px; display: flex; align-items: center;'>";
+
+										foreach (var columnDetail in rowDetail.row_detail)
+										{
+											InputHtml += $@"
+											<input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-bottom: {columnDetail.point_bottom}px; margin-left: {columnDetail.point_left}px; width: {columnDetail.point_width}%; height: {columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
+										}
+									InputHtml += @"
+									</div>
+									</div>";
 								}
 							}
 			InputHtml += @"

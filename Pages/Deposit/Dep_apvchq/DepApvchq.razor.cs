@@ -189,47 +189,6 @@ namespace FinanceApp.Pages.Deposit.Dep_apvchq
             {
                 ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "กรุณากรอกเลขทะเบียนสมาชิก", Duration = 1500 });
             }
-            // else
-            // {
-            //     try
-            //     {
-            //         isLoading = true;
-            //         var response = await
-            //         httpClient.GetAsync($"{ApiClient.API.ApibaseUrl}{Paths.DepOfInitOpenAccount}?coop_control={coop_id}&member_no={member_no}&reqappl_flag={reqappl_flag}");
-            //         response.EnsureSuccessStatusCode();
-            //         var json = await response.Content.ReadAsStringAsync();
-            //         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
-            //         Console.WriteLine(apiResponse.status == true);
-            //         if (apiResponse.status == true)
-            //         {
-            //             repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.data };
-            //             Console.WriteLine($"API request failed: {repReqdepoit}");
-            //         }
-            //         else
-            //         {
-            //             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = "ตรวจสอบเลขที่กรอกให้ถูกต้อง", Duration = 2500 });
-            //             Console.WriteLine($"API request failed: {apiResponse.message}");
-            //         }
-            //     }
-            //     catch (Exception ex)
-            //     {
-            //         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
-            //         Console.WriteLine(ex.Message.ToString());
-            //     }
-            //     finally
-            //     {
-            //         isLoading = false;
-            //     }
-            // }
-            // string memberNo_fild = null;
-
-            // if (member_no != null)
-            // {
-            //     string[] memberNoDtails = member_no.ToString().Split('-');
-            //     string firstPart = memberNoDtails[0];
-            //     string secondPart = memberNoDtails[1];
-            //     member_no = firstPart + secondPart;
-            // }
             else
             {
                 try
@@ -439,12 +398,13 @@ namespace FinanceApp.Pages.Deposit.Dep_apvchq
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}DepOfPostDeptSaving", content);
                     var responseData = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                     Console.WriteLine("JsonData:" + json);
 
-                    if (response.IsSuccessStatusCode)
+                    if (apiResponse.status)
                     {
                         // var responseData = await response.Content.ReadAsStringAsync();
-                        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        // var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
 
                         Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                         var notificationDetail = apiResponse != null ? apiResponse.message : responseData;

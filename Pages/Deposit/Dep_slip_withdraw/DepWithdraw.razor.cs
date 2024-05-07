@@ -1365,7 +1365,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                         var Response = JsonConvert.DeserializeObject<SaveResponse>(jsonResponse);
                         success_status = true;
-                        if (response.IsSuccessStatusCode)
+                        if (Response.success)
                         {
 
                             statement_data = new List<Models.Content> { Response.content };
@@ -1407,8 +1407,14 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                                             Console.WriteLine($"coop_id: {statement.coop_id}, deptaccount_no: {statement.deptaccount_no}");
                                             statementDetailsList.Add(statementDetails);
                                         }
+                                    }else{
+                                        printbookData = null;
                                     }
                                     statementDetails = statementDetailsList;
+                                }
+                                else
+                                {
+                                    statementDetailsList = null;
                                 }
                             }
                             currentStep = 2;

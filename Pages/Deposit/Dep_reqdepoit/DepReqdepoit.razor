@@ -116,12 +116,12 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-				<RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync"
-					disabled="@(!IsSaveEnabled)" />
+				<RadzenButton class="save_top" Icon="save" Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
+					disabled="@(!IsSaveEnabled)" />		
 			}
 			else if (currentStep == 2)
 			{
-				<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf"
+				<RadzenButton class="save_top" Icon="print" Text="พิมพ์ slip" Click="@PrintPdf"
 					disabled="@(!success_status)" />
 			}
 		</div>
@@ -1732,8 +1732,8 @@ else
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook" />
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ ปกสมุด" Click="@PrintFrontbook" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook_" />
 						@foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
@@ -1954,24 +1954,18 @@ else
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
-									 InputHtml += $@"<table  style='width:100%;'>
-										 <thead>
-											<tr>";
-												@* @foreach (var columnDetail in rowDetail.row_detail)
-												{
-													InputHtml += $@"<th style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; color:transparent;'>{columnDetail.column_name}</th>";
-												} *@
-											InputHtml += @"</tr>
-										</thead>
-										<tbody>
-											<tr>";
-												@foreach (var columnDetail in rowDetail.row_detail)
-												{
-													 InputHtml += $@" <td  style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%;height:{columnDetail.point_height}%; vertical-align: {columnDetail.valign}; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</td>";
-												}
-												InputHtml += @"</tr>
-										</tbody>
-								</table>";
+									 InputHtml += @"
+										<div class='tablept'>
+										<div class='row-detail' style='padding:0px;margin:0px; display: flex; align-items: center;'>";
+
+										foreach (var columnDetail in rowDetail.row_detail)
+										{
+											InputHtml += $@"
+											<input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-bottom: {columnDetail.point_bottom}px; margin-left: {columnDetail.point_left}px; width: {columnDetail.point_width}%; height: {columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
+										}
+										InputHtml += @"
+										</div>
+										</div>";
 								}
 							}
 			InputHtml += @"
@@ -1980,6 +1974,61 @@ else
 		return InputHtml;
 	}
 	// Event handler for RadzenSteps change
+	private async Task PrintFrontbook()
+    {
+		try{ 
+		printLoading = true;
+		await Print_Frontbook();
+        string htmlData = await GetPrintFrontbook();
+        // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
+        await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
+		}catch(Exception ex)
+		{
+		Console.WriteLine(ex.Message);
+			printLoading=false;
+
+		}finally{
+			printLoading=false;
+			StateHasChanged();
+		}
+    }
+	 private async Task<string> GetPrintFrontbook()
+    {
+         var InputHtml = $@"
+                <style>
+        	       body {{
+						font-family: Arial, sans-serif;
+						margin: 0;
+						padding: 0;
+					}}
+					.left-align-no-border {{
+						text-align: left;
+						padding: 1px;
+					}}
+					@page {{
+						size: A4;
+						margin: 5px;
+					}}
+                </style>
+
+                </head>
+                <body style='margin-top:-10px'>
+            <div class='row left-align-no-border' style='width: 100%;'>";
+                foreach (var item in printFrontbook_data){
+					var row_detaill = item.result_data;
+					foreach (var columnDetail in row_detaill)
+					{
+                     InputHtml += $@"
+				 	<div style=' width: {columnDetail.point_width}%; margin-top: {columnDetail.point_top}px;'>
+				 			<lable style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px;'>{columnDetail.column_value}</lable>
+				 	</div>";
+                 }
+				 }
+                InputHtml += @"
+			</div>
+		</body>";
+		return InputHtml;
+	}
 	private void OnChange(int newStep)
 	{
 		currentStep = newStep;

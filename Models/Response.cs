@@ -31,6 +31,7 @@ namespace FinanceApp.Models
       public string? column_name { get; set; }
       public string? column_value { get; set; }
       public decimal? point_top { get; set; }
+      public decimal? point_bottom { get; set; }
       public decimal? point_left { get; set; }
       public decimal? point_width { get; set; }
       public decimal? point_height { get; set; }
@@ -81,7 +82,7 @@ namespace FinanceApp.Models
       public string? column_name { get; set; }
       public string? column_value { get; set; }
       public decimal? point_top { get; set; }
-      public int? point_bottom { get; set; }
+      public decimal? point_bottom { get; set; }
       public decimal? point_left { get; set; }
       public decimal? point_width { get; set; }
       public decimal? point_height { get; set; }

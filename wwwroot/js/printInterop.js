@@ -3,8 +3,8 @@ window.createPdf = function (pdfData) {
   var iframe = document.createElement("iframe");
   // iframe.style.width = "3508px";
   // iframe.style.height = "2480px";
-  iframe.style.width = "0";
-  iframe.style.height = "0";
+  iframe.style.width = "210mm";
+  iframe.style.height = "297mm";
   iframe.style.display = "none";
   document.body.appendChild(iframe);
 
@@ -21,7 +21,6 @@ window.printPdf = function (pdfData) {
   var iframe = createPdf(pdfData);
   iframe.contentWindow.print();
 };
-
 
 // สร้าง PDF ด้วย iframe
 window.createBookPdf = function (pdfData) {

@@ -105,7 +105,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         private bool isLoadingModals;
 
         /// <summary> 
-        public string memcoop_id = "065001";
+        public string? memcoop_id { get; set; }
         public string? member_No_fild { get; set; }
         public string? member_name { get; set; }
         public string? member_surname { get; set; }
@@ -148,6 +148,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         public List<DepReqdepoitDeails> depReqdepoitDeails;
         public List<DeptSlip> deptSlipOpe;
         private List<ReqAccDetails> depOfGetAccDetails;
+        public List<Print_detail>? printFrontbook_data { get; set; }
+
 
         private string DepttypeValue;
         private string selectedValue;
@@ -418,7 +420,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
                     await InvokeAsync(() => StateHasChanged());
                     await GetBookNo();
-				}
+                }
             }
             catch (Exception ex)
             {
@@ -970,7 +972,6 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                             {
                                 currentStep = 2;
                                 await PrintPdf();
-                                await PrintBook();
                                 StateHasChanged();
                             }
                         }
@@ -1051,6 +1052,58 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 Console.WriteLine(ex.Message.ToString());
             }
         }
+
+        private async Task Print_Frontbook()
+        {
+            try
+            {
+                foreach (var statement in statement_data)
+                {
+                    if (statement.book_data != null)
+                    {
+                        var printbookData = JsonConvert.DeserializeObject<Book_data>(statement.book_data.ToString());
+                        if (printbookData != null)
+                        {
+                            foreach (var Item in printbookData.statement_list)
+                            {
+
+                                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfGetFrontbook}?deptaccount_no={Item.deptaccount_no}";
+                                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
+                                {
+                                    // อ่าน response string
+                                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                                    var apiResponse = JsonConvert.DeserializeObject<PrintFrontBookResponse>(jsonResponse);
+                                    Console.WriteLine(apiResponse.success);
+                                    if (apiResponse.success)
+                                    {
+                                        printFrontbook_data = new List<Print_detail> { apiResponse.content };
+                                        foreach (var item in printFrontbook_data)
+                                        {
+
+                                            var row_detaill = item.result_data;
+                                            foreach (var item_row in row_detaill)
+                                            {
+                                                Console.WriteLine($"row_detaill:{item_row.column_name}");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+            }
+        }
         private string GetMachineAddress()
         {
             string hostName = Dns.GetHostName();
@@ -1073,6 +1126,12 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             public bool success { get; set; }
             public Models.DepReqdepoit content { get; set; }
+            public string message { get; set; }
+        }
+        public class PrintFrontBookResponse
+        {
+            public bool success { get; set; }
+            public Print_detail content { get; set; }
             public string message { get; set; }
         }
         public class PrintBookResponse

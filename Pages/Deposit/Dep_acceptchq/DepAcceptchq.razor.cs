@@ -439,14 +439,15 @@ namespace FinanceApp.Pages.Deposit.Dep_acceptchq
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
                     var response = await httpClient.PostAsync($"{ApiClient.API.ApibaseUrl}DepOfPostDeptSaving", content);
                     var responseData = await response.Content.ReadAsStringAsync();
+                    var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                     Console.WriteLine("JsonData:" + json);
 
-                    if (response.IsSuccessStatusCode)
+                    if (apiResponse.status)
                     {
                         // var responseData = await response.Content.ReadAsStringAsync();
-                        var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
+                        // var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
 
-                        Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
+                        Console.WriteLine($"apiResponse.status: {apiResponse.status}");
                         var notificationDetail = apiResponse != null ? apiResponse.message : responseData;
                         ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = notificationDetail, Duration = 2500 });
                     }

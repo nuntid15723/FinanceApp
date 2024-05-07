@@ -936,7 +936,7 @@ else
 		printLoading = true;
 		await PrintBook();
         string htmlData = await GetPrintBookData();
-		Console.WriteLine(htmlData);
+		@* Console.WriteLine(htmlData); *@
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 
 		}catch(Exception ex)
@@ -1015,63 +1015,70 @@ else
 {
     var InputHtml = @"
     <!DOCTYPE html>
-    <html>
-    <head>
-    <style>
-    .body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-    .left-align-no-border {
-        text-align: left;
-        padding: 0;
-        margin: 0;
-    } 
-    .tablept {
-        width: 100%;
-        height: 100%;
-        border: 1px solid transparent; 
-        margin-left: -5px;
-    }
-    @page {
-        size: A4;
-        margin: 0px;
-        padding: 0px;
-    }
-    @page :first {
-        /*margin-top: -10;*/
-    }
-    </style>
-    </head>
-    <body>
-    <div class='row' style='width:100%;'>";
+	<html>
+		<head>
+			<style>
+			.body {
+				font-family: Arial, sans-serif;
+				margin: 0;
+				padding: 0;
+			}
+			.left-align-no-border {
+				text-align: left;
+				padding: 0;
+				margin: 0;
+			} 
+			.tablept {
+				width: 100%;
+				height: 100%;
+				border: 1px solid transparent; 
+				margin-left: -5px;
+			}
+			.tablept .row-detail {
+			display: flex;
+			align-items: center;
+			}
+			@page {
+				size: A4;
+				margin: 0px;
+				padding: 0px;
+			}
+			@media print {
+			html, body {
+				width: 210mm;
+				height: 297mm;
+				margin: 0;
+			}
 
-foreach (var content in printbook_data)
-{
-    var printDetail = content.print_detail;
-    foreach (var rowDetail in printDetail)
-    {
-        InputHtml += @"
-        <div class='tablept'>
-        <div class='row-detail' style='padding:0px;margin:0px; display: flex; align-items: center;'>";
+			@page :first {
+				margin-top: -10;
+			}
+			</style>
+		</head>
+		<body>
+			<div class='row' style='width:100%;'>";
+				foreach (var content in printbook_data)
+				{
+					var printDetail = content.print_detail;
+					foreach (var rowDetail in printDetail)
+					{
+						InputHtml += @"
+						<div class='tablept'>
+						<div class='row-detail' style='padding:0px;margin:0px; display: flex; align-items: center;'>";
 
-        foreach (var columnDetail in rowDetail.row_detail)
-        {
-            InputHtml += $@"
-            <input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-bottom: {columnDetail.point_bottom}px; margin-left: {columnDetail.point_left}%; width: {columnDetail.point_width}%; height: {columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
-        }
-
-        InputHtml += @"
-        </div>
-        </div>";
-    }
-}
-
-
-    InputHtml += @"
-    </div>
-    </body>
+						foreach (var columnDetail in rowDetail.row_detail)
+						{
+							InputHtml += $@"
+							<input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-bottom: {columnDetail.point_bottom}px; margin-left: {columnDetail.point_left}px; width: {columnDetail.point_width}%; height: {columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
+						}
+						InputHtml += @"
+						</div>
+						</div>";
+					}
+				}
+				InputHtml += @"
+			</div>
+		</body>
     </html>";
 
     return InputHtml;
