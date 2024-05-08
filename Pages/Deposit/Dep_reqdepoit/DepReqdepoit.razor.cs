@@ -766,6 +766,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                         var OfBookNoList = JsonConvert.DeserializeObject<List<GetOfBookNo>>(OfBookNoJson);
                         getOfBookNo = new List<GetOfBookNo>();
                         getOfBookNo.AddRange(OfBookNoList);
+                        deptpassbook_no = getOfBookNo.FirstOrDefault()?.book_no;
                         await InvokeAsync(() => StateHasChanged());
 
                     }
