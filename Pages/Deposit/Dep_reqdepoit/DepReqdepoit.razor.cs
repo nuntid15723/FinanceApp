@@ -156,10 +156,15 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         private string AcctypeValue;
         private string selectAcctype;
         private string TofromaccValue;
+        private string TofromaccCash;
         private string selectTofromacc;
 
         private string recpPayTypeCode;
+        private string recpPayTypeCash;
         private string selectRecpPayType;
+        private string valuetoFromaccId;
+        private string recpPayCash { get; set; }
+
         private bool success_status = false;
         // public string deptaccount_No { get; set; }
         public int lastrec_no { get; set; }
@@ -293,8 +298,11 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         {
             string[] values = e.Value.ToString().Split('|');
             recpPayTypeCode = values[0];
+            recpPayTypeCash = values[2];
+            recpPayCash = recpPayTypeCash;
+            valuetoFromaccId = values[3];
             selectRecpPayType = values[0] + "-" + values[1];
-            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}");
+            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}, recpPayTypeCash :{recpPayTypeCash}");
             // if (recpPayTypeCode == "DEN")
             // {
             //     GetBabk();
@@ -324,8 +332,9 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
         private async Task TofromaccChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
-            TofromaccValue = values[0];
-            selectTofromacc = values[0] + "-" + values[1];
+            TofromaccCash = values[0];
+            TofromaccValue = values[1];
+            selectTofromacc = values[1] + "-" + values[2];
             Console.WriteLine($" Recp Pay Type Code: {selectTofromacc}");
             // if (recpPayTypeCode == "DEN")
             // {
@@ -808,7 +817,6 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                 var hostEntry = Dns.GetHostEntry(hostName);
                 int MonthintpayMeth = type_monthintpay;
                 Console.WriteLine("dept_status : " + dept_status);
-                isLoading = true;
                 foreach (var item in repReqdepoit)
                 {
                     var SlipOpen = item.deptSlip;
@@ -912,7 +920,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     var Response = JsonConvert.DeserializeObject<SaveResponse>(responseData);
                     if (response.IsSuccessStatusCode)
                     {
-                        if (response.IsSuccessStatusCode)
+                        if (Response.success)
                         {
                             statement_data = new List<Models.Content> { Response.content };
                             foreach (var content in statement_data)
@@ -971,7 +979,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                             if (Response.success)
                             {
                                 currentStep = 2;
-                                await PrintPdf();
+                                await Print_Frontbook();
                                 StateHasChanged();
                             }
                         }
@@ -1055,54 +1063,54 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
         private async Task Print_Frontbook()
         {
-            try
-            {
-                foreach (var statement in statement_data)
-                {
-                    if (statement.book_data != null)
-                    {
-                        var printbookData = JsonConvert.DeserializeObject<Book_data>(statement.book_data.ToString());
-                        if (printbookData != null)
-                        {
-                            foreach (var Item in printbookData.statement_list)
-                            {
+           try
+           {
+               foreach (var statement in statement_data)
+               {
+                   if (statement.book_data != null)
+                   {
+                       var printbookData = JsonConvert.DeserializeObject<Book_data>(statement.book_data.ToString());
+                       if (printbookData != null)
+                       {
+                           foreach (var Item in printbookData.statement_list)
+                           {
 
-                                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfGetFrontbook}?deptaccount_no={Item.deptaccount_no}";
-                                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
-                                {
-                                    // อ่าน response string
-                                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                                    var apiResponse = JsonConvert.DeserializeObject<PrintFrontBookResponse>(jsonResponse);
-                                    Console.WriteLine(apiResponse.success);
-                                    if (apiResponse.success)
-                                    {
-                                        printFrontbook_data = new List<Print_detail> { apiResponse.content };
-                                        foreach (var item in printFrontbook_data)
-                                        {
+                               var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfGetFrontbook}?deptaccount_no={Item.deptaccount_no}";
+                               var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
+                               {
+                                   // อ่าน response string
+                                   var jsonResponse = await response.Content.ReadAsStringAsync();
+                                   var apiResponse = JsonConvert.DeserializeObject<PrintFrontBookResponse>(jsonResponse);
+                                   Console.WriteLine(apiResponse.success);
+                                   if (apiResponse.success)
+                                   {
+                                       printFrontbook_data = new List<Print_detail> { apiResponse.content };
+                                       foreach (var item in printFrontbook_data)
+                                       {
 
-                                            var row_detaill = item.result_data;
-                                            foreach (var item_row in row_detaill)
-                                            {
-                                                Console.WriteLine($"row_detaill:{item_row.column_name}");
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                           var row_detaill = item.result_data;
+                                           foreach (var item_row in row_detaill)
+                                           {
+                                               Console.WriteLine($"row_detaill:{item_row.column_name}");
+                                           }
+                                       }
+                                   }
+                                   else
+                                   {
+                                       ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+                                   }
+                               }
+                           }
+                       }
+                   }
+               }
 
-            }
-            catch (Exception ex)
-            {
+           }
+           catch (Exception ex)
+           {
 
-                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
-            }
+               ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+           }
         }
         private string GetMachineAddress()
         {

@@ -758,7 +758,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
             cashTypeValue = toFromaccId1[0];
             valuetoFromaccId = toFromaccId1[1];
             Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {valuetoFromaccId},cashTypeValue:{cashTypeValue},selectedRecppaytype:{selectedRecppaytype},");
-
+            await OnToFromAccChanged(e);
             if (recpPayTypeCode == "DEN")
             {
                 GetBabk();
@@ -768,11 +768,16 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private async Task OnToFromAccChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
-            Valueselecte = values[0];
-            toFromaccId2 = values[1];
-            // selectedToFromAcc = values[2];
-            selectedToFromAcc = values[1] + " - " + values[2];
-            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{toFromaccId2},selectedToFromAcc:{selectedToFromAcc}");
+            string[] csahValue = e.Value.ToString().Split('_');
+            if (values != null && values.Length >= 2)
+            {
+                Valueselecte = values[0];
+                toFromaccId2 = values[1];
+                // selectedToFromAcc = values[2];
+                // selectedToFromAcc = values[0] + " - " + values[1];
+                selectedToFromAcc = csahValue[0];
+                Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{toFromaccId2},selectedToFromAcc:{selectedToFromAcc}");
+            }
 
         }
         private async Task CheckNumber()
@@ -1119,7 +1124,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                         // var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                         Console.WriteLine($"Response.message {Response.message}");
                         success_status = true;
-                        if (response.IsSuccessStatusCode)
+                        if (Response.success)
                         {
                             statement_data = new List<Models.Content> { Response.content };
                             // string deptslip_no;

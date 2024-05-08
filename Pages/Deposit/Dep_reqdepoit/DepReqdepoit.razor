@@ -662,7 +662,7 @@ else
 																			value="@Item.deptmonth_amt" />
 																	</div>
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">เปิดบัญชีโดย</label>
+																		<label class="form-label" for="">เปิดบัญชีโดย1</label>
 																		<select id="recppaytypeSelect" name="recppaytype_code" @onchange="RecpPayTypeChanged"
 																			class="form-select">
 																			@if (Item.recppaytype == null || !Item.recppaytype.Any())
@@ -682,7 +682,7 @@ else
 																					{
 																						isCurrentOptionSelected = false;
 																					}
-																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc" selected="@isCurrentOptionSelected">
+																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
 																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
 																					</option>
 																				}
@@ -725,25 +725,52 @@ else
 																		</select>
 																	</div>
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">รหัสคู่บัญชี</label>
-																		<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
-																			@foreach (var tofromaccItem in Item.tofromacc)
+																		<label class="form-label" for="">รหัสคู่บัญชี1</label>
+																		<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
+																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																			{
-																				if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-																				{
-																					isCurrentOptionSelected = true;
-
-																				}
-																				else
-																				{
-																					isCurrentOptionSelected = false;
-																				}
-																				<option value="@tofromaccItem.tofrom_accid|tofromaccItem.tofrom_accdesc"  selected="@isCurrentOptionSelected">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																				</option>
-
+																				<option selected disabled>--กรุณาเลือก--</option>
 																			}
-																		</select>
+																			else
+																			{
+																				<option selected disabled>--กรุณาเลือก--</option>
+																				@foreach (var tofromaccItem in Item.tofromacc)
+																				{
+																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+																					if (isCashTypeSelected)
+																					{
+																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
+																							</option>
+																						}
+																						else
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
+																							</option>
+																						}
+																					}
+																					else if (isItemAccIdSelected)
+																					{
+																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isItemAccIdSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																							</option>
+																						}
+																					}
+																				}
+																			}
+																	</select>
 																	</div>
 																</div>
 																<div class="row">
@@ -887,7 +914,7 @@ else
 																			value="@Item.deptmonth_amt" />
 																	</div>
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">เปิดบัญชีโดย</label>
+																		<label class="form-label" for="">เปิดบัญชีโดย2</label>
 																		<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
 																			class="form-select">
 																			@if (Item.recppaytype == null || !Item.recppaytype.Any())
@@ -907,7 +934,7 @@ else
 																					{
 																						isCurrentOptionSelected = false;
 																					}
-																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc" selected="@isCurrentOptionSelected">
+																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
 																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
 																					</option>
 																				}
@@ -929,24 +956,51 @@ else
 																	</div>
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">รหัสคู่บัญชี</label>
-																		<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
-																			@foreach (var tofromaccItem in Item.tofromacc)
+																		<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
+																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																			{
-																				if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
-																				{
-																					isCurrentOptionSelected = true;
-
-																				}
-																				else
-																				{
-																					isCurrentOptionSelected = false;
-																				}
-																				<option value="@tofromaccItem.tofrom_accid|tofromaccItem.tofrom_accdesc"  selected="@isCurrentOptionSelected">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																				</option>
-
+																				<option selected disabled>--กรุณาเลือก--</option>
 																			}
-																		</select>
+																			else
+																			{
+																				<option selected disabled>--กรุณาเลือก--</option>
+																				@foreach (var tofromaccItem in Item.tofromacc)
+																				{
+																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+																					if (isCashTypeSelected)
+																					{
+																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
+																							</option>
+																						}
+																						else
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
+																							</option>
+																						}
+																					}
+																					else if (isItemAccIdSelected)
+																					{
+																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isItemAccIdSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																							</option>
+																						}
+																					}
+																				}
+																			}
+																	</select>
 																	</div>
 																</div>
 																<div class="row">
@@ -1107,7 +1161,7 @@ else
 																		value="@Item.deptmonth_amt" />
 																</div>
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">เปิดบัญชีโดย</label>
+																	<label class="form-label" for="">เปิดบัญชีโดย3</label>
 																	<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
 																		class="form-select">
 																		@if (Item.recppaytype == null || !Item.recppaytype.Any())
@@ -1127,7 +1181,7 @@ else
 																				{
 																					isCurrentOptionSelected = false;
 																				}
-																				<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc" selected="@isCurrentOptionSelected">
+																				<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
 																					@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
 																				</option>
 																			}
@@ -1149,23 +1203,50 @@ else
 																</div>
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">รหัสคู่บัญชี</label>
-																	<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid">
-																		@foreach (var tofromaccItem in Item.tofromacc)
-																		{
-																			if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+																	<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
+																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																			{
-																				isCurrentOptionSelected = true;
-
+																				<option selected disabled>--กรุณาเลือก--</option>
 																			}
 																			else
 																			{
-																				isCurrentOptionSelected = false;
+																				<option selected disabled>--กรุณาเลือก--</option>
+																				@foreach (var tofromaccItem in Item.tofromacc)
+																				{
+																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+																					if (isCashTypeSelected)
+																					{
+																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
+																							</option>
+																						}
+																						else
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
+																							</option>
+																						}
+																					}
+																					else if (isItemAccIdSelected)
+																					{
+																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isItemAccIdSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																							</option>
+																						}
+																					}
+																				}
 																			}
-																			<option value="@tofromaccItem.tofrom_accid|tofromaccItem.tofrom_accdesc" selected="@isCurrentOptionSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																			</option>
-
-																		}
 																	</select>
 																</div>
 															</div>
@@ -1381,7 +1462,7 @@ else
 																					{
 																						isCurrentOptionSelected = false;
 																					}
-																					<option value="@recppaytypeItem.recppaytype_code" selected="@isCurrentOptionSelected">
+																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid"  selected="@isCurrentOptionSelected">
 																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
 																					</option>
 																				}
@@ -1451,22 +1532,49 @@ else
 															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 																<label class="form-label-preview" for="">รหัสคู่บัญชี</label>
 																@if(selectTofromacc == null){
-																	<select id="tofromaccSelect" class="form-select" @bind="Item.tofrom_accid" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																		@foreach (var tofromaccItem in Item.tofromacc)
+																	<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
 																			{
-																				if (tofromaccItem.tofrom_accid == Item.tofrom_accid)
+																				<option selected disabled>--กรุณาเลือก--</option>
+																			}
+																			else
+																			{
+																				<option selected disabled>--กรุณาเลือก--</option>
+																				@foreach (var tofromaccItem in Item.tofromacc)
 																				{
-																					isCurrentOptionSelected = true;
-
+																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+																					if (isCashTypeSelected)
+																					{
+																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
+																							</option>
+																						}
+																						else
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isCurrentOptionSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
+																							</option>
+																						}
+																					}
+																					else if (isItemAccIdSelected)
+																					{
+																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
+																						{
+																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																									selected="@isItemAccIdSelected">
+																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																							</option>
+																						}
+																					}
 																				}
-																				else
-																				{
-																					isCurrentOptionSelected = false;
-																				}
-																				<option value="@tofromaccItem.tofrom_accid" selected="@isCurrentOptionSelected">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																				</option>
-
 																			}
 																	</select>
 																}else{
@@ -1731,22 +1839,16 @@ else
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์" Click="@PrintPdf" />
+						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ slip" Click="@PrintPdf" />
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ ปกสมุด" Click="@PrintFrontbook" />
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook_" />
-						@foreach (var content in printbook_data)
+						@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook_" /> *@
+						@* @foreach (var content in printbook_data)
 							{
 								var printDetail = content.print_detail;
 								foreach (var rowDetail in printDetail)
 								{
 									<table style='margin-top: 20px;'>
 										 <thead>
-											@* <tr>
-												@foreach (var columnDetail in rowDetail.row_detail)
-												{
-													<th style='text-align: @(columnDetail.align); margin-top: @(columnDetail.point_top)px; margin-left: @(columnDetail.point_left)%; width: @(columnDetail.point_width)%; vertical-align: top; font-family: @(columnDetail.font_name); font-size: @(columnDetail.font_size)px;'>@columnDetail.column_name</th>
-												}
-											</tr> *@
 										</thead>
 										<tbody>
 											<tr style='margin-top:20px;'>
@@ -1758,7 +1860,7 @@ else
 										</tbody>
 									</table>
 								}
-							}
+							} *@
 
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
@@ -1949,25 +2051,27 @@ else
 		</head>
 		<body>
 			<div class='row account-book' style='width:100%;'>";
-				@foreach (var content in printbook_data)
-							{
-								var printDetail = content.print_detail;
-								foreach (var rowDetail in printDetail)
-								{
-									 InputHtml += @"
-										<div class='tablept'>
-										<div class='row-detail' style='padding:0px;margin:0px; display: flex; align-items: center;'>";
+				@if(printbook_data!=null){
+					@foreach (var content in printbook_data)
+					{
+						var printDetail = content.print_detail;
+						foreach (var rowDetail in printDetail)
+						{
+							InputHtml += @"
+								<div class='tablept'>
+								<div class='row-detail' style='padding:0px;margin:0px; display: flex; align-items: center;'>";
 
-										foreach (var columnDetail in rowDetail.row_detail)
-										{
-											InputHtml += $@"
-											<input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-bottom: {columnDetail.point_bottom}px; margin-left: {columnDetail.point_left}px; width: {columnDetail.point_width}%; height: {columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
-										}
-										InputHtml += @"
-										</div>
-										</div>";
+								foreach (var columnDetail in rowDetail.row_detail)
+								{
+									InputHtml += $@"
+									<input type='text' style='text-align: {columnDetail.align}; margin-top: {columnDetail.point_top}px; margin-bottom: {columnDetail.point_bottom}px; margin-left: {columnDetail.point_left}px; width: {columnDetail.point_width}%; height: {columnDetail.point_height}%; vertical-align: top; font-family: {columnDetail.font_name}; font-size: {columnDetail.font_size}px; border: 0px solid ;' value='{columnDetail.column_value}' />";
 								}
-							}
+								InputHtml += @"
+								</div>
+								</div>";
+						}
+					}
+				}
 			InputHtml += @"
 			</div>
 		</body>";
@@ -1978,7 +2082,7 @@ else
     {
 		try{ 
 		printLoading = true;
-		await Print_Frontbook();
+		// await Print_Frontbook();
         string htmlData = await GetPrintFrontbook();
         // เรียกใช้ JavaScript Interop เพื่อแปลง HTML เป็น PDF และพิมพ์
         await jsRuntime.InvokeVoidAsync("printBook", htmlData); 

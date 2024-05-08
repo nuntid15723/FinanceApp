@@ -984,6 +984,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private string toFromaccId2 { get; set; }
         private string bookCode { get; set; }
         private string deptslipNetamt { get; set; }
+        private string selectedToFromAcc { get; set; }
         private string DeptslipAmt { get; set; }
         private decimal deptslipAmt { get; set; }
         private decimal book_balance { get; set; }
@@ -994,12 +995,13 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             string[] values = e.Value.ToString().Split('_');
             selectedValue = values[0];
             recpPayTypeCode = values[1];
-            selectedRecppaytype = values[1] + " - " + values[2];
+            selectedRecppaytype = values[1] + " - " + values[3];
             bookCode = selectedValue;
             string[] toFromaccId1 = bookCode.Split('|');
             cashTypeValue = toFromaccId1[0];
             valuetoFromaccId = toFromaccId1[1];
-            Console.WriteLine($"Cash Type: {cashTypeValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{valuetoFromaccId},selectedRecppaytype:{selectedRecppaytype}");
+            Console.WriteLine($"Cash Type: {selectedValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{valuetoFromaccId},selectedRecppaytype:{selectedRecppaytype}");
+            await OnToFromAccChanged(e);
             if (recpPayTypeCode == "DEN")
             {
                 GetBank();
@@ -1009,9 +1011,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private async Task OnToFromAccChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
+            string[] csahValue = e.Value.ToString().Split('_');
             Valueselecte = values[0];
             toFromaccId2 = values[1];
-            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId}");
+            selectedToFromAcc = csahValue[0];
+            Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId},selectedToFromAcc:{selectedToFromAcc}");
+
 
         }
         private async Task OnKeyDownAsync(KeyboardEventArgs e)
