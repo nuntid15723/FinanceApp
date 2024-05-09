@@ -1,5 +1,5 @@
 @* @page "/dept/dep_withdraw" *@
-@page "/ws_dep_procdeptuptran"
+@page "/ws_dep_slip_closeacc"
 @using Newtonsoft.Json
 @using Radzen.Blazor
 @using System.Runtime.InteropServices.JavaScript
@@ -799,7 +799,7 @@ else
 												<div class="form-group ">
 													<div class="input-group">
 														<input type="text" class="format-money form-control" style="text-align: end;"
-														@bind="prncbal" placeholder="0.00" readonly @onblur="() => FormatNumber()" />
+														@bind="prncbal" placeholder="0.00" readonly  @onblur="(e) => {FormatNumber(); CheckDeptslipAmt(); }" />
 														<div class="input-group-addon">
 															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																		data-bs-target="#myModal1" />
@@ -852,7 +852,7 @@ else
 												<label class="form-label" for="">ยอดสุทธิ</label>
 												<input class="format-money form-control" placeholder="0.00" type="text"
 													   style="text-align: end; font-size: 32px;" readonly name="sumtotal"
-												@bind="Sumtotal" id="showNumber" />
+												@bind="Sumtotal" @onblur="(e) => {CheckDeptslipAmt(); }" id="showNumber" />
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เงื่อนไขการถอน</label>
@@ -1200,7 +1200,7 @@ else
 							</div>
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ตรวจสอบรายการ">
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
 						</RadzenRow>
@@ -1844,7 +1844,7 @@ else
 							</div>
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(lsdisable)" Text="เสร็จสิ้น"  @onclick="@CheckDeptslipAmt">
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
@@ -1949,6 +1949,33 @@ else
 	private string searchText;
 	int selectedIndex = 0;
 	private bool IsSaveEnabled => SaveStatus == "1";
+	private bool disable = true;
+	private bool lsdisable = true;
+  	protected async Task CheckDeptslipAmt()
+    {
+		Console.WriteLine($"deptslipAmt :{deptslipAmt},currentStep :{currentStep}");
+		if (sumpb_intnat == null)
+		{
+			disable = true;
+			currentStep = 0;
+			Console.WriteLine("== null ");
+			@* await jsRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้"); *@
+		}
+		else
+		{
+			if (currentStep == 2 )
+			{
+				disable = true;
+			}else{
+				if(currentStep !=2){
+					lsdisable = true;
+				}
+				disable = false;
+			}
+			Console.WriteLine("!= null ");
+		}
+		await InvokeAsync(() => StateHasChanged());
+    }
 	private Task AllowRowSelect(){
 		allowRowSelectOnRowClick = true;
 		return Task.CompletedTask;

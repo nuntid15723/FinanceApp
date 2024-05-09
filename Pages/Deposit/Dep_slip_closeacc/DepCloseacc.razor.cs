@@ -685,6 +685,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
             else
             {
                 await CallApi();
+                await CheckDeptslipAmt();
+
+
             }
             isLoading = false;
         }
@@ -1416,6 +1419,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                             currentStep = 2;
                             await PrintPdf();
                             await PrintBook();
+                            await CheckDeptslipAmt();
                             await InvokeAsync(() => StateHasChanged());
 
                             Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
