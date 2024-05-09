@@ -1425,6 +1425,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                             currentStep = 2;
                             await PrintPdf();
                             await PrintBook();
+                            await CheckDeptslipAmt();
                             await InvokeAsync(() => StateHasChanged());
 
                             Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");

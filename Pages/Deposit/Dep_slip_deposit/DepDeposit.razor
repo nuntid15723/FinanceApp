@@ -156,7 +156,7 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
+					<RadzenStepsItem Disabled="@(currentStep == 2)" @bind-SelectedIndex="currentStep" Text="ทำรายการ" @onkeydown="OnKeyDownAsync">
 						<RadzenRow>
 							<RadzenText Text="ทำรายการ" />
 						</RadzenRow>
@@ -1552,11 +1552,11 @@ else
 											</div>
 										</div>
 										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">ยอดทำรายการ</label>
+											<label class="form-label" for="">ยอดทำรายการ2</label>
 											<div class="form-group ">
 												<div class="input-group">
 													<input type="text" class="format-money form-control" style="text-align: end;"
-													@bind="DeptslipAmt" placeholder="0.00" @onblur="FormatNumber" />
+													@bind="DeptslipAmt" placeholder="0.00"  @onblur="(e) => {OnBlurHandler(); CheckDeptslipAmt(); }" />
 
 													<div class="input-group-addon">
 														<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
@@ -2182,7 +2182,7 @@ else
 						}
 					</RadzenStepsItem>
 					@* <RadzenStepsItem Disabled="@(currentStep != 2)" Text="เสร็จสิ้น" Last="true"> *@
-					<RadzenStepsItem Disabled="@(currentStep == 3 || DeptslipAmt == null)"  Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(lsdisable)"  Text="เสร็จสิ้น"  @onclick="@CheckDeptslipAmt">
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
@@ -2379,21 +2379,29 @@ else
 </script>
 @code {
 	private bool disable = true;
- 	private async Task CheckDeptslipAmt()
+	private bool lsdisable = true;
+ 	protected async Task CheckDeptslipAmt()
     {
 		Console.WriteLine($"deptslipAmt :{deptslipAmt},currentStep :{currentStep}");
-		if (deptslipAmt == null || deptslipAmt == 0)
+		if (DeptslipAmt == null || DeptslipAmt == "0.00")
 		{
-			disable = false;
-			// ใช้ JavaScript แสดง Alert
-			await JSRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้");
-			if(currentStep == 2)
+			disable = true;
+			currentStep = 0;
+			Console.WriteLine("== null ");
+			await jsRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้");
+		}
+		else
+		{
+			if (currentStep == 2 )
 			{
 				disable = true;
 			}else{
+				lsdisable = currentStep != 2;
 				disable = false;
 			}
+			Console.WriteLine("!= null ");
 		}
+		await InvokeAsync(() => StateHasChanged());
     }
     private async Task PrintPdf()
     {
@@ -2525,7 +2533,7 @@ else
 		@if (currentStep == 2)
 		{
 			// PrintPdf(deptslip_no);
-			disable = true;
+			@* disable = true; *@
 		}
 	}
 

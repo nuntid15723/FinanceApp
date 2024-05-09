@@ -1028,7 +1028,7 @@ else
 												<div class="form-group ">
 													<div class="input-group">
 														<input type="text" class="format-money form-control" style="text-align: end;"
-														@bind="DeptslipAmt" placeholder="0.00"   @onblur="() => FormatNumber()" />
+														@bind="DeptslipAmt" placeholder="0.00"  @onblur="(e) => {FormatNumber(); CheckDeptslipAmt(); }"/>
 														<div class="input-group-addon">
 															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																		data-bs-target="#myModal1" />
@@ -2319,7 +2319,7 @@ else
 							</div>
 						}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(lsdisable)" Text="เสร็จสิ้น" @onclick="@CheckDeptslipAmt">
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
@@ -2421,21 +2421,31 @@ else
 </script>
 @code {
 	private bool disable = true;
-  	private async Task CheckDeptslipAmt()
+	private bool lsdisable = true;
+  	protected async Task CheckDeptslipAmt()
     {
 		Console.WriteLine($"deptslipAmt :{deptslipAmt},currentStep :{currentStep}");
-		if (deptslipAmt == null || deptslipAmt == 0)
+		if (DeptslipAmt == null || DeptslipAmt == "0.00")
 		{
-			disable = false;
-			// ใช้ JavaScript แสดง Alert
-			await JSRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้");
-			if(currentStep == 2)
+			disable = true;
+			currentStep = 0;
+			Console.WriteLine("== null ");
+			await jsRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้");
+		}
+		else
+		{
+			if (currentStep == 2 )
 			{
 				disable = true;
 			}else{
+				if(currentStep !=2){
+					lsdisable = true;
+				}
 				disable = false;
 			}
+			Console.WriteLine("!= null ");
 		}
+		await InvokeAsync(() => StateHasChanged());
     }
 	private string searchText;
 	int selectedIndex = 0;

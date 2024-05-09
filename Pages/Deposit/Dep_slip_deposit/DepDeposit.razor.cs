@@ -888,21 +888,6 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 isLoading = false;
             }
         }
-        public async void SaveData1()
-        {
-            try
-            {
-                // ทำการบันทึกข้อมูลลงในฐานข้อมูล
-                SaveDataAsync();
-                // บันทึก log
-                Console.WriteLine("บันทึกข้อมูลลงในฐานข้อมูลสำเร็จ");
-            }
-            catch (Exception ex)
-            {
-                // กรณีเกิด error ในขณะที่บันทึกข้อมูล
-                Console.WriteLine($"เกิดข้อผิดพลาด: {ex.Message}");
-            }
-        }
         // public async Task SaveDataAsync()
         // {
         //     try
@@ -1178,6 +1163,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                             this.currentStep = 2;
                             await PrintPdf();
                             await PrintBook();
+                            await CheckDeptslipAmt();
                             await InvokeAsync(() => StateHasChanged());
                             Console.WriteLine($"IsSuccessStatusCode: {response.IsSuccessStatusCode}");
                             ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Success", Detail = Response.message, Duration = 2500 });

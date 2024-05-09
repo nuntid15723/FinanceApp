@@ -981,7 +981,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                             {
                                 currentStep = 2;
                                 await Print_Frontbook();
-                                StateHasChanged();
+                                await CheckDeptslipAmt();
+                                await InvokeAsync(() => StateHasChanged());
                             }
                         }
                     }

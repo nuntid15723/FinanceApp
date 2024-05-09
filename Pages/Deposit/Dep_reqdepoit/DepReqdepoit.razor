@@ -142,7 +142,7 @@ else
 		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
 			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange">
 				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="ทำรายการ">
+					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
 						<RadzenRow>
 							@* <RadzenText Text="Enter user information" /> *@
 						</RadzenRow>
@@ -821,7 +821,7 @@ else
 																	</div>
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">รวมสุทธิ</label>
-																		<input class="format-money form-control" @onblur="FormatNumber" @bind="DeptslipAmt"
+																		<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}"@bind="DeptslipAmt"
 																			placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
 																			id="showNumber" />
 																	</div>
@@ -1067,7 +1067,7 @@ else
 																	</div>
 																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																		<label class="form-label" for="">รวมสุทธิ</label>
-																		<input class="format-money form-control" @onblur="FormatNumber" @bind="DeptslipAmt"
+																		<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
 																			placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
 																			id="showNumber" />
 																	</div>
@@ -1298,7 +1298,7 @@ else
 																</div>
 																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 																	<label class="form-label" for="">รวมสุทธิ</label>
-																	<input class="format-money form-control" @onblur="FormatNumber" @bind="DeptslipAmt"
+																	<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
 																		placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
 																		id="showNumber" />
 																</div>
@@ -1387,7 +1387,7 @@ else
 									</div>
 								}
 					</RadzenStepsItem>
-					<RadzenStepsItem  Disabled="@(currentStep == 3)" Text="ตรวจสอบรายการ">
+					<RadzenStepsItem Disabled="@(disable)" Text="ตรวจสอบรายการ" @onclick="@CheckDeptslipAmt">
 					@* <RadzenStepsItem Disabled="@(repReqdepoit == null)" Text='@(currentStep == 2 ? "เสร็จสิ้น" : "ยืนยัน")' Next='@(currentStep == 2)'> *@
 						<RadzenRow>
 							<RadzenText Text="ตรวจสอบรายละเอียด" />
@@ -1835,7 +1835,7 @@ else
 										</div>
 								}
 					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(currentStep == 3)" Text="เสร็จสิ้น" Last="true">
+					<RadzenStepsItem Disabled="@(lsdisable)" Text="เสร็จสิ้น" @onclick="@CheckDeptslipAmt">
 						<RadzenRow>
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
@@ -1953,6 +1953,29 @@ else
 	private bool IsSaveEnabled => SaveStatus == "1";
 	IEnumerable<GetOfBookNo> getOfBook_No;
 	 private bool dept_status1 = false;
+	 private bool disable = true;
+ 	private bool lsdisable = true;
+ 	protected async Task CheckDeptslipAmt()
+    {
+		Console.WriteLine($"deptslipAmt :{deptslipAmt},currentStep :{currentStep}");
+		if (DeptslipAmt == null || DeptslipAmt == "0.00")
+		{
+			disable = true;
+			currentStep = 0;
+			await jsRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้");
+		}
+		else
+		{
+			if (currentStep == 2 )
+			{
+				disable = true;
+			}else{
+				lsdisable = currentStep != 2;
+				disable = false;
+			}
+		}
+		await InvokeAsync(() => StateHasChanged());
+    }
 
     // เมื่อ checkbox ถูกติกเลือก
     @* private void CheckboxChanged()
@@ -2141,6 +2164,7 @@ else
 		@if (currentStep == 2)
 		{
 			PrintPdf();
+			disable = true;
 		}
 
 	}
