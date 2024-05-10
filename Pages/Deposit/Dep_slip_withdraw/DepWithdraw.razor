@@ -79,8 +79,13 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-				<RadzenButton class="save_top" Icon="save" Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
-							  Disabled="@(!IsSaveEnabled)" />
+				if( currentStep == 1){
+					<RadzenButton class="save_top" Icon="save"  Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
+						Disabled="@(!IsSaveEnabled ||DeptslipAmt == null)" />
+					}else{
+					<RadzenButton class="save_top" Icon="arrow_forward"  Text="@("ถัดไป")" Click="@GoToNextStep"
+						Disabled="@(DeptslipAmt == null)" />
+					}	
 			}
 			else if (currentStep == 2)
 			{
@@ -1532,14 +1537,14 @@ else
 																		{
 																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
 																					selected="@isCurrentOptionSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 1
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
 																			</option>
 																		}
 																		else
 																		{
 																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
 																					selected="@isCurrentOptionSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 2
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
 																			</option>
 																		}
 																	}
@@ -1550,7 +1555,7 @@ else
 																		{
 																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
 																					selected="@isItemAccIdSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 3
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
 																			</option>
 																		}
 																	}
@@ -1563,7 +1568,7 @@ else
 																	{
 																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
 																						selected="@isCurrentOptionSelected">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 4
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
 																		</option>
 																	}
 															</select>
@@ -2324,6 +2329,8 @@ else
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
 							<RadzenButton class="save_top" Icon="print" Text="@((printLoading ? "พิมพ์..." : "พิมพ์ Book"))" Click="@PrintBook_" />
+							<RadzenButton class="save_top" Icon="arrow_back" Text="ทำรายการ" Click="@GoBack" />
+
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
@@ -2420,6 +2427,8 @@ else
 	}
 </script>
 @code {
+	[Inject]
+    private NavigationManager NavigationManager { get; set; }
 	private bool disable = true;
 	private bool lsdisable = true;
   	protected async Task CheckDeptslipAmt()
@@ -2429,7 +2438,6 @@ else
 		{
 			disable = true;
 			currentStep = 0;
-			Console.WriteLine("== null ");
 			await jsRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้");
 		}
 		else
@@ -2443,10 +2451,19 @@ else
 				}
 				disable = false;
 			}
-			Console.WriteLine("!= null ");
 		}
 		await InvokeAsync(() => StateHasChanged());
     }
+	protected async Task GoBack()
+    {
+		currentStep = 0;
+		NavigationManager.NavigateTo("/ws_dep_slip_withdraw", true);
+
+	}
+	protected void GoToNextStep()
+	{
+		currentStep = 1;
+	}
 	private string searchText;
 	int selectedIndex = 0;
 	private bool IsSaveEnabled => SaveStatus == "1";

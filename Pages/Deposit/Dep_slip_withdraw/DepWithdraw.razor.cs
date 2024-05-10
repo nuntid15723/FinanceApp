@@ -982,6 +982,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
         private string check_no { get; set; }
         private string valuetoFromaccId { get; set; }
         private string toFromaccId2 { get; set; }
+        private string toFromaccValue { get; set; }
         private string bookCode { get; set; }
         private string deptslipNetamt { get; set; }
         private string selectedToFromAcc { get; set; }
@@ -1015,6 +1016,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
             Valueselecte = values[0];
             toFromaccId2 = values[1];
             selectedToFromAcc = csahValue[0];
+            string[] selectedToFromValue = selectedToFromAcc.ToString().Split('|');
+            toFromaccValue = selectedToFromValue[1];
             Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId},selectedToFromAcc:{selectedToFromAcc}");
 
 
@@ -1478,7 +1481,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_withdraw
                 bankbranch_code = item.deptSlip.bankbranch_code,
                 entry_id = name,
                 machine_id = machine_address,
-                tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? item.deptSlip.tofrom_accid,
+                tofrom_accid = (toFromaccValue == null) ? item.deptSlip.tofrom_accid : toFromaccValue,
                 operate_date = DateTime.Today,
                 entry_date = DateTime.Today,
                 calint_from = DateTime.Today,

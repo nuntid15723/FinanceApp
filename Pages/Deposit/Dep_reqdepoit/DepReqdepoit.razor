@@ -116,8 +116,13 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-				<RadzenButton class="save_top" Icon="save" Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
-					disabled="@(!IsSaveEnabled)" />		
+			if( currentStep == 1){
+					<RadzenButton class="save_top" Icon="save"  Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
+						Disabled="@(!IsSaveEnabled ||DeptslipAmt == null)" />
+					}else{
+					<RadzenButton class="save_top" Icon="arrow_forward"  Text="@("ถัดไป")" Click="@GoToNextStep"
+						Disabled="@(DeptslipAmt == null)" />
+					}	
 			}
 			else if (currentStep == 2)
 			{
@@ -1841,6 +1846,7 @@ else
 						</RadzenRow>
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ slip" Click="@PrintPdf" />
 						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ ปกสมุด" Click="@PrintFrontbook" />
+						<RadzenButton class="save_top" Icon="arrow_back" Text="ทำรายการ" Click="@GoBack" />
 						@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook_" /> *@
 						@* @foreach (var content in printbook_data)
 							{
@@ -1976,7 +1982,16 @@ else
 		}
 		await InvokeAsync(() => StateHasChanged());
     }
-
+	protected async Task GoBack()
+    {
+		currentStep = 0;
+		NavigationManager.NavigateTo("/ws_dep_reqdepoit", true);
+	}
+	protected void GoToNextStep()
+	{
+		currentStep = 1;
+	}
+	
     // เมื่อ checkbox ถูกติกเลือก
     @* private void CheckboxChanged()
     {

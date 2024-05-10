@@ -71,8 +71,13 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-				<RadzenButton class="save_top" Icon="save" Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
-							  Disabled="@(!IsSaveEnabled)" />
+				if( currentStep == 1){
+					<RadzenButton class="save_top" Icon="save"  Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
+						Disabled="@(!IsSaveEnabled ||DeptslipAmt == null)" />
+					}else{
+					<RadzenButton class="save_top" Icon="arrow_forward"  Text="@("ถัดไป")" Click="@GoToNextStep"
+						Disabled="@(DeptslipAmt == null)" />
+					}	
 			}
 			else if (currentStep == 2)
 			{
@@ -573,53 +578,51 @@ else
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รหัสคู่บัญชี</label>
-												@if (Item.moneytype_code == "CSH" )
-												{
-														<select id="tofromaccSelect" class="form-select" value="@bookCode"
-														@onchange="OnToFromAccChanged">
+													<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
 															{
-																<option selected disabled></option>
+																<option selected disabled>--กรุณาเลือก--</option>
 															}
 															else
 															{
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var tofromaccItem in Item.tofromacc)
 																{
-																	isCurrentOptionSelected = true;
-																	@if (tofromaccItem.cash_type == Item.moneytype_code)
+																	bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
+																	bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+																	bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+																	if (isCashTypeSelected)
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																		if (valuetoFromaccId == null|| toFromaccId2 == null)
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isCurrentOptionSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																			</option>
+																		}
+																		else
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isCurrentOptionSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																			</option>
+																		}
+																	}
+																	else if (isItemAccIdSelected)
+																	{
+																		// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																		if (valuetoFromaccId == null|| toFromaccId2 == null)
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isItemAccIdSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																			</option>
+																		}
 																	}
 																}
 															}
-														</select>
-												}else{
-													<select id="tofromaccSelect" class="form-select" @onchange="OnToFromAccChanged">
-													@if (Item.tofromacc == null || !Item.tofromacc.Any())
-														{
-															<option selected disabled></option>
-														}
-														else
-														{
-															<option selected disabled>--กรุณาเลือก--</option>
-															@foreach (var tofromaccItem in Item.tofromacc)
-															{
-																isCurrentOptionSelected = true;
-																@if (tofromaccItem.cash_type == cashTypeValue)
-																{
-																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																	</option>
-																}
-															}
-														}
 												</select>
-												}
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขสมุด</label>
@@ -1261,53 +1264,64 @@ else
 												<label class="form-label" for="">รหัสคู่บัญชี</label>
 												<div class="form-group ">
 														<div class="input-group">
-															@* <select id="tofromaccSelect" class="form-select" value="@bookCode"style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-																@if (Item.tofromacc == null || !Item.tofromacc.Any())
-																{
-																	<option selected disabled></option>
-																}
-																else
-																{
-																	<option selected disabled>--กรุณาเลือก--</option>
-																		@foreach (var tofromaccItem in Item.tofromacc)
-																		{
-																			@if (tofromaccItem.cash_type == cashTypeValue)
-																			{
-																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																						selected="@isCurrentOptionSelected">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																				</option>
-																			}else{
-																				<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																					selected="@(tofromaccItem == Item.tofromacc.First(item => item.cash_type == "TRN"))">
-																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																				</option>
-																				
-																			}
-																		}
-																	}
-															</select> *@
-															<select id="tofromaccSelect" class="form-select" @onchange="OnToFromAccChanged" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+															@if(selectedValue == null){
+														<select id="tofromaccSelect" class="form-select"  @bind="selectedValue"
+																style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();"disabled>
 															@if (Item.tofromacc == null || !Item.tofromacc.Any())
 															{
-																<option selected disabled></option>
+																<option selected disabled>--กรุณาเลือก--</option>
 															}
 															else
 															{
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var tofromaccItem in Item.tofromacc)
 																{
-																	@* isCurrentOptionSelected = true; *@
-																	@if (tofromaccItem.cash_type == cashTypeValue)
+																	bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
+																	bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+																	bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+																	if (isCashTypeSelected)
 																	{
-																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																		</option>
+																		// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																		if (valuetoFromaccId == null|| toFromaccId2 == null)
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isCurrentOptionSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
+																			</option>
+																		}
+																		else
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isCurrentOptionSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
+																			</option>
+																		}
+																	}
+																	else if (isItemAccIdSelected)
+																	{
+																		// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																		if (valuetoFromaccId == null|| toFromaccId2 == null)
+																		{
+																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																					selected="@isItemAccIdSelected">
+																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 
+																			</option>
+																		}
 																	}
 																}
 															}
 														</select>
+														}else{
+															<select id="tofromaccSelect" class="form-select"  @bind="selectedToFromAcc" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();"disabled>
+																	@foreach (var tofromaccItem in Item.tofromacc)
+																	{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																						selected="@isCurrentOptionSelected">
+																					@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc 4
+																		</option>
+																	}
+															</select>
+														}
 														</div>
 												</div>
 											</div>
@@ -1849,6 +1863,7 @@ else
 							<RadzenText Text="ประวัติทำรายการ" />
 						</RadzenRow>
 							<RadzenButton class="save_top" Icon="print" Text="พิมพ์ book_" Click="@PrintBook_" />
+							<RadzenButton class="save_top" Icon="arrow_back" Text="ทำรายการ" Click="@GoBack" />
 						<div class="row mt-2"
 			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
 							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="200px"
@@ -1945,6 +1960,8 @@ else
 	}
 </script>
 @code {
+	[Inject]
+    private NavigationManager NavigationManager { get; set; }
 	bool isFirstTRN =true;
 	private string searchText;
 	int selectedIndex = 0;
@@ -1958,8 +1975,6 @@ else
 		{
 			disable = true;
 			currentStep = 0;
-			Console.WriteLine("== null ");
-			@* await jsRuntime.InvokeVoidAsync("alert", "ฝากเงินเป็น 0 ไม่ได้"); *@
 		}
 		else
 		{
@@ -1976,6 +1991,16 @@ else
 		}
 		await InvokeAsync(() => StateHasChanged());
     }
+		protected async Task GoBack()
+    {
+		currentStep = 0;
+		NavigationManager.NavigateTo("/ws_dep_slip_closeacc", true);
+
+	}
+	protected void GoToNextStep()
+	{
+		currentStep = 1;
+	}
 	private Task AllowRowSelect(){
 		allowRowSelectOnRowClick = true;
 		return Task.CompletedTask;

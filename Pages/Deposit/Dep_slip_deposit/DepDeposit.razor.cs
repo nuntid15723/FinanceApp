@@ -717,6 +717,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         private string selectedToFromAcc { get; set; }
         private string valuetoFromaccId { get; set; }
         private string toFromaccId2 { get; set; }
+        private string toFromaccValue { get; set; }
+        
         private string bookCode { get; set; }
         private decimal deptslipAmt { get; set; }
         private string deptslipNetamt { get; set; }
@@ -769,6 +771,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
         {
             string[] values = e.Value.ToString().Split('|');
             string[] csahValue = e.Value.ToString().Split('_');
+            
             if (values != null && values.Length >= 2)
             {
                 Valueselecte = values[0];
@@ -776,6 +779,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 // selectedToFromAcc = values[2];
                 // selectedToFromAcc = values[0] + " - " + values[1];
                 selectedToFromAcc = csahValue[0];
+                string[] selectedToFromValue = selectedToFromAcc.ToString().Split('|');
+                toFromaccValue = selectedToFromValue[1];
                 Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{toFromaccId2},selectedToFromAcc:{selectedToFromAcc}");
             }
 
@@ -1213,7 +1218,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_deposit
                 bankbranch_code = item.deptSlip.bankbranch_code,
                 entry_id = name,
                 machine_id = machine_address,
-                tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? item.deptSlip.tofrom_accid,
+                tofrom_accid = (toFromaccValue==null) ? item.deptSlip.tofrom_accid : toFromaccValue,
                 operate_date = DateTime.Today,
                 entry_date = DateTime.Today,
                 calint_from = DateTime.Today,

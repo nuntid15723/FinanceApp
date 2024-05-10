@@ -978,7 +978,9 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
         private string check_no { get; set; }
         private string valuetoFromaccId { get; set; }
         private string toFromaccId2 { get; set; }
+        private string toFromaccValue { get; set; }
         private string bookCode { get; set; }
+        private string selectedToFromAcc { get; set; }
         private string deptslipNetamt { get; set; }
         private string DeptslipAmt { get; set; }
         private decimal deptslipAmt { get; set; }
@@ -995,6 +997,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
             string[] toFromaccId1 = bookCode.Split('|');
             cashTypeValue = toFromaccId1[0];
             valuetoFromaccId = toFromaccId1[1];
+            await OnToFromAccChanged(e);
             Console.WriteLine($"Cash Type: {cashTypeValue}, Recp Pay Type Code: {recpPayTypeCode},toFromaccId:{valuetoFromaccId},selectedRecppaytype:{selectedRecppaytype}");
             if (recpPayTypeCode == "DEN")
             {
@@ -1005,8 +1008,12 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
         private async Task OnToFromAccChanged(ChangeEventArgs e)
         {
             string[] values = e.Value.ToString().Split('|');
+            string[] csahValue = e.Value.ToString().Split('_');
             Valueselecte = values[0];
             toFromaccId2 = values[1];
+            selectedToFromAcc = csahValue[0];
+            string[] selectedToFromValue = selectedToFromAcc.ToString().Split('|');
+            toFromaccValue = selectedToFromValue[1];
             Console.WriteLine($"Cash Typee: {bookCode}, Recp Pay Type Code: {Valueselecte},toFromaccId:{valuetoFromaccId}");
 
         }
@@ -1362,7 +1369,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                         var Response = JsonConvert.DeserializeObject<SaveResponse>(jsonResponse);
                         var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(responseData);
                         success_status = true;
-                        if (response.IsSuccessStatusCode)
+                        if (Response.success)
                         {
 
                             statement_data = new List<Models.Content> { Response.content };
@@ -1471,7 +1478,7 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
                 bankbranch_code = item.deptSlip.bankbranch_code,
                 entry_id = name,
                 machine_id = machine_address,
-                tofrom_accid = (toFromaccId2 ?? valuetoFromaccId) ?? item.deptSlip.tofrom_accid,
+                tofrom_accid = (toFromaccValue == null) ? item.deptSlip.tofrom_accid : toFromaccValue,
                 operate_date = DateTime.Today,
                 entry_date = DateTime.Today,
                 calint_from = DateTime.Today,
