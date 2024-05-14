@@ -45,8 +45,6 @@ public static class ApiClient
         public const string PostMemeber = "PostMemeber";
         public const string GetLoanobjective = "GetLoanobjective";
         public const string GetMoneyType = "GetMoneyType";
-
-
     }
     public static class Print
     {
