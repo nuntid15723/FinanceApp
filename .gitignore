@@ -1,0 +1,8 @@
+# Ignore all PDB files
+*.pdb
+
+# Ignore other files and directories
+bin/
+obj/
+.vscode/
+.env
