@@ -1349,19 +1349,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\faluk\\.nuget\\packages\\": {}
+    "C:\\Users\\nunti\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\งานทั้งหมด\\Finance\\FinanceApp\\FinanceApp.csproj",
+      "projectUniqueName": "D:\\work\\Icoop\\DonNet\\New folder\\F1\\FinanceApp\\FinanceApp.csproj",
       "projectName": "FinanceApp",
-      "projectPath": "F:\\งานทั้งหมด\\Finance\\FinanceApp\\FinanceApp.csproj",
-      "packagesPath": "C:\\Users\\faluk\\.nuget\\packages\\",
-      "outputPath": "F:\\งานทั้งหมด\\Finance\\FinanceApp\\obj\\",
+      "projectPath": "D:\\work\\Icoop\\DonNet\\New folder\\F1\\FinanceApp\\FinanceApp.csproj",
+      "packagesPath": "C:\\Users\\nunti\\.nuget\\packages\\",
+      "outputPath": "D:\\work\\Icoop\\DonNet\\New folder\\F1\\FinanceApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\faluk\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\nunti\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1381,11 +1381,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -1440,7 +1435,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }
