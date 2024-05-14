@@ -6,11 +6,13 @@ public static class ApiClient
     {
         // public static string ApiKey { get; } = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhZG1pbl9hcGkiLCJuYW1lIjoiYWRtaW5fYXBpIiwiZW1haWwiOiJhZG1pbl9hcGkiLCJuYmYiOjE3MDQ0NDI2NDYsImV4cCI6MTcwNDQ0NjI0NiwiaWF0IjoxNzA0NDQyNjQ2LCJpc3MiOiJTZWN1cmVBcGkiLCJhdWQiOiJTZWN1cmVBcGlVc2VyIn0.ZgklhLaCQmXIAy3BfZZsl-bWy-jCwdo5sN0kL8WjUnw";
         public static string ApibaseUrl { get; } = " https://localhost:7090/api/";
+        public static string ApibaseUrl2 { get; } = " https://localhost:7214/api/";
     }
     public static class App
     {
         public const string Deposit = "Deposit/";
         public const string Finance = "Finance/";
+        public const string Loan = "Loan/";
 
     }
     public static class Paths
@@ -37,8 +39,12 @@ public static class ApiClient
         public const string DepOfDataStatement = "DepOfDataStatement?deptaccount_no"; 
         public const string DepOfCalIntPrncfix = "DepOfCalIntPrncfix"; 
         public const string DepOfGetBookNew = "DepOfGetBookNew"; 
-        public const string DepOfPutBookNew = "DepOfPutBookNew"; 
+        public const string DepOfPutBookNew = "DepOfPutBookNew";
 
+        //Loan
+        public const string PostMemeber = "PostMemeber";
+        public const string GetLoanobjective = "GetLoanobjective";
+        public const string GetMoneyType = "GetMoneyType";
 
 
     }

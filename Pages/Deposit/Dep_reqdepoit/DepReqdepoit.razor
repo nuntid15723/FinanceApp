@@ -116,1768 +116,1813 @@
 		<div class="header-right">
 			@if (currentStep != 2)
 			{
-			if( currentStep == 1){
-					<RadzenButton class="save_top" Icon="save"  Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
-						Disabled="@(!IsSaveEnabled ||DeptslipAmt == null)" />
-					}else{
-					<RadzenButton class="save_top" Icon="arrow_forward"  Text="@("ถัดไป")" Click="@GoToNextStep"
-						Disabled="@(DeptslipAmt == null)" />
-					}	
+				if (currentStep == 1)
+				{
+					<RadzenButton class="save_top" Icon="save" Text="@((saveLoading ? "Saving..." : "Save"))" Click="@SaveDataAsync"
+								  Disabled="@(!IsSaveEnabled ||DeptslipAmt == null)" />
+				}
+				else
+				{
+					<RadzenButton class="save_top" Icon="arrow_forward" Text="@("ถัดไป")" Click="@GoToNextStep"
+								  Disabled="@(DeptslipAmt == null)" />
+				}
 			}
 			else if (currentStep == 2)
 			{
 				<RadzenButton class="save_top" Icon="print" Text="พิมพ์ slip" Click="@PrintPdf"
-					disabled="@(!success_status)" />
+							  disabled="@(!success_status)" />
 			}
 		</div>
 	</div>
 </div>
-@* @if (isLoading)
-{
-	<div
-		style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; display: flex;background-color: #e9e9e9;opacity: 50%; justify-content: center; align-items: center; z-index: 90;">
-		<div class="spinner-border text-primary" role="status">
-			<span class="visually-hidden">Loading...</span>
-		</div>
-	</div>
-}
-else
-{ *@
-	<div class="card body-page">
-		<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
-			<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange">
-				<Steps>
-					<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
-						<RadzenRow>
-							@* <RadzenText Text="Enter user information" /> *@
-						</RadzenRow>
-							@if (repReqdepoit == null)
-								{
-									<form @onsubmit="SearchOfGetAcc">
-										<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
-											<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ทะเบียนสมาชิก</label>
-												<div class="form-group ">
-													<div class="input-group">
-														@* <RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no"
-												Name="member_no"
-												class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
-														<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
-															class="form-control" @onkeydown="@HandleEnterKeyPress" />
-														<div class="input-group-addon">
-															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																data-bs-target="#ModalSearch" />
+<div class="card body-page">
+	<div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
+		<RadzenSteps @bind-SelectedIndex="currentStep" Change="@OnChange">
+			<Steps>
+				<RadzenStepsItem Disabled="@(currentStep == 2)" Text="ทำรายการ">
+					<RadzenRow>
+						@* <RadzenText Text="Enter user information" /> *@
+					</RadzenRow>
+					@if (repReqdepoit == null)
+					{
+						<form @onsubmit="SearchOfGetAcc">
+							<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+								<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
+									<label class="form-label" for="">ทะเบียนสมาชิก</label>
+									<div class="form-group ">
+										<div class="input-group">
+											@* <RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no"
+										Name="member_no"
+										class="form-control" @onkeydown="@((e) => e.Code == "Enter" ? Search() : null)" /> *@
+											<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no" Name="member_no"
+														class="form-control" @onkeydown="@HandleEnterKeyPress" />
+											<div class="input-group-addon">
+												<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+															data-bs-target="#ModalSearch" />
+											</div>
+										</div>
+									</div>
+									<div class="modal" tabindex="-1" id="ModalSearch">
+										<div class="modal-dialog modal-xl">
+											<div class="modal-content">
+												<!-- Modal Header -->
+												<div class="modal-header">
+													<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+													<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+												</div>
+												<!-- Modal body -->
+												<div class="modal-body">
+													<div class="row" style="margin-left:-4px;margin-right:-4px;">
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ทะเบียนสมาชิก</label>
+															<div class="form-group ">
+																<div class="input-group">
+																	<RadzenMask Mask="********" CharacterPattern="[0-9]"
+																	@bind-value="member_No_fild" Name="deptaccount_no"
+																				class="form-control" />
+
+																</div>
+															</div>
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for=""> รหัสพนักงาน</label>
+															<div class="form-group ">
+																<div class="input-group">
+																	<input class="form-control" type="text" name="emp_name"
+																	@bind-value="salary_id">
+
+																</div>
+															</div>
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ประเภทบุคคล</label>
+															<select class="form-select" @bind="membcat_code">
+																<option selected>--เลือก--</option>
+																<option Value="10">สามัญ</option>
+																<option Value="20">สมทบ</option>
+																<option Value="30">สหกรณ์อื่นๆ</option>
+															</select>
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ชื่อ</label>
+															<div class="form-group ">
+																<div class="input-group">
+																	<input class="form-control" type="text" name="member_name"
+																	@bind-value="member_name">
+
+																</div>
+															</div>
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">นามสกุล</label>
+															<div class="form-group ">
+																<div class="input-group">
+																	<input class="form-control" type="text" name="member_surname"
+																	@bind-value="member_surname">
+																</div>
+															</div>
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">สังกัด</label>
+															<div class="form-group ">
+																<div class="input-group">
+																	<input class="form-control" type="text" name="card_person"
+																	@bind-value="fullgroup">
+																</div>
+															</div>
+														</div>
+														<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<button class="btn btn-outline-secondary" @onclick="SearchOfGetAcc">ค้นหา</button>
 														</div>
 													</div>
-												</div>
-												<div class="modal" tabindex="-1" id="ModalSearch">
-													<div class="modal-dialog modal-xl">
-														<div class="modal-content">
-															<!-- Modal Header -->
-															<div class="modal-header">
-																<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-																<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-															</div>
-															<!-- Modal body -->
-															<div class="modal-body">
-																<div class="row" style="margin-left:-4px;margin-right:-4px;">
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ทะเบียนสมาชิก</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<RadzenMask Mask="********" CharacterPattern="[0-9]"
-																					@bind-value="member_No_fild" Name="deptaccount_no"
-																					class="form-control" />
-
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for=""> รหัสพนักงาน</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="form-control" type="text" name="emp_name"
-																					@bind-value="salary_id">
-
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ประเภทบุคคล</label>
-																		<select class="form-select" @bind="membcat_code"
-																			>
-																			<option selected>--เลือก--</option>
-																			<option Value="10">สามัญ</option>
-																			<option Value="20">สมทบ</option>
-																			<option Value="30">สหกรณ์อื่นๆ</option>
-																		</select>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ชื่อ</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="form-control" type="text" name="member_name"
-																					@bind-value="member_name">
-
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">นามสกุล</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="form-control" type="text" name="member_surname"
-																					@bind-value="member_surname">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">สังกัด</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="form-control" type="text" name="card_person"
-																					@bind-value="fullgroup">
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<button class="btn btn-outline-secondary" @onclick="SearchOfGetAcc">ค้นหา</button>
-																	</div>
-																</div>
-																<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails" ColumnWidth="100%"
+													<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails" ColumnWidth="100%"
 																	AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																	FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																	AllowPaging="true" AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left"
 																	ShowPagingSummary="true">
-																	<Columns>
-																		<RadzenDataGridColumn Width="10%" TItem="Models.ReqAccDetails" Title="ทะเบียน"
-																			Property="member_no">
-																			<Template>
-																				<div @onclick="@(e => UpdateAccountDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.member_no
-																				</div>
-																			</Template>
-																		</RadzenDataGridColumn>
+														<Columns>
+															<RadzenDataGridColumn Width="10%" TItem="Models.ReqAccDetails" Title="ทะเบียน"
+																				  Property="member_no">
+																<Template>
+																	<div @onclick="@(e => UpdateAccountDetails(context))"
+																		 data-bs-dismiss="modal">
+																		@context.member_no
+																	</div>
+																</Template>
+															</RadzenDataGridColumn>
 
-																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
-																			Title="ชื่อ - นามสกุล" Property="memb_name">
-																			<Template>
-																				<div @onclick="@(e => UpdateAccountDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.memb_name @context.memb_surname
-																				</div>
-																			</Template>
-																		</RadzenDataGridColumn>
-																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
-																			Title="รหัสประเภทบุคคล" Property="membcat_code">
-																			<Template>
-																				<div @onclick="@(e => UpdateAccountDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.membcat_code
-																				</div>
-																			</Template>
-																		</RadzenDataGridColumn>
-																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="ประเภทบุคคล"
-																			Property="membcat_desc">
-																			<Template>
-																				<div @onclick="@(e => UpdateAccountDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.membcat_desc
-																				</div>
-																			</Template>
-																		</RadzenDataGridColumn>
-																		<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="สังกัด"
-																			Property="membgroup_desc">
-																			<Template>
-																				<div @onclick="@(e => UpdateAccountDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.membgroup_desc
-																				</div>
-																			</Template>
-																		</RadzenDataGridColumn>
-																	</Columns>
-																</RadzenDataGrid>
+															<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																				  Title="ชื่อ - นามสกุล" Property="memb_name">
+																<Template>
+																	<div @onclick="@(e => UpdateAccountDetails(context))"
+																		 data-bs-dismiss="modal">
+																		@context.memb_name @context.memb_surname
+																	</div>
+																</Template>
+															</RadzenDataGridColumn>
+															<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																				  Title="รหัสประเภทบุคคล" Property="membcat_code">
+																<Template>
+																	<div @onclick="@(e => UpdateAccountDetails(context))"
+																		 data-bs-dismiss="modal">
+																		@context.membcat_code
+																	</div>
+																</Template>
+															</RadzenDataGridColumn>
+															<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="ประเภทบุคคล"
+																				  Property="membcat_desc">
+																<Template>
+																	<div @onclick="@(e => UpdateAccountDetails(context))"
+																		 data-bs-dismiss="modal">
+																		@context.membcat_desc
+																	</div>
+																</Template>
+															</RadzenDataGridColumn>
+															<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails" Title="สังกัด"
+																				  Property="membgroup_desc">
+																<Template>
+																	<div @onclick="@(e => UpdateAccountDetails(context))"
+																		 data-bs-dismiss="modal">
+																		@context.membgroup_desc
+																	</div>
+																</Template>
+															</RadzenDataGridColumn>
+														</Columns>
+													</RadzenDataGrid>
 
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+									@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
+									<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">
+										@if (isLoading)
+										{
+											<span>...</span>
+											<i class="fa fa-spinner fa-spin"></i>
+										}
+										else
+										{
+											<span>ค้นหา</span>
+										}
+									</button>
+								</div>
+							</div>
+						</form>
+					}
+					else
+					{
+						<div class="from">
+							@foreach (var Item in repReqdepoit)
+							{
+								<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
+									<div class="row">
+										<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ทะเบียนสมาชิก</label>
+											<div class="form-group ">
+												<div class="input-group">
+													<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no"
+																Name="member_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
+													<div class="input-group-addon">
+														<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																	data-bs-target="#ModalSearch" />
+													</div>
+												</div>
+											</div>
+											<div class="modal" tabindex="-1" id="ModalSearch">
+												<div class="modal-dialog modal-xl">
+													<div class="modal-content">
+														<!-- Modal Header -->
+														<div class="modal-header">
+															<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+														</div>
+														<!-- Modal body -->
+														<div class="modal-body">
+															<div class="row" style="margin-left:-4px;margin-right:-4px;">
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">ทะเบียนสมาชิก</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<RadzenMask Mask="********" CharacterPattern="[0-9]"
+																			@bind-value="member_No_fild" Name="deptaccount_no"
+																						class="form-control" />
+
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for=""> รหัสพนักงาน</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="emp_name"
+																			@bind-value="salary_id">
+
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">ประเภทบุคคล</label>
+																	<select class="form-select" @bind="membcat_code">
+																		<option selected>--เลือก--</option>
+																		<option Value="10">สามัญ</option>
+																		<option Value="20">สมทบ</option>
+																		<option Value="30">สหกรณ์อื่นๆ</option>
+																	</select>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">ชื่อ</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="member_name"
+																			@bind-value="member_name">
+
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">นามสกุล</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="member_surname"
+																			@bind-value="member_surname">
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<label class="form-label" for="">สังกัด</label>
+																	<div class="form-group ">
+																		<div class="input-group">
+																			<input class="form-control" type="text" name="card_person"
+																			@bind-value="fullgroup">
+																		</div>
+																	</div>
+																</div>
+																<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
+																</div>
+																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																	<button class="btn btn-outline-secondary"
+																	@onclick="SearchOfGetAcc">
+																		ค้นหา
+																	</button>
+																</div>
 															</div>
+															<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
+																			ColumnWidth="100%" AllowFiltering="true"
+																			FilterPopupRenderMode="PopupRenderMode.OnDemand"
+																			FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+																			AllowPaging="true" AllowSorting="true"
+																			PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+																<Columns>
+																	<RadzenDataGridColumn Width="10%" TItem="Models.ReqAccDetails"
+																						  Title="ทะเบียน" Property="member_no">
+																		<Template>
+																			<div @onclick="@(e => UpdateAccountDetails(context))"
+																				 data-bs-dismiss="modal">
+																				@context.member_no
+																			</div>
+																		</Template>
+																	</RadzenDataGridColumn>
+
+																	<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																						  Title="ชื่อ - นามสกุล" Property="memb_name">
+																		<Template>
+																			<div @onclick="@(e => UpdateAccountDetails(context))"
+																				 data-bs-dismiss="modal">
+																				@context.memb_name @context.memb_surname
+																			</div>
+																		</Template>
+																	</RadzenDataGridColumn>
+																	<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																						  Title="รหัสประเภทบุคคล" Property="membcat_code">
+																		<Template>
+																			<div @onclick="@(e => UpdateAccountDetails(context))"
+																				 data-bs-dismiss="modal">
+																				@context.membcat_code
+																			</div>
+																		</Template>
+																	</RadzenDataGridColumn>
+																	<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																						  Title="ประเภทบุคคล" Property="membcat_desc">
+																		<Template>
+																			<div @onclick="@(e => UpdateAccountDetails(context))"
+																				 data-bs-dismiss="modal">
+																				@context.membcat_desc
+																			</div>
+																		</Template>
+																	</RadzenDataGridColumn>
+																	<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
+																						  Title="สังกัด" Property="membgroup_desc">
+																		<Template>
+																			<div @onclick="@(e => UpdateAccountDetails(context))"
+																				 data-bs-dismiss="modal">
+																				@context.membgroup_desc
+																			</div>
+																		</Template>
+																	</RadzenDataGridColumn>
+																</Columns>
+															</RadzenDataGrid>
+
 														</div>
 													</div>
 												</div>
 											</div>
-											<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-												@* <button type="submit" class="btn btn-outline-secondary">ค้นหา</button> *@
-												<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">  @if (isLoading)
+										</div>
+										<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
+											<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">
+												@if (isLoading)
+												{
+													<span>...</span>
+													<i class="fa fa-spinner fa-spin"></i>
+												}
+												else
+												{
+													<span>ค้นหา</span>
+												}
+											</button>
+										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ประเภทบัญชี</label>
+											<select id="depttype" name="depttype_code" class="form-select" @onchange="DepttypeChanged">
+												@if (Item.depttype == null || !Item.depttype.Any())
+												{
+													<option selected disabled></option>
+												}
+												else
+												{
+													@foreach (var depttypeItem in Item.depttype)
 													{
-														<span>...</span>
-														<i class="fa fa-spinner fa-spin"></i>
+														if (depttypeItem.deptmain_type == Item.depttype_code)
+														{
+															isCurrentOptionSelected = true;
+
+														}
+														else
+														{
+															isCurrentOptionSelected = false;
+														}
+														<option value="@depttypeItem.deptmain_type | @depttypeItem.deptmain_desc" selected="@isCurrentOptionSelected">
+															@depttypeItem.deptmain_desc
+														</option>
 													}
-													else
-													{
-														<span>ค้นหา</span>
-													}
-													</button>
+												}
+											</select>
+										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลขที่สมุดเงินฝาก</label>
+											<div class="form-group ">
+												<div class="input-group">
+													<RadzenDropDown Disabled="@(chk_deptpassbookno)" AllowClear="true" @bind-Value="@deptpassbook_no"
+																	AllowFiltering="true" Data="@getOfBookNo" Class="form-control" TextProperty="book_no"
+																	ValueProperty="book_no" Name="DropDownFilteringLoadData" />
+													<div class="input-group-addon">
+														<RadzenCheckBox style="margin-left: 5px;margin-top: 7px;"
+														@bind-Value=@chk_deptpassbookno Name="CheckBox1" />
+													</div>
+												</div>
 											</div>
 										</div>
-									</form>
-								}
-							else
-								{
-										<div class="from">
-												@foreach (var Item in repReqdepoit)
+									</div>
+									<div class="row">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลขที่บัญชี</label>
+											<div class="form-group ">
+												<div class="input-group">
+													<input type="text" class="format-money form-control" Name="deptslip_netamt"
+														   value="@Item.deptaccount_no" disabled="@(!chk_deptacc)" />
+													<div class="input-group-addon">
+														<RadzenCheckBox style="margin-left: 5px;margin-top: 7px;" @bind-Value=@chk_deptacc
+																		Name="CheckBox1" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ประเภทบุคคล</label>
+											<RadzenTextBox class="form-control" type="text" ReadOnly Name="membcat_code"
+												@bind-value="Item.membcat_desc" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">วันที่เปิดบัญชี</label>
+												<RadzenDatePicker @bind-Value=Item.operate_date ReadOnly @oninput="FormatDate" Name="operate_date"
+																  DateFormat="dd/MM/yyyy" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">วันครบกำหนด</label>
+												<RadzenDatePicker @bind-Value=Item.due_date ReadOnly Name="operate_date"
+																  DateFormat="dd/MM/yyyy" />
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ผู้ถือบัญชี</label>
+												<select id="recppaytypeSelect" name="depttype_code" class="form-select" @onchange="AcctypeChanged">
+													@if (Item.recppaytype == null || !Item.recppaytype.Any())
 												{
-													<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
-														<div class="row">
-															<div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ทะเบียนสมาชิก</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		<RadzenMask Mask="********" CharacterPattern="[0-9]" @bind-value="member_no"
-																			Name="member_no" class="form-control" @onkeydown="@HandleEnterKeyPress" />
-																		<div class="input-group-addon">
-																			<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																				data-bs-target="#ModalSearch" />
-																		</div>
-																	</div>
-																</div>
-																<div class="modal" tabindex="-1" id="ModalSearch">
-																	<div class="modal-dialog modal-xl">
-																		<div class="modal-content">
-																			<!-- Modal Header -->
-																			<div class="modal-header">
-																				<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-																				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-																			</div>
-																			<!-- Modal body -->
-																			<div class="modal-body">
-																				<div class="row" style="margin-left:-4px;margin-right:-4px;">
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<label class="form-label" for="">ทะเบียนสมาชิก</label>
-																						<div class="form-group ">
-																							<div class="input-group">
-																								<RadzenMask Mask="********" CharacterPattern="[0-9]"
-																									@bind-value="member_No_fild" Name="deptaccount_no"
-																									class="form-control" />
-
-																							</div>
-																						</div>
-																					</div>
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<label class="form-label" for=""> รหัสพนักงาน</label>
-																						<div class="form-group ">
-																							<div class="input-group">
-																								<input class="form-control" type="text" name="emp_name"
-																									@bind-value="salary_id">
-
-																							</div>
-																						</div>
-																					</div>
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<label class="form-label" for="">ประเภทบุคคล</label>
-																						<select class="form-select" @bind="membcat_code"
-																							>
-																							<option selected>--เลือก--</option>
-																							<option Value="10">สามัญ</option>
-																							<option Value="20">สมทบ</option>
-																							<option Value="30">สหกรณ์อื่นๆ</option>
-																						</select>
-																					</div>
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<label class="form-label" for="">ชื่อ</label>
-																						<div class="form-group ">
-																							<div class="input-group">
-																								<input class="form-control" type="text" name="member_name"
-																									@bind-value="member_name">
-
-																							</div>
-																						</div>
-																					</div>
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<label class="form-label" for="">นามสกุล</label>
-																						<div class="form-group ">
-																							<div class="input-group">
-																								<input class="form-control" type="text" name="member_surname"
-																									@bind-value="member_surname">
-																							</div>
-																						</div>
-																					</div>
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<label class="form-label" for="">สังกัด</label>
-																						<div class="form-group ">
-																							<div class="input-group">
-																								<input class="form-control" type="text" name="card_person"
-																									@bind-value="fullgroup">
-																							</div>
-																						</div>
-																					</div>
-																					<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
-																					</div>
-																					<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																						<button class="btn btn-outline-secondary"
-																							@onclick="SearchOfGetAcc">ค้นหา</button>
-																					</div>
-																				</div>
-																				<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
-																					ColumnWidth="100%" AllowFiltering="true"
-																					FilterPopupRenderMode="PopupRenderMode.OnDemand"
-																					FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-																					AllowPaging="true" AllowSorting="true"
-																					PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-																					<Columns>
-																						<RadzenDataGridColumn Width="10%" TItem="Models.ReqAccDetails"
-																							Title="ทะเบียน" Property="member_no">
-																							<Template>
-																								<div @onclick="@(e => UpdateAccountDetails(context))"
-																									data-bs-dismiss="modal">
-																									@context.member_no
-																								</div>
-																							</Template>
-																						</RadzenDataGridColumn>
-
-																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
-																							Title="ชื่อ - นามสกุล" Property="memb_name">
-																							<Template>
-																								<div @onclick="@(e => UpdateAccountDetails(context))"
-																									data-bs-dismiss="modal">
-																									@context.memb_name @context.memb_surname
-																								</div>
-																							</Template>
-																						</RadzenDataGridColumn>
-																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
-																							Title="รหัสประเภทบุคคล" Property="membcat_code">
-																							<Template>
-																								<div @onclick="@(e => UpdateAccountDetails(context))"
-																									data-bs-dismiss="modal">
-																									@context.membcat_code
-																								</div>
-																							</Template>
-																						</RadzenDataGridColumn>
-																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
-																							Title="ประเภทบุคคล" Property="membcat_desc">
-																							<Template>
-																								<div @onclick="@(e => UpdateAccountDetails(context))"
-																									data-bs-dismiss="modal">
-																									@context.membcat_desc
-																								</div>
-																							</Template>
-																						</RadzenDataGridColumn>
-																						<RadzenDataGridColumn Width="20%" TItem="Models.ReqAccDetails"
-																							Title="สังกัด" Property="membgroup_desc">
-																							<Template>
-																								<div @onclick="@(e => UpdateAccountDetails(context))"
-																									data-bs-dismiss="modal">
-																									@context.membgroup_desc
-																								</div>
-																							</Template>
-																						</RadzenDataGridColumn>
-																					</Columns>
-																				</RadzenDataGrid>
-
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
-																<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">  @if (isLoading)
+													<option selected disabled></option>
+												}
+												else
+												{
+													@foreach (var acctypeItem in Item.acctype)
 													{
-														<span>...</span>
-														<i class="fa fa-spinner fa-spin"></i>
-													}
-													else
-													{
-														<span>ค้นหา</span>
-													}
-													</button>
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ประเภทบัญชี</label>
-																<select id="depttype" name="depttype_code" class="form-select" @onchange="DepttypeChanged">
-																	@if (Item.depttype == null || !Item.depttype.Any())
-																	{
-																		<option selected disabled></option>
-																	}
-																	else
-																	{
-																		@foreach (var depttypeItem in Item.depttype)
-																		{
-																			if (depttypeItem.deptmain_type == Item.depttype_code)
-																			{
-																				isCurrentOptionSelected = true;
-
-																			}
-																			else
-																			{
-																				isCurrentOptionSelected = false;
-																				@* <option value="@depttypeItem.deptmain_type" selected="@(depttypeItem.deptmain_type ==
-														"10")">
-														@depttypeItem.deptmain_desc
-														</option> *@
-																			}
-																			<option value="@depttypeItem.deptmain_type | @depttypeItem.deptmain_desc" selected="@isCurrentOptionSelected">
-																				@depttypeItem.deptmain_desc
-																			</option>
-																		}
-																	}
-																</select>
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขที่สมุดเงินฝาก</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		@* <RadzenTextBox class="form-control" type="text" ReadOnly style="background-color:
-															#fff;"
-															Name="deptpassbook_no" disabled="@(!chk_deptpassbookno)"
-															@bind-value="Item.deptpassbook_no"
-															/> *@
-																		@* <input class="format-money form-control" type="text" Name="deptpassbook_no"
-																			disabled="@(chk_deptpassbookno)" @bind-value="Item.deptpassbook_no" /> *@
-																			<RadzenDropDown Disabled="@(chk_deptpassbookno)" AllowClear="true" @bind-Value="@deptpassbook_no" 
-																			AllowFiltering="true" Data="@getOfBookNo" Class="form-control" TextProperty="book_no"
-																			ValueProperty="book_no" Name="DropDownFilteringLoadData" />
-																		<div class="input-group-addon">
-																			<RadzenCheckBox style="margin-left: 5px;margin-top: 7px;"
-																				@bind-Value=@chk_deptpassbookno Name="CheckBox1" />
-																		</div>
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขที่บัญชี</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		<input type="text" class="format-money form-control" Name="deptslip_netamt"
-																			value="@Item.deptaccount_no" disabled="@(!chk_deptacc)" />
-																		<div class="input-group-addon">
-																			<RadzenCheckBox style="margin-left: 5px;margin-top: 7px;" @bind-Value=@chk_deptacc
-																				Name="CheckBox1" />
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ประเภทบุคคล</label>
-																<RadzenTextBox class="form-control" type="text" ReadOnly Name="membcat_code"
-																	@bind-value="Item.membcat_desc" />
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วันที่เปิดบัญชี</label>
-																<RadzenDatePicker @bind-Value=Item.operate_date ReadOnly  @oninput="FormatDate" Name="operate_date"
-																	DateFormat="dd/MM/yyyy" />
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วันครบกำหนด</label>
-																<RadzenDatePicker @bind-Value=Item.due_date ReadOnly Name="operate_date"
-																	DateFormat="dd/MM/yyyy" />
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ผู้ถือบัญชี</label>
-																<select id="recppaytypeSelect" name="depttype_code" class="form-select" @onchange="AcctypeChanged">
-																	@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																	{
-																		<option selected disabled></option>
-																	}
-																	else
-																	{
-																		@foreach (var acctypeItem in Item.acctype)
-																		{
-																			if (acctypeItem.account_type == Item.account_type)
-																			{
-																				isCurrentOptionSelected = true;
-
-																			}
-																			else
-																			{
-																				isCurrentOptionSelected = false;
-																			}
-																			<option value="@acctypeItem.account_type|@acctypeItem.account_desc" selected="@isCurrentOptionSelected">
-																				@acctypeItem.account_type - @acctypeItem.account_desc
-																			</option>
-																		}
-																	}
-																</select>
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ชื่อบัญชี(TH)</label>
-																<RadzenTextBox class="form-control" type="text" ReadOnly Name="deptaccount_name"
-																	@bind-value="Item.deptaccount_name" />
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ชื่อบัญชี(EN)</label>
-																<RadzenTextBox class="form-control" type="text" ReadOnly Name="deptaccount_ename"
-																	@bind-value="Item.deptaccount_ename" />
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ระยะเวลาการรับด/บ</label>
-																<select class="form-select" @bind="Item.upint_time" >
-																	<option Value="1">ตามประเภท</option>
-																	<option Value="2">รายเดือน</option>
-																	<option Value="3">ราย 3 เดือน</option>
-																</select>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วิธีรับดอกเบี้ย</label>
-																<select class="form-select" value="@Item.monthintpay_meth" @onchange="BookNo">
-																	<option Value="0">ทบต้น</option>
-																	<option value="1">โอนเข้า บ/ช</option>
-																	<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
-																	<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
-																	<option Value="5">รับเป็นธนาณัติ</option>
-																</select>
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เพื่อ</label>
-																<input class="form-control" type="text" Name="dept_objective"
-																	@bind-value="Item.dept_objective" />
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เงื่อนไขการถอน</label>
-																<RadzenTextBox class="form-control" type="text" Name="condforwithdraw"
-																	@bind-value="Item.condforwithdraw" />
-															</div>
-														</div>
-														@if (type_monthintpay == 1 || type_monthintpay == 2)
+														if (acctypeItem.account_type == Item.account_type)
 														{
-															@if (type_monthintpay == 1)
-															{
-																<div class="row">
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
-																			<RadzenDropDown AllowClear="true" @bind-Value="@tran_deptacc_no" 
-																			AllowFiltering="true" Data="@getOfBookNo" Class="form-control" TextProperty="book_no"
-																			ValueProperty="book_no" Name="DropDownFilteringLoadData" />
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">การฝากรายเดือน</label>
-																		<select class="form-select" @bind="Item.deptmonth_status">
-																			<option Value="0">ไม่ต้องการฝาก</option>
-																			<option Value="1">ต้องการฝาก</option>
-																		</select>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">จำนวนส่งรายงวด</label>
-																		<input type="text" class="format-money form-control" Name="deptmonth_amt"
-																			value="@Item.deptmonth_amt" />
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">เปิดบัญชีโดย1</label>
-																		<select id="recppaytypeSelect" name="recppaytype_code" @onchange="RecpPayTypeChanged"
-																			class="form-select">
-																			@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																			{
-																				<option selected disabled></option>
-																			}
-																			else
-																			{
-																				@foreach (var recppaytypeItem in Item.recppaytype)
-																				{
-																					if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-																					{
-																						isCurrentOptionSelected = true;
+															isCurrentOptionSelected = true;
 
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
-																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																					</option>
-																				}
-																			}
-																		</select>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ชื่อบัญชี</label>
-																		<input type="text" class="format-money form-control" Name="deptslip_netamt"
-																			value="@Item.dept_tranacc_name" />
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ประเภทบัญชี</label>
-																		<select id="recppaytypeSelect" name="depttype_code" class="form-select"
-																			@bind="traninttype_code">
-																			@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																			{
-																				<option selected disabled></option>
-																			}
-																			else
-																			{
-																				@foreach (var depttypeItem in Item.depttype)
-																				{
-																					if (depttypeItem.deptgroup_code == Item.traninttype_code)
-																					{
-																						isCurrentOptionSelected = true;
+														}
+														else
+														{
+															isCurrentOptionSelected = false;
+														}
+														<option value="@acctypeItem.account_type|@acctypeItem.account_desc" selected="@isCurrentOptionSelected">
+															@acctypeItem.account_type - @acctypeItem.account_desc
+														</option>
+													}
+												}
+											</select>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ชื่อบัญชี(TH)</label>
+											<RadzenTextBox class="form-control" type="text" ReadOnly Name="deptaccount_name" @bind-value="Item.deptaccount_name" />
+										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ชื่อบัญชี(EN)</label>
+											<RadzenTextBox class="form-control" type="text" ReadOnly Name="deptaccount_ename"
+											@bind-value="Item.deptaccount_ename" />
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ระยะเวลาการรับด/บ</label>
+											<select class="form-select" @bind="Item.upint_time">
+												<option Value="1">ตามประเภท</option>
+												<option Value="2">รายเดือน</option>
+												<option Value="3">ราย 3 เดือน</option>
+											</select>
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">วิธีรับดอกเบี้ย</label>
+											<select class="form-select" value="@Item.monthintpay_meth" @onchange="BookNo">
+												<option Value="0">ทบต้น</option>
+												<option value="1">โอนเข้า บ/ช</option>
+												<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
+												<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
+												<option Value="5">รับเป็นธนาณัติ</option>
+											</select>
+										</div>
+									</div>
+									<div class="row">
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เพื่อ</label>
+												<input class="form-control" type="text" Name="dept_objective"
+												@bind-value="Item.dept_objective" />
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เงื่อนไขการถอน</label>
+												<RadzenTextBox class="form-control" type="text" Name="condforwithdraw"
+												@bind-value="Item.condforwithdraw" />
+											</div>
+											@* </div> *@
+											@if (type_monthintpay == 1 || type_monthintpay == 2)
+										{
+											@if (type_monthintpay == 1)
+											{
 
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
-																						@depttypeItem.deptmain_desc
-																					</option>
-																				}
-																			}
-																		</select>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">รหัสคู่บัญชี1</label>
-																		<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
-																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																			}
-																			else
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																				@foreach (var tofromaccItem in Item.tofromacc)
-																				{
-																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
-																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
-																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
-																					if (isCashTypeSelected)
-																					{
-																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
-																							</option>
-																						}
-																						else
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
-																							</option>
-																						}
-																					}
-																					else if (isItemAccIdSelected)
-																					{
-																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isItemAccIdSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																							</option>
-																						}
-																					}
-																				}
-																			}
-																	</select>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ธนาคาร</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="format-money form-control" type="text"
-																					style="text-align: center; width: 30%;" name="bank_code" readonly value="@bank_code"
-																					@oninput="OnGetBankChanged" />
-																				<select id="getBankSelect" disabled class="form-select"
-																					@onchange="OnGetBankSelectChanged" style="width: 70%;">
-																				</select>
-																			</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input type="text" class="format-money form-control" Name="tran_deptacc_no"
+															@bind="@tran_deptacc_no" />
+															<div class="input-group-addon">
+																		<RadzenIcon class="icons icon-search" disabled Icon="ballot" data-bs-toggle="modal"
+																					data-bs-target="#tranDeptno" />
+															</div>
+															<!-- The Modal tranDeptno -->
+															<div class="modal" id="tranDeptno">
+																<div class="modal-dialog modal-xl">
+																	<div class="modal-content">
+																		<!-- Modal Header -->
+																		<div class="modal-header">
+																			<h4 class="modal-title">ข้อมูลบัญชี</h4>
+																			<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 																		</div>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">สาขา</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="format-money form-control" type="text"
-																					style="text-align: center; width: 30%;" name="bank_code" readonly
-																					value="@bankbranch_code" @oninput="OnBankBranchChanged" />
-																				<select id="getBankSelect" disabled class="form-select"
-																					@onchange="OnBankBranchSelectChanged" style="width: 70%;">
-																				</select>
-																			</div>
-																		</div>
-																	</div>
-																	@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<div class="form-check" style="margin-top: 35px;">
-																			<input class="form-check-input" type="checkbox" @bind="dept_status" id="flexCheckDefault">
-																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
-																		</div>
-																	</div> *@
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">อ้างอิง</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input type="text" class="format-money form-control" Name="deptslip_netamt"
-																					value="@Item.deptslip_no" />
-																				<div class="input-group-addon">
-																					<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																						data-bs-target="#myModal1" />
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">รวมสุทธิ</label>
-																		<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}"@bind="DeptslipAmt"
-																			placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
-																			id="showNumber" />
-																	</div>
-																</div>
-															}
-															else
-															{
-																<div class="row">
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input type="text" class="format-money form-control" Name="tran_deptacc_no"
-																					@bind="@Item.tran_deptacc_no" />
-																				<div class="input-group-addon">
-																					<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																						data-bs-target="#accNo" />
-																				</div>
-																			</div>
-																		</div>
-																		<!-- The Modal -->
-																		<div class="modal" id="accNo">
-																			<div class="modal-dialog modal-xl">
-																				<div class="modal-content">
-																					<!-- Modal Header -->
-																					<div class="modal-header">
-																						<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-																						<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-																					</div>
-																					<!-- Modal body -->
-																					<div class="modal-body">
-																						<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
+																		<!-- Modal body -->
+																		<div class="modal-body">
+																			<RadzenDataGrid Data="@tranDeptDetails" TItem="Models.TranDeptno"
 																							ColumnWidth="100" AllowFiltering="true"
 																							FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																							FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																							AllowPaging="true" AllowSorting="true"
 																							PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-																							<Columns>
-																								<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
-																									Title="ประเภทเงินฝาก" Property="deptaccount_no">
-																									<Template>
-																										@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.deptaccount_no
-																					</div> *@
-																									</Template>
-																								</RadzenDataGridColumn>
-																								<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
-																									Title="เลขที่บัญชี" Property="member_no">
-																									<Template>
-																										@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.member_no
-																					</div> *@
-																									</Template>
-																								</RadzenDataGridColumn>
-																								<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
-																									Title="ชื่อบัญชี" Property="deptaccount_name">
-																									<Template>
-																										@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.deptaccount_name
-																					</div> *@
-																									</Template>
-																								</RadzenDataGridColumn>
-																							</Columns>
-																						</RadzenDataGrid>
-																						<!-- Modal footer -->
-																						<div class="modal-footer">
-																							<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-																								Close
-																							</button>
-																						</div>
-
-																					</div>
-																				</div>
-																			</div>
+																				<Columns>
+																					<RadzenDataGridColumn Width="30%" TItem="Models.TranDeptno"
+																										Title="ประเภทเงินฝาก" Property="depttype_code">
+																						<Template>
+																								<div @onclick="@(e => UpdateTranDeptno(context))"
+																									data-bs-dismiss="modal">
+																									@context.depttype_code
+																								</div>
+																						</Template>
+																					</RadzenDataGridColumn>
+																					<RadzenDataGridColumn Width="40%" TItem="Models.TranDeptno"
+																										Title="เลขที่บัญชี" Property="deptaccount_no">
+																						<Template>
+																							<div @onclick="@(e => UpdateTranDeptno(context))"
+																							data-bs-dismiss="modal">
+																							@context.deptaccount_no
+																							</div>
+																						</Template>
+																					</RadzenDataGridColumn>
+																					<RadzenDataGridColumn Width="40%" TItem="Models.TranDeptno"
+																										Title="ชื่อบัญชี" Property="deptaccount_name">
+																						<Template>
+																							<div @onclick="@(e => UpdateTranDeptno(context))"
+																							data-bs-dismiss="modal">
+																							@context.deptaccount_name
+																							</div>
+																						</Template>
+																					</RadzenDataGridColumn>
+																				</Columns>
+																			</RadzenDataGrid>
 																		</div>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">การฝากรายเดือน</label>
-																		<select class="form-select" @bind="Item.deptmonth_status" >
-																			<option Value="0">ไม่ต้องการฝาก</option>
-																			<option Value="1">ต้องการฝาก</option>
-																		</select>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">จำนวนส่งรายงวด</label>
-																		<input type="text" class="format-money form-control" Name="deptmonth_amt"
-																			value="@Item.deptmonth_amt" />
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">เปิดบัญชีโดย2</label>
-																		<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
-																			class="form-select">
-																			@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																			{
-																				<option selected disabled></option>
-																			}
-																			else
-																			{
-																				@foreach (var recppaytypeItem in Item.recppaytype)
-																				{
-																					if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-																					{
-																						isCurrentOptionSelected = true;
-
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
-																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																					</option>
-																				}
-																			}
-																		</select>
 																	</div>
 																</div>
-																<div class="row">
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ชื่อบัญชี</label>
-																		<input type="text" class="format-money form-control" Name="deptslip_netamt"
-																			value="@Item.dept_tranacc_name" />
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ประเภทบัญชี</label>
-																		<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select"
-																			@bind="traninttype_code">
-																		</select>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">รหัสคู่บัญชี</label>
-																		<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
-																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																			}
-																			else
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																				@foreach (var tofromaccItem in Item.tofromacc)
-																				{
-																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
-																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
-																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
-																					if (isCashTypeSelected)
-																					{
-																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
-																							</option>
-																						}
-																						else
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
-																							</option>
-																						}
-																					}
-																					else if (isItemAccIdSelected)
-																					{
-																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isItemAccIdSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																							</option>
-																						}
-																					}
-																				}
-																			}
-																	</select>
-																	</div>
-																</div>
-																<div class="row">
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">ธนาคาร</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="format-money form-control" type="text"
-																					style="text-align: center; width: 30%;" name="bank_code" value="@bank_code"
-																					@oninput="OnGetBankChanged" />
-																				<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
-																					style="width: 70%;">
-																					<option selected>--กรุณาเลือก--</option>
-																					@foreach (var getBankItem in getBank)
-																					{
-																						bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
-																						<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
-																							@getBankItem.bank_code - @getBankItem.bank_desc
-																						</option>
-																					}
-																				</select>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">สาขา</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input class="format-money form-control" type="text"
-																					style="text-align: center; width: 30%;" name="bank_code" value="@bankbranch_code"
-																					@oninput="OnBankBranchChanged" />
-																				<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
-																					style="width: 70%;">
-																					<option selected>--กรุณาเลือก--</option>
-																					@foreach (var bankBranchItem in bankBranch)
-																					{
-																						bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
-																						<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
-																							@bankBranchItem.branch_id - @bankBranchItem.branch_name
-																						</option>
-																					}
-																				</select>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<div class="form-check" style="margin-top: 35px;">
-																			<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน1</label>
-																		</div>
-																	</div>
-																	<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">อ้างอิง</label>
-																		<div class="form-group ">
-																			<div class="input-group">
-																				<input type="text" class="format-money form-control" Name="deptslip_netamt"
-																					value="@Item.deptslip_no" />
-																				<div class="input-group-addon">
-																					<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																						data-bs-target="#myModal1" />
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																		<label class="form-label" for="">รวมสุทธิ</label>
-																		<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
-																			placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
-																			id="showNumber" />
-																	</div>
-																</div>
-															}
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">การฝากรายเดือน</label>
+													<select class="form-select" @bind="Item.deptmonth_status">
+														<option Value="0">ไม่ต้องการฝาก</option>
+														<option Value="1">ต้องการฝาก</option>
+													</select>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">จำนวนส่งรายงวด</label>
+													<input type="text" class="format-money form-control" Name="deptmonth_amt"
+														   value="@Item.deptmonth_amt" />
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">เปิดบัญชีโดย</label>
+													<select id="recppaytypeSelect" name="recppaytype_code" @onchange="RecpPayTypeChanged"
+															class="form-select">
+														@if (Item.recppaytype == null || !Item.recppaytype.Any())
+														{
+															<option selected disabled></option>
 														}
 														else
 														{
-															<div class="row">
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			<input type="text" class="format-money form-control" readonly Name="tran_deptacc_no"
-																				@bind="@Item.tran_deptacc_no" />
-																			<div class="input-group-addon">
-																				<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																					data-bs-target="#accNo" />
-																			</div>
-																		</div>
-																	</div>
-																	<!-- The Modal -->
-																	<div class="modal" id="accNo">
-																		<div class="modal-dialog modal-xl">
-																			<div class="modal-content">
-																				<!-- Modal Header -->
-																				<div class="modal-header">
-																					<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-																					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-																				</div>
-																				<!-- Modal body -->
-																				<div class="modal-body">
-																					<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails"
-																						ColumnWidth="100" AllowFiltering="true"
-																						FilterPopupRenderMode="PopupRenderMode.OnDemand"
-																						FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
-																						AllowPaging="true" AllowSorting="true"
-																						PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
-																						<Columns>
-																							<RadzenDataGridColumn Width="35%" TItem="Models.ReqAccDetails"
-																								Title="ประเภทเงินฝาก" Property="deptaccount_no">
-																								<Template>
-																									@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.deptaccount_no
-																					</div> *@
-																								</Template>
-																							</RadzenDataGridColumn>
-																							<RadzenDataGridColumn Width="25%" TItem="Models.ReqAccDetails"
-																								Title="เลขที่บัญชี" Property="member_no">
-																								<Template>
-																									@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.member_no
-																					</div> *@
-																								</Template>
-																							</RadzenDataGridColumn>
-																							<RadzenDataGridColumn Width="40%" TItem="Models.ReqAccDetails"
-																								Title="ชื่อบัญชี" Property="deptaccount_name">
-																								<Template>
-																									@* <div @onclick="@(e => UpdateReqAccDetails(context))"
-																					data-bs-dismiss="modal">
-																					@context.deptaccount_name
-																					</div> *@
-																								</Template>
-																							</RadzenDataGridColumn>
-																						</Columns>
-																					</RadzenDataGrid>
-																					<!-- Modal footer -->
-																					<div class="modal-footer">
-																						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-																							Close
-																						</button>
-																					</div>
+															@foreach (var recppaytypeItem in Item.recppaytype)
+															{
+																if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+																{
+																	isCurrentOptionSelected = true;
 
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">การฝากรายเดือน</label>
-																	<select class="form-select" @bind="Item.deptmonth_status" >
-																		<option Value="0">ไม่ต้องการฝาก</option>
-																		<option Value="1">ต้องการฝาก</option>
-																	</select>
-																</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">จำนวนส่งรายงวด</label>
-																	<input type="text" class="format-money form-control" Name="deptmonth_amt"
-																		value="@Item.deptmonth_amt" />
-																</div>
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">เปิดบัญชีโดย3</label>
-																	<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
-																		class="form-select">
-																		@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																		{
-																			<option selected disabled></option>
-																		}
-																		else
-																		{
-																			@foreach (var recppaytypeItem in Item.recppaytype)
-																			{
-																				if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-																				{
-																					isCurrentOptionSelected = true;
-
-																				}
-																				else
-																				{
-																					isCurrentOptionSelected = false;
-																				}
-																				<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
-																					@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																				</option>
-																			}
-																		}
-																	</select>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ชื่อบัญชี</label>
-																	<input type="text" class="format-money form-control" readonly Name="deptslip_netamt"
-																		value="@Item.dept_tranacc_name" />
-																</div>
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ประเภทบัญชี</label>
-																	<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select"
-																		@bind="traninttype_code">
-																	</select>
-																</div>
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">รหัสคู่บัญชี</label>
-																	<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
-																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																			}
-																			else
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																				@foreach (var tofromaccItem in Item.tofromacc)
-																				{
-																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
-																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
-																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
-																					if (isCashTypeSelected)
-																					{
-																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
-																							</option>
-																						}
-																						else
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
-																							</option>
-																						}
-																					}
-																					else if (isItemAccIdSelected)
-																					{
-																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isItemAccIdSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																							</option>
-																						}
-																					}
-																				}
-																			}
-																	</select>
-																</div>
-															</div>
-															<div class="row">
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ธนาคาร</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			<input class="format-money form-control" readonly type="text"
-																				style="text-align: center; width: 30%;" name="bank_code"
-																				@oninput="OnGetBankChanged" />
-																			<select id="getBankSelect" disabled class="form-select"
-																				@onchange="OnGetBankSelectChanged" style="width: 70%;">
-																			</select>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">สาขา</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			<input class="format-money form-control" type="text" readonly
-																				style="text-align: center; width: 30%;" name="bank_code"
-																				@oninput="OnBankBranchChanged" />
-																			<select id="getBankSelect" disabled class="form-select"
-																				@onchange="OnBankBranchSelectChanged" style="width: 70%;">
-																			</select>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	<div class="form-check" style="margin-top: 35px;">
-																		<input class="form-check-input" type="checkbox" @bind="@dept_status1" @onclick="CheckboxChanged">
-																		<label class="form-check-label">ค้ำประกัน</label>
-																	</div>
-																</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">อ้างอิง</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			<input type="text" class="format-money form-control" Name="deptslip_netamt"
-																				value="@Item.deptslip_no" />
-																			<div class="input-group-addon">
-																				<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																					data-bs-target="#myModal1" />
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">รวมสุทธิ</label>
-																	<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
-																		placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
-																		id="showNumber" />
-																</div>
-															</div>
+																}
+																else
+																{
+																	isCurrentOptionSelected = false;
+																}
+																<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
+																	@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+																</option>
+															}
 														}
-													</div>
-												}
-										</div>
-									<div class="card mt-4" hidden>
-										<div class="row mt-2"
-											style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-											<RadzenTabs @bind-SelectedIndex=@selectedIndex>
-												<Tabs>
-													<RadzenTabsItem Text="ข้อมูลรูปภาพ">
-														<div class="row">
-															@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">เลือกกลุ่มงาน</label>
-													<select class="form-select" @bind="membcat_code" >
-													<option selected>--เลือก--</option>
-													<option Value="10">สามัญ</option>
-													<option Value="20">สมทบ</option>
-													<option Value="30">สหกรณ์อื่นๆ</option>
 													</select>
-													</div>
-													<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">เลือกรูปแบบข้อมูล</label>
-													<select class="form-select" @bind="membcat_code" >
-													<option selected>--เลือก--</option>
-													<option Value="10">สามัญ</option>
-													<option Value="20">สมทบ</option>
-													<option Value="30">สหกรณ์อื่นๆ</option>
-													</select>
-													</div> *@
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ชื่อรูปภาพ</label>
-																<input class="form-control" type="text" Name="remark" @bind-value="@file_name" />
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ชื่อบัญชี</label>
+													<input type="text" class="format-money form-control" Name="deptslip_netamt"
+														   value="@Item.dept_tranacc_name" />
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ประเภทบัญชี</label>
+													<select id="recppaytypeSelect" name="depttype_code" class="form-select"
+													@bind="traninttype_code">
+														@if (Item.recppaytype == null || !Item.recppaytype.Any())
+														{
+															<option selected disabled></option>
+														}
+														else
+														{
+															@foreach (var depttypeItem in Item.depttype)
+															{
+																if (depttypeItem.deptgroup_code == Item.traninttype_code)
+																{
+																	isCurrentOptionSelected = true;
 
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">วันที่หมดอายุ</label>
-																<RadzenDatePicker @bind-Value=operate_date Disabled="true" Name="operate_date"
-																	DateFormat="dd/MM/yyyy" />
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">หมายเหตุ</label>
-																<input class="form-control" type="text" Name="remark" @bind-value="@remark" />
-															</div>
-															<div class="col-xl-12 col-md-12 col-sm-6 d-flex flex-column" style="text-align: center;">
-																<label class="form-label" for="">กำหนดสำหรับอ้างถึง</label>
-																<RadzenCard Style="background-color: transparent;">
-																	<RadzenUpload @ref="upload" Auto="false" Multiple="true" Url="upload/multiple"
-																		Change=@(args => OnChange(args, "Manual Upload")) Progress=@(args =>
-																OnProgress(args, "Manual Upload")) class="w-100" />
-																</RadzenCard>
+																}
+																else
+																{
+																	isCurrentOptionSelected = false;
+																}
+																<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
+																	@depttypeItem.deptmain_desc
+																</option>
+															}
+														}
+													</select>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">รหัสคู่บัญชี</label>
+												<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
+													@if (Item.tofromacc == null || !Item.tofromacc.Any())
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+													}
+													else
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+														@foreach (var tofromaccItem in Item.tofromacc)
+														{
+															bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+															bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+															bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+															if (isCashTypeSelected)
+															{
+																// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+																else
+																{
+																	if(valuetoFromaccId == "11013001" && recpPayCash == "CHQ")
+																	{
+																		 bool isOptionSelected = tofromaccItem.tofrom_accid == valuetoFromaccId && valuetoFromaccId == "11013001";
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																	}else{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																		}
+																	
+																	
+																}
+															}
+															else if (isItemAccIdSelected)
+															{
+																// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")" selected="@isItemAccIdSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+															}
+														}
+													}
+												</select>
+												</div>
+
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ธนาคาร1</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input class="format-money form-control" type="text"
+																   style="text-align: center; width: 30%;" name="bank_code" readonly value="@bank_code"
+															@oninput="OnGetBankChanged" />
+															<select id="getBankSelect" disabled class="form-select"
+															@onchange="OnGetBankSelectChanged" style="width: 70%;">
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">สาขา</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input class="format-money form-control" type="text"
+																   style="text-align: center; width: 30%;" name="bank_code" readonly
+																   value="@bankbranch_code" @oninput="OnBankBranchChanged" />
+															<select id="getBankSelect" disabled class="form-select"
+															@onchange="OnBankBranchSelectChanged" style="width: 70%;">
+															</select>
+														</div>
+													</div>
+												</div>
+																@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="form-check" style="margin-top: 35px;">
+												<input class="form-check-input" type="checkbox" @bind="dept_status" id="flexCheckDefault">
+												<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+												</div>
+												</div> *@
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">อ้างอิง</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input type="text" class="format-money form-control" Name="deptslip_netamt"
+																   value="@Item.deptslip_no" />
+															<div class="input-group-addon">
+																<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																			data-bs-target="#myModal1" />
 															</div>
 														</div>
-														<div class="row">
-															<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails" ColumnWidth="200px"
+													</div>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">รวมสุทธิ</label>
+													<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
+														   placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
+														   id="showNumber" />
+												</div>
+
+											}
+											else
+											{
+
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input type="text" class="format-money form-control" Name="tran_deptacc_no"
+															@bind="@tran_deptacc_no" />
+															<div class="input-group-addon">
+																<RadzenIcon class="icons icon-search"  Icon="ballot" disabled />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">การฝากรายเดือน</label>
+													<select class="form-select" @bind="Item.deptmonth_status">
+														<option Value="0">ไม่ต้องการฝาก</option>
+														<option Value="1">ต้องการฝาก</option>
+													</select>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">จำนวนส่งรายงวด</label>
+													<input type="text" class="format-money form-control" Name="deptmonth_amt"
+														   value="@Item.deptmonth_amt" />
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">เปิดบัญชีโดย</label>
+													<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
+															class="form-select">
+														@if (Item.recppaytype == null || !Item.recppaytype.Any())
+														{
+															<option selected disabled></option>
+														}
+														else
+														{
+															@foreach (var recppaytypeItem in Item.recppaytype)
+															{
+																if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+																{
+																	isCurrentOptionSelected = true;
+
+																}
+																else
+																{
+																	isCurrentOptionSelected = false;
+																}
+																<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
+																	@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+																</option>
+															}
+														}
+													</select>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ชื่อบัญชี</label>
+													<input type="text" class="format-money form-control" Name="deptslip_netamt"
+														   value="@Item.dept_tranacc_name" />
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ประเภทบัญชี</label>
+													<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select"
+													@bind="traninttype_code">
+													</select>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">รหัสคู่บัญชี</label>
+												<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
+													@if (Item.tofromacc == null || !Item.tofromacc.Any())
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+													}
+													else
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+														@foreach (var tofromaccItem in Item.tofromacc)
+														{
+															bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+															bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+															bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+															if (isCashTypeSelected)
+															{
+																// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+																else
+																{
+																	if(valuetoFromaccId == "11013001" && recpPayCash == "CHQ")
+																	{
+																		 bool isOptionSelected = tofromaccItem.tofrom_accid == valuetoFromaccId && valuetoFromaccId == "11013001";
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																	}else{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																		}
+																	
+																}
+															}
+															else if (isItemAccIdSelected)
+															{
+																// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")" selected="@isItemAccIdSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+															}
+														}
+													}
+												</select>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ธนาคาร2</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input class="format-money form-control" type="text"
+																   style="text-align: center; width: 30%;" name="bank_code" value="@bank_code"
+															@oninput="OnGetBankChanged" />
+															<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
+																	style="width: 70%;">
+																<option selected>--กรุณาเลือก--</option>
+																@foreach (var getBankItem in getBank)
+																{
+																	bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
+																	<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
+																		@getBankItem.bank_code - @getBankItem.bank_desc
+																	</option>
+																}
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">สาขา</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input class="format-money form-control" type="text"
+																   style="text-align: center; width: 30%;" name="bank_code" disabled="@(bank_code==null||BankValues ==null)" value="@bankbranch_code"
+															@oninput="OnBankBranchChanged" />
+															<select id="getBankSelect" class="form-select" disabled="@(bank_code==null||BankValues ==null)" @onchange="OnBankBranchSelectChanged"
+																	style="width: 70%;">
+																<option selected>--กรุณาเลือก--</option>
+																@foreach (var bankBranchItem in bankBranch)
+																{
+																	bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
+																	<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
+																		@bankBranchItem.branch_id - @bankBranchItem.branch_name
+																	</option>
+																}
+															</select>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<div class="form-check" style="margin-top: 35px;">
+														<input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+														<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน1</label>
+													</div>
+												</div>
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">อ้างอิง</label>
+													<div class="form-group ">
+														<div class="input-group">
+															<input type="text" class="format-money form-control" Name="deptslip_netamt"
+																   value="@Item.deptslip_no" />
+															<div class="input-group-addon">
+																<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																			data-bs-target="#myModal1" />
+															</div>
+														</div>
+													</div>
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">รวมสุทธิ</label>
+													<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
+														   placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
+														   id="showNumber" />
+												</div>
+											}
+										}
+										else
+										{
+
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
+												<div class="form-group ">
+													<div class="input-group">
+															<input type="text" class="format-money form-control" Name="tran_deptacc_no"
+															@bind="@tran_deptacc_no" />
+															<div class="input-group-addon">
+																		<RadzenIcon class="icons icon-search" disabled Icon="ballot" data-bs-toggle="modal"
+																					data-bs-target="#tranDeptno" />
+															</div>
+															<!-- The Modal tranDeptno -->
+															<div class="modal" id="tranDeptno">
+																<div class="modal-dialog modal-xl">
+																	<div class="modal-content">
+																		<!-- Modal Header -->
+																		<div class="modal-header">
+																			<h4 class="modal-title">ข้อมูลบัญชี</h4>
+																			<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+																		</div>
+																		<!-- Modal body -->
+																		<div class="modal-body">
+																			<RadzenDataGrid Data="@tranDeptDetails" TItem="Models.TranDeptno"
+																							ColumnWidth="100" AllowFiltering="true"
+																							FilterPopupRenderMode="PopupRenderMode.OnDemand"
+																							FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
+																							AllowPaging="true" AllowSorting="true"
+																							PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+																				<Columns>
+																					<RadzenDataGridColumn Width="30%" TItem="Models.TranDeptno"
+																										Title="ประเภทเงินฝาก" Property="depttype_code">
+																						<Template>
+																								<div @onclick="@(e => UpdateTranDeptno(context))"
+																									data-bs-dismiss="modal">
+																									@context.depttype_code
+																								</div>
+																						</Template>
+																					</RadzenDataGridColumn>
+																					<RadzenDataGridColumn Width="40%" TItem="Models.TranDeptno"
+																										Title="เลขที่บัญชี" Property="deptaccount_no">
+																						<Template>
+																							<div @onclick="@(e => UpdateTranDeptno(context))"
+																							data-bs-dismiss="modal">
+																							@context.deptaccount_no
+																							</div>
+																						</Template>
+																					</RadzenDataGridColumn>
+																					<RadzenDataGridColumn Width="40%" TItem="Models.TranDeptno"
+																										Title="ชื่อบัญชี" Property="deptaccount_name">
+																						<Template>
+																							<div @onclick="@(e => UpdateTranDeptno(context))"
+																							data-bs-dismiss="modal">
+																							@context.deptaccount_name
+																							</div>
+																						</Template>
+																					</RadzenDataGridColumn>
+																				</Columns>
+																			</RadzenDataGrid>
+																		</div>
+																	</div>
+																</div>
+															</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">การฝากรายเดือน</label>
+												<select class="form-select" @bind="Item.deptmonth_status">
+													<option Value="0">ไม่ต้องการฝาก</option>
+													<option Value="1">ต้องการฝาก</option>
+												</select>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">จำนวนส่งรายงวด</label>
+												<input type="text" class="format-money form-control" Name="deptmonth_amt"
+													   value="@Item.deptmonth_amt" />
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เปิดบัญชีโดย</label>
+												<select id="recppaytypeSelect" name="depttype_code" @onchange="RecpPayTypeChanged"
+														class="form-select">
+													@if (Item.recppaytype == null || !Item.recppaytype.Any())
+													{
+														<option selected disabled></option>
+													}
+													else
+													{
+														@foreach (var recppaytypeItem in Item.recppaytype)
+														{
+															if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+															{
+																isCurrentOptionSelected = true;
+
+															}
+															else
+															{
+																isCurrentOptionSelected = false;
+															}
+															<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
+																@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+															</option>
+														}
+													}
+												</select>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อบัญชี</label>
+												<input type="text" class="format-money form-control" readonly Name="deptslip_netamt"
+													   value="@Item.dept_tranacc_name" />
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ประเภทบัญชี</label>
+												<select id="recppaytypeSelect" name="depttype_code" disabled class="form-select"
+												@bind="traninttype_code">
+												</select>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">รหัสคู่บัญชี</label>
+												<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged">
+													@if (Item.tofromacc == null || !Item.tofromacc.Any())
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+													}
+													else
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+														@foreach (var tofromaccItem in Item.tofromacc)
+														{
+															bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+															bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+															bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+															if (isCashTypeSelected)
+															{
+																// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+																else
+																{
+																	if(valuetoFromaccId == "11013001" && recpPayCash == "CHQ")
+																	{
+																		 bool isOptionSelected = tofromaccItem.tofrom_accid == valuetoFromaccId && valuetoFromaccId == "11013001";
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																	}else{
+																		<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																		}
+																	
+																	
+																}
+															}
+															else if (isItemAccIdSelected)
+															{
+																// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")" selected="@isItemAccIdSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+															}
+														}
+													}
+												</select>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ธนาคาร3</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="format-money form-control" readonly type="text"
+															   style="text-align: center; width: 30%;" name="bank_code"
+														@oninput="OnGetBankChanged" />
+														<select id="getBankSelect" disabled class="form-select"
+														@onchange="OnGetBankSelectChanged" style="width: 70%;">
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">สาขา</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input class="format-money form-control" type="text" readonly
+															   style="text-align: center; width: 30%;" name="bank_code"
+														@oninput="OnBankBranchChanged" />
+														<select id="getBankSelect" disabled class="form-select"
+														@onchange="OnBankBranchSelectChanged" style="width: 70%;">
+														</select>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="form-check" style="margin-top: 35px;">
+													<input class="form-check-input" type="checkbox" @bind="@dept_status1" @onclick="CheckboxChanged">
+													<label class="form-check-label">ค้ำประกัน</label>
+												</div>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">อ้างอิง</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input type="text" class="format-money form-control" Name="deptslip_netamt"
+															   value="@Item.deptslip_no" />
+														<div class="input-group-addon">
+															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																		data-bs-target="#myModal1" />
+														</div>
+													</div>
+												</div>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">รวมสุทธิ</label>
+												<input class="format-money form-control" @onblur="(e) => {FormatNumber(); CheckDeptslipAmt();}" @bind="DeptslipAmt"
+													   placeholder="0.00" type="text" style="text-align: end; font-size: 40px;" name="prncbal"
+													   id="showNumber" />
+											</div>
+										}
+									</div>
+									@if (AcctypeValue == "02")
+									{
+									<RadzenTabs @bind-SelectedIndex=@selectedIndex>
+										<Tabs>
+											<RadzenTabsItem Text="ผู้ฝากร่วม">
+												<div class="row">
+												<label for="form-label">ผู้ฝากร่วม</label>
+												<button type="button" @onclick="AddRow">Add Row</button>
+												<RadzenDataGrid Data="@deptdepositAcc" TItem="Models.deptDepositAcc" ColumnWidth="200px"
+																AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+																FilterMode="FilterMode.Advanced" PageSize="10"
+																AllowPaging="true" AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left"
+																ShowPagingSummary="true" @ref="dataGridRef">
+													<Columns>
+														<RadzenDataGridColumn TItem="Models.deptDepositAcc" Width="10%" Title="ลำดับ"
+																			Property="order"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.deptDepositAcc" Width="25%" Title="ชื่อ"
+																			Property="memb_name">
+																			<Template Context="data">
+																			<input type="text"value="@data.memb_name">
+																			</Template>
+																			</RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.deptDepositAcc" Width="15%" Title="นามสกุล"
+																			Property="memb_surname"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.deptDepositAcc" Width="25%" Title="รายละเอียด"
+																			Property="description"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.deptDepositAcc" Width="10%" Title="ลบ">
+															<Template Context="data">
+															 <RadzenButton Text="ลบ" Icon="delete" ButtonStyle="ButtonStyle.Danger"
+                      											@onclick="(e) => DeleteRow(data)"/>
+															</Template>
+														</RadzenDataGridColumn>
+													</Columns>
+												</RadzenDataGrid>
+											</div>
+											</RadzenTabsItem>
+										</Tabs>
+									</RadzenTabs>
+									}
+								</div>
+							}
+						</div>
+						<div class="card mt-4" hidden>
+							<div class="row mt-2"
+								 style="margin-left: calc(var(--bs-gutter-x) * .5);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+								<RadzenTabs @bind-SelectedIndex=@selectedIndex>
+									<Tabs>
+										<RadzenTabsItem Text="ข้อมูลรูปภาพ">
+											<div class="row">
+												@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลือกกลุ่มงาน</label>
+											<select class="form-select" @bind="membcat_code" >
+											<option selected>--เลือก--</option>
+											<option Value="10">สามัญ</option>
+											<option Value="20">สมทบ</option>
+											<option Value="30">สหกรณ์อื่นๆ</option>
+											</select>
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลือกรูปแบบข้อมูล</label>
+											<select class="form-select" @bind="membcat_code" >
+											<option selected>--เลือก--</option>
+											<option Value="10">สามัญ</option>
+											<option Value="20">สมทบ</option>
+											<option Value="30">สหกรณ์อื่นๆ</option>
+											</select>
+											</div> *@
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ชื่อรูปภาพ</label>
+													<input class="form-control" type="text" Name="remark" @bind-value="@file_name" />
+
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">วันที่หมดอายุ</label>
+													<RadzenDatePicker @bind-Value=operate_date Disabled="true" Name="operate_date"
+																	  DateFormat="dd/MM/yyyy" />
+												</div>
+												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">หมายเหตุ</label>
+													<input class="form-control" type="text" Name="remark" @bind-value="@remark" />
+												</div>
+												<div class="col-xl-12 col-md-12 col-sm-6 d-flex flex-column" style="text-align: center;">
+													<label class="form-label" for="">กำหนดสำหรับอ้างถึง</label>
+													<RadzenCard Style="background-color: transparent;">
+														<RadzenUpload @ref="upload" Auto="false" Multiple="true" Url="upload/multiple"
+																	  Change=@(args => OnChange(args, "Manual Upload")) Progress=@(args =>
+																  OnProgress(args, "Manual Upload")) class="w-100" />
+													</RadzenCard>
+												</div>
+											</div>
+											<div class="row">
+												<RadzenDataGrid Data="@dataaccDetails" TItem="Models.ReqAccDetails" ColumnWidth="200px"
 																AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
 																FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10"
 																AllowPaging="true" AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left"
 																ShowPagingSummary="true">
-																<Columns>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="10%" Title="ลำดับ"
-																		Property="prnc_no"></RadzenDataGridColumn>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="25%" Title="แฟ้มข้อมูล (ชื่อ)"
-																		Property="prnc_bal"></RadzenDataGridColumn>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="15%" Title="รูปแบบข้อมูล"
-																		Property="prncslip_amt"></RadzenDataGridColumn>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="10%" Title="วันที่หมดอายุ"
-																		Property="prnc_date"></RadzenDataGridColumn>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="15%" Title="ผู้เพิ่ม"
-																		Property="prncdue_date"></RadzenDataGridColumn>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="10%" Title="วันที่เพิ่ม"
-																		Property="calint_from"></RadzenDataGridColumn>
-																	<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="15%" Title="ประเภท File"
-																		Property="calint_to"></RadzenDataGridColumn>
-																</Columns>
-															</RadzenDataGrid>
-														</div>
+													<Columns>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="10%" Title="ลำดับ"
+																			  Property="prnc_no"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="25%" Title="แฟ้มข้อมูล (ชื่อ)"
+																			  Property="prnc_bal"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="15%" Title="รูปแบบข้อมูล"
+																			  Property="prncslip_amt"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="10%" Title="วันที่หมดอายุ"
+																			  Property="prnc_date"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="15%" Title="ผู้เพิ่ม"
+																			  Property="prncdue_date"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="10%" Title="วันที่เพิ่ม"
+																			  Property="calint_from"></RadzenDataGridColumn>
+														<RadzenDataGridColumn TItem="Models.ReqAccDetails" Width="15%" Title="ประเภท File"
+																			  Property="calint_to"></RadzenDataGridColumn>
+													</Columns>
+												</RadzenDataGrid>
+											</div>
 
-													</RadzenTabsItem>
-												</Tabs>
-											</RadzenTabs>
+										</RadzenTabsItem>
+									</Tabs>
+								</RadzenTabs>
+							</div>
+						</div>
+					}
+				</RadzenStepsItem>
+				<RadzenStepsItem Disabled="@(disable)" Text="ตรวจสอบรายการ" @onclick="@CheckDeptslipAmt">
+					@* <RadzenStepsItem Disabled="@(repReqdepoit == null)" Text='@(currentStep == 2 ? "เสร็จสิ้น" : "ยืนยัน")' Next='@(currentStep == 2)'> *@
+					<RadzenRow>
+						<RadzenText Text="ตรวจสอบรายละเอียด" />
+					</RadzenRow>
+					@if (repReqdepoit != null)
+					{
+						<div class="from">
+							@foreach (var Item in repReqdepoit)
+							{
+								<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
+									<div class="row">
+										<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">ทะเบียนสมาชิก</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<div class="input-group-addon">
+														<RadzenText Text="@member_no" />
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">ประเภทบัญชี</label>
+											<div class="form-group ">
+												<div class="input-group">
+													@if (selectedValue == null)
+													{
+														<select id="depttype" name="depttype_code" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled class="form-select">
+															@if (Item.depttype == null || !Item.depttype.Any())
+															{
+																<option selected disabled></option>
+															}
+															else
+															{
+																@foreach (var depttypeItem in Item.depttype)
+																{
+																	bool isCurrentOptionSelected = depttypeItem.deptmain_type == Item.depttype_code;
+
+																	<option value="@depttypeItem.deptmain_type | @depttypeItem.deptmain_desc" selected="@isCurrentOptionSelected">
+																		@depttypeItem.deptmain_desc
+																	</option>
+																}
+															}
+														</select>
+													}
+													else
+													{
+														<RadzenText Text="@selectedValue" />
+													}
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">เปิดบัญชีโดย</label>
+											@if (selectRecpPayType == null)
+											{
+												<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
+														disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+													@if (Item.recppaytype == null || !Item.recppaytype.Any())
+													{
+														<option selected disabled></option>
+													}
+													else
+													{
+														@foreach (var recppaytypeItem in Item.recppaytype)
+														{
+															if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
+															{
+																isCurrentOptionSelected = true;
+
+															}
+															else
+															{
+																isCurrentOptionSelected = false;
+															}
+															<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid" selected="@isCurrentOptionSelected">
+																@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
+															</option>
+														}
+													}
+												</select>
+											}
+											else
+											{
+												<RadzenText Text="@selectRecpPayType" />
+											}
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">วันที่เปิดบัญชี</label>
+											<div class="form-group ">
+												<div class="label-group">
+													@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.operate_date)</label> *@
+													<RadzenText Text="@String.Format("{0:dd/MM/yyyy}", Item.operate_date)" />
+
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">วันครบกำหนด</label>
+											<div class="form-group ">
+												<div class="label-group">
+													@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.due_date)</label> *@
+													<RadzenText Text="@String.Format("{0:dd/MM/yyyy}", Item.due_date)" />
+												</div>
+											</div>
 										</div>
 									</div>
-								}
-					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(disable)" Text="ตรวจสอบรายการ" @onclick="@CheckDeptslipAmt">
-					@* <RadzenStepsItem Disabled="@(repReqdepoit == null)" Text='@(currentStep == 2 ? "เสร็จสิ้น" : "ยืนยัน")' Next='@(currentStep == 2)'> *@
-						<RadzenRow>
-							<RadzenText Text="ตรวจสอบรายละเอียด" />
-						</RadzenRow>
-							@if (repReqdepoit != null)
-								{
-										<div class="from">
-												@foreach (var Item in repReqdepoit)
-												{
-													<div class="row" style="margin-left: calc(var(--bs-gutter-x) * -.21);margin-bottom: 15px;">
-														<div class="row">
-															<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">ทะเบียนสมาชิก</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<div class="input-group-addon">
-																			<RadzenText Text="@member_no" />
-																		</div> 
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">ประเภทบัญชี</label>
-																<div class="form-group ">
-																		<div class="input-group">
-																			@if (selectedValue == null)
-																				{
-																					<select id="depttype"  name="depttype_code" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled class="form-select">
-																						@if (Item.depttype == null || !Item.depttype.Any())
-																						{
-																							<option selected disabled></option>
-																						}
-																						else
-																						{
-																							@foreach (var depttypeItem in Item.depttype)
-																							{
-																								bool isCurrentOptionSelected = depttypeItem.deptmain_type == Item.depttype_code;
-																								
-																								<option value="@depttypeItem.deptmain_type | @depttypeItem.deptmain_desc" selected="@isCurrentOptionSelected">
-																									@depttypeItem.deptmain_desc
-																								</option>
-																							}
-																						}
-																					</select>
-																				}
-																				else
-																				{
-																					<RadzenText Text="@selectedValue" />
-																				}
-																		</div> 
-																</div>
-															</div>
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">เปิดบัญชีโดย</label>
-																@if(selectRecpPayType == null){
-																	<select id="recppaytypeSelect" name="recppaytype_code"class="form-select" 
-																		disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																		@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																			{
-																				<option selected disabled></option>
-																			}
-																			else
-																			{
-																				@foreach (var recppaytypeItem in Item.recppaytype)
-																				{
-																					if (recppaytypeItem.recppaytype_code == Item.recppaytype_code)
-																					{
-																						isCurrentOptionSelected = true;
-
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@recppaytypeItem.recppaytype_code|@recppaytypeItem.recppaytype_desc|@recppaytypeItem.cash_type|@recppaytypeItem.tofrom_accid"  selected="@isCurrentOptionSelected">
-																						@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
-																					</option>
-																				}
-																			}
-																	</select>
-																}else{
-																	<RadzenText Text="@selectRecpPayType" />
-																	}
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">วันที่เปิดบัญชี</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.operate_date)</label> *@
-																		<RadzenText Text="@String.Format("{0:dd/MM/yyyy}", Item.operate_date)" />
-
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">วันครบกำหนด</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																	@* <label for=""> @String.Format("{0:dd/MM/yyyy}", Item.due_date)</label> *@
-																		<RadzenText Text="@String.Format("{0:dd/MM/yyyy}", Item.due_date)" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">ผู้ถือบัญชี</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		@if(selectAcctype ==null){
-																		<select id="recppaytypeSelect" name="depttype_code" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
-																			@if (Item.recppaytype == null || !Item.recppaytype.Any())
-																			{
-																				<option selected disabled></option>
-																			}
-																			else
-																			{
-																				@foreach (var acctypeItem in Item.acctype)
-																				{
-																					if (acctypeItem.account_type == Item.account_type)
-																					{
-																						isCurrentOptionSelected = true;
-
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@acctypeItem.account_type" selected="@isCurrentOptionSelected">
-																						@acctypeItem.account_type - @acctypeItem.account_desc
-																					</option>
-																				}
-																			}
-																		</select>
-																		}else{
-																			<RadzenText Text="@selectAcctype" />
-																		}
-																	</div>
-																</div>
-															</div>
-															@* @if(){} *@
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">รหัสคู่บัญชี</label>
-																@if(selectTofromacc == null){
-																	<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																		@if (Item.tofromacc == null || !Item.tofromacc.Any())
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																			}
-																			else
-																			{
-																				<option selected disabled>--กรุณาเลือก--</option>
-																				@foreach (var tofromaccItem in Item.tofromacc)
-																				{
-																					bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
-																					bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
-																					bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
-																					if (isCashTypeSelected)
-																					{
-																						// เลือก <option> เมื่อ isCashTypeSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
-																							</option>
-																						}
-																						else
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isCurrentOptionSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
-																							</option>
-																						}
-																					}
-																					else if (isItemAccIdSelected)
-																					{
-																						// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
-																						if (valuetoFromaccId == null|| recpPayTypeCash == null)
-																						{
-																							<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
-																									selected="@isItemAccIdSelected">
-																								@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																							</option>
-																						}
-																					}
-																				}
-																			}
-																	</select>
-																}else{
-																	<RadzenText Text="@selectTofromacc" />
-																}
-															</div>
-															@{
-																string colSizeClass = (recpPayTypeCode == "OTR") ? "col-xl-2" : "col-xl-3";
+									<div class="row">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">ผู้ถือบัญชี</label>
+											<div class="form-group ">
+												<div class="input-group">
+													@if (selectAcctype == null)
+													{
+														<select id="recppaytypeSelect" name="depttype_code" class="form-select" style="background-color:transparent; border-color: transparent;--bs-form-select-bg-img:url();" disabled>
+															@if (Item.recppaytype == null || !Item.recppaytype.Any())
+															{
+																<option selected disabled></option>
 															}
-															<div class="@colSizeClass col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">ระยะเวลาการรับดอกเบี้ย</label>
-																<select class="form-select"  @bind="Item.upint_time" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																	<option Value="1">ตามประเภท</option>
-																	<option Value="2">รายเดือน</option>
-																	<option Value="3">ราย 3 เดือน</option>
-																	
-																</select>
-															</div>
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">วิธีรับดอกเบี้ย</label>
-																<select class="form-select" value="@type_monthintpay" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																	<option Value="0">ทบต้น</option>
-																	<option value="1">โอนเข้า บ/ช</option>
-																	<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
-																	<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
-																	<option Value="5">รับเป็นธนาณัติ</option>
-																</select>
-															</div>
-															@if(recpPayTypeCode == "OTR"){
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">อ้างอิง</label>
-																<div class="form-group ">
-																	<div class="lable-group">
-																		<RadzenText Text="@Item.deptslip_no" />
-																	</div>
-																</div>
-															</div>}
-															
-														</div>
-														<div class="row">
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">ชื่อบัญชี</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptaccount_name" />
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">เงื่อนไขการถอน</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.condforwithdraw" />
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<div class="form-check" style="margin-top: 35px;">
-																	<input class="form-check-input" style="opacity: 1;" disabled type="checkbox" @bind="dept_status1" >
-																	<label class="form-check-label" style="opacity: 1;" >ค้ำประกัน</label>
-																</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<div class="form-check" style="margin-top: 35px;">
-																	@if(Item.deptmonth_status.ToString() == "1"){
-																	<input class="form-check-input" style="opacity: 1;" disabled type="checkbox" id="flexCheckDefault" checked>
-																	<label class="form-check-label" style="opacity: 100;" for="flexCheckDefault">การฝากรายเดือน</label>
-																	}else{
-																	<input class="form-check-input" style="opacity: 1; disabled type="checkbox" id="deptMonthCheckbox">
-           									 						<label class="form-check-label" style="opacity: 100;" for="deptMonthCheckbox">การฝากรายเดือน</label>
-																	}
-																</div>
-															</div>
-															@if(dept_status == 1){
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">จำนวนส่งรายงวด</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptmonth_amt" />
-																	</div>
-																</div>
-															</div>
-															}
-														</div>
-														<div class="row">
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column"></div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column"></div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">ยอดรวมสุทธิ</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		@* <RadzenText  Text="@DeptslipAmt ?? 0" style="text-align: end; font-size: 40px;"/> *@
-																		<RadzenText  Text="@(DeptslipAmt?.ToString()  ?? "0")" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label-preview" for="">การฝากรายเดือน</label>
-																<select class="form-select" @bind="Item.deptmonth_status" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																	<option Value="0">ไม่ต้องการฝาก</option>
-																	<option Value="1">ต้องการฝาก</option>
-																</select>
-															</div> *@
-															@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขที่สมุดเงินฝาก</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptpassbook_no" />
-																	</div>
-																</div>
-															</div> *@
-															@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขที่บัญชี</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptaccount_no" />
-																		</div>
-																	</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ประเภทบุคคล</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.membcat_desc" />
-																	</div>
-																</div>
-															</div> *@
-														</div>
-														@* <div class="row">
-															<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ชื่อบัญชี(EN)</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.deptaccount_ename" />
-																	</div>
-																</div>
-															</div>
-															
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เพื่อ</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@Item.dept_objective" />
-																	</div>
-																</div>
-															</div>
-														</div>
-														<div class="row">
-															
-															@if(type_monthintpay ==1 || type_monthintpay==2){
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
-																<div class="form-group ">
-																	<div class="label-group">
-																		<RadzenText Text="@tran_deptacc_no" />
-																	</div>
-																</div>
-															</div>
-															}
-															@if(type_monthintpay ==1 || type_monthintpay==2){
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ชื่อบัญชี</label>
-																	<div class="form-group ">
-																		<div class="label-group">
-																			<RadzenText Text="@Item.dept_tranacc_name" />
-																		</div>
-																	</div>
-																</div>
-																@if(type_monthintpay ==1){
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ประเภทบัญชี</label>
-																	<select id="recppaytypeSelect" name="depttype_code" class="form-select" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();"
-																	@bind="traninttype_code">
-																	@if (Item.recppaytype == null || !Item.recppaytype.Any())
+															else
+															{
+																@foreach (var acctypeItem in Item.acctype)
+																{
+																	if (acctypeItem.account_type == Item.account_type)
 																	{
-																		<option selected disabled></option>
-																		}
-																		else
-																		{
-																			@foreach (var depttypeItem in Item.depttype)
-																			{
-																				if (depttypeItem.deptgroup_code == Item.traninttype_code)
-																				{
-																					isCurrentOptionSelected = true;
-																					}
-																					else
-																					{
-																						isCurrentOptionSelected = false;
-																					}
-																					<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
-																						@depttypeItem.deptmain_desc
-																					</option>
-																				}
-																			}
-																	</select>
-																</div>
+																		isCurrentOptionSelected = true;
+
+																	}
+																	else
+																	{
+																		isCurrentOptionSelected = false;
+																	}
+																	<option value="@acctypeItem.account_type" selected="@isCurrentOptionSelected">
+																		@acctypeItem.account_type - @acctypeItem.account_desc
+																	</option>
 																}
 															}
-															
-															@if(type_monthintpay == 2){
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">ธนาคาร</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
-																		disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																		<option selected>--กรุณาเลือก--</option>
-																		@foreach (var getBankItem in getBank)
-																			{
-																				bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
-																				<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
-																				@getBankItem.bank_code - @getBankItem.bank_desc
-																				</option>
-																			}
-																		</select>
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">สาขา</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
-																			disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
-																			<option selected>--กรุณาเลือก--</option>
-																			@foreach (var bankBranchItem in bankBranch)
-																			{
-																				bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
-																				<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
-																					@bankBranchItem.branch_id - @bankBranchItem.branch_name
-																				</option>
-																			}
-																		</select>
-																	</div>
-																</div>
-															</div>
-															}
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																		<div class="form-check" style="margin-top: 35px;">
-																			<input class="form-check-input" type="checkbox" @bind="dept_status" id="flexCheckDefault">
-																			<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
-																		</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">อ้างอิง</label>
-																<div class="form-group ">
-																	<div class="lable-group">
-																		<RadzenText Text="@Item.deptslip_no" />
-																	</div>
-																</div>
-															</div>
-															
-														</div> *@
-													</div>
-												}
+														</select>
+													}
+													else
+													{
+														<RadzenText Text="@selectAcctype" />
+													}
+												</div>
+											</div>
 										</div>
-								}
-					</RadzenStepsItem>
-					<RadzenStepsItem Disabled="@(lsdisable)" Text="เสร็จสิ้น" @onclick="@CheckDeptslipAmt">
-						<RadzenRow>
-							<RadzenText Text="ประวัติทำรายการ" />
-						</RadzenRow>
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ slip" Click="@PrintPdf" />
-						<RadzenButton class="save_top" Icon="print" Text="พิมพ์ ปกสมุด" Click="@PrintFrontbook" />
-						<RadzenButton class="save_top" Icon="arrow_back" Text="ทำรายการ" Click="@GoBack" />
-						@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook_" /> *@
-						@* @foreach (var content in printbook_data)
-							{
-								var printDetail = content.print_detail;
-								foreach (var rowDetail in printDetail)
-								{
-									<table style='margin-top: 20px;'>
-										 <thead>
-										</thead>
-										<tbody>
-											<tr style='margin-top:20px;'>
-												@foreach (var columnDetail in rowDetail.row_detail)
-												{
-													<td style='text-align: @(columnDetail.align); margin-top: @(columnDetail.point_top)px; margin-left: @(columnDetail.point_left)%; width: @(columnDetail.point_width)%; vertical-align: top; font-family: @(columnDetail.font_name); font-size: @(columnDetail.font_size)px;'>@columnDetail.column_value</td>
-												}
-											</tr>
-										</tbody>
-									</table>
-								}
-							} *@
+										@* @if(){} *@
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">รหัสคู่บัญชี</label>
+											@if (selectTofromacc == null)
+											{
+												<select id="tofromaccSelect" class="form-select" value="@recpPayCash" @onchange="TofromaccChanged" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+													@if (Item.tofromacc == null || !Item.tofromacc.Any())
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+													}
+													else
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+														@foreach (var tofromaccItem in Item.tofromacc)
+														{
+															bool isCashTypeSelected = (tofromaccItem.cash_type == recpPayTypeCash);
+															bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+															bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+															if (isCashTypeSelected)
+															{
+																// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>@recpPayTypeCash:@valuetoFromaccId</p>
+																	</option>
+																}
+																else
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc<p>2</p>
+																	</option>
+																}
+															}
+															else if (isItemAccIdSelected)
+															{
+																// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																if (valuetoFromaccId == null || recpPayTypeCash == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}|{tofromaccItem.tofrom_accdesc}")"
+																			selected="@isItemAccIdSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+															}
+														}
+													}
+												</select>
+											}
+											else
+											{
+												<RadzenText Text="@selectTofromacc" />
+											}
+										</div>
+										@{
+											string colSizeClass = (recpPayTypeCode == "OTR") ? "col-xl-2" : "col-xl-3";
+										}
+										<div class="@colSizeClass col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">ระยะเวลาการรับดอกเบี้ย</label>
+											<select class="form-select" @bind="Item.upint_time" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+												<option Value="1">ตามประเภท</option>
+												<option Value="2">รายเดือน</option>
+												<option Value="3">ราย 3 เดือน</option>
 
-						<div class="row mt-2"
-			 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
-							<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
+											</select>
+										</div>
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">วิธีรับดอกเบี้ย</label>
+											<select class="form-select" value="@type_monthintpay" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+												<option Value="0">ทบต้น</option>
+												<option value="1">โอนเข้า บ/ช</option>
+												<option Value="3">รับเองโดยแยกต้นเงินใหม่</option>
+												<option Value="2">โอนเข้า บ/ช ธนาคาร</option>
+												<option Value="5">รับเป็นธนาณัติ</option>
+											</select>
+										</div>
+										@if (recpPayTypeCode == "OTR")
+										{
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label-preview" for="">อ้างอิง</label>
+												<div class="form-group ">
+													<div class="lable-group">
+														<RadzenText Text="@Item.deptslip_no" />
+													</div>
+												</div>
+											</div>
+										}
+
+									</div>
+									<div class="row">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">ชื่อบัญชี</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@Item.deptaccount_name" />
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">เงื่อนไขการถอน</label>
+											<div class="form-group ">
+												<div class="label-group">
+													<RadzenText Text="@Item.condforwithdraw" />
+												</div>
+											</div>
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="form-check" style="margin-top: 35px;">
+												<input class="form-check-input" style="opacity: 1;" disabled type="checkbox" @bind="dept_status1">
+												<label class="form-check-label" style="opacity: 1;">ค้ำประกัน</label>
+											</div>
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="form-check" style="margin-top: 35px;">
+												@if (Item.deptmonth_status.ToString() == "1")
+												{
+													<input class="form-check-input" style="opacity: 1;" disabled type="checkbox" id="flexCheckDefault" checked>
+													<label class="form-check-label" style="opacity: 100;" for="flexCheckDefault">การฝากรายเดือน</label>
+												}
+												else
+												{
+													<input class="form-check-input" style="opacity: 1; disabled type="checkbox" id="deptMonthCheckbox">
+													<label class="form-check-label" style="opacity: 100;" for="deptMonthCheckbox">การฝากรายเดือน</label>
+												}
+											</div>
+										</div>
+										@if (dept_status == 1)
+										{
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label-preview" for="">จำนวนส่งรายงวด</label>
+												<div class="form-group ">
+													<div class="label-group">
+														<RadzenText Text="@Item.deptmonth_amt" />
+													</div>
+												</div>
+											</div>
+										}
+									</div>
+									<div class="row">
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column"></div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column"></div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label-preview" for="">ยอดรวมสุทธิ</label>
+											<div class="form-group ">
+												<div class="label-group">
+													@* <RadzenText  Text="@DeptslipAmt ?? 0" style="text-align: end; font-size: 40px;"/> *@
+													<RadzenText Text="@(DeptslipAmt?.ToString()  ?? "0")" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label-preview" for="">การฝากรายเดือน</label>
+								<select class="form-select" @bind="Item.deptmonth_status" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+								<option Value="0">ไม่ต้องการฝาก</option>
+								<option Value="1">ต้องการฝาก</option>
+								</select>
+								</div> *@
+										@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">เลขที่สมุดเงินฝาก</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<RadzenText Text="@Item.deptpassbook_no" />
+								</div>
+								</div>
+								</div> *@
+										@* <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">เลขที่บัญชี</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<RadzenText Text="@Item.deptaccount_no" />
+								</div>
+								</div>
+								</div>
+								<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+								<label class="form-label" for="">ประเภทบุคคล</label>
+								<div class="form-group ">
+								<div class="label-group">
+								<RadzenText Text="@Item.membcat_desc" />
+								</div>
+								</div>
+								</div> *@
+									</div>
+									@* <div class="row">
+							<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">ชื่อบัญชี(EN)</label>
+							<div class="form-group ">
+							<div class="label-group">
+							<RadzenText Text="@Item.deptaccount_ename" />
+							</div>
+							</div>
+							</div>
+
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">เพื่อ</label>
+							<div class="form-group ">
+							<div class="label-group">
+							<RadzenText Text="@Item.dept_objective" />
+							</div>
+							</div>
+							</div>
+							</div>
+							<div class="row">
+
+							@if(type_monthintpay ==1 || type_monthintpay==2){
+							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">เลขบัญชีโอนดอกเบี้ย</label>
+							<div class="form-group ">
+							<div class="label-group">
+							<RadzenText Text="@tran_deptacc_no" />
+							</div>
+							</div>
+							</div>
+							}
+							@if(type_monthintpay ==1 || type_monthintpay==2){
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">ชื่อบัญชี</label>
+							<div class="form-group ">
+							<div class="label-group">
+							<RadzenText Text="@Item.dept_tranacc_name" />
+							</div>
+							</div>
+							</div>
+							@if(type_monthintpay ==1){
+							<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">ประเภทบัญชี</label>
+							<select id="recppaytypeSelect" name="depttype_code" class="form-select" disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();"
+							@bind="traninttype_code">
+							@if (Item.recppaytype == null || !Item.recppaytype.Any())
+							{
+							<option selected disabled></option>
+							}
+							else
+							{
+							@foreach (var depttypeItem in Item.depttype)
+							{
+							if (depttypeItem.deptgroup_code == Item.traninttype_code)
+							{
+							isCurrentOptionSelected = true;
+							}
+							else
+							{
+							isCurrentOptionSelected = false;
+							}
+							<option value="@depttypeItem.deptmain_type" selected="@isCurrentOptionSelected">
+							@depttypeItem.deptmain_desc
+							</option>
+							}
+							}
+							</select>
+							</div>
+							}
+							}
+
+							@if(type_monthintpay == 2){
+							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">ธนาคาร</label>
+							<div class="form-group ">
+							<div class="input-group">
+							<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
+							disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+							<option selected>--กรุณาเลือก--</option>
+							@foreach (var getBankItem in getBank)
+							{
+							bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
+							<option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
+							@getBankItem.bank_code - @getBankItem.bank_desc
+							</option>
+							}
+							</select>
+							</div>
+							</div>
+							</div>
+							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">สาขา</label>
+							<div class="form-group ">
+							<div class="input-group">
+							<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged"
+							disabled style="background-color: transparent;border-color: transparent;--bs-form-select-bg-img:url();">
+							<option selected>--กรุณาเลือก--</option>
+							@foreach (var bankBranchItem in bankBranch)
+							{
+							bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
+							<option value="@bankBranchItem.branch_id" selected="@isCurrentOptionSelected">
+							@bankBranchItem.branch_id - @bankBranchItem.branch_name
+							</option>
+							}
+							</select>
+							</div>
+							</div>
+							</div>
+							}
+							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+							<div class="form-check" style="margin-top: 35px;">
+							<input class="form-check-input" type="checkbox" @bind="dept_status" id="flexCheckDefault">
+							<label class="form-check-label" for="flexCheckDefault">ค้ำประกัน</label>
+							</div>
+							</div>
+							<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+							<label class="form-label" for="">อ้างอิง</label>
+							<div class="form-group ">
+							<div class="lable-group">
+							<RadzenText Text="@Item.deptslip_no" />
+							</div>
+							</div>
+							</div>
+
+							</div> *@
+								</div>
+							}
+						</div>
+					}
+				</RadzenStepsItem>
+				<RadzenStepsItem Disabled="@(lsdisable)" Text="เสร็จสิ้น" @onclick="@CheckDeptslipAmt">
+					<RadzenRow>
+						<RadzenText Text="ประวัติทำรายการ" />
+					</RadzenRow>
+					<RadzenButton class="save_top" Icon="print" Text="พิมพ์ slip" Click="@PrintPdf" />
+					<RadzenButton class="save_top" Icon="print" Text="พิมพ์ ปกสมุด" Click="@PrintFrontbook" />
+					<RadzenButton class="save_top" Icon="arrow_back" Text="ทำรายการ" Click="@GoBack" />
+					@* <RadzenButton class="save_top" Icon="print" Text="พิมพ์ book" Click="@PrintBook_" /> *@
+					@* @foreach (var content in printbook_data)
+					{
+					var printDetail = content.print_detail;
+					foreach (var rowDetail in printDetail)
+					{
+					<table style='margin-top: 20px;'>
+					<thead>
+					</thead>
+					<tbody>
+					<tr style='margin-top:20px;'>
+					@foreach (var columnDetail in rowDetail.row_detail)
+					{
+					<td style='text-align: @(columnDetail.align); margin-top: @(columnDetail.point_top)px; margin-left: @(columnDetail.point_left)%; width: @(columnDetail.point_width)%; vertical-align: top; font-family: @(columnDetail.font_name); font-size: @(columnDetail.font_size)px;'>@columnDetail.column_value</td>
+					}
+					</tr>
+					</tbody>
+					</table>
+					}
+					} *@
+
+					<div class="row mt-2"
+						 style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+						<RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
 										AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
 										FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
-										AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"> 
+										AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
 							<Columns>
 								<RadzenDataGridColumn Width="10%" TItem="Models.Statement_list" Title="ลำดับ" Property="coop_id">
 								</RadzenDataGridColumn>
-								<RadzenDataGridColumn  Width="13%" TItem="Models.Statement_list" Title="วันที่"
+								<RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="วันที่"
 													  Property="operate_date">
 								</RadzenDataGridColumn>
 								<RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="รายการ"
@@ -1896,14 +1941,12 @@ else
 								</RadzenDataGridColumn>
 							</Columns>
 						</RadzenDataGrid>
-								</div>
-					</RadzenStepsItem>
-				</Steps>
-			</RadzenSteps>
-		</div>
+					</div>
+				</RadzenStepsItem>
+			</Steps>
+		</RadzenSteps>
 	</div>
-
-@* } *@
+</div>
 <script>
 	$(document).ready(function () {
 		var previous_data;
@@ -2190,33 +2233,6 @@ else
 		Console.WriteLine($"return true;{true}");
 		return true;
 	}
-	@* private async Task LoadData(LoadDataArgs args)
-	{
-		var query = BookData();
-		if (!string.IsNullOrEmpty(args.Filter))
-		{
-			query = query.Where(item => item.book_no.ToLower().Contains(args.Filter.ToLower()));
-		}
-
-		getOfBook_No = query.ToList(); // Materialize the query result
-		await InvokeAsync(StateHasChanged);
-	} *@
-
-	// Simulate fetching data from a service
-	@* IEnumerable<GetOfBookNo> BookData()
-	{
-		if (getOfBookNo == null)
-		{
-			return Enumerable.Empty<GetOfBookNo>(); // Return an empty enumerable if getOfBookNo is null
-		}
-		else
-		{
-			return getOfBookNo.Select(item => new GetOfBookNo { book_no = item.book_no });
-		}
-	} *@
-
-
-	/////////
 	RadzenUpload upload;
 
 	int progress;
@@ -2285,11 +2301,46 @@ else
 		Console.WriteLine($"Server response: {args.RawResponse}");
 	}
 	public IEnumerable<Models.ReqAccDetails> dataaccDetails { get; set; }
+	public IEnumerable<Models.TranDeptno> tranDeptDetails { get; set; }
+  	@* IEnumerable<Models.deptDepositAcc> deptdepositAcc; *@
+	List<Models.deptDepositAcc> deptdepositAcc = new List<Models.deptDepositAcc>();
+    Radzen.Blazor.RadzenDataGrid<Models.deptDepositAcc> dataGridRef;
 	int selectedIndex = 0;
+	 protected override void OnInitialized()
+    {
+        // สร้างข้อมูลตัวอย่างสำหรับ DataGrid
+        deptdepositAcc = new List<Models.deptDepositAcc>
+        {
+            new Models.deptDepositAcc { order = 1, memb_name = "John", memb_surname = "Doe", description = "Group A"},
+            new Models.deptDepositAcc { order = 2, memb_name = "Jane", memb_surname = "Doe", description = "Group B"},
+            new Models.deptDepositAcc { order = 3, memb_name = "Alice", memb_surname = "Smith", description = "Group C"}
+        };
+    }
+	void AddRow()
+    {
+        var newRow = new Models.deptDepositAcc
+        {
+			order = deptdepositAcc.Count() + 1,
+            memb_name = "New Name",
+            memb_surname = "New Surname",
+            description = "New Description"
+        };
+
+        deptdepositAcc = deptdepositAcc.Append(newRow).ToList();
+        dataGridRef.Reload();
+	}
+	void DeleteRow(Models.deptDepositAcc rowData)
+	{
+		Console.WriteLine("555");
+		deptdepositAcc.Remove(rowData);
+		dataGridRef.Reload();
+	}
+
 
 	private async Task OnBankBranchChanged(ChangeEventArgs e)
 	{
 		BankBranchValues = e.Value.ToString();
+		
 	}
 	private void OnBankBranchSelectChanged(ChangeEventArgs e)
 	{
@@ -2302,6 +2353,7 @@ else
 	{
 		BankValues = e.Value.ToString();
 		Console.WriteLine($"BankValues: {BankValues}");
+		bank_code = BankValues;
 	}
 	private void OnGetBankSelectChanged(ChangeEventArgs e)
 	{

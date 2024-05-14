@@ -18,16 +18,19 @@
 		public string bank_name_e { get; set; }
 		public string bank_shortname_t { get; set; }
 	}
-	// public class GetOfBookNo
-	// {
-	// 	public string book_no { get; set; }
-	// }
 	
 	public class GetDeptMaintype
 	{
 		public string coop_id { get; set; }
 		public string deptmain_type { get; set; }
 		public string deptmain_desc { get; set; }
+	}
+	public class GetLoanType
+	{
+		public string loangroup_code { get; set; }
+		public string loantype_code { get; set; }
+		public string prefix { get; set; }
+		public string loantype_desc { get; set; }
 	}
 
 }

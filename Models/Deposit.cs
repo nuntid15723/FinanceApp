@@ -84,6 +84,7 @@ namespace FinanceApp.Models
         public decimal? spcint_rate { get; set; }
         public decimal? deptslipAmt { get; set; }
         public int? payfee_meth { get; set; }
+        public int? payother_meth { get; set; }
 
 
     }

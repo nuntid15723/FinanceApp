@@ -12,6 +12,7 @@ using System.Net.Http.Headers;
 using System.Globalization;
 using Radzen.Blazor;
 using FinanceApp.Services;
+using System.Data.Common;
 
 
 namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
@@ -302,7 +303,8 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             recpPayCash = recpPayTypeCash;
             valuetoFromaccId = values[3];
             selectRecpPayType = values[0] + "-" + values[1];
-            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}, recpPayTypeCash :{recpPayTypeCash}");
+            await TofromaccChanged(e);
+            Console.WriteLine($" Recp Pay Type Code: {recpPayTypeCode}, recpPayTypeCash :{recpPayTypeCash} valuetoFromaccId :{recpPayCash}{valuetoFromaccId}");
             // if (recpPayTypeCode == "DEN")
             // {
             //     GetBabk();
@@ -335,7 +337,7 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             TofromaccCash = values[0];
             TofromaccValue = values[1];
             selectTofromacc = values[1] + "-" + values[2];
-            Console.WriteLine($" Recp Pay Type Code: {selectTofromacc}");
+            Console.WriteLine($"selectTofromacc: {selectTofromacc}");
             // if (recpPayTypeCode == "DEN")
             // {
             //     GetBabk();
@@ -717,6 +719,10 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
                     {
                         repReqdepoit = new List<Models.DepReqdepoit> { apiResponse.content };
                         Console.WriteLine($"API request failed: {repReqdepoit}");
+                        foreach (var content in repReqdepoit)
+                        {
+                            tranDeptDetails = content.tranDeptno;
+                        }
                     }
                     else
                     {
@@ -795,14 +801,22 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
             var type_Value = e.Value.ToString();
             type_monthintpay = int.Parse(type_Value);
             Console.WriteLine($"type_monthintpay: {type_monthintpay}");
+            valuetoFromaccId = null;
+            recpPayCash = null;
+
             if (type_monthintpay == 1)
             {
                 await GetBookNo();
-                // foreach (var item in getOfBookNo)
-                // {
-                //     Console.WriteLine($"book_no: {item.book_no}");
-                // }
+                // await RecpPayTypeChanged(e);
+                // await TofromaccChanged(e);
+                valuetoFromaccId = null;
+                recpPayCash = null;
             }
+        }
+        public async Task UpdateTranDeptno(Models.TranDeptno data)
+        {
+            Console.WriteLine($"UpdateTranDeptno :{data.deptaccount_no}");
+            tran_deptacc_no = data.deptaccount_no;
         }
         //เรียกใช้ฟังก์ชันบันทึกข้อมูล
         public async Task SaveDataAsync()
@@ -1065,54 +1079,54 @@ namespace FinanceApp.Pages.Deposit.Dep_reqdepoit
 
         private async Task Print_Frontbook()
         {
-           try
-           {
-               foreach (var statement in statement_data)
-               {
-                   if (statement.book_data != null)
-                   {
-                       var printbookData = JsonConvert.DeserializeObject<Book_data>(statement.book_data.ToString());
-                       if (printbookData != null)
-                       {
-                           foreach (var Item in printbookData.statement_list)
-                           {
+            try
+            {
+                foreach (var statement in statement_data)
+                {
+                    if (statement.book_data != null)
+                    {
+                        var printbookData = JsonConvert.DeserializeObject<Book_data>(statement.book_data.ToString());
+                        if (printbookData != null)
+                        {
+                            foreach (var Item in printbookData.statement_list)
+                            {
 
-                               var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfGetFrontbook}?deptaccount_no={Item.deptaccount_no}";
-                               var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
-                               {
-                                   // อ่าน response string
-                                   var jsonResponse = await response.Content.ReadAsStringAsync();
-                                   var apiResponse = JsonConvert.DeserializeObject<PrintFrontBookResponse>(jsonResponse);
-                                   Console.WriteLine(apiResponse.success);
-                                   if (apiResponse.success)
-                                   {
-                                       printFrontbook_data = new List<Print_detail> { apiResponse.content };
-                                       foreach (var item in printFrontbook_data)
-                                       {
+                                var apiUrl = $"{ApiClient.API.ApibaseUrl}{ApiClient.App.Deposit}{ApiClient.Print.DepOfGetFrontbook}?deptaccount_no={Item.deptaccount_no}";
+                                var response = await ApiProvider.SendApiRequestAsyncGet(apiUrl);
+                                {
+                                    // อ่าน response string
+                                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                                    var apiResponse = JsonConvert.DeserializeObject<PrintFrontBookResponse>(jsonResponse);
+                                    Console.WriteLine(apiResponse.success);
+                                    if (apiResponse.success)
+                                    {
+                                        printFrontbook_data = new List<Print_detail> { apiResponse.content };
+                                        foreach (var item in printFrontbook_data)
+                                        {
 
-                                           var row_detaill = item.result_data;
-                                           foreach (var item_row in row_detaill)
-                                           {
-                                               Console.WriteLine($"row_detaill:{item_row.column_name}");
-                                           }
-                                       }
-                                   }
-                                   else
-                                   {
-                                       ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
-                                   }
-                               }
-                           }
-                       }
-                   }
-               }
+                                            var row_detaill = item.result_data;
+                                            foreach (var item_row in row_detaill)
+                                            {
+                                                Console.WriteLine($"row_detaill:{item_row.column_name}");
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = apiResponse.message, Duration = 5000 });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
-           }
-           catch (Exception ex)
-           {
+            }
+            catch (Exception ex)
+            {
 
-               ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
-           }
+                ShowNotification(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Error", Detail = ex.Message, Duration = 5000 });
+            }
         }
         private string GetMachineAddress()
         {

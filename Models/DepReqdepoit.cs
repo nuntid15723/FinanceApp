@@ -198,11 +198,12 @@
 		public string? dept_objective { get; set; }
 		public int? prncbal_retire { get; set; }
 		public string? remark { get; set; }
-		public List<Recppaytype> recppaytype { get; set; }
-		public List<Tofromacc> tofromacc { get; set; }
-		public List<Depttype> depttype { get; set; }
-		public string trandepttype { get; set; }
-		public List<Acctype> acctype { get; set; }
+		public List<Recppaytype>? recppaytype { get; set; }
+		public List<Tofromacc>? tofromacc { get; set; }
+		public List<Depttype>? depttype { get; set; }
+		public string? trandepttype { get; set; }
+		public List<Acctype>? acctype { get; set; }
+		public List<TranDeptno>? tranDeptno { get; set; }
 		public string? bank { get; set; }
 		public string? branch { get; set; }
 		public string? due_date { get; set; }
@@ -286,6 +287,13 @@
 		public int? reqappl_flag { get; set; }
 		public string? membcat_code { get; set; }
 		public string? membcat_desc { get; set; }
+	}
+	public class deptDepositAcc
+	{
+		public int? order { get; set; }
+		public string? memb_name { get; set; }
+		public string? memb_surname { get; set; }
+		public string? description { get; set; }
 	}
 
 }
