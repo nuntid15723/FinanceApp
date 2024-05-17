@@ -1,0 +1,235 @@
+@page "/ws_dep_apv_reqsequest"
+@using FinanceApp.Models;
+@using Newtonsoft.Json
+@using Radzen.Blazor
+@using System.Runtime.InteropServices.JavaScript
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@using System.Linq.Dynamic.Core
+@inject NotificationService NotificationService
+@using System.Globalization
+@using System.Text.Json
+@using System.ComponentModel
+@using Microsoft.AspNetCore.Components
+@inject Services.Api_Provider ApiProvider
+@inject Services.GetUserDataList GetuUerData
+<style>
+    .icon-search {
+        display: inline-flex !important;
+        justify-content: space-evenly !important;
+        align-items: center !important;
+        position: relative !important;
+        top: 3px !important;
+        padding: 15px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .table> :not(caption)>*>* {
+        padding: 0.2rem 0.2rem;
+    }
+
+    .save_top {
+        border: #adacac solid 1px;
+    }
+
+    .header-right {
+        text-align: start;
+    }
+
+    .header-left {
+        text-align: end;
+    }
+
+    .rz-fileupload-row {
+        display: flex;
+        color: transparent;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column-reverse;
+    }
+
+    .rz-fileupload-row img {
+        width: 250px;
+        margin-top: -4rem;
+        max-height: 200px;
+
+
+    }
+
+    .rz-fileupload-row button {
+        margin-left: 20rem;
+        margin-top: 8px;
+    }
+
+    .rz-fileupload-files {
+        background-color: var(--rz-upload-files-background-color);
+        padding: var(--rz-upload-files-padding);
+        margin-top: -1.5rem;
+    }
+
+    .rz-fileupload-buttonbar {
+        position: relative;
+        background-color: transparent;
+        padding: var(--rz-upload-button-bar-padding);
+        border-radius: var(--rz-upload-button-bar-border-radius);
+    }
+
+    .rz-card.rz-variant-filled {
+        box-shadow: var(--rz-base-background-color);
+        margin-top: -5px;
+    }
+
+    .rz-card {
+        padding: 0;
+        box-sizing: var(--rz-base-background-color);
+    }
+
+    .card {
+        background-color: #f9f9f9;
+    }
+
+    .rz-calendar .rz-inputtext {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    .label-group {
+        margin-left: 10px;
+    }
+
+    .form-label-preview {
+        margin-bottom: 0.1rem;
+        margin-top: 5px;
+        font-size: 19px;
+    }
+
+    table {
+        margin-top: 0px;
+    }
+
+    .section-title {
+        display: block;
+        /* ทำให้บล็อกครอบคลุมความกว้างทั้งหมด */
+        font-weight: bold;
+        /* กำหนดฟอนต์ให้ตัวหนา */
+        border-bottom: 2px solid rgb(208, 204, 204);
+        /* เส้นใต้ */
+    @*padding-bottom:5px;*@
+        /* ระยะห่างระหว่างข้อความกับเส้น */
+    @*margin-left:-15px;*@width: 40%;
+    }
+</style>
+<div class="header-page">
+    <div class="row-header d-flex justify-content-between ">
+        <div class="header-left">
+            <h4>ระบบ เงินฝาก - อนุมัติอายัด</h4>
+        </div>
+        <div class="header-right">
+            @* <RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" /> *@
+        </div>
+    </div>
+</div>
+<div class="card body-page">
+    <div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
+        <div class="row" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+            <div class="row">
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ตั้งแต่วันที่ที่มีผล</label>
+                    <RadzenDatePicker @bind-Value=@start_date Name="start_date" DateFormat="dd/MM/yyyy" />
+                </div>
+                <div class="col-xl-3 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ถึงวันที่ที่มีผล</label>
+                    <RadzenDatePicker @bind-Value=@end_date Name="end_date" DateFormat="dd/MM/yyyy" />
+                </div>
+                <div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ตั้งแต่เลขบัญชี</label>
+                    <RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
+                        Name="deptaccount_no" class="form-control" />
+                </div>
+                <div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ถึงเลขบัญชี</label>
+                    <RadzenMask Mask="**-********" CharacterPattern="[0-9]" @bind-value="deptno_format"
+                        Name="deptaccount_no" class="form-control" />
+                </div>
+                <div class="col-xl-2 col-md-2 col-sm-6 d-flex flex-column">
+                    <button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">
+                        @if (isLoading)
+                        {
+                            <span>...</span>
+                            <i class="fa fa-spinner fa-spin"></i>
+                        }
+                        else
+                        {
+                            <span>ดึงข้อมูล</span>
+                        }
+                    </button>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <label style="font-weight: bold;" for="">รายละเอียดอนุมัติอายัด</label>
+                <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                        <label class="form-check-label" for="flexCheckDefault">เลือกทั้งหมด</label>
+                    </div>
+                </div>
+                <div class="col-xl-10 col-md-2 col-sm-6 d-flex flex-column" style="align-items: end;margin-top: -5px;">
+                    <div class="form-check">
+                        <label class="form-check-label" for="flexCheckDefault">สถานะ</label>
+                        <button class="btn btn-outline-secondary" style="margin-top: 0px;" type="button">รอ</button>
+                        <button class="btn btn-outline-secondary" style="margin-top: 0px;"
+                            type="button">อนุมัติ</button>
+                        <button class="btn btn-outline-secondary" style="margin-top: 0px;"
+                            type="button">ไม่อนุมัติ</button>
+                    </div>
+                </div>
+                <div class="row mt-2"
+                    style="margin-left: calc(var(--bs-gutter-x) * .1);margin-right: calc(var(--bs-gutter-x) * .5);margin-bottom: 15px;">
+                    @* <RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
+                    AllowFiltering="true" FilterPopupRenderMode="PopupRenderMode.OnDemand"
+                    FilterMode="FilterMode.Advanced" IsLoading="@isLoadingModals" PageSize="10" AllowPaging="true"
+                    AllowSorting="true" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true"> *@
+                    <RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
+                        AllowColumnResize="true">
+                        <Columns>
+                            <RadzenDataGridColumn Width="5%" TItem="Models.Statement_list" Title="chk"
+                                Property="coop_id">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="13%" TItem="Models.Statement_list" Title="เลขที่บัญชี"
+                                Property="operate_date">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="20%" TItem="Models.Statement_list" Title="ชื่อบัญชี"
+                                Property="deptitemtype_code">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="20%" TItem="Models.Statement_list" Title="ประเภทรายการ"
+                                Property="withdraw_amt">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="20%" TItem="Models.Statement_list" Title="เหตุผลการอายัด"
+                                Property="deposit_amt">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="17%" TItem="Models.Statement_list" Title="จำนวนเงิน"
+                                Property="prncbal">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="5%" TItem="Models.Statement_list" Title="รอ"
+                                Property="item_status">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="8%" TItem="Models.Statement_list" Title="อนุมัติ"
+                                Property="item_status">
+                            </RadzenDataGridColumn>
+                            <RadzenDataGridColumn Width="8%" TItem="Models.Statement_list" Title="ไม่อนุมัติ"
+                                Property="item_status">
+                            </RadzenDataGridColumn>
+                        </Columns>
+                    </RadzenDataGrid>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@code {
+
+}

@@ -1209,38 +1209,38 @@ else
 																			PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
 																<Columns>
 																	<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-																						  Title="เลขที่บัญชี" Property="deptaccount_no">
+																						Title="เลขที่บัญชี" Property="deptaccount_no">
 																		<Template>
 																			<div @onclick="@(e => UpdateAccountDetails(context))"
-																				 data-bs-dismiss="modal">
+																				data-bs-dismiss="modal">
 																				@context.deptaccount_no
 																			</div>
 																		</Template>
 																	</RadzenDataGridColumn>
 
 																	<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-																						  Title="ชื่อบัญชี" Property="deptaccount_name">
+																						Title="ชื่อบัญชี" Property="deptaccount_name">
 																		<Template>
 																			<div @onclick="@(e => UpdateAccountDetails(context))"
-																				 data-bs-dismiss="modal">
+																				data-bs-dismiss="modal">
 																				@context.deptaccount_name
 																			</div>
 																		</Template>
 																	</RadzenDataGridColumn>
 																	<RadzenDataGridColumn Width="20%" TItem="Models.AccountDetails"
-																						  Title="เลขสมาชิก" Property="member_no">
+																						Title="เลขสมาชิก" Property="member_no">
 																		<Template>
 																			<div @onclick="@(e => UpdateAccountDetails(context))"
-																				 data-bs-dismiss="modal">
+																				data-bs-dismiss="modal">
 																				@context.member_no
 																			</div>
 																		</Template>
 																	</RadzenDataGridColumn>
 																	<RadzenDataGridColumn Width="30%" TItem="Models.AccountDetails"
-																						  Title=" ชื่อ -นามสกุล" Property="full_name">
+																						Title=" ชื่อ -นามสกุล" Property="full_name">
 																		<Template>
 																			<div @onclick="@(e => UpdateAccountDetails(context))"
-																				 data-bs-dismiss="modal">
+																				data-bs-dismiss="modal">
 																				@context.full_name
 																			</div>
 																		</Template>
@@ -1255,7 +1255,7 @@ else
 										</div>
 										<div class="col-xl-1 col-md-2 col-sm-6 d-flex flex-column">
 											<button type="button" class="btn btn-outline-secondary" @onclick="PerformSearch">
-											  @if (isLoading)
+											@if (isLoading)
 													{
 														<span>...</span>
 														<i class="fa fa-spinner fa-spin"></i>
@@ -1279,7 +1279,7 @@ else
 												{
 													@foreach (var recppaytypeItem in Item.recppaytype)
 													{
-														 isCurrentOptionSelected = (recppaytypeItem.recppaytype_code == Item.recppaytype_code || recppaytypeItem.recppaytype_code == recpPayTypeCode);
+														isCurrentOptionSelected = (recppaytypeItem.recppaytype_code == Item.recppaytype_code || recppaytypeItem.recppaytype_code == recpPayTypeCode);
 														if (recppaytypeItem.genvc_flag == 1)
 														{
 															<option value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}_{recppaytypeItem.recppaytype_desc}")"
@@ -1292,255 +1292,130 @@ else
 
 											</select>
 										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<div class="col-xl-1 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ประเภทเงิน</label>
+											<input class="form-control" readonly type="text" name="cash_type"
+												value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
+										</div>
+										<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">วันที่</label>
 											@* <input class="form-control" type="text" DateFormat="dd/MM/yyyy" name="operate_date"
-								@bind="Item.operate_date" /> *@
+											@bind="Item.operate_date" /> *@
 											<RadzenDatePicker @bind-Value=@Item.operate_date Name="operate_date" ReadOnly
-																  DateFormat="dd/MM/yyyy" />
-											</div>
-											<!-- The Modal -->
-											<div class="modal" id="anotherModal">
-												<div class="modal-dialog modal-xl">
-													<div class="modal-content">
-														<!-- Modal Header -->
-														<div class="modal-header">
-															<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-														</div>
-														<!-- Modal body -->
-														<div class="modal-body">
-															<div class="row">
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ชื่อ</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			@* <input class="form-control" type="text" name="emp_name"
-															@bind="emp_name">
-															*@
-																		</div>
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																<label class="form-label" for="">นามสกุล</label>
-																<div class="form-group ">
-																	<div class="input-group">
-																		@* <input class="form-control" type="text"
-														name="emp_surname"@bind="emp_surname"> *@
-																	</div>
-																</div>
-															</div>
-															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																@* <button type="button" class="btn
-												btn-outline-secondary"@onclick="SearchModals">ค้นหา</button> *@
-															</div>
-														</div>
-														@* @if (employeeData != null)
-										{ *@
-														<table id="example" class="table mt-2" style="width:100%">
-															<thead>
-																<tr>
-																	<th>เลขที่สมาชิก</th>
-																	<th>ชื่อ</th>
-																	<th>นามสกุล</th>
-																	<th>ชื่อเล่น</th>
-																	<th>เลขบัตรประชาชน</th>
-																</tr>
-															</thead>
-															@* @foreach (var Itemmodal in employeeData)
-											{
-											<tbody>
-											<tr>
-											<td><a style="cursor: pointer;"
-											@onclick="() => OpenModal(Itemmodal.emp_no)">@Itemmodal.emp_no</a></td>
-											<td>@Itemmodal.emp_name</td>
-											<td>@Itemmodal.emp_surname</td>
-											<td>@Itemmodal.emp_nickname</td>
-											<td>@Itemmodal.id_card</td>
-											</tr>
-											</tbody>
-											} *@
-														</table>
-
-														<!-- Modal footer -->
-														<div class="modal-footer">
-															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-														</div>
-														@* } *@
-													</div>
-												</div>
-											</div>
+												DateFormat="dd/MM/yyyy" />
 										</div>
-										<div class="row">
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมุด</label>
-												<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="Item.deptpassbook_no"
-															Name="deptaccount_no" class="form-control" />
-											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ชื่อบัญชี</label>
-												<RadzenTextBox class="form-control" type="text" readonly Name="deptaccount_name"
-												@bind-value="Item.deptaccount_name" />
-											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ประเภทบัญชี</label>
-												<RadzenTextBox class="form-control" readonly type="text" Name="depttype_code"
-												@bind-value="Item.depttype_desc" />
-											</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลขสมุด</label>
+											<RadzenMask Mask="**********" CharacterPattern="[0-9]" @bind-value="Item.deptpassbook_no"
+														Name="deptaccount_no" class="form-control" />
 										</div>
-										<div class="row">
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เพื่อ</label>
-												<RadzenTextBox class="form-control" readonly type="text" Name="dept_objective"
-												@bind-value="Item.dept_objective" />
-											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ประเภทเงิน</label>
-												<input class="form-control" readonly type="text" name="cash_type"
-													   value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
-											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">รหัสคู่บัญชี</label>
-												@* @if(selectedToFromAcc == null){ *@
-												<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
-												@if (Item.tofromacc == null || !Item.tofromacc.Any())
-												{
-													<option selected disabled>--กรุณาเลือก--</option>
-												}
-												else
-												{
-													<option selected disabled>--กรุณาเลือก--</option>
-													@foreach (var tofromaccItem in Item.tofromacc)
-													{
-														bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
-														bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
-														bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
-														if (isCashTypeSelected)
-														{
-															// เลือก <option> เมื่อ isCashTypeSelected เป็น true
-															if (valuetoFromaccId == null|| toFromaccId2 == null)
-															{
-																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																		selected="@isCurrentOptionSelected">
-																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																</option>
-															}
-															else
-															{
-																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																		selected="@isCurrentOptionSelected">
-																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																</option>
-															}
-														}
-														else if (isItemAccIdSelected)
-														{
-															// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
-															if (valuetoFromaccId == null|| toFromaccId2 == null)
-															{
-																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																		selected="@isItemAccIdSelected">
-																	@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																</option>
-															}
-														}
-													}
-												}
-											</select>
-											@* }else{
-												<select id="tofromaccSelect" class="form-select"  @bind="selectedToFromAcc">
-															@foreach (var tofromaccItem in Item.tofromacc)
-															{
-																<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																				selected="@isCurrentOptionSelected">
-																			@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																</option>
-															}
-															</select>
-											} *@
-											</div>
-											<!-- The Modal -->
-											<div class="modal" id="myModal">
-												<div class="modal-dialog modal-xl">
-													<div class="modal-content">
-														<!-- Modal Header -->
-														<div class="modal-header">
-															<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-															<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-														</div>
-														<!-- Modal body -->
-														<div class="modal-body">
-															<div class="row">
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">ชื่อ</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			@* <input class="form-control" type="text" name="emp_name"
-																@bind="emp_name">
-																*@
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-																	<label class="form-label" for="">นามสกุล</label>
-																	<div class="form-group ">
-																		<div class="input-group">
-																			@* <input class="form-control" type="text"
-																name="emp_surname"@bind="emp_surname"> *@
-																		</div>
-																	</div>
-																</div>
-																<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-																	@* <button type="button" class="btn
-														btn-outline-secondary"@onclick="SearchModals">ค้นหา</button> *@
-																</div>
-															</div>
-															@* @if (employeeData != null)
-												{ *@
-															<table id="example" class="table mt-2" style="width:100%">
-																<thead>
-																	<tr>
-																		<th>เลขที่สมาชิก</th>
-																		<th>ชื่อ</th>
-																		<th>นามสกุล</th>
-																		<th>ชื่อเล่น</th>
-																		<th>เลขบัตรประชาชน</th>
-																	</tr>
-																</thead>
-																@* @foreach (var Itemmodal in employeeData)
-													{
-													<tbody>
-													<tr>
-													<td><a style="cursor: pointer;"
-													@onclick="() => OpenModal(Itemmodal.emp_no)">@Itemmodal.emp_no</a></td>
-													<td>@Itemmodal.emp_name</td>
-													<td>@Itemmodal.emp_surname</td>
-													<td>@Itemmodal.emp_nickname</td>
-													<td>@Itemmodal.id_card</td>
-													</tr>
-													</tbody>
-													} *@
-															</table>
-
-															<!-- Modal footer -->
-															<div class="modal-footer">
-																<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-															</div>
-															@* } *@
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ทำรายการโดย</label>
 											<select class="form-select" @bind="nobook_flag">
 												<option Value="0">มีสมุด</option>
 												<option Value="1">ไม่มีสมุด</option>
 											</select>
 										</div>
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">รหัสคู่บัญชี</label>
+											@* @if(selectedToFromAcc == null){ *@
+											<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+												@if (Item.tofromacc == null || !Item.tofromacc.Any())
+											{
+												<option selected disabled>--กรุณาเลือก--</option>
+											}
+											else
+											{
+												<option selected disabled>--กรุณาเลือก--</option>
+												@foreach (var tofromaccItem in Item.tofromacc)
+												{
+													bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
+													bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+													bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+													if (isCashTypeSelected)
+													{
+														// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+														if (valuetoFromaccId == null || toFromaccId2 == null)
+														{
+															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																	selected="@isCurrentOptionSelected">
+																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+															</option>
+														}
+														else
+														{
+															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																	selected="@isCurrentOptionSelected">
+																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+															</option>
+														}
+													}
+													else if (isItemAccIdSelected)
+													{
+														// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+														if (valuetoFromaccId == null || toFromaccId2 == null)
+														{
+															<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																	selected="@isItemAccIdSelected">
+																@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+															</option>
+														}
+													}
+												}
+											}
+													</select>
+													@* }else{
+											<select id="tofromaccSelect" class="form-select"  @bind="selectedToFromAcc">
+											@foreach (var tofromaccItem in Item.tofromacc)
+											{
+											<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+											selected="@isCurrentOptionSelected">
+											@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+											</option>
+											}
+											</select>
+											} *@
 										</div>
-										<div class="row">
+										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ประเภทบัญชี</label>
+											<RadzenTextBox class="form-control" readonly type="text" Name="depttype_code"
+											@bind-value="Item.depttype_desc" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">คงเหลือ</label>
+											<input class="form-control" readonly style="text-align: end;" type="text" Name="prncbal"
+												@bind-value="prncbal" />
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลขสมาชิก</label>
+											<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="Item.member_no"
+														Name="deptaccount_no" class="form-control" />
+
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เลขบัตรประชาชน</label>
+											<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="card_person"
+														Name="deptaccount_no" class="form-control" />
+										</div>
+										<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ชื่อบัญชี</label>
+											<RadzenTextBox class="form-control" type="text" readonly Name="deptaccount_name"
+															@bind-value="Item.deptaccount_name" />
+										</div>	
+									</div>
+									<div class="row">
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">คงเหลือสูงสุด</label>
+											<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt"
+												@bind-value="withdrawable_amt" />
+										</div>
+										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">ยอดฝากได้</label>
+											<input class="form-control" style="text-align: end;" placeholder="0.00" readonly type="text"
+												Name="deptmax_amt" @bind="deptmax_amt" />
+										</div>
 										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">อ้างอิงรายการ</label>
 											<div class="form-group ">
@@ -1554,22 +1429,88 @@ else
 												</div>
 											</div>
 										</div>
-										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">คงเหลือ</label>
-											<input class="form-control" readonly style="text-align: end;" type="text" Name="prncbal"
-											@bind-value="prncbal" />
+										<!-- The Modal -->
+										<div class="modal" id="myModal">
+											<div class="modal-dialog modal-xl">
+												<div class="modal-content">
+													<!-- Modal Header -->
+													<div class="modal-header">
+														<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+														<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+													</div>
+													<!-- Modal body -->
+													<div class="modal-body">
+														<div class="row">
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ชื่อ</label>
+																<div class="form-group ">
+																	<div class="input-group">
+																		@* <input class="form-control" type="text" name="emp_name"
+																@bind="emp_name">
+																*@
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">นามสกุล</label>
+																<div class="form-group ">
+																	<div class="input-group">
+																		@* <input class="form-control" type="text"
+																name="emp_surname"@bind="emp_surname"> *@
+																	</div>
+																</div>
+															</div>
+															<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+																@* <button type="button" class="btn
+														btn-outline-secondary"@onclick="SearchModals">ค้นหา</button> *@
+															</div>
+														</div>
+														@* @if (employeeData != null)
+												{ *@
+														<table id="example" class="table mt-2" style="width:100%">
+															<thead>
+																<tr>
+																	<th>เลขที่สมาชิก</th>
+																	<th>ชื่อ</th>
+																	<th>นามสกุล</th>
+																	<th>ชื่อเล่น</th>
+																	<th>เลขบัตรประชาชน</th>
+																</tr>
+															</thead>
+															@* @foreach (var Itemmodal in employeeData)
+													{
+													<tbody>
+													<tr>
+													<td><a style="cursor: pointer;"
+													@onclick="() => OpenModal(Itemmodal.emp_no)">@Itemmodal.emp_no</a></td>
+													<td>@Itemmodal.emp_name</td>
+													<td>@Itemmodal.emp_surname</td>
+													<td>@Itemmodal.emp_nickname</td>
+													<td>@Itemmodal.id_card</td>
+													</tr>
+													</tbody>
+													} *@
+														</table>
+
+														<!-- Modal footer -->
+														<div class="modal-footer">
+															<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+														</div>
+														@* } *@
+													</div>
+												</div>
+											</div>
 										</div>
-										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">คงเหลือสูงสุด</label>
-											<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt"
-											@bind-value="withdrawable_amt" />
+										<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">เพื่อ</label>
+											<RadzenTextBox class="form-control" readonly type="text" Name="dept_objective"
+														@bind-value="Item.dept_objective" />
 										</div>
-										<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">ยอดฝากได้</label>
-											<input class="form-control" style="text-align: end;" placeholder="0.00" readonly type="text"
-												   Name="deptmax_amt" @bind="deptmax_amt" />
+										<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+											<label class="form-label" for="">หมายเหตุ</label>
+											<input class="form-control" type="text" Name="remark" @bind-value="@Item.remark" />
 										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+										<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ยอดทำรายการ</label>
 											<div class="form-group ">
 												<div class="input-group">
@@ -1581,7 +1522,7 @@ else
 																	data-bs-target="#myModal1" />
 													</div>
 												</div>
-												 @if (DeptslipAmt == null||DeptslipAmt=="0.00")
+												@if (DeptslipAmt == null||DeptslipAmt=="0.00")
 													{
 														<div class="text-danger" style="font-size: 13px;margin-bottom: -15px;"> **ยอดทำรายการเป็น 0 ไม่สวามารถทำรายการได้**</div>
 													}
@@ -1663,21 +1604,16 @@ else
 											</div>
 										</div>
 									</div>
-									<div class="row">
-										
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-											<label class="form-label" for="">หมายเหตุ</label>
-											<input class="form-control" type="text" Name="remark" @bind-value="@Item.remark" />
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+									<div class="row justify-content-end">
+										<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
 											<label class="form-label" for="">ยอดสุทธิ</label>
 											<input class="format-money form-control" placeholder="0.00" type="text"
-												   style="text-align: end; font-size: 40px;" readonly name="deptslip_netamt" @bind="DeptslipAmt"
-												   id="showNumber" />
+												style="text-align: end; font-size: 40px;" readonly name="deptslip_netamt" @bind="DeptslipAmt"
+												id="showNumber" />
 										</div>
 									</div>
 									<div class="row mt-button">
-										
+													
 									</div>
 								</div>
 								@if (recpPayTypeCode == "DEN")
@@ -2343,7 +2279,7 @@ else
 
 @* } *@
 
-<script>
+@* <script>
 	$(document).ready(function () {
 		var previous_data;
 		$(".format-money").on('focus', function () {
@@ -2391,7 +2327,7 @@ else
 			}
 		});
 	}
-</script>
+</script> *@
 @code {
 	[Inject]
     private NavigationManager NavigationManager { get; set; }
