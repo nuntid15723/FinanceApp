@@ -1,0 +1,86 @@
+@page "/ws_fin_closeday"
+@using FinanceApp.Models;
+@using Newtonsoft.Json
+@using Radzen.Blazor
+@using System.Runtime.InteropServices.JavaScript
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@using System.Linq.Dynamic.Core
+@inject NotificationService NotificationService
+@using System.Globalization
+@using System.Text.Json
+@using System.ComponentModel
+@using Microsoft.AspNetCore.Components
+@inject Services.Api_Provider ApiProvider
+@inject Services.GetUserDataList GetuUerData
+<style>
+    .icon-search {
+        display: inline-flex !important;
+        justify-content: space-evenly !important;
+        align-items: center !important;
+        position: relative !important;
+        top: 3px !important;
+        padding: 15px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .table> :not(caption)>*>* {
+        padding: 0.2rem 0.2rem;
+    }
+
+    .save_top {
+        border: #adacac solid 1px;
+    }
+
+    .header-right {
+        text-align: start;
+    }
+
+    .header-left {
+        text-align: end;
+    }
+
+    .card {
+        background-color: #f9f9f9;
+    }
+
+    .tbbook {
+        border-top: 1px solid #dddddd;
+        border-bottom: 1px solid #dddddd;
+        border-right: 0px solid #dddddd;
+        text-align: left;
+        padding: 3px;
+        font-size: 0.875rem;
+    }
+
+    .thbook {
+        font-size: 0.875rem;
+        background-color: #ffffff;
+        padding: 8px;
+        border-top: 1px solid #dddddd;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    tr td:first-child,
+    tr td:last-child {
+        border-right: 0px solid #dddddd;
+    }
+</style>
+<div class="header-page">
+    <div class="row-header d-flex justify-content-between ">
+        <div class="header-left">
+            <h4>ระบบ การเงิน - ปิดงานประจำวัน</h4>
+        </div>
+        <div class="header-right">
+            @* <RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" /> *@
+        </div>
+    </div>
+</div>
+<div class="card body-page">
+    <div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
+    </div>
+</div>

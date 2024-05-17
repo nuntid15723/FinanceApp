@@ -678,17 +678,17 @@ else
 											</div>
 											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">การหักค่าปรับ</label>
-												<select class="form-select" @bind="payother_meth">
-													<option Value="0">--กรุณาเลือก--</option>
-													<option Value="1">ชำระเป็นเงินสด</option>
-													<option Value="2">ชำระหักจากยอดถอน</option>
-													<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
-													<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
+												<select disabled ="@(Item.oth_amt == 0)" class="form-select" @bind="payother_meth">
+													<option value="0"></option>
+													<option value="1">ชำระเป็นเงินสด</option>
+													<option value="2">ชำระหักจากยอดถอน</option>
+													<option value="3">ชำระหักในบัญชีเงินฝาก</option>
+													<option value="-9">ไม่คิดค่าธรรมเนียม</option>
 												</select>
 											</div>
 											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ค่าปรับ</label>
-												<input class="form-control" style="text-align: end;" readonly type="text" Name="other_amt" @bind-value="other_amt" />
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="other_amt" @bind-value="Item.oth_amt" />
 											</div>
 											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เพื่อ</label>

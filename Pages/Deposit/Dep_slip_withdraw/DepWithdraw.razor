@@ -500,10 +500,9 @@
 												</select>
 											</div> *@
 										 @*--------------------------------------------------start ทำรายการ-------------------------------------------*@
-											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รายการ</label>
-												<select id="recppaytypeSelect" name="recppaytype_code" class="form-select"
-												@onchange="RecpPayTypeChanged">
+												<select id="recppaytypeSelect" name="recppaytype_code" class="form-select" @onchange="RecpPayTypeChanged">
 
 													@if (Item.recppaytype == null || !Item.recppaytype.Any())
 													{
@@ -513,11 +512,13 @@
 													{
 														@foreach (var recppaytypeItem in Item.recppaytype)
 														{
-															isCurrentOptionSelected = (recppaytypeItem.recppaytype_code == Item.recppaytype_code || recppaytypeItem.recppaytype_code == recpPayTypeCode);
+															isCurrentOptionSelected = (recppaytypeItem.recppaytype_code == Item.recppaytype_code ||
+															recppaytypeItem.recppaytype_code == recpPayTypeCode);
 															if (recppaytypeItem.genvc_flag == 1)
 															{
-																<option value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}_{recppaytypeItem.recppaytype_desc}")"
-																		selected="@isCurrentOptionSelected">
+																<option
+																	value="@($"{recppaytypeItem.cash_type}|{recppaytypeItem.tofrom_accid}_{recppaytypeItem.recppaytype_code}_{recppaytypeItem.cash_type}_{recppaytypeItem.recppaytype_desc}")"
+																	selected="@isCurrentOptionSelected">
 																	@recppaytypeItem.recppaytype_code - @recppaytypeItem.recppaytype_desc
 																</option>
 															}
@@ -527,135 +528,135 @@
 												</select>
 											</div>
 											<div class="col-xl-1 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">ประเภทเงิน</label>
-													<input class="form-control" style="text-align: center;" readonly type="text" name="cash_type"
-														   value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
-												</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-														<label class="form-label" for="">รหัสคู่บัญชี</label>
-														<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
-															@if (Item.tofromacc == null || !Item.tofromacc.Any())
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-															}
-															else
-															{
-																<option selected disabled>--กรุณาเลือก--</option>
-																@foreach (var tofromaccItem in Item.tofromacc)
-																{
-																	bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
-																	bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
-																	bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
-																	if (isCashTypeSelected)
-																	{
-																		// เลือก <option> เมื่อ isCashTypeSelected เป็น true
-																		if (valuetoFromaccId == null|| toFromaccId2 == null)
-																		{
-																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																					selected="@isCurrentOptionSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																			</option>
-																		}
-																		else
-																		{
-																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																					selected="@isCurrentOptionSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																			</option>
-																		}
-																	}
-																	else if (isItemAccIdSelected)
-																	{
-																		// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
-																		if (valuetoFromaccId == null|| toFromaccId2 == null)
-																		{
-																			<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
-																					selected="@isItemAccIdSelected">
-																				@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
-																			</option>
-																		}
-																	}
-																}
-															}
-														</select>
+												<label class="form-label" for="">ประเภทเงิน</label>
+												<input class="form-control" style="text-align: center;" readonly type="text" name="cash_type"
+													value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
 											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมุด</label>
-												<RadzenMask Mask="**********" CharacterPattern="[0-9]" readonly
-												@bind-value="Item.deptpassbook_no" Name="deptpassbook_no" class="form-control" />
-											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขบัตรประชาชน</label>
-												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="card_person"
-															Name="card_person" class="form-control" />
-											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมาชิก</label>
-												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="Item.member_no"
-															Name="member_no" class="form-control" />
-											</div>		
-											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ชื่อบัญชี</label>
-												<RadzenTextBox class="form-control" type="text" readonly Name="deptaccount_name"
-												@bind-value="Item.deptaccount_name" />
-											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">วันที่</label>
 												<RadzenDatePicker ReadOnly @bind-Value=@Item.operate_date Name="operate_date" DateFormat="dd/MM/yyyy" />
 											</div>
 											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขสมุด</label>
+												<RadzenMask Mask="**********" CharacterPattern="[0-9]" readonly @bind-value="Item.deptpassbook_no"
+													Name="deptpassbook_no" class="form-control" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ทำรายการโดย</label>
-												<select class="form-select" @bind="nobook_flag" >
+												<select class="form-select" @bind="nobook_flag">
 													<option Value="0">มีสมุด</option>
 													<option Value="1">ไม่มีสมุด</option>
 												</select>
-											</div>	
+											</div>
+											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">รหัสคู่บัญชี</label>
+												<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
+													@if (Item.tofromacc == null || !Item.tofromacc.Any())
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+													}
+													else
+													{
+														<option selected disabled>--กรุณาเลือก--</option>
+														@foreach (var tofromaccItem in Item.tofromacc)
+														{
+															bool isCashTypeSelected = (tofromaccItem.cash_type == cashTypeValue);
+															bool isItemAccIdSelected = (tofromaccItem.cash_type == Item.moneytype_code);
+															bool isCurrentOptionSelected = (tofromaccItem.tofrom_accid == valuetoFromaccId);
+															if (isCashTypeSelected)
+															{
+																// เลือก <option> เมื่อ isCashTypeSelected เป็น true
+																if (valuetoFromaccId == null || toFromaccId2 == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																		selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+																else
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")"
+																		selected="@isCurrentOptionSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+															}
+															else if (isItemAccIdSelected)
+															{
+																// เลือก <option> เมื่อ isItemAccIdSelected เป็น true
+																if (valuetoFromaccId == null || toFromaccId2 == null)
+																{
+																	<option value="@($"{tofromaccItem.cash_type}|{tofromaccItem.tofrom_accid}")" selected="@isItemAccIdSelected">
+																		@tofromaccItem.tofrom_accid - @tofromaccItem.tofrom_accdesc
+																	</option>
+																}
+															}
+														}
+													}
+												</select>
+											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ประเภทบัญชี</label>
-												<RadzenTextBox class="form-control" readonly type="text" Name="depttype_code"
-												@bind-value="Item.depttype_desc" />
+												<RadzenTextBox class="form-control" readonly type="text" Name="depttype_code" @bind-value="Item.depttype_desc" />
 											</div>
 											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เช็คเรียกเก็บ</label>
-												<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
-												@bind-value="checkpend_amt" />
+												<label class="form-label" for="">คงเหลือ</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="prncbal" @bind-value="prncbal" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขสมาชิก</label>
+												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="Item.member_no" Name="member_no"
+													class="form-control" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขบัตรประชาชน</label>
+												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="card_person" Name="card_person"
+													class="form-control" />
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อบัญชี</label>
+												<RadzenTextBox class="form-control" type="text" readonly Name="deptaccount_name"
+													@bind-value="Item.deptaccount_name" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ถอนได้</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt"
+													@bind-value="withdrawable_amt" />
 											</div>
 											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">อายัดรวม</label>
 												<input class="form-control" style="text-align: end;" readonly type="text" Name="sequest_amont"
-												@bind-value="sequest_amont" />
-											</div>										
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เพื่อ</label>
-												<RadzenTextBox class="form-control" type="text" readonly Name="dept_objective"
-												@bind-value="Item.dept_objective" />
+													@bind-value="sequest_amont" />
 											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เช็คเรียกเก็บ</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
+													@bind-value="checkpend_amt" />
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เพื่อ</label>
+												<RadzenTextBox class="form-control" type="text" readonly Name="dept_objective" @bind-value="Item.dept_objective" />
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">หมายเหตุ</label>
+												<input type="text" class="format-money form-control" Name="remark" value="@Item.remark" />
+
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เงื่อนไขการถอน</label>
 												<RadzenTextBox class="form-control" type="text" readonly Name="condforwithdraw"
-												@bind-value="Item.condforwithdraw" />
-											</div>											
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ถอนได้</label>
-												<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt" @bind-value="withdrawable_amt" />
-											</div>
-											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">คงเหลือ</label>
-												<input class="form-control" style="text-align: end;" readonly type="text" Name="prncbal"
-												@bind-value="prncbal" />
+													@bind-value="Item.condforwithdraw" />
 											</div>
 											@* ------------------------start แสดงเฉพาะ CBT CHQ-------------------------------------- *@
-											@if (cashTypeValue == "CBT" || Item.moneytype_code == "CBT" || cashTypeValue == "CHQ" ||Item.moneytype_code == "CHQ")  
+											@if (cashTypeValue == "CBT" || Item.moneytype_code == "CBT" || cashTypeValue == "CHQ" || Item.moneytype_code == "CHQ")
 											{
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">ธนาคาร</label>
 													<div class="form-group ">
 														<div class="input-group">
-															<input class="format-money form-control" type="text"
-																   style="text-align: center; width: 30%;" name="bank_code" value="@bank_code"
-															@oninput="OnGetBankChanged" />
-															<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
-																	style="width: 70%;">
+															<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+																name="bank_code" value="@bank_code" @oninput="OnGetBankChanged" />
+															<select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged" style="width: 70%;">
 																<option selected disabled>--กรุณาเลือก--</option>
 																@foreach (var getBankItem in getBank)
 																{
@@ -668,20 +669,23 @@
 														</div>
 													</div>
 												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">สาขา</label>
 													<div class="form-group ">
 														<div class="input-group">
-															<input class="format-money form-control" type="text"
-																   style="text-align: center; width: 30%;" disabled="@(bankBranch == null)" name="bank_code" value="@bankbranch_code"
-															@oninput="OnBankBranchChanged" />	
-															@if(bankBranch ==null){
+															<input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+																disabled="@(bankBranch == null)" name="bank_code" value="@bankbranch_code"
+																@oninput="OnBankBranchChanged" />
+															@if (bankBranch == null)
+															{
 																<select id="getBankSelect" disabled class="form-select" style="width: 70%;">
 																	<option value=""></option>
 																</select>
-																}else{
+															}
+															else
+															{
 																<select id="getBankSelect" class="form-select" @onchange="OnBankBranchSelectChanged" style="width: 70%;">
-																<option selected disabled>--กรุณาเลือก--</option>
+																	<option selected disabled>--กรุณาเลือก--</option>
 																	@foreach (var bankBranchItem in bankBranch)
 																	{
 																		bool isCurrentOptionSelected = bankBranchItem.branch_id == BankBranchValues;
@@ -691,161 +695,158 @@
 																	}
 																</select>
 															}
-															
+
 														</div>
 													</div>
 												</div>
 												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">เลขที่บัญชี</label>
-													<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
-													@bind-value="check_no" />
+													<label class="form-label" for="">เลขที่บัญชีธนาคาร</label>
+													<input class="form-control" style="text-align: end;" type="text" Name="prncbal" @bind-value="check_no" />
 												</div>
-												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">ชื่อบัญชี</label>
-													<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
-													@bind-value="bankaccount_name" />
-												</div>												
+												<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ชื่อบัญชีธนาคาร</label>
+													<input class="form-control" style="text-align: end;" type="text" Name="prncbal" @bind-value="bankaccount_name" />
+												</div>
 											}
 											@* ------------------------end แสดงเฉพาะ CBT CHQ-------------------------------------*@											
 										</div>
-										<div class="row">
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">โบนัส</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="intbonus_amt" value="@intbonus_amt" placeholder="0.00"
-													/>
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ด/บ</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_amt" value="@(int_amt!= null ? Item.int_amt:int_amt)" placeholder="0.00"
-													/>
-											</div>											
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ภาษี ด/บ</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="tax_amt" value="@(tax_amt!= null ? Item.tax_amt:tax_amt)" placeholder="0.00"
-													/>
-
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ด/บ คืน</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_return" value="@Item.int_return" placeholder="0.00"/>
-
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ภาษี คืน</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="tax_return" value="@Item.tax_return" placeholder="0.00" />
-
-											</div>
-											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ด/บ สุทธิ</label>
-												<input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_netamt" value="@Item.int_netamt" placeholder="0.00"  />
-
-											</div>
-											<div class="col-xl-4 col-md-4 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">หมายเหตุ</label>
-												<input type="text" class="format-money form-control" Name="remark" value="@Item.remark"  />
-
-											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ยอดทำรายการ</label>
-												<div class="form-group ">
-													<div class="input-group">
-														<input type="text" class="format-money form-control" style="text-align: end;"
-														@bind="DeptslipAmt" placeholder="0.00"  @onblur="(e) => {FormatNumber(); CheckDeptslipAmt(); }"/>
-														<div class="input-group-addon">
-															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
-																		data-bs-target="#myModal1" style="text-align: end; font-size: 32px;" />
+										<div class="d-flex justify-content-around">
+											<div class="row mx-0">
+												<div class="col-xl-6 col-md-12 col-sm-12 d-flex flex-column">
+													<div class="row me-1">
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ด/บ</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																Name="int_amt" value="@(int_amt!= null ? Item.int_amt:int_amt)" placeholder="0.00" />
 														</div>
-													</div>
-													 @if (DeptslipAmt == null||DeptslipAmt=="0.00")
-													{
-														<div class="text-danger" style="font-size: 13px;margin-bottom: -15px;"> **ยอดทำรายการเป็น 0 ไม่สวามารถทำรายการได้**</div>
-													}
-												</div>
-												<!-- The Modal -->
-												<div class="modal" id="myModal1">
-													<div class="modal-dialog modal-xl">
-														<div class="modal-content">
-															<!-- Modal Header -->
-															<div class="modal-header">
-																<h4 class="modal-title">ข้อมูลสมาชิก</h4>
-																<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-															</div>
-															<!-- Modal body -->
-															<div class="modal-body">
-																<div style="margin: 20px">
-																</div>
-																<span>
-																	<asp:Button ID="b_calChange" runat="server"
-																				Style="float: left; width: 100%; height: 25px" Text="คำนวณเงินทอน"
-																				TabIndex="12" BackColor="#556B2F" ForeColor="White" />
-																</span>
-
-																<!-- Modal footer -->
-																<div class="modal-footer">
-																	<button type="button" class="btn btn-danger"
-																			data-bs-dismiss="modal">
-																		Close
-																	</button>
-																</div>
-
-															</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">โบนัส</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																Name="intbonus_amt" value="@intbonus_amt" placeholder="0.00" />
 														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ภาษี ด/บ</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																Name="tax_amt" value="@(tax_amt!= null ? Item.tax_amt:tax_amt)" placeholder="0.00" />
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ด/บ คืน</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																Name="int_return" value="@Item.int_return" placeholder="0.00" />
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ภาษี คืน</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																Name="tax_return" value="@Item.tax_return" placeholder="0.00" />
+														</div>
+														<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+															<label class="form-label" for="">ด/บ สุทธิ</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																Name="int_netamt" value="@Item.int_netamt" placeholder="0.00" />
+														</div>
+														@* ------------------------start แสดงเฉพาะ fee_amt > -------------------------------------- *@
+														@if (Item.fee_amt > 0)
+														{
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">การหักค่าธรรมเนียม</label>
+																<select class="form-select" @bind="Item.payfee_meth">
+																	<option Value="0">เลือก</option>
+																	<option Value="1">ชำระเป็นเงินสด</option>
+																	<option Value="2">ชำระหักจากยอดถอน</option>
+																	<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
+																	<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
+																</select>
+															</div>
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ค่าธรรมเนียม</label>
+																<input class="form-control" style="text-align: end;" readonly type="text" Name="fee_amt"
+																	@bind-value="Item.fee_amt" />
+															</div>
+														}
+														@* ------------------------end แสดงเฉพาะ fee_amt > -------------------------------------- *@
+														@* ------------------------start แสดงเฉพาะ oth_amt > -------------------------------------- *@
+														@if (Item.oth_amt > 0)
+														{
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">การหักค่าปรับ</label>
+																<select class="form-select" @bind="Item.payother_meth">
+																	<option Value="0">เลือก</option>
+																	<option Value="1">ชำระเป็นเงินสด</option>
+																	<option Value="2">ชำระหักจากยอดถอน</option>
+																	<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
+																	<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
+																</select>
+															</div>
+															<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+																<label class="form-label" for="">ค่าปรับ</label>
+																<input class="form-control" style="text-align: end;" readonly type="text" Name="oth_amt"
+																	@bind-value="Item.oth_amt" />
+															</div>
+														}
+														@* ------------------------end แสดงเฉพาะ oth_amt > -------------------------------------- *@
 													</div>
 												</div>
-											</div>											
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ยอดสุทธิ</label>
-												<input class="format-money form-control" placeholder="0.00" type="text"
-													   style="text-align: end; font-size: 32px;" readonly name="deptslip_netamt"
-												@bind="DeptslipAmt" id="showNumber" />
-											</div>											
+												<div class="col-xl-6 col-md-12 col-sm-12 d-flex flex-column">
+													<div class="row me-1">
+														<div class="col-xl-12 col-md-12 col-sm-12 d-flex flex-column">
+															<label class="form-label" for="">ยอดทำรายการ</label>
+															<div class="form-group ">
+																<div class="input-group">
+																	<input type="text" class="format-money form-control" style="text-align: end;"
+																		@bind="DeptslipAmt" placeholder="0.00"
+																		@onblur="(e) => {FormatNumber(); CheckDeptslipAmt(); }" />
+																	<div class="input-group-addon">
+																		<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																			data-bs-target="#myModal1" style="text-align: end; font-size: 32px;" />
+																	</div>
+																</div>
+																@if (DeptslipAmt == null || DeptslipAmt == "0.00")
+																{
+																	<div class="text-danger" style="font-size: 13px;margin-bottom: -15px;"> **ยอดทำรายการเป็น 0
+																		ไม่สวามารถทำรายการได้**</div>
+																}
+															</div>
+															<!-- The Modal -->
+															<div class="modal" id="myModal1">
+																<div class="modal-dialog modal-xl">
+																	<div class="modal-content">
+																		<!-- Modal Header -->
+																		<div class="modal-header">
+																			<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+																			<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+																		</div>
+																		<!-- Modal body -->
+																		<div class="modal-body">
+																			<div style="margin: 20px">
+																			</div>
+																			<span>
+																				<asp:Button ID="b_calChange" runat="server"
+																					Style="float: left; width: 100%; height: 25px" Text="คำนวณเงินทอน"
+																					TabIndex="12" BackColor="#556B2F" ForeColor="White" />
+																			</span>
+
+																			<!-- Modal footer -->
+																			<div class="modal-footer">
+																				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+																					Close
+																				</button>
+																			</div>
+
+																		</div>
+																	</div>
+																</div>
+															</div>
+														</div>
+														<div class="col-xl-12 col-md-12 col-sm-12 d-flex flex-column">
+															<label class="form-label" for="">ยอดสุทธิ</label>
+															<input class="format-money form-control" placeholder="0.00" type="text"
+																style="text-align: end; font-size: 50px; height: 7rem" readonly name="deptslip_netamt"
+																@bind="DeptslipAmt" id="showNumber" />
+														</div>
+													</div>
+												</div>
+											</div>
 										</div>
-											@* ------------------------start แสดงเฉพาะ fee_amt > -------------------------------------- *@
-											@if(Item.fee_amt > 0)
-											{
-												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">การหักค่าธรรมเนียม</label>
-													<select class="form-select" @bind="Item.payfee_meth" >
-														<option Value="0">เลือก</option>
-														<option Value="1">ชำระเป็นเงินสด</option>
-														<option Value="2">ชำระหักจากยอดถอน</option>
-														<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
-														<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
-													</select>
-												</div>
-													<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">ค่าธรรมเนียม</label>
-													<input class="form-control" style="text-align: end;" readonly type="text" Name="fee_amt"
-													@bind-value="Item.fee_amt" />
-												</div>
-											}
-											@* ------------------------end แสดงเฉพาะ fee_amt > -------------------------------------- *@
-											@* ------------------------start แสดงเฉพาะ oth_amt > -------------------------------------- *@
-											@if(Item.oth_amt > 0)
-											{
-												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">การหักค่าปรับ</label>
-													<select class="form-select" @bind="Item.payother_meth" >
-														<option Value="0">เลือก</option>
-														<option Value="1">ชำระเป็นเงินสด</option>
-														<option Value="2">ชำระหักจากยอดถอน</option>
-														<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
-														<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
-													</select>
-												</div>
-												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">ค่าปรับ</label>
-													<input class="form-control" style="text-align: end;" readonly type="text" Name="oth_amt"
-													@bind-value="Item.oth_amt" />
-												</div>
-											}
-											@* ------------------------end แสดงเฉพาะ oth_amt > -------------------------------------- *@
 									</div>
 									@if (recpPayTypeCode == "DEN")
 									{
