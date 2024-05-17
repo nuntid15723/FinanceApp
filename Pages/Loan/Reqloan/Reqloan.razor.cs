@@ -46,6 +46,7 @@ namespace FinanceApp.Pages.Loan.Reqloan
         public string? loanno_format { get; set; }
         public string loanType { get; set; }
         public List<GetLoanType>? getLoanType { get; set; }
+
         // public List<GetOfLoanType>? getOfLoanType { get; set; }
         bool isCurrentOptionSelected = false;
 
