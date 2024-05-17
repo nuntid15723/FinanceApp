@@ -576,6 +576,28 @@ else
 
 												</select>
 											</div>
+											<div class="col-xl-1 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ประเภทเงิน</label>
+													<input class="form-control" style="text-align: center;" readonly type="text" name="cash_type"
+														   value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
+											</div>
+											<div class="col-xl-3 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">วันที่</label>
+												<RadzenDatePicker ReadOnly @bind-Value=@Item.operate_date Name="operate_date"
+																	  DateFormat="dd/MM/yyyy" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขสมุด</label>
+												<RadzenMask Mask="**********" CharacterPattern="[0-9]" readonly
+												@bind-value="Item.deptpassbook_no" Name="deptaccount_no" class="form-control" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ทำรายการโดย</label>
+													<select class="form-select" @bind="nobook_flag" >
+														<option Value="0">มีสมุด</option>
+														<option Value="1">ไม่มีสมุด</option>
+													</select>
+											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">รหัสคู่บัญชี</label>
 													<select id="tofromaccSelect" class="form-select" value="@bookCode" @onchange="OnToFromAccChanged">
@@ -625,50 +647,71 @@ else
 												</select>
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมุด</label>
-												<RadzenMask Mask="**********" CharacterPattern="[0-9]" readonly
-												@bind-value="Item.deptpassbook_no" Name="deptaccount_no" class="form-control" />
-											</div>
-											<div class="col-xl-8 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ชื่อบัญชี</label>
-												<RadzenTextBox class="form-control" type="text" readonly Name="deptaccount_name"
-												@bind-value="Item.deptaccount_name" />
-											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ประเภทบัญชี</label>
 												<RadzenTextBox class="form-control" readonly type="text" Name="depttype_code"
 												@bind-value="Item.depttype_desc" />
 											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เลขสมาชิก</label>
-												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="Item.member_no"
-															Name="deptaccount_no" class="form-control" />
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">คงเหลือ</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="prncbal"
+												@bind-value="prncbal" />
 											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">เลขบัตรประชาชน</label>
 												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="card_person"
 															Name="deptaccount_no" class="form-control" />
 											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เลขสมาชิก</label>
+												<RadzenMask Mask="**********" readonly CharacterPattern="[0-9]" @bind-value="Item.member_no"
+															Name="deptaccount_no" class="form-control" />
+											
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อบัญชี</label>
+												<RadzenTextBox class="form-control" type="text" readonly Name="deptaccount_name"
+												@bind-value="Item.deptaccount_name" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ถอนได้</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt" @bind-value="withdrawable_amt" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">การหักค่าปรับ</label>
+												<select class="form-select" @bind="payother_meth">
+													<option Value="0">--กรุณาเลือก--</option>
+													<option Value="1">ชำระเป็นเงินสด</option>
+													<option Value="2">ชำระหักจากยอดถอน</option>
+													<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
+													<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
+												</select>
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ค่าปรับ</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="other_amt" @bind-value="other_amt" />
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เพื่อ</label>
+												<RadzenTextBox class="form-control" type="text" readonly Name="dept_objective"
+												@bind-value="Item.dept_objective" />
+											</div>
+											<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">อายัดรวม</label>
+												<input class="form-control" style="text-align: end;" readonly type="text" Name="sequest_amont"
+													@bind-value="sequest_amont" />
+											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">วันที่</label>
-												<RadzenDatePicker ReadOnly @bind-Value=@Item.operate_date Name="operate_date"
-																	  DateFormat="dd/MM/yyyy" />
-												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">ทำรายการโดย</label>
-													<select class="form-select" @bind="nobook_flag" >
-														<option Value="0">มีสมุด</option>
-														<option Value="1">ไม่มีสมุด</option>
-													</select>
-												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-													<label class="form-label" for="">ประเภทเงิน</label>
-													<input class="form-control" readonly type="text" name="cash_type"
-														   value="@(cashTypeValue == null ? Item.moneytype_code : cashTypeValue)" />
-												</div>
-												@if (cashTypeValue == "CBT" || Item.recppaytype_code == "CCT")
+												<label class="form-label" for="">หมายเหตุ</label>
+												<input class="form-control" type="text" Name="checkpend_amt" @bind-value="checkpend_amt" />
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">เงื่อนไขการถอน</label>
+												<input class="form-control" style="text-align: start;" readonly type="text" Name="condforwithdraw"
+													@bind-value="Item.condforwithdraw" />
+											</div>
+											@if (cashTypeValue == "CBT" || Item.recppaytype_code == "CCT")
 											{
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">ธนาคาร</label>
 													<div class="form-group ">
 														<div class="input-group">
@@ -689,7 +732,7 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">สาขา</label>
 													<div class="form-group ">
 														<div class="input-group">
@@ -710,25 +753,78 @@ else
 														</div>
 													</div>
 												</div>
-												<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+												<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
 													<label class="form-label" for="">เลขที่บัญชี</label>
 													<input class="form-control" style="text-align: end;" type="text" Name="prncbal"
 													@bind-value="check_no" />
 												</div>
+												<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ชื่อบัญชีธนาคาร</label>
+													<RadzenTextBox class="form-control" type="text" readonly Name="bankaccount_name"
+													@bind-value="bankaccount_name" />
+												</div>
 												}
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">คงเหลือ</label>
-												<input class="form-control" style="text-align: end;" readonly type="text" Name="prncbal"
-												@bind-value="prncbal" />
+											<div class="col-xl-2 d-flex flex-column">
+											<label class="form-label" for="">ด/บ</label>
+											<input type="text" class="format-money form-control" readonly style="text-align: end;"Name="int_amt" value="@int_amt" placeholder="0.00"/>
 											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">ถอนได้</label>
-												<input class="form-control" style="text-align: end;" readonly type="text" Name="withdrawable_amt" @bind-value="withdrawable_amt" />
-													   @* @{var Item.withdrawable_amt =  Item.withdrawable_amt?.ToString("N2");} *@
-													  @* <RadzenTextBox  Name="withdrawable_amt" @bind-Value="@(Item.withdrawable_amt.ToString("N2"))" class="form-control" style="text-align: end;"></RadzenTextBox> *@
+											<div class="col-xl-2 d-flex flex-column">
+															<label class="form-label" for="">โบนัส</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																			Name="intbonus_amt" value="@intbonus_amt" placeholder="0.00"
+																			/>
+											</div>
+											<div class="col-xl-2 d-flex flex-column">
+															<label class="form-label" for="">ภาษี ด/บ</label>
+															<input type="text" class="format-money form-control" readonly style="text-align: end;"
+																			Name="tax_amt" value="@tax_amt" placeholder="0.00"
+																			/>
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+												<label class="form-label" for="">ยอดทำรายการ</label>
+												<div class="form-group ">
+													<div class="input-group">
+														<input type="text" class="format-money form-control" style="text-align: end;"
+														@bind="prncbal" placeholder="0.00" readonly  @onblur="(e) => {FormatNumber(); CheckDeptslipAmt(); }" />
+														<div class="input-group-addon">
+															<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
+																		data-bs-target="#myModal1" />
+														</div>
+													</div>
+												</div>
+												<!-- The Modal -->
+												<div class="modal" id="myModal1">
+													<div class="modal-dialog modal-xl">
+														<div class="modal-content">
+															<!-- Modal Header -->
+															<div class="modal-header">
+																<h4 class="modal-title">ข้อมูลสมาชิก</h4>
+																<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+															</div>
+															<!-- Modal body -->
+															<div class="modal-body">
+																<div style="margin: 20px">
+																</div>
+																<span>
+																	<asp:Button ID="b_calChange" runat="server"
+																				Style="float: left; width: 100%; height: 25px" Text="คำนวณเงินทอน"
+																				TabIndex="12" BackColor="#556B2F" ForeColor="White" />
+																</span>
 
+																<!-- Modal footer -->
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-danger"
+																			data-bs-dismiss="modal">
+																		Close
+																	</button>
+																</div>
+
+															</div>
+														</div>
+													</div>
+												</div>
 											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+											@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">อายัดรวม</label>
 												<input class="form-control" style="text-align: end;" readonly type="text" Name="sequest_amont"
 												@bind-value="sequest_amont" />
@@ -737,29 +833,48 @@ else
 												<label class="form-label" for="">เช็คเรียกเก็บ</label>
 												<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
 												@bind-value="checkpend_amt" />
+											</div> *@
+											<div class="col-xl-2 d-flex flex-column">
+												<label class="form-label" for="">ด/บ คืน</label>
+												<input type="text" class="format-money form-control" readonly style="text-align: end;" Name="int_return"
+													value="@int_return" placeholder="0.00" />
 											</div>
+											<div class="col-xl-2 d-flex flex-column">
+													<label class="form-label" for="">ภาษี คืน</label>
+													<input type="text" class="format-money form-control" readonly style="text-align: end;" Name="tax_return"
+														value="@tax_return" placeholder="0.00" />
+											</div>
+											<div class="col-xl-2 d-flex flex-column">
+													<label class="form-label" for="">ด/บ สุทธิ</label>
+													<input type="text" class="format-money form-control" readonly style="text-align: end;" Name="int_netamt"
+														value="@int_netamt" placeholder="0.00" />
+											</div>
+											<div class="col-xl-6 col-md-6 col-sm-6 d-flex flex-column">
+													<label class="form-label" for="">ยอดสุทธิ</label>
+													<input class="format-money form-control" placeholder="0.00" type="text" style="text-align: end; font-size: 32px;"
+														readonly name="sumtotal" @bind="Sumtotal" @onblur="(e) => {CheckDeptslipAmt(); }" id="showNumber" />
+											</div>
+											@if (cashTypeValue == "CBT" && fee_amt > 0)
+												{
+													<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">การหักค่าธรรมเนียม</label>
+														<select class="form-select" @bind="payfee_meth">
+															<option Value="0">--กรุณาเลือก--</option>
+															<option Value="1">ชำระเป็นเงินสด</option>
+															<option Value="2">ชำระหักจากยอดถอน</option>
+															<option Value="3">ชำระหักในบัญชีเงินฝาก</option>
+															<option Value="-9">ไม่คิดค่าธรรมเนียม</option>
+														</select>
+													</div>
+													<div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+														<label class="form-label" for="">ค่าธรรมเนียม</label>
+														<input class="form-control" style="text-align: end;" readonly type="text" Name="fee_amt" @bind-value="fee_amt" />
+													</div>
+											}
 										</div>
-										<div class="row">
-											@* <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">อายัดรวม</label>
-										<input class="form-control" style="text-align: end;" readonly type="text" Name="sequest_amont"
-										@bind-value="sequest_amont" />
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">เช็คเรียกเก็บ</label>
-										<input class="form-control" style="text-align: end;" readonly type="text" Name="checkpend_amt"
-										@bind-value="checkpend_amt" />
-										</div>
-										<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-										<label class="form-label" for="">ยอดฝากได้</label>
-										<input class="form-control" style="text-align: end;" type="text" Name="deptslip_amt"
-										@bind-value="Item.deptslip_amt" />
-										</div> *@
+										@* <div class="row">
 											<div class="col-xl-2 col-md-4 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ด/บ</label>
-												@* <input type="text" class="format-money form-control" readonly style="text-align: end;"
-													   Name="int_amt" value="@(int_amt!= null ? Item.int_amt:int_amt)" placeholder="0.00"
-													/> *@
 													<input type="text" class="format-money form-control" readonly style="text-align: end;"
 													   Name="int_amt" value="@int_amt" placeholder="0.00"
 													/>
@@ -842,11 +957,6 @@ else
 												</div>
 											</div>
 											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
-												<label class="form-label" for="">เพื่อ</label>
-												<RadzenTextBox class="form-control" type="text" readonly Name="dept_objective"
-												@bind-value="Item.dept_objective" />
-											</div>
-											<div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
 												<label class="form-label" for="">ยอดในสมุด</label>
 												<RadzenTextBox class="form-control" type="text" readonly Name="dept_objective"
 												@bind-value="Item.dept_objective" />
@@ -862,7 +972,7 @@ else
 												<textarea class="form-control " readonly @bind="Item.condforwithdraw" name="condforwithdraw"
 														  id="" cols="30" rows="2"></textarea>
 											</div>
-										</div>
+										</div> *@
 									</div>
 									@if (recpPayTypeCode == "DEN")
 									{

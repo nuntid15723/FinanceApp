@@ -383,6 +383,10 @@ else
 																	data-bs-target="#myModal1" onclick="OpenModal" />
 													</div>
 												</div>
+												 @if (DeptslipAmt == null||DeptslipAmt=="0.00")
+													{
+														<div class="text-danger" style="font-size: 13px;margin-bottom: -15px;"> **ยอดทำรายการเป็น 0 ไม่สวามารถทำรายการได้**</div>
+													}
 											</div>
 											<!-- The Modal -->
 											<div class="modal" id="myModal1">
@@ -1570,13 +1574,17 @@ else
 											<div class="form-group ">
 												<div class="input-group">
 													<input type="text" class="format-money form-control" style="text-align: end;"
-													@bind="DeptslipAmt" placeholder="0.00"  @onblur="(e) => {OnBlurHandler(); CheckDeptslipAmt(); }" />
+													@bind="DeptslipAmt" placeholder="0.00"  @onblur="(e) => {OnBlurHandler(); CheckDeptslipAmt();}" />
 
 													<div class="input-group-addon">
 														<RadzenIcon class="icons icon-search" Icon="ballot" data-bs-toggle="modal"
 																	data-bs-target="#myModal1" />
 													</div>
 												</div>
+												 @if (DeptslipAmt == null||DeptslipAmt=="0.00")
+													{
+														<div class="text-danger" style="font-size: 13px;margin-bottom: -15px;"> **ยอดทำรายการเป็น 0 ไม่สวามารถทำรายการได้**</div>
+													}
 											</div>
 											<!-- The Modal -->
 											<div class="modal" id="myModal1">
@@ -2419,6 +2427,7 @@ else
 	{
 		currentStep = 1;
 	}
+	
     private async Task PrintPdf()
     {
         // รับ HTML จาก GetPdfData()

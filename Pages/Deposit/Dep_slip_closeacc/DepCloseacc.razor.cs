@@ -163,6 +163,8 @@ namespace FinanceApp.Pages.Deposit.Dep_slip_closeacc
         bool isCurrentOptionSelected = false;
         private bool isUpdateExecuted = false;
         private bool success_status = false;
+        private int? payother_meth{get; set; }
+        private int? payfee_meth { get; set; }
         private int currentStep = 0;
         public string? SaveStatus { get; set; }
         public string? group_itemtype { get; set; }

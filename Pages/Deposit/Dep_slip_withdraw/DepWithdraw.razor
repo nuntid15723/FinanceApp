@@ -762,6 +762,10 @@
 																		data-bs-target="#myModal1" style="text-align: end; font-size: 32px;" />
 														</div>
 													</div>
+													 @if (DeptslipAmt == null||DeptslipAmt=="0.00")
+													{
+														<div class="text-danger" style="font-size: 13px;margin-bottom: -15px;"> **ยอดทำรายการเป็น 0 ไม่สวามารถทำรายการได้**</div>
+													}
 												</div>
 												<!-- The Modal -->
 												<div class="modal" id="myModal1">
