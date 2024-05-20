@@ -1,0 +1,216 @@
+@page "/ws_dep_depttyp_addint"
+@using FinanceApp.Models;
+@using Newtonsoft.Json
+@using Radzen.Blazor
+@using System.Runtime.InteropServices.JavaScript
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@inject IJSRuntime jsRuntime
+@inject HttpClient httpClient
+@using System.Linq.Dynamic.Core
+@inject NotificationService NotificationService
+@using System.Globalization
+@using System.Text.Json
+@using System.ComponentModel
+@using Microsoft.AspNetCore.Components
+@inject Services.Api_Provider ApiProvider
+@inject Services.GetUserDataList GetuUerData
+<style>
+    .icon-search {
+        display: inline-flex !important;
+        justify-content: space-evenly !important;
+        align-items: center !important;
+        position: relative !important;
+        top: 3px !important;
+        padding: 15px !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .table> :not(caption)>*>* {
+        padding: 0.2rem 0.2rem;
+    }
+
+    .save_top {
+        border: #adacac solid 1px;
+    }
+
+    .header-right {
+        text-align: start;
+    }
+
+    .header-left {
+        text-align: end;
+    }
+
+    .rz-fileupload-row {
+        display: flex;
+        color: transparent;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column-reverse;
+    }
+
+    .rz-fileupload-row img {
+        width: 250px;
+        margin-top: -4rem;
+        max-height: 200px;
+    }
+
+    .rz-fileupload-row button {
+        margin-left: 20rem;
+        margin-top: 8px;
+    }
+
+    .rz-fileupload-files {
+        background-color: var(--rz-upload-files-background-color);
+        padding: var(--rz-upload-files-padding);
+        margin-top: -1.5rem;
+    }
+
+    .rz-fileupload-buttonbar {
+        position: relative;
+        background-color: transparent;
+        padding: var(--rz-upload-button-bar-padding);
+        border-radius: var(--rz-upload-button-bar-border-radius);
+    }
+
+    .rz-card.rz-variant-filled {
+        box-shadow: var(--rz-base-background-color);
+        margin-top: -5px;
+    }
+
+    .rz-card {
+        padding: 0;
+        box-sizing: var(--rz-base-background-color);
+    }
+
+    .card {
+        background-color: #f9f9f9;
+    }
+
+    .rz-calendar .rz-inputtext {
+        background-color: #e9ecef;
+        opacity: 1;
+    }
+
+    .label-group {
+        margin-left: 10px;
+    }
+
+    .form-label-preview {
+        margin-bottom: 0.1rem;
+        margin-top: 5px;
+        font-size: 19px;
+    }
+
+    .header-title-row {
+    @*border-bottom:1px#e4dbdbsolid;*@@*margin-top:0px;*@margin-bottom: 20px;
+    }
+
+    .section-title {
+        display: block;
+        /* ทำให้บล็อกครอบคลุมความกว้างทั้งหมด */
+        font-weight: bold;
+        /* กำหนดฟอนต์ให้ตัวหนา */
+        border-bottom: 2px solid rgb(208, 204, 204);
+        /* เส้นใต้ */
+        padding-bottom: 5px;
+        /* ระยะห่างระหว่างข้อความกับเส้น */
+        margin-left: -15px;
+        font-weight: 600;
+        width: 40%;
+    }
+
+    .radzendatagrid-header {
+        text-align: center !important;
+    }
+</style>
+<div class="header-page">
+    <div class="row-header d-flex justify-content-between ">
+        <div class="header-left">
+            <h4>ระบบ เงินฝาก - บัญชีเงิรฝากสมาชิก</h4>
+        </div>
+        <div class="header-right">
+            @* <RadzenButton class="save_top" Icon="save" Text="Save" Click="@SaveDataAsync" /> *@
+        </div>
+    </div>
+</div>
+<div class="card body-page">
+    <div class="row mt-2" style="margin-left: calc(var(--bs-gutter-x) * .1);margin-bottom: 15px;">
+        <div class="row" tabindex="0" style="margin-left: calc(var(--bs-gutter-x) * -.21)">
+            <div class="row">
+                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ประเภทเงินฝาก</label>
+                    <div class="form-group ">
+                        <div class="input-group">
+                            <input class="format-money form-control" type="text" style="text-align: center; width: 30%;"
+                                name="bank_code" />
+                            @* <input class="format-money form-control" type="text"
+                            style="text-align: center; width: 30%;" name="bank_code" value="@bank_code"
+                            @oninput="OnGetBankChanged" /> *@
+                            <select id="getBankSelect" class="form-select" name="depttype_desc" style="width: 70%;">
+                                <option selected disabled>--กรุณาเลือก--</option>
+                            </select>
+                            @* <select id="getBankSelect" class="form-select" @onchange="OnGetBankSelectChanged"
+                            style="width: 70%;">
+                            <option selected disabled>--กรุณาเลือก--</option>
+                            @foreach (var getBankItem in getBank)
+                            {
+                            bool isCurrentOptionSelected = getBankItem.bank_code == BankValues;
+                            <option value="@getBankItem.bank_code" selected="@isCurrentOptionSelected">
+                            @getBankItem.bank_code - @getBankItem.bank_desc
+                            </option>
+                            }
+                            </select> *@
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ประเภทการใช้</label>
+                    <select class="form-select" name="useall_flag" id="">
+                        <option selected="selected" value="0">ทุกประเภท</option>
+                        <option value="1">ระบุประเภท</option>
+                    </select>
+                </div>
+                <div class="col-xl-2 col-md-6 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">วันที่มีผล </label>
+                    <RadzenDatePicker @bind-Value=@start_date Name="start_date" DateFormat="dd/MM/yyyy" />
+                </div>
+                <div class="col-xl-4 col-md-6 col-sm-6 d-flex flex-column">
+                    <label class="form-label" for="">ประเภท</label>
+                    <select class="form-select" name="useall_flag" id="">
+                        <option selected="selected" value="01">กรมสรรพาวุธ</option>
+                        <option value="02">กองทัพเรือ</option>
+                        <option value="03">พนักงานราชการ</option>
+                        <option value="04">รร.สรรพาวุธ</option>
+                        <option value="05">สนามยิงปืน</option>
+                        <option value="06">สมทบ</option>
+                        <option value="10">10</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <button type="button" class="col-2 mt-2 mb-2 btn btn-outline-success">เพิ่มแถว</button>
+                <RadzenDataGrid Data="@statementDetails" TItem="Models.Statement_list" ColumnWidth="100%"
+                    AllowColumnResize="true">
+                    <Columns>
+                        <RadzenDataGridColumn Width="40%" TItem="Models.Statement_list" Title="ตั้งแต่ ( >= )"
+                            Property="coop_id" HeaderCssClass="radzendatagrid-header">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="25%" TItem="Models.Statement_list" Title="อัตราดอกเบี้ย"
+                            Property="operate_date" HeaderCssClass="radzendatagrid-header">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn Width="5%" TItem="Models.Statement_list" Title="ลบ" Property="deposit_amt"
+                            HeaderCssClass="radzendatagrid-header">
+                        </RadzenDataGridColumn>
+                    </Columns>
+                </RadzenDataGrid>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+}
